@@ -274,13 +274,13 @@ public class LocationUpdatesService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 //.addAction(R.drawable.logo, getString(R.string.launch_activity),activityPendingIntent)
-                .addAction(R.mipmap.ic_launcher, getString(R.string.remove_location_updates),
+                .addAction(R.mipmap.launcher_icon, getString(R.string.remove_location_updates),
                         servicePendingIntent)
                 //.setContentText(text)
                 .setContentTitle("Compartiendo Ubicación")//Utils.getLocationTitle(this))
                 .setOngoing(true)
                 .setSound(null)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.launcher_icon)
                 .setTicker(text);
 
 

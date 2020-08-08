@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Splash extends StatefulWidget { 
 
@@ -16,10 +17,17 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> with AfterLayoutMixin {
 
+    Future<void>_request()async{
+      final PermissionStatus status = await Permission.locationWhenInUse.request();
+
+      print('permisos $status');
+    }
   
 
   @override
   void afterFirstLayout(BuildContext context) async{
+
+    _request();
     final categoriasApi = CategoriasApi();
     categoriasApi.obtenerAmbos();
     

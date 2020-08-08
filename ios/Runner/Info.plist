@@ -28,18 +28,38 @@
 				<string>com.googleusercontent.apps.446658527649-58t4nc46ifk53deeo1oh9gj66gejc5ca</string>
 			</array>
 		</dict>
-
 		<dict>
-            <key>CFBundleURLSchemes</key>
-            <array>
-              <string>fb694814964640748</string>
-            </array>
-          </dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb694814964640748</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>EnableBackgroundLocationUpdates</key>
+	<true/>
+	<key>FacebookAppID</key>
+	<string>694814964640748</string>
+	<key>FacebookDisplayName</key>
+	<string>Enchiladas App</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Necesitamos acceso a su ubicación para la entrega de pedidos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Necesitamos acceso a su ubicación para la entrega de pedidos.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -59,24 +79,5 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
-	<key>EnableBackgroundLocationUpdates</key>
-	<true/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Al aplicacion necesita su ubicacion para la entrega de pedidos.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Al aplicacion necesita su ubicacion para la entrega de pedidos.</string>
-
-	<key>FacebookAppID</key>
-    <string>694814964640748</string>
-    <key>FacebookDisplayName</key>
-    <string>Enchiladas App</string>
-
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>fbapi</string>
-      <string>fb-messenger-share-api</string>
-      <string>fbauth2</string>
-      <string>fbshareextension</string>
-    </array>
 </dict>
 </plist>
