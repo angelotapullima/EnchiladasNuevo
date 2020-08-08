@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1070225901888-qjeg7jr5dgo398aklccaqnikg9hhaie7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1070225901888-qjeg7jr5dgo398aklccaqnikg9hhaie7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1070225901888-6604ni8uu6eksappvt6dt7dcrrg6v75e.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCjSdGKjAk6dxZtXH1OQUSpRyF7SVRO2qc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1070225901888</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.bufeotec.enchiladasapp</string>
+	<key>PROJECT_ID</key>
+	<string>enchiladasapp-3e0bd</string>
+	<key>STORAGE_BUCKET</key>
+	<string>enchiladasapp-3e0bd.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1070225901888:ios:beab4c49909e18ad28d2a5</string>
+	<key>DATABASE_URL</key>
+	<string>https://enchiladasapp-3e0bd.firebaseio.com</string>
+</dict>
+</plist>

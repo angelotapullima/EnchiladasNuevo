@@ -1,0 +1,16 @@
+
+<resources>
+
+    <string name="app_name">Enchiladas App</string>
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core
+        functionality.</string>
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="cargando">cargando</string>
+    <string name="remove_location_updates">Detener</string>
+    <string name="title_notificacion">Ubicación Compartida activada</string>
+
+    <string name="facebook_app_id">694814964640748</string> <string name="fb_login_protocol_scheme">fb694814964640748</string>
+
+</resources>

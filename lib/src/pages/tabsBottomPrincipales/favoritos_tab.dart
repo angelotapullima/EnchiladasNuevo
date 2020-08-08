@@ -1,0 +1,263 @@
+import 'package:enchiladasapp/src/bloc/provider.dart';
+import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+class FavoritosTab extends StatefulWidget {
+  const FavoritosTab({Key key}) : super(key: key);
+
+  @override
+  _FavoritosTabState createState() => _FavoritosTabState();
+}
+
+class _FavoritosTabState extends State<FavoritosTab> {
+  @override
+  Widget build(BuildContext context) {
+    final Responsive responsive = new Responsive.of(context);
+
+    final favoritosBloc = ProviderBloc.fav(context);
+    favoritosBloc.obtenerProductosFavoritos();
+
+    setState(() {
+      favoritosBloc.obtenerProductosFavoritos();
+      print('favoritos');
+    });
+    return Scaffold(
+        body: Stack(children: <Widget>[
+      Container(
+        height: double.infinity,
+        width: double.infinity,
+        color: Colors.red,
+      ),
+      _favoritos(responsive, favoritosBloc),
+    ]));
+  }
+
+  Widget _favoritos(Responsive responsive, FavoritosBloc favoritosBloc) {
+    return StreamBuilder(
+      stream: favoritosBloc.productosFavoritosStream,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
+        final sinDatos = SafeArea(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Favoritos',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: responsive.ip(2.6),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.card_giftcard,
+                      color: Colors.white,
+                      size: responsive.ip(3.5),
+                    ),
+                    onPressed: () {},
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadiusDirectional.only(
+                          topStart: Radius.circular(13),
+                          topEnd: Radius.circular(13)),
+                      color: Colors.grey[50]),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                            height: responsive.hp(20),
+                            child: SvgPicture.asset('assets/carrito.svg')),
+                        SizedBox(
+                          height: responsive.hp(3),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(2)),
+                          child: Text(
+                            'No hay Productos en la sección Favoritos',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: responsive.ip(2.5)),
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+            )
+          ],
+        ));
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return _listaFavoritos(responsive, snapshot.data);
+          } else {
+            return sinDatos;
+          }
+        } else {
+          return Center(
+            child: CupertinoActivityIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _listaFavoritos(Responsive responsive, List<ProductosData> favoritos) {
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Favoritos',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(2.7),
+                      fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.card_giftcard,
+                    color: Colors.white,
+                    size: responsive.ip(3),
+                  ),
+                  onPressed: () {
+                    setState(() {});
+                  },
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadiusDirectional.only(
+                      topStart: Radius.circular(13),
+                      topEnd: Radius.circular(13)),
+                  color: Colors.grey[50]),
+              //padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: favoritos.length,
+                  itemBuilder: (context, i) =>
+                      _itemPedido(responsive, favoritos[i])),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _itemPedido(Responsive responsive, ProductosData productosData) {
+    return GestureDetector(
+      child: Container(
+        margin: EdgeInsets.symmetric(
+            vertical: responsive.hp(0.5), horizontal: responsive.wp(3)),
+        padding: EdgeInsets.only(right: responsive.wp(3)),
+        decoration: BoxDecoration(
+            color: Colors.grey[50],
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(13)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+             Container(
+                width: responsive.wp(35),
+                child:  ClipRRect(
+                    borderRadius: BorderRadius.circular(13),
+                    child: FadeInImage(
+                        placeholder: AssetImage('assets/jar-loading.gif'),
+                        fit: BoxFit.contain,
+                        image: NetworkImage(
+                            'https://sifu.unileversolutions.com/image/es-MX/recipe-topvisual/2/1260-709/hamburguesa-clasica-50425188.jpg')),
+                  ),
+              ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: responsive.wp(.8)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      productosData.productoNombre,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsive.ip(1.8)),
+                    ),
+                    Text(
+                      productosData.productoPrecio,
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsive.ip(2)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                      icon: Icon(
+                        Icons.delete_outline,
+                        size: responsive.ip(3.5),
+                      ),
+                      onPressed: () {
+                        utils.quitarFavoritos(context, productosData);
+                        setState(() {});
+                      }),
+                  GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.red),
+                      child: Text(
+                        'Agregar',
+                        style: TextStyle(
+                            color: Colors.white, fontSize: responsive.ip(1.8)),
+                      ),
+                    ),
+                    onTap: () {
+                      utils.agregarCarrito(productosData, context, "1");
+                    },
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: (){
+        Navigator.pushNamed(context, 'detalleP', arguments: productosData);
+      },
+
+    );
+  }
+ 
+ 
+ }

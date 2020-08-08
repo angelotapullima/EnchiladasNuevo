@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "446658527649",
+    "firebase_url": "https://app-enchiladas.firebaseio.com",
+    "project_id": "app-enchiladas",
+    "storage_bucket": "app-enchiladas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446658527649:android:f3e224d1eb746074ba4be0",
+        "android_client_info": {
+          "package_name": "com.bufeotec.enchiladasapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446658527649-0ece6jugck1ih3tqcao5b0aqq5sondku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bufeotec.enchiladasapp",
+            "certificate_hash": "87a2f2031027ac8bd0bf1da626c04ff85c57b1d8"
+          }
+        },
+        {
+          "client_id": "446658527649-r9pbv73kai0fectickamesqddp8jicgn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm-o8J2q25bMJcPPz6OEiMCqIYlBF9txI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446658527649-r9pbv73kai0fectickamesqddp8jicgn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

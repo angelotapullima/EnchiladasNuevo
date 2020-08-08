@@ -1,0 +1,855 @@
+import 'dart:ui';
+
+import 'package:animate_do/animate_do.dart';
+import 'package:enchiladasapp/src/bloc/provider.dart';
+import 'package:enchiladasapp/src/database/carrito_database.dart';
+import 'package:enchiladasapp/src/models/carrito_model.dart';
+import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
+import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+class DetalleProducto extends StatefulWidget {
+  @override
+  _DetalleProducto createState() => _DetalleProducto();
+}
+
+class _DetalleProducto extends State<DetalleProducto> {
+  /* final double _initFabHeight = 55.0;
+  double _fabHeight; */
+  bool estadoDelivery = false;
+  double _panelHeightOpen;
+
+
+  TextEditingController observacionProducto = TextEditingController();
+
+  @override
+  void dispose() {
+    // Limpia el controlador cuando el Widget se descarte
+    observacionProducto.dispose();
+    super.dispose();
+  }
+  void llamado() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    /* _fabHeight = _initFabHeight; */
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _panelHeightOpen = MediaQuery.of(context).size.height * .80;
+    final ProductosData productos = ModalRoute.of(context).settings.arguments;
+    final responsive = Responsive.of(context);
+    final productosIdBloc = ProviderBloc.prod(context);
+
+    productosIdBloc.obtenerProductoPorId(productos.idProducto);
+
+    return Material(
+        child: StreamBuilder(
+            stream: productosIdBloc.productosIdStream,
+            initialData: [],
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data.length > 0) {
+                  return SlidingUpPanel(
+                    maxHeight: _panelHeightOpen,
+                    minHeight: responsive.hp(7),
+                    parallaxEnabled: true,
+                    parallaxOffset: .5,
+                    body: Stack(children: <Widget>[
+                      _background(),
+                      _backgroundImage(context),
+                      _crearAppbar(responsive),
+                      _contenido(snapshot.data[0], responsive, context),
+                    ]),
+                    panelBuilder: (sc) => _carritoProductos(responsive, sc),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(18.0),
+                        topRight: Radius.circular(18.0)),
+                    onPanelSlide: (double pos) => setState(() {
+                      /* _fabHeight = pos * (_panelHeightOpen - responsive.hp(7)) +
+                          _initFabHeight; */
+                    }),
+                  );
+                } else {
+                  return Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+                }
+              } else {
+                return Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+            }));
+  }
+
+  Widget botonesBajos(Responsive responsive, ProductosData productosData) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
+      height: responsive.hp(7),
+      width: double.infinity,
+      child: Row(
+        children: <Widget>[
+          Container(
+              width: responsive.wp(20),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.red)),
+              child: Center(
+                  child: (productosData.productoFavorito == 1)
+                      ? IconButton(
+                          onPressed: () {
+                            setState(() {
+                              print('quitar');
+                              utils.quitarFavoritos(context, productosData);
+                            });
+                          },
+                          icon: Icon(FontAwesomeIcons.solidHeart,
+                              color: Colors.red, size: responsive.ip(2.5)),
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            setState(() {
+                              print('agregar');
+                              utils.agregarFavoritos(context, productosData);
+                            });
+                          },
+                          icon: Icon(FontAwesomeIcons.heart,
+                              color: Colors.red, size: responsive.ip(2.5))))),
+          SizedBox(
+            width: responsive.wp(5),
+          ),
+          GestureDetector(
+            child: Container(
+                width: responsive.wp(65),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.red,
+                    border: Border.all(color: Colors.red)),
+                child: Center(
+                  child: Text(
+                    'Agregar al Carrito',
+                    style: TextStyle(
+                        color: Colors.white, fontSize: responsive.ip(2.5)),
+                  ),
+                )),
+            onTap: () {
+              utils.agregarCarrito(productosData, context, "1");
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _contenido(ProductosData productosData, Responsive responsive,
+      BuildContext context) {
+    final precioProdcuto =
+        utils.format(double.parse(productosData.productoPrecio));
+    return Padding(
+      padding: EdgeInsets.only(top: responsive.hp(11)),
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.7,
+        builder: (context, controller) {
+          return Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadiusDirectional.circular(20),
+                  color: Colors.white),
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: SingleChildScrollView(
+                  controller: controller,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: responsive.hp(3),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Flexible(
+                              child: Text(
+                                productosData.productoNombre,
+                                style: TextStyle(
+                                    fontSize: responsive.ip(3),
+                                    fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            SizedBox(
+                              width: responsive.wp(6),
+                            ),
+                            Text(
+                              'S/ $precioProdcuto',
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: responsive.ip(4),
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: responsive.hp(3),
+                        ),
+                        botonesBajos(responsive, productosData),
+                        //_cantidad(responsive),
+                        SizedBox(
+                          height: responsive.hp(3),
+                        ),
+                        Text(
+                          'Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit./n Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(fontSize: responsive.ip(2)),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(3),
+                        ),
+                        Text(
+                          'Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit./n Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(fontSize: responsive.ip(2)),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(3),
+                        ),
+                        Text(
+                          'Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit./n Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(fontSize: responsive.ip(2)),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(3),
+                        ),
+                        Text(
+                          'Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit./n Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(fontSize: responsive.ip(2)),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(3),
+                        ),
+                        /* Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.red),
+                          child: Column(
+                            children: <Widget>[
+                              Icon(FontAwesomeIcons.bitbucket,
+                                  color: Colors.white),
+                              Text(
+                                'Delivery Disponible',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ), */
+                        SizedBox(
+                          height: responsive.hp(10),
+                        ),
+                      ])));
+        },
+      ),
+    );
+  }
+
+  Widget _carritoProductos(Responsive responsive, ScrollController sc) {
+    final carritoBloc = ProviderBloc.carrito(context);
+    carritoBloc.obtenerCarrito();
+
+    return StreamBuilder(
+      stream: carritoBloc.carritoIdStream,
+      builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return _contenidoDeCarrito(responsive, snapshot.data, sc);
+          } else {
+            return Column(children: <Widget>[
+              Container(
+                height: responsive.hp(7),
+                padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5), vertical: responsive.hp(1.5)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadiusDirectional.only(
+                        topEnd: Radius.circular(20),
+                        topStart: Radius.circular(20)),
+                    color: Colors.red),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Text(
+                      'Monto S/0.00',
+                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    )),
+                    Stack(children: <Widget>[
+                      Icon(
+                        Icons.shopping_cart,
+                        size: responsive.ip(4),
+                        color: Colors.white,
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: BounceInDown(
+                          from: 10,
+                          child: Container(
+                            child: Text(
+                              '0',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: responsive.ip(1.5)),
+                            ),
+                            alignment: Alignment.center,
+                            width: responsive.ip(1.8),
+                            height: responsive.ip(1.8),
+                            decoration: BoxDecoration(
+                                color: Colors.green, shape: BoxShape.circle),
+                          ),
+                        ),
+                      )
+                    ])
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: responsive.hp(3),
+              ),
+              Container(
+                  height: responsive.hp(30),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: responsive.wp(10)),
+                    child: SvgPicture.asset('assets/carrito.svg'),
+                  )),
+              SizedBox(
+                height: responsive.hp(3),
+              ),
+              Text(
+                'No hay Productos en el carrito',
+                style: TextStyle(color: Colors.black, fontSize: 22),
+              )
+            ]);
+          }
+        } else {
+          return Center(
+            child: SvgPicture.asset('assets/carrito.svg'),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _contenidoDeCarrito(
+      Responsive responsive, List<Carrito> carrito, ScrollController sc) {
+    double subtotal = 0;
+    double total = 0;
+    double valorDelivery = 0;
+    int cant = 0;
+    for (int i = 0; i < carrito.length; i++) {
+      if (carrito[i].productoTipo != '1') {
+        subtotal = subtotal +
+            (double.parse(carrito[i].productoPrecio) *
+                double.parse(carrito[i].productoCantidad));
+      } else {
+        estadoDelivery = true;
+        valorDelivery = double.parse(carrito[i].productoPrecio);
+      }
+      /* subtotal = subtotal +
+          (double.parse(carrito[i].productoPrecio) *
+              double.parse(carrito[i].productoCantidad)); */
+      cant++;
+    }
+
+    total = subtotal + valorDelivery;
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: responsive.wp(5), vertical: responsive.hp(2)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(20), topStart: Radius.circular(20)),
+              color: Colors.red),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                  child: Text(
+                'Monto S/ $total',
+                style: TextStyle(color: Colors.white, fontSize: 22),
+              )),
+              Stack(children: <Widget>[
+                Icon(
+                  Icons.shopping_cart,
+                  size: responsive.ip(4),
+                  color: Colors.white,
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: BounceInDown(
+                    from: 10,
+                    child: Container(
+                      child: Text(
+                        '$cant',
+                        style: TextStyle(
+                            color: Colors.white, fontSize: responsive.ip(1.5)),
+                      ),
+                      alignment: Alignment.center,
+                      width: responsive.ip(1.9),
+                      height: responsive.ip(1.9),
+                      decoration: BoxDecoration(
+                          color: Colors.green, shape: BoxShape.circle),
+                    ),
+                  ),
+                  //child: Icon(Icons.brightness_1, size: 8,color: Colors.redAccent,  )
+                )
+              ])
+            ],
+          ),
+        ),
+        Expanded(
+            child: ListView(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: <Widget>[
+            _resumenPedido(responsive, subtotal, valorDelivery),
+            _deliveryRapido(responsive),
+            _pagarCarrito(context, responsive),
+            _listaProductos(responsive, carrito),
+          ],
+        ))
+      ],
+    );
+  }
+
+  Widget _listaProductos(Responsive responsive, List<Carrito> carrito) {
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(blurRadius: 3, color: Colors.black26),
+            ],
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(13)),
+        child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+            itemCount: carrito.length + 1,
+            itemBuilder: (context, i) {
+              if (i == 0) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                      top: responsive.hp(1.2),
+                      left: responsive.wp(2),
+                      right: responsive.wp(2)),
+                  child: Text(
+                    'Productos',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: responsive.ip(2.8)),
+                  ),
+                );
+              }
+              final index = i - 1;
+              return _itemPedido(responsive, carrito[index]);
+            }));
+  }
+
+  Widget _itemPedido(Responsive responsive, Carrito carrito) {
+    final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
+        double.parse(carrito.productoCantidad));
+        var observacionProducto = 'Toca para agregar descripción';
+        if(carrito.productoObservacion!=null && carrito.productoObservacion !=' '){
+          observacionProducto = carrito.productoObservacion;
+        }
+
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
+      child: (carrito.productoTipo != '1')
+          ? Column(
+            children: <Widget>[
+              Row(
+                  children: <Widget>[
+                    Container(
+                      width: responsive.wp(35),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: FadeInImage(
+                            placeholder: AssetImage('assets/jar-loading.gif'),
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                                'https://sifu.unileversolutions.com/image/es-MX/recipe-topvisual/2/1260-709/hamburguesa-clasica-50425188.jpg')),
+                      ),
+                    ),
+                    SizedBox(
+                      width: responsive.wp(2),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            carrito.productoNombre,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.8)),
+                          ),
+                          Text(
+                            '$preciofinal',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(2)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        //crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          IconButton(
+                              icon: Icon(
+                                Icons.delete_outline,
+                                size: responsive.ip(3),
+                              ),
+                              onPressed: () {
+                                final carritoDatabase = CarritoDatabase();
+                                carritoDatabase
+                                    .deteleProductoCarrito(carrito.idProducto);
+                                setState(() {});
+                              }),
+                          Container(
+                              child: CantidadTab(
+                                  carrito: carrito, llamada: this.llamado))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                GestureDetector(
+                  child: Row(children: <Widget>[
+                    Icon(Icons.mode_edit,color: Colors.red,),
+                    Expanded(child: Text('$observacionProducto'))
+                  ],),
+                  onTap: (){
+                    dialogoObservacionProducto('${carrito.idProducto}');
+                  },
+                )
+            ],
+          )
+          : Container(),
+    );
+  }
+
+  Widget _resumenPedido(
+      Responsive responsive, double subtotal, double valorDelivery) {
+    final subtotal2 = utils.format(subtotal);
+    final valorDelivery2 = utils.format(valorDelivery);
+    final totalex = utils.format(subtotal + valorDelivery);
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+      child: Container(
+          decoration: BoxDecoration(
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
+              color: Colors.white,
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(5)),
+          child: Padding(
+            padding: EdgeInsets.all(responsive.wp(2)),
+            child: Column(children: [
+              Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Text(
+                    'Sub Total ',
+                    style: TextStyle(fontSize: responsive.ip(2)),
+                  )),
+                  Text('S/ $subtotal2',
+                      style: TextStyle(fontSize: responsive.ip(2))),
+                ],
+              ),
+              SizedBox(
+                height: responsive.hp(2),
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Text('Entrega rápida',
+                          style: TextStyle(fontSize: responsive.ip(2)))),
+                  Text('S/ $valorDelivery2',
+                      style: TextStyle(fontSize: responsive.ip(2)))
+                ],
+              ),
+              SizedBox(
+                height: responsive.hp(2),
+              ),
+              Divider(),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Text(
+                    'Total a pagar',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: responsive.ip(2.2)),
+                  )),
+                  Text('S/ $totalex',
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsive.ip(2.2)))
+                ],
+              ),
+            ]),
+          )),
+    );
+  }
+
+  Widget _pagarCarrito(BuildContext context, Responsive responsive) {
+    return GestureDetector(
+      child: Padding(
+        padding: EdgeInsets.all(responsive.wp(2)),
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                width: double.infinity,
+                child: RaisedButton(
+                    color: Colors.red,
+                    textColor: Colors.white,
+                    child: Text(
+                      'Ordenar Pedido',
+                      style: TextStyle(fontSize: responsive.ip(2)),
+                    ),
+                    onPressed: () {
+                      final prefs = Preferences();
+
+                      if (prefs.email != null && prefs.email != "") {
+                        Navigator.pushNamed(context, 'detallePago');
+                      } else {
+                        pedirLogueo();
+                      }
+                    }),
+              ),
+            ],
+          ),
+        ),
+      ),
+      onTap: () {
+        final prefs = Preferences();
+
+        if (prefs.email != null && prefs.email != "") {
+          Navigator.pushNamed(context, 'detallePago');
+        } else {
+          pedirLogueo();
+        }
+      },
+    );
+  }
+
+  void pedirLogueo() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (contextd) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Debe registrarse para Ordenar'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancelar')),
+              FlatButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, 'login', (route) => false);
+                  },
+                  child: Text('Continuar')),
+            ],
+          );
+        });
+  }
+
+  Widget _crearAppbar(Responsive responsive) {
+    return Container(
+      height: responsive.hp(9),
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.shop,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _background() {
+    return Container(
+      color: Colors.red,
+      width: double.infinity,
+      height: double.infinity,
+    );
+  }
+
+  Widget _backgroundImage(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    print(size.height * 0.38);
+    print(size.width);
+
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20))),
+            width: double.infinity,
+            height: size.height * 0.38,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Image(
+                    image: AssetImage('assets/jar-loading.gif'),
+                    fit: BoxFit.cover),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                imageUrl: 'http://guabba.com/capitan2/media/12.png',
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  )),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _deliveryRapido(Responsive responsive) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      decoration: BoxDecoration(
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
+          color: Colors.white,
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(13)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('Agregar entrega rápida',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+              Switch.adaptive(
+                value: estadoDelivery,
+                onChanged: (bool state) async {
+                  print(state);
+                  estadoDelivery = state;
+
+                  if (estadoDelivery) {
+                    await utils.agregarDeliveryRapido(context);
+                  } else {
+                    await utils.quitarDeliveryRapido(context);
+                  }
+                  //setState(() {});
+                },
+              ),
+            ],
+          ),
+          Text(
+            'Tu pedido llegará en máximo 1 hora',
+            textAlign: TextAlign.start,
+          )
+        ],
+      ),
+    );
+  }
+
+  void dialogoObservacionProducto(String id) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (contextd) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Ingrese la observación del producto'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextField(
+                  controller: observacionProducto,
+                ),
+                //Text('Producto agregado al carrito correctamente'),
+                SizedBox(
+                  height: 20.0,
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancelar')),
+              FlatButton(
+                  onPressed: () async {
+                    utils.actualizarObservacion(context, observacionProducto.text,id);
+
+                    observacionProducto.text='';
+
+                    Navigator.pop(context);
+                  },
+                  child: Text('Aceptar')),
+            ],
+          );
+        });
+  }
+
+  
+}
