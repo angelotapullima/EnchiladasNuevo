@@ -32,20 +32,22 @@ class ZonaBloc {
   void obtenerUsuarioZona() async {
     final list = List<Zona>();
     final user = await usuarioDatabase.obtenerUsUario();
-    if (user[0].idZona != "") {
-      final zonas = await zonaDatabase.obtenerZonaPorId(user[0].idZona);
-      final producto =
-          await productoDatabase.consultarPorId(zonas[0].idProducto);
+    if (user.length > 0) {
+      if (user[0].idZona != "") {
+        final zonas = await zonaDatabase.obtenerZonaPorId(user[0].idZona);
+        final producto =
+            await productoDatabase.consultarPorId(zonas[0].idProducto);
 
-      Zona zona = Zona();
-      zona.idZona = zonas[0].idZona;
-      zona.zonaNombre = zonas[0].zonaNombre;
-      zona.zonaPedidoMinimo = zonas[0].zonaPedidoMinimo;
-      zona.zonaImagen = zonas[0].zonaImagen;
-      zona.idProducto = zonas[0].idProducto;
-      zona.zonaDescripcion = zonas[0].zonaDescripcion;
-      zona.zonaPrecio = producto[0].productoPrecio;
-      list.add(zona);
+        Zona zona = Zona();
+        zona.idZona = zonas[0].idZona;
+        zona.zonaNombre = zonas[0].zonaNombre;
+        zona.zonaPedidoMinimo = zonas[0].zonaPedidoMinimo;
+        zona.zonaImagen = zonas[0].zonaImagen;
+        zona.idProducto = zonas[0].idProducto;
+        zona.zonaDescripcion = zonas[0].zonaDescripcion;
+        zona.zonaPrecio = producto[0].productoPrecio;
+        list.add(zona);
+      }
     }
 
     _zonaUsuarioController.sink.add(list);

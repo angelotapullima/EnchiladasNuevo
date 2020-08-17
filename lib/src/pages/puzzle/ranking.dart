@@ -52,22 +52,33 @@ class RankingPage extends StatelessWidget {
 
   Widget contenidoRankingMayora3(BuildContext context, String time,
       Responsive responsive, List<RankingPuzzle> data) {
+
+        final list = List<RankingPuzzle>();
+
+        for(int i=0;i<3;i++){
+
+          RankingPuzzle rankingPuzzle =  RankingPuzzle();
+          rankingPuzzle.idPuzzle = data[i].idPuzzle;
+          rankingPuzzle.personName = data[i].personName;
+          rankingPuzzle.puzzleFecha = data[i].puzzleFecha;
+          rankingPuzzle.userImage = data[i].userImage;
+          rankingPuzzle.puzzleTiempo = data[i].puzzleTiempo;
+          list.add(rankingPuzzle);
+
+
+        }
     return CustomScrollView(slivers: <Widget>[
-      _crearAppbar(context, time),
+      _crearAppbar(context, time,list),
       SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int i) {
-          return _cardRanking(responsive, data[i]);
-        }, childCount: data.length),
+          return _cardRanking(responsive, data[i+3]);
+        }, childCount: data.length-3),
       )
     ]);
   }
 
-  Widget _crearFondo(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-
-
-    final circulo = Container(
+  Widget _circulo(Size size,String foto){
+    return Container(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100.0),
         child: FadeInImage(
@@ -76,9 +87,16 @@ class RankingPage extends StatelessWidget {
             fit: BoxFit.cover,
             placeholder: AssetImage('assets/ladrillos.png'),
             image: NetworkImage(
-                'https://ep01.epimg.net/elpais/imagenes/2019/06/24/icon/1561369019_449523_1561456608_noticia_normal.jpg')),
+                '$foto'),),
       ),
     );
+  }
+  Widget _crearFondo(BuildContext context,List<RankingPuzzle> list) {
+    final size = MediaQuery.of(context).size;
+
+
+
+    
     return Stack(
         children: <Widget>[
           Container(
@@ -115,9 +133,18 @@ class RankingPage extends StatelessWidget {
                       padding: EdgeInsets.only(top: size.height * 0.15),
                       child: Column(
                         children: <Widget>[
-                          circulo,
+                          _circulo(size, '${list[0].userImage}'),
                           Text(
-                            'Angelo Tapullima Del Aguila',
+                            '${list[0].puzzleTiempo}',
+
+                            textAlign: TextAlign.center,
+                            //overflow:TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '${list[0].personName}',
 
                             textAlign: TextAlign.center,
                             //overflow:TextOverflow.ellipsis,
@@ -133,9 +160,18 @@ class RankingPage extends StatelessWidget {
                       padding: EdgeInsets.only(top: size.height * 0.05),
                       child: Column(
                         children: <Widget>[
-                          circulo,
+                          _circulo(size, '${list[1].userImage}'),
                           Text(
-                            'Angelo Tapullima Del Aguila',
+                            '${list[0].puzzleTiempo}',
+
+                            textAlign: TextAlign.center,
+                            //overflow:TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '${list[1].personName}',
                             textAlign: TextAlign.center,
                             //overflow:TextOverflow.ellipsis,
                             style: TextStyle(
@@ -150,9 +186,18 @@ class RankingPage extends StatelessWidget {
                       padding: EdgeInsets.only(top: size.height * 0.15),
                       child: Column(
                         children: <Widget>[
-                          circulo,
+                          _circulo(size, '${list[2].userImage}'),
                           Text(
-                            'Angelo Tapullima Del Aguila',
+                            '${list[0].puzzleTiempo}',
+
+                            textAlign: TextAlign.center,
+                            //overflow:TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '${list[2].personName}',
                             textAlign: TextAlign.center,
                             //overflow:TextOverflow.ellipsis,
                             style: TextStyle(
@@ -171,7 +216,9 @@ class RankingPage extends StatelessWidget {
       );
   }
 
-  Widget _crearAppbar(BuildContext context, String time) {
+  Widget _crearAppbar(BuildContext context, String time,List<RankingPuzzle> list) {
+
+
     final size = MediaQuery.of(context).size;
     return SliverAppBar(
       shape: ContinuousRectangleBorder(
@@ -188,7 +235,7 @@ class RankingPage extends StatelessWidget {
           time,
           style: TextStyle(color: Colors.white, fontSize: 16.0),
         ),*/
-        background: _crearFondo(context),
+        background: _crearFondo(context,list),
       ),
     );
   }

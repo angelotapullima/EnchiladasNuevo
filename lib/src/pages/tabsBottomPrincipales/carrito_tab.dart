@@ -211,13 +211,14 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                     builder: (BuildContext context,
                         AsyncSnapshot<List<User>> snapshotUser) {
                       if (snapshotUser.hasData) {
-                        return ListView(
+                        if(snapshotUser.data.length>0){
+                          return ListView(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           children: <Widget>[
                             _direccion(),
                             _zona(context),
-                            _numeroTelefono(context, snapshotUser.data),
+                            //_numeroTelefono(context, snapshotUser.data),
                             _listaproductos(responsive, carritoBloc),
                             _deliveryRapido(responsive),
                             _resumenPedido(
@@ -225,6 +226,12 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                             _pagarCarrito(responsive),
                           ],
                         );
+                        }else{
+                          return Center(
+                            child:Text('no hay usuario')
+                          );
+                        }
+                        
                       } else {
                         return Center(child: CupertinoActivityIndicator());
                       }

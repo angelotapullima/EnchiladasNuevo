@@ -34,8 +34,7 @@ class _SplashState extends State<Splash> with AfterLayoutMixin {
     final configuracionApi=ConfiguracionApi();
     configuracionApi.configuracion();
 
-    final pushNotificationProvider = PushNotificationProvider();
-    pushNotificationProvider.initNotification();
+    
 
     Auth.instance.user.then((FirebaseUser user) {
       if(user!= null){

@@ -20,11 +20,12 @@ class PedidosRepartidor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
     return Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
-            height: double.infinity,
+            height: responsive.hp(50),
             width: double.infinity,
             color: Colors.red,
           ),

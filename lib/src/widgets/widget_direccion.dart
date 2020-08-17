@@ -37,7 +37,7 @@ Widget widgetDireccion(String imagen, String titulo, String monto, String descri
         height: responsive.hp(1.5),
       ),
       Text(
-        monto,
+        'Monto mínimo S/.$monto',
         style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,

@@ -26,8 +26,8 @@ class DetallePago extends StatefulWidget {
 }
 
 class _DetallePagoState extends State<DetallePago> {
-  int _comprobanteValue = 0;
-  int _tipoPagoValue = 0;
+  int _comprobanteValue = 3;
+  int _tipoPagoValue = 3;
   String ruc = "";
   String razonSocial = "";
   String montoPago = "";
@@ -68,7 +68,8 @@ class _DetallePagoState extends State<DetallePago> {
     });
   }
 
-  void _tipoPagoRadioValue(BuildContext context, int value) {
+  void _tipoPagoRadioValue(
+      BuildContext context, int value, Responsive responsive) {
     setState(() {
       _tipoPagoValue = value;
 
@@ -80,13 +81,11 @@ class _DetallePagoState extends State<DetallePago> {
           break;
         case 1:
           print('1');
-          dialogoIngresarMonto(context);
+          dialogoIngresarMonto(context, responsive);
           break;
       }
     });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -174,15 +173,15 @@ class _DetallePagoState extends State<DetallePago> {
               Divider(),
               _deliveryRapido(responsive, carrito),
               Divider(),
-              _numeroTelefono(usuarioBloc, context),
+              _numeroTelefono(usuarioBloc, context, responsive),
               Divider(),
-              _direccion(context),
+              _direccion(context, responsive),
               Divider(),
               _zona(context),
               Divider(),
               _tipoComprobante(context, responsive),
               Divider(),
-              _tipoPago(),
+              _tipoPago(responsive),
               Divider(),
               _pagarCarrito(context, responsive)
             ],
@@ -383,7 +382,8 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _numeroTelefono(UsuarioBloc usuarioBloc, BuildContext context) {
+  Widget _numeroTelefono(
+      UsuarioBloc usuarioBloc, BuildContext context, Responsive responsive) {
     return StreamBuilder(
         stream: usuarioBloc.usuarioStream,
         builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
@@ -395,20 +395,20 @@ class _DetallePagoState extends State<DetallePago> {
                 telefono = snapshot.data[0].telefono;
                 agregar = 'Cambiar';
 
-                return _telefono(telefono, agregar);
+                return _telefono(telefono, agregar, responsive);
               } else {
-                return _telefono(telefono, agregar);
+                return _telefono(telefono, agregar, responsive);
               }
             } else {
-              return _telefono(telefono, agregar);
+              return _telefono(telefono, agregar, responsive);
             }
           } else {
-            return _telefono(telefono, agregar);
+            return _telefono(telefono, agregar, responsive);
           }
         });
   }
 
-  Widget _telefono(String telefono, String agregar) {
+  Widget _telefono(String telefono, String agregar, Responsive responsive) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -419,7 +419,7 @@ class _DetallePagoState extends State<DetallePago> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18)),
+                      fontSize: responsive.ip(2))),
               FlatButton(
                 child: Text(
                   '$agregar',
@@ -437,17 +437,17 @@ class _DetallePagoState extends State<DetallePago> {
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 22)),
+                    fontSize: responsive.ip(2.1))),
             Text('$telefono',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 22))
+                    fontSize: responsive.ip(2.1)))
           ])
         ]);
   }
 
-  Widget _direccion(BuildContext context) {
+  Widget _direccion(BuildContext context, Responsive responsive) {
     final direcionBloc = ProviderBloc.dire(context);
     direcionBloc.obtenerDireccion();
 
@@ -457,18 +457,18 @@ class _DetallePagoState extends State<DetallePago> {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
             return direction(snapshot.data[snapshot.data.length - 1].direccion,
-                snapshot.data[0].referencia);
+                snapshot.data[0].referencia, responsive);
           } else {
-            return direction("", "");
+            return direction("", "", responsive);
           }
         } else {
-          return direction("", "");
+          return direction("", "", responsive);
         }
       },
     );
   }
 
-  Widget direction(String addres, String referencia) {
+  Widget direction(String addres, String referencia, Responsive responsive) {
     String addresito;
     String agg;
     String ref;
@@ -494,7 +494,7 @@ class _DetallePagoState extends State<DetallePago> {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18)),
+                  fontSize: responsive.ip(2))),
           FlatButton(
             child: Text(
               '$agg',
@@ -509,7 +509,9 @@ class _DetallePagoState extends State<DetallePago> {
       Text(
         '$addresito',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: responsive.ip(2)),
       ),
       SizedBox(
         height: 5,
@@ -524,41 +526,64 @@ class _DetallePagoState extends State<DetallePago> {
 
   Widget _tipoComprobante(BuildContext context, Responsive responsive) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Text('Comprobante de pago',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18)),
+        Text(
+          'Comprobante de pago',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: responsive.ip(2),
+          ),
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Radio(
-              value: 0,
-              groupValue: _comprobanteValue,
-              onChanged: (valor) {
-                _comprobanteRadioValue(context, valor);
+            GestureDetector(
+              onTap: () {
+                _comprobanteRadioValue(context, 0);
               },
-            ),
-            new Text(
-              'Boleta',
-              style: new TextStyle(fontSize: 16.0),
-            ),
-            Expanded(child: Container()),
-            new Radio(
-              value: 1,
-              groupValue: _comprobanteValue,
-              onChanged: (valor) {
-                _comprobanteRadioValue(context, valor);
-              },
-            ),
-            new Text(
-              'Factura',
-              style: new TextStyle(
-                fontSize: 16.0,
+              child: Container(
+                child: Row(
+                  children: <Widget>[
+                    Radio(
+                      value: 0,
+                      groupValue: _comprobanteValue,
+                      onChanged: (valor) {
+                        _comprobanteRadioValue(context, valor);
+                      },
+                    ),
+                    Text(
+                      'Boleta',
+                      style: new TextStyle(fontSize: responsive.ip(1.8)),
+                    ),
+                  ],
+                ),
               ),
             ),
+            GestureDetector(
+              onTap: () {
+                _comprobanteRadioValue(context, 1);
+              },
+              child: Container(
+                  child: Row(
+                children: <Widget>[
+                  Radio(
+                    value: 1,
+                    groupValue: _comprobanteValue,
+                    onChanged: (valor) {
+                      _comprobanteRadioValue(context, valor);
+                    },
+                  ),
+                  Text(
+                    'Factura',
+                    style: new TextStyle(
+                      fontSize: responsive.ip(1.8),
+                    ),
+                  ),
+                ],
+              )),
+            )
           ],
         ),
         (ruc != "")
@@ -566,38 +591,46 @@ class _DetallePagoState extends State<DetallePago> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text('Razon Social : ',
-                          style: new TextStyle(
-                            fontSize: 16.0,
-                          )),
+                      Text(
+                        'Razon Social : ',
+                        style: TextStyle(
+                          fontSize: responsive.ip(1.8),
+                        ),
+                      ),
                       Expanded(
                         child: Text('$razonSocial',
-                            style: new TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                fontSize: responsive.ip(1.8),
+                                fontWeight: FontWeight.bold)),
                       )
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text('Ruc : ',
-                          style: new TextStyle(
-                            fontSize: 16.0,
-                          )),
+                      Text(
+                        'Ruc : ',
+                        style: new TextStyle(
+                          fontSize: responsive.ip(1.8),
+                        ),
+                      ),
                       Text('$ruc',
                           style: new TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.bold))
+                              fontSize: responsive.ip(1.8),
+                              fontWeight: FontWeight.bold))
                     ],
                   ),
                 ],
               )
-            : Text('$errorRuc',
-                style:
-                    new TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold))
+            : Text(
+                '$errorRuc',
+                style: new TextStyle(
+                    fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
+              )
       ],
     );
   }
 
-  Widget _tipoPago() {
+  Widget _tipoPago(Responsive responsive) {
     montoPago = tipoPagoController.text;
     vuelto = 0;
     if (montoPago != null && montoPago != "") {
@@ -610,56 +643,82 @@ class _DetallePagoState extends State<DetallePago> {
             style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 18)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            new Radio(
-              value: 0,
-              groupValue: _tipoPagoValue,
-              onChanged: (valor) {
-                _tipoPagoRadioValue(context, valor);
-              },
-            ),
-            new Text(
-              'Pago Online',
-              style: new TextStyle(fontSize: 16.0),
-            ),
-            Expanded(child: Container()),
-            new Radio(
-              value: 1,
-              groupValue: _tipoPagoValue,
-              onChanged: (valor) {
-                _tipoPagoRadioValue(context, valor);
-              },
-            ),
-            new Text(
-              'Efectivo',
-              style: new TextStyle(
-                fontSize: 16.0,
+                fontSize: responsive.ip(1.8))),
+        GestureDetector(
+          onTap: () {
+            _tipoPagoRadioValue(context, 0, responsive);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  _tipoPagoRadioValue(context, 0, responsive);
+                },
+                child: Container(
+                    child: Row(
+                  children: <Widget>[
+                    Radio(
+                      value: 0,
+                      groupValue: _tipoPagoValue,
+                      onChanged: (valor) {
+                        _tipoPagoRadioValue(context, valor, responsive);
+                      },
+                    ),
+                    Text(
+                      'Pago Online',
+                      style: TextStyle(fontSize: responsive.ip(1.8)),
+                    ),
+                  ],
+                )),
               ),
-            ),
-          ],
+              GestureDetector(
+                onTap: () {
+                  _tipoPagoRadioValue(context, 1, responsive);
+                },
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Radio(
+                        value: 1,
+                        groupValue: _tipoPagoValue,
+                        onChanged: (valor) {
+                          _tipoPagoRadioValue(context, valor, responsive);
+                        },
+                      ),
+                      Text(
+                        'Efectivo',
+                        style: TextStyle(
+                          fontSize: responsive.ip(1.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
         (montoPago != "" && montoPago != null)
             ? (vuelto < 0)
                 ? Container(
                     child: Text(
                         'El monto de pago debe ser superior al precio de la orden',
-                        style: new TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold)))
+                        style: TextStyle(
+                            fontSize: responsive.ip(1.8),
+                            fontWeight: FontWeight.bold)))
                 : Column(
                     children: <Widget>[
                       Row(
                         children: <Widget>[
                           Text('Monto de Pago : ',
-                              style: new TextStyle(
-                                fontSize: 16.0,
+                              style: TextStyle(
+                                fontSize: responsive.ip(1.8),
                               )),
                           Expanded(
                             child: Text('$montoPago',
-                                style: new TextStyle(
-                                    fontSize: 16.0,
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.8),
                                     fontWeight: FontWeight.bold)),
                           )
                         ],
@@ -667,12 +726,13 @@ class _DetallePagoState extends State<DetallePago> {
                       Row(
                         children: <Widget>[
                           Text('Vuelto ',
-                              style: new TextStyle(
-                                fontSize: 16.0,
+                              style: TextStyle(
+                                fontSize: responsive.ip(1.8),
                               )),
                           Text('$vuelto',
-                              style: new TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold))
+                              style: TextStyle(
+                                  fontSize: responsive.ip(1.8),
+                                  fontWeight: FontWeight.bold))
                         ],
                       ),
                     ],
@@ -712,10 +772,10 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  void dialogoIngresarMonto(BuildContext context) {
+  void dialogoIngresarMonto(BuildContext context, Responsive responsive) {
     showDialog(
         context: context,
-        barrierDismissible: true,
+        barrierDismissible: false,
         builder: (contextd) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
@@ -730,7 +790,7 @@ class _DetallePagoState extends State<DetallePago> {
                 ),
                 //Text('Producto agregado al carrito correctamente'),
                 SizedBox(
-                  height: 20.0,
+                  height: responsive.hp(1),
                 ),
               ],
             ),
@@ -795,7 +855,7 @@ class _DetallePagoState extends State<DetallePago> {
                       } else {
                         print('fue pe');
                         _comprobanteRadioValue(context, 0);
-                        errorRuc = 'Ingreso un RUC invalido';
+                        errorRuc = 'Ingrese un RUC válido';
                         mostrarErrorRuc = true;
                         Navigator.pop(context);
                       }
@@ -838,41 +898,45 @@ class _DetallePagoState extends State<DetallePago> {
 
   void dialogoIngresarTelefono() {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Ingrese su número de Teléfono'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: telefonoController,
-                ),
-                //Text('Producto agregado al carrito correctamente'),
-                SizedBox(
-                  height: 20.0,
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    utils.agregarTelefono(context, telefonoController.text);
-
-                    Navigator.pop(context);
-                  },
-                  child: Text('Continuar')),
+      context: context,
+      barrierDismissible: true,
+      builder: (contextd) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          title: Text('Ingrese su número de Teléfono'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: telefonoController,
+                keyboardType: TextInputType.number,
+              ),
+              //Text('Producto agregado al carrito correctamente'),
+              SizedBox(
+                height: 20.0,
+              ),
             ],
-          );
-        });
+          ),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar'),
+            ),
+            FlatButton(
+              onPressed: () async {
+                utils.agregarTelefono(context, telefonoController.text);
+
+                Navigator.pop(context);
+              },
+              child: Text('Continuar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _pagarcarrito() async {
@@ -948,13 +1012,13 @@ class _DetallePagoState extends State<DetallePago> {
                 Navigator.pop(context);
               }
             } else {
-              utils.showToast('debe ingresar un Comprobante de pago válido', 2);
+              utils.showToast('Debe ingresar un Comprobante de pago válido', 2);
             }
           } else {
-            utils.showToast('debe ingresar un Tipo de pago válido', 2);
+            utils.showToast('Debe ingresar un Tipo de pago válido', 2);
           }
         } else {
-          utils.showToast('Ingrese un número de telefono de entrega', 2);
+          utils.showToast('Ingrese un número de teléfono de entrega', 2);
         }
       } else {
         utils.showToast('Debe registrar una zona de entrega', 2);
@@ -1116,7 +1180,7 @@ class _DetallePagoState extends State<DetallePago> {
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18)),
+                    fontSize: responsive.ip(2))),
             Switch.adaptive(
               value: estadoDelivery,
               onChanged: (bool state) async {

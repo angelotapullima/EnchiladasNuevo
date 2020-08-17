@@ -15,12 +15,12 @@ class TrackingApi {
       final resp = await http.post(url, body: {
         'tn': prefs.token,
         'id_user': prefs.idUser,
-        'app': 'true',
+        'app': 'true', 
         'id_entrega': idEntrega
       });
       final decodedData = json.decode(resp.body);
-      final code = decodedData['result']['code'];
-      if (code == 1) {
+      final code = decodedData['success'];
+      if (code == 1 || code ==8) {
         return 1;
       } else {
         return 0;
@@ -43,8 +43,8 @@ class TrackingApi {
         'id_entrega': idEntrega
       });
       final decodedData = json.decode(resp.body);
-      final code = decodedData['result']['code'];
-      if (code == 1) {
+      final code = decodedData['success'];
+      if (code == 1 || code ==8) {
         return 1;
       } else {
         return 0;

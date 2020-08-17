@@ -275,7 +275,7 @@ class MapaRepartidorState extends State<MapaRepartidor> {
     String idUser = prefs.idUser;
     final trackingApi = TrackingApi();
 
-    try {
+    try { 
       if (prefs.tracking == 'activado') {
         final resp = await trackingApi.finalizarEntrega(idEntrega);
         if (resp == 1) {

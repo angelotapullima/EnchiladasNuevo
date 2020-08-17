@@ -27,7 +27,6 @@ class _DetalleProducto extends State<DetalleProducto> {
   bool estadoDelivery = false;
   double _panelHeightOpen;
 
-
   TextEditingController observacionProducto = TextEditingController();
 
   @override
@@ -36,6 +35,7 @@ class _DetalleProducto extends State<DetalleProducto> {
     observacionProducto.dispose();
     super.dispose();
   }
+
   void llamado() {
     setState(() {});
   }
@@ -65,12 +65,12 @@ class _DetalleProducto extends State<DetalleProducto> {
                 if (snapshot.data.length > 0) {
                   return SlidingUpPanel(
                     maxHeight: _panelHeightOpen,
-                    minHeight: responsive.hp(7),
+                    minHeight: responsive.hp(8),
                     parallaxEnabled: true,
-                    parallaxOffset: .5,
+                    parallaxOffset: .6,
                     body: Stack(children: <Widget>[
                       _background(),
-                      _backgroundImage(context),
+                      _backgroundImage(context, snapshot.data[0]),
                       _crearAppbar(responsive),
                       _contenido(snapshot.data[0], responsive, context),
                     ]),
@@ -93,7 +93,7 @@ class _DetalleProducto extends State<DetalleProducto> {
                   child: CupertinoActivityIndicator(),
                 );
               }
-            }));
+            },),);
   }
 
   Widget botonesBajos(Responsive responsive, ProductosData productosData) {
@@ -211,53 +211,15 @@ class _DetalleProducto extends State<DetalleProducto> {
                           height: responsive.hp(3),
                         ),
                         Text(
-                          'Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit./n Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit.',
+                          '${productosData.productoDescripcion}',
                           textAlign: TextAlign.justify,
                           style: TextStyle(fontSize: responsive.ip(2)),
                         ),
+
                         SizedBox(
                           height: responsive.hp(3),
                         ),
-                        Text(
-                          'Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit./n Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit.',
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: responsive.ip(2)),
-                        ),
-                        SizedBox(
-                          height: responsive.hp(3),
-                        ),
-                        Text(
-                          'Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit./n Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit.',
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: responsive.ip(2)),
-                        ),
-                        SizedBox(
-                          height: responsive.hp(3),
-                        ),
-                        Text(
-                          'Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit./n Excepteur laborum ut adipisicing quis. Commodo nisi do aliquip aliqua veniam ullamco est incididunt. Magna aute proident aliquip anim exercitation aute pariatur tempor culpa esse velit.',
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: responsive.ip(2)),
-                        ),
-                        SizedBox(
-                          height: responsive.hp(3),
-                        ),
-                        /* Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.red),
-                          child: Column(
-                            children: <Widget>[
-                              Icon(FontAwesomeIcons.bitbucket,
-                                  color: Colors.white),
-                              Text(
-                                'Delivery Disponible',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ), */
+
                         SizedBox(
                           height: responsive.hp(10),
                         ),
@@ -280,48 +242,69 @@ class _DetalleProducto extends State<DetalleProducto> {
           } else {
             return Column(children: <Widget>[
               Container(
-                height: responsive.hp(7),
+                height: responsive.hp(8),
                 padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5), vertical: responsive.hp(1.5)),
+                  horizontal: responsive.wp(5),
+                  //vertical: responsive.hp(1.5),
+                ),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadiusDirectional.only(
                         topEnd: Radius.circular(20),
-                        topStart: Radius.circular(20)),
+                        topStart: Radius.circular(20),),
                     color: Colors.red),
-                child: Row(
+                child: Column(
                   children: <Widget>[
-                    Expanded(
-                        child: Text(
-                      'Monto S/0.00',
-                      style: TextStyle(color: Colors.white, fontSize: 22),
-                    )),
-                    Stack(children: <Widget>[
-                      Icon(
-                        Icons.shopping_cart,
-                        size: responsive.ip(4),
-                        color: Colors.white,
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: BounceInDown(
-                          from: 10,
-                          child: Container(
-                            child: Text(
-                              '0',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: responsive.ip(1.5)),
-                            ),
-                            alignment: Alignment.center,
-                            width: responsive.ip(1.8),
-                            height: responsive.ip(1.8),
-                            decoration: BoxDecoration(
-                                color: Colors.green, shape: BoxShape.circle),
-                          ),
+                    Padding(
+                      padding: EdgeInsets.only(top: responsive.hp(1),),
+                      child: Container(
+                        height: responsive.hp(.6),
+                        width: responsive.wp(18),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),color: Colors.white,
                         ),
-                      )
-                    ])
+                        
+                      ),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            'Monto S/0.00',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsive.ip(2.8)),
+                          ),
+                        ), 
+                        Stack(children: <Widget>[
+                          Icon(
+                            Icons.shopping_cart,
+                            size: responsive.ip(4),
+                            color: Colors.white,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: BounceInDown(
+                              from: 10,
+                              child: Container(
+                                child: Text(
+                                  '0',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: responsive.ip(1.5)),
+                                ),
+                                alignment: Alignment.center,
+                                width: responsive.ip(1.8),
+                                height: responsive.ip(1.8),
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    shape: BoxShape.circle),
+                              ),
+                            ),
+                          )
+                        ])
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -339,7 +322,8 @@ class _DetalleProducto extends State<DetalleProducto> {
               ),
               Text(
                 'No hay Productos en el carrito',
-                style: TextStyle(color: Colors.black, fontSize: 22),
+                style: TextStyle(
+                    color: Colors.black, fontSize: responsive.ip(2.8)),
               )
             ]);
           }
@@ -388,7 +372,8 @@ class _DetalleProducto extends State<DetalleProducto> {
               Expanded(
                   child: Text(
                 'Monto S/ $total',
-                style: TextStyle(color: Colors.white, fontSize: 22),
+                style: TextStyle(
+                    color: Colors.white, fontSize: responsive.ip(2.8)),
               )),
               Stack(children: <Widget>[
                 Icon(
@@ -474,17 +459,18 @@ class _DetalleProducto extends State<DetalleProducto> {
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
     final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
         double.parse(carrito.productoCantidad));
-        var observacionProducto = 'Toca para agregar descripción';
-        if(carrito.productoObservacion!=null && carrito.productoObservacion !=' '){
-          observacionProducto = carrito.productoObservacion;
-        }
+    var observacionProducto = 'Toca para agregar descripción';
+    if (carrito.productoObservacion != null &&
+        carrito.productoObservacion != ' ') {
+      observacionProducto = carrito.productoObservacion;
+    }
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
       child: (carrito.productoTipo != '1')
           ? Column(
-            children: <Widget>[
-              Row(
+              children: <Widget>[
+                Row(
                   children: <Widget>[
                     Container(
                       width: responsive.wp(35),
@@ -493,8 +479,7 @@ class _DetalleProducto extends State<DetalleProducto> {
                         child: FadeInImage(
                             placeholder: AssetImage('assets/jar-loading.gif'),
                             fit: BoxFit.fill,
-                            image: NetworkImage(
-                                'https://sifu.unileversolutions.com/image/es-MX/recipe-topvisual/2/1260-709/hamburguesa-clasica-50425188.jpg')),
+                            image: NetworkImage('${carrito.productoFoto}')),
                       ),
                     ),
                     SizedBox(
@@ -546,16 +531,21 @@ class _DetalleProducto extends State<DetalleProducto> {
                   ],
                 ),
                 GestureDetector(
-                  child: Row(children: <Widget>[
-                    Icon(Icons.mode_edit,color: Colors.red,),
-                    Expanded(child: Text('$observacionProducto'))
-                  ],),
-                  onTap: (){
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.mode_edit,
+                        color: Colors.red,
+                      ),
+                      Expanded(child: Text('$observacionProducto'))
+                    ],
+                  ),
+                  onTap: () {
                     dialogoObservacionProducto('${carrito.idProducto}');
                   },
                 )
-            ],
-          )
+              ],
+            )
           : Container(),
     );
   }
@@ -568,60 +558,61 @@ class _DetalleProducto extends State<DetalleProducto> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
       child: Container(
-          decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-              color: Colors.white,
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(5)),
-          child: Padding(
-            padding: EdgeInsets.all(responsive.wp(2)),
-            child: Column(children: [
-              Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Text(
-                    'Sub Total ',
-                    style: TextStyle(fontSize: responsive.ip(2)),
-                  )),
-                  Text('S/ $subtotal2',
-                      style: TextStyle(fontSize: responsive.ip(2))),
-                ],
-              ),
-              SizedBox(
-                height: responsive.hp(2),
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Text('Entrega rápida',
-                          style: TextStyle(fontSize: responsive.ip(2)))),
-                  Text('S/ $valorDelivery2',
-                      style: TextStyle(fontSize: responsive.ip(2)))
-                ],
-              ),
-              SizedBox(
-                height: responsive.hp(2),
-              ),
-              Divider(),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Text(
-                    'Total a pagar',
+        decoration: BoxDecoration(
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
+            color: Colors.white,
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(5)),
+        child: Padding(
+          padding: EdgeInsets.all(responsive.wp(2)),
+          child: Column(children: [
+            Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(
+                  'Sub Total ',
+                  style: TextStyle(fontSize: responsive.ip(2)),
+                )),
+                Text('S/ $subtotal2',
+                    style: TextStyle(fontSize: responsive.ip(2))),
+              ],
+            ),
+            SizedBox(
+              height: responsive.hp(2),
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text('Entrega rápida',
+                        style: TextStyle(fontSize: responsive.ip(2)))),
+                Text('S/ $valorDelivery2',
+                    style: TextStyle(fontSize: responsive.ip(2)))
+              ],
+            ),
+            SizedBox(
+              height: responsive.hp(2),
+            ),
+            Divider(),
+            Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(
+                  'Total a pagar',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(2.2)),
+                )),
+                Text('S/ $totalex',
                     style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2.2)),
-                  )),
-                  Text('S/ $totalex',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(2.2)))
-                ],
-              ),
-            ]),
-          )),
+                        fontSize: responsive.ip(2.2)))
+              ],
+            ),
+          ]),
+        ),
+      ),
     );
   }
 
@@ -670,29 +661,30 @@ class _DetalleProducto extends State<DetalleProducto> {
 
   void pedirLogueo() {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Debe registrarse para Ordenar'),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, 'login', (route) => false);
-                  },
-                  child: Text('Continuar')),
-            ],
-          );
-        });
+      context: context,
+      barrierDismissible: true,
+      builder: (contextd) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          title: Text('Debe registrarse para Ordenar'),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancelar')),
+            FlatButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, 'login', (route) => false);
+                },
+                child: Text('Continuar')),
+          ],
+        );
+      },
+    );
   }
 
   Widget _crearAppbar(Responsive responsive) {
@@ -721,39 +713,44 @@ class _DetalleProducto extends State<DetalleProducto> {
     );
   }
 
-  Widget _backgroundImage(BuildContext context) {
+  Widget _backgroundImage(BuildContext context, ProductosData carrito) {
     final size = MediaQuery.of(context).size;
-    print(size.height * 0.38);
-    print(size.width);
+    print('2 pe ${carrito.idProducto}');
 
     return SafeArea(
       child: Column(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
-            width: double.infinity,
-            height: size.height * 0.38,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-              child: CachedNetworkImage(
-                placeholder: (context, url) => Image(
-                    image: AssetImage('assets/jar-loading.gif'),
-                    fit: BoxFit.cover),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: 'http://guabba.com/capitan2/media/12.png',
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  )),
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
-            ),
+              width: double.infinity,
+              height: size.height * 0.38,
+              child: Hero(
+                tag: '${carrito.idProducto}',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => Image(
+                        image: AssetImage('assets/jar-loading.gif'),
+                        fit: BoxFit.cover),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    imageUrl: '${carrito.productoFoto}',
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      )),
+                    ),
+                  ),
+                ),
+              ),
+            
           ),
           Expanded(
             child: Container(
@@ -784,7 +781,7 @@ class _DetalleProducto extends State<DetalleProducto> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18)),
+                      fontSize: responsive.ip(2))),
               Switch.adaptive(
                 value: estadoDelivery,
                 onChanged: (bool state) async {
@@ -803,6 +800,7 @@ class _DetalleProducto extends State<DetalleProducto> {
           ),
           Text(
             'Tu pedido llegará en máximo 1 hora',
+            style: TextStyle(fontSize: responsive.ip(1.7)),
             textAlign: TextAlign.start,
           )
         ],
@@ -839,9 +837,10 @@ class _DetalleProducto extends State<DetalleProducto> {
                   child: Text('Cancelar')),
               FlatButton(
                   onPressed: () async {
-                    utils.actualizarObservacion(context, observacionProducto.text,id);
+                    utils.actualizarObservacion(
+                        context, observacionProducto.text, id);
 
-                    observacionProducto.text='';
+                    observacionProducto.text = '';
 
                     Navigator.pop(context);
                   },
@@ -850,6 +849,4 @@ class _DetalleProducto extends State<DetalleProducto> {
           );
         });
   }
-
-  
 }

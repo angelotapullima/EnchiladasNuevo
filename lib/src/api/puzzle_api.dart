@@ -62,7 +62,8 @@ class PuzzleApi {
           puzzle.puzzleFecha = decodedData['result']['data'][i]['puzzle_fecha'];
           puzzle.userImage = decodedData['result']['data'][i]['user_image'];
           puzzle.puzzleTiempo =
-          decodedData['result']['data'][i]['puzzle_tiempo'];await rankingDatabase.insertarRanking(puzzle);
+          decodedData['result']['data'][i]['puzzle_tiempo'];
+          await rankingDatabase.insertarRanking(puzzle);
         }
       }
       return true;

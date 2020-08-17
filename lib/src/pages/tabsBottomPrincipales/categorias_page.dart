@@ -13,20 +13,15 @@ import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-
 class CategoriasPage extends StatelessWidget {
-
-  final _refreshController =
-  RefreshController(initialRefresh: false);
-  void _onRefresh(BuildContext context) async{
+  final _refreshController = RefreshController(initialRefresh: false);
+  void _onRefresh(BuildContext context) async {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
     categoriasBloc.obtenerCategoriasEnchiladas();
     _refreshController.refreshCompleted();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +30,21 @@ class CategoriasPage extends StatelessWidget {
     categoriasBloc.obtenerCategoriasEnchiladas();
 
     return ChangeNotifierProvider(
-      create: (_) => new PaginacionCategoria(),
-      child: Scaffold(
-        body:  Stack(children: <Widget>[
+        create: (_) => new PaginacionCategoria(),
+        child: Scaffold(
+          body: Stack(children: <Widget>[
             Container(
               height: double.infinity,
               width: double.infinity,
               color: Colors.red,
             ),
-            rowDatos(context,categoriasBloc)]),
-        ) );
+            rowDatos(context, categoriasBloc)
+          ]),
+        ));
   }
 
-  Widget _conte(double anchoCategorias,double anchoProductos,List<CategoriaData> categorias) {
-
+  Widget _conte(double anchoCategorias, double anchoProductos,
+      List<CategoriaData> categorias) {
     return Row(
       children: <Widget>[
         Container(
@@ -64,54 +60,57 @@ class CategoriasPage extends StatelessWidget {
         )
       ],
     );
-
   }
 
-  Widget rowDatos(BuildContext context,CategoriasBloc categoriasBloc) {
+  Widget rowDatos(BuildContext context, CategoriasBloc categoriasBloc) {
     final responsive = Responsive.of(context);
     final anchoCategorias = responsive.wp(24);
     final anchoProductos = responsive.wp(70);
 
     return SafeArea(
-        child: Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Categorías',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: responsive.ip(2.8),
-                    fontWeight: FontWeight.bold),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                  size: responsive.ip(3.5),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Categorías',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(2.8),
+                      fontWeight: FontWeight.bold),
                 ),
-                onPressed: () {
-                  showSearch(context: context, delegate: DataSearch());
-                },
-              )
-            ],
+                IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                    size: responsive.ip(3.5),
+                  ),
+                  onPressed: () {
+                    showSearch(context: context, delegate: DataSearch());
+                  },
+                )
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Container(
+          Expanded(
+            child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadiusDirectional.only(
-                      topEnd: Radius.circular(13),
-                      topStart: Radius.circular(13)),
-                  color: Colors.grey[50]),
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(13),
+                  topStart: Radius.circular(13),
+                ),
+                color: Colors.grey[50],
+              ),
               padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(3), vertical: responsive.hp(1)),
+                horizontal: responsive.wp(3),
+                vertical: responsive.hp(1),
+              ),
               child: SmartRefresher(
-                controller:_refreshController ,
-                onRefresh:(){
+                controller: _refreshController,
+                onRefresh: () {
                   _onRefresh(context);
                 },
                 child: StreamBuilder(
@@ -119,7 +118,8 @@ class CategoriasPage extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.length > 0) {
-                        return _conte(anchoCategorias,anchoProductos,snapshot.data);
+                        return _conte(
+                            anchoCategorias, anchoProductos, snapshot.data);
                       } else {
                         return Center(
                           child: Text('No hay datos de categorias'),
@@ -132,12 +132,13 @@ class CategoriasPage extends StatelessWidget {
                     }
                   },
                 ),
-              )),
-        ),
-      ],
-    ));
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
-
 }
 
 class CategoriasProducto extends StatefulWidget {
@@ -155,7 +156,6 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: _listaCategorias(widget.data),
       /* _listaCategorias(categoriasBloc), */
     );
@@ -237,7 +237,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosEnchiladasPorCategoria( _currenIndex);
+    productosIdBloc.obtenerProductosEnchiladasPorCategoria(_currenIndex);
 
     return Scaffold(
       body: _listaProductosId(productosIdBloc),
@@ -248,7 +248,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     return Container(
       color: Colors.transparent,
       width: this.widget.ancho,
-      child: StreamBuilder( 
+      child: StreamBuilder(
         stream: productosIdBloc.productosEnchiladasStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
@@ -278,6 +278,9 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
   Widget _itemPedido(BuildContext context, ProductosData productosData) {
     final Responsive responsive = new Responsive.of(context);
 
+
+    print(' 1 pe ${productosData.idProducto}');
+
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
@@ -289,24 +292,26 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
         //height: responsive.hp(13),
         child: Row(
           children: <Widget>[
-            Container(
-              width: responsive.wp(28),
-              height: responsive.hp(12),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  placeholder: (context, url) => Image(
-                      image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl:
-                      'http://guabba.com/capitan2/media/12.png',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.fill,
-                    )),
+            Hero(
+              tag: '${productosData.idProducto}',
+              child: Container(
+                width: responsive.wp(28),
+                height: responsive.hp(12),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => Image(
+                        image: AssetImage('assets/jar-loading.gif'),
+                        fit: BoxFit.cover),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    imageUrl: '${productosData.productoFoto}',
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                      )),
+                    ),
                   ),
                 ),
               ),

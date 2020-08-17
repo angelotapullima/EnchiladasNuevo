@@ -89,6 +89,7 @@ class OrdenesApi {
       print('Response status: $response');
       final decodedData = json.decode(response.body);
       print(response.body);
+      utils.showToast(response.body, 2);
 
       if (decodedData['result']['code'] == 1) {
         PedidoServer pedidosServer =

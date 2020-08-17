@@ -55,6 +55,7 @@ class CategoriasApi {
               productosData.productoPrecio = productos[x]['producto_precio'];
               productosData.productoUnidad = productos[x]['producto_unidad'];
               productosData.productoEstado = productos[x]['producto_estado'];
+              productosData.productoDescripcion = productos[x]['producto_detalle'];
 
               if (datoproducto.length > 0) {
                 productosData.productoFavorito =
@@ -95,6 +96,7 @@ class CategoriasApi {
               productosData.productoPrecio = productos[x]['producto_precio'];
               productosData.productoUnidad = productos[x]['producto_unidad'];
               productosData.productoEstado = productos[x]['producto_estado'];
+              productosData.productoDescripcion = productos[x]['producto_detalle'];
 
               if (datoproducto.length > 0) {
                 productosData.productoFavorito =
@@ -203,6 +205,9 @@ class CategoriasApi {
               productos.result.data[i].productoUnidad;
           productosData.productoEstado =
               productos.result.data[i].productoEstado;
+
+          productosData.productoDescripcion =
+              productos.result.data[i].productoDescripcion;
 
           if (dato.length > 0) {
             productosData.productoFavorito = dato[0].productoFavorito;

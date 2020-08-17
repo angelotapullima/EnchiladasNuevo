@@ -11,7 +11,6 @@ import 'package:enchiladasapp/src/models/direccion_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart'; 
 
 void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   final favoritosBloc = ProviderBloc.fav(context);
@@ -165,7 +164,7 @@ void agregarDireccion(BuildContext context, String addres, double latitud,
   direccion.latitud = latitud.toString();
   direccion.longitud = longitud.toString();
   direccion.referencia = referencia;
-
+ 
   await direccionDatabase.insertarDireccionDb(direccion);
   await usuarioDatabase.updateDireccionUsuario(direccion.id); 
   direccionBloc.obtenerDireccion();

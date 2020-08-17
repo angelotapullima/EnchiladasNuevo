@@ -10,12 +10,12 @@ class ProductoDatabase{
 
     
     final res = await db.rawInsert(
-        "INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_precio,producto_unidad,producto_estado,producto_favorito) "
+        "INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_precio,producto_unidad,producto_estado,producto_descripcion,producto_favorito) "
         "VALUES ( '${productos.idProducto}' , '${productos.idCategoria}' , '${productos.productoNombre}' ,"
         " '${productos.productoFoto}' , '${productos.productoPrecio}' , '${productos.productoUnidad}' ,"
-        " '${productos.productoEstado}', ${productos.productoFavorito} )");
+        " '${productos.productoEstado}','${productos.productoDescripcion}', ${productos.productoFavorito} )");
     return res;
-  }
+  } 
 
   updateProductosDb(ProductosData productos)async{
     final db = await dbprovider.database;

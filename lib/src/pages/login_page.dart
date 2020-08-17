@@ -1,3 +1,5 @@
+
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/user.dart';
 import 'package:enchiladasapp/src/utils/dialogs.dart';
@@ -6,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,6 +18,51 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  @override
+  void initState() { 
+    super.initState();
+    checkLoggedInState();
+
+    AppleSignIn.onCredentialRevoked.listen((_) {
+      print("Credentials revoked");
+    });
+  }
+
+  void checkLoggedInState() async {
+
+    final userId = await FlutterSecureStorage().read(key: "userId");
+    if (userId == null) {
+      print("No stored user ID");
+      return;
+    }
+
+    final credentialState = await AppleSignIn.getCredentialState(userId);
+    switch (credentialState.status) {
+      case CredentialStatus.authorized:
+        print("getCredentialState returned authorized");
+        break;
+
+      case CredentialStatus.error:
+        print(
+            "getCredentialState returned an error: ${credentialState.error.localizedDescription}");
+        break;
+
+      case CredentialStatus.revoked:
+        print("getCredentialState returned revoked");
+        break;
+
+      case CredentialStatus.notFound:
+        print("getCredentialState returned not found");
+        break;
+
+      case CredentialStatus.transferred:
+        print("getCredentialState returned not transferred");
+        break;
+    }
+  }
+   
+  
   bool isLoggedIn = false;
 
   LoginBloc loginBloc;
@@ -80,6 +129,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _columDatos(
       BuildContext context, Responsive responsive, LoginBloc loginBloc) {
+    final appleSignInAvailable =
+        Provider.of<AppleSignInAvailable>(context, listen: false); 
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: responsive.ip(5)),
@@ -116,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextStyle(color: Colors.white, fontSize: responsive.ip(1.6)),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: responsive.ip(5)),
+            SizedBox(height: responsive.ip(2)),
             GestureDetector(
                 child: Container(
                   decoration: BoxDecoration(
@@ -144,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                   final user = await Auth.instance.facebook(context);
                   goto(context, user, loginBloc);
                 }),
-            SizedBox(height: responsive.ip(2)),
+            SizedBox(height: responsive.ip(1)),
             GestureDetector(
               child: Container(
                 padding: EdgeInsets.all(responsive.ip(1)),
@@ -174,6 +225,20 @@ class _LoginPageState extends State<LoginPage> {
                 goto(context, user, loginBloc);
               },
             ),
+            SizedBox(height: responsive.ip(1)),
+             (appleSignInAvailable.isAvailable)
+                  ? AppleSignInButton(
+                      style: ButtonStyle.black, // style as needed
+                      type: ButtonType.signIn, // style as needed
+                      onPressed: () async{
+                        /*final user = await Auth.instance.signInWithApple();
+                goto(context, user, loginBloc);*/
+
+                Navigator.pushReplacementNamed(context, 'sign');
+                      },
+                    )
+                  : Container(),  
+            
             Expanded(
               child: Container(),
             ),
@@ -194,3 +259,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+class AppleSignInAvailable {
+  AppleSignInAvailable(this.isAvailable);
+  final bool isAvailable;
+
+  static Future<AppleSignInAvailable> check() async {
+    return AppleSignInAvailable(await AppleSignIn.isAvailable());
+  }
+}
+ 
