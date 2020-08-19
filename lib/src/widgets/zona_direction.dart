@@ -51,16 +51,17 @@ class DownloadZonaPage extends StatelessWidget {
   final String idZona;
   final Widget devolucion;
   final Widget cargando;
+  final String route;
 
-  const DownloadZonaPage({Key key, this.fileStream, this.foto,@required this.devolucion,this.cargando, this.nombre, this.pedidoMinimo, this.descripcion, this.idZona})
+  const DownloadZonaPage({Key key, this.fileStream, this.foto,@required this.devolucion,this.cargando, this.nombre, this.pedidoMinimo, this.descripcion, this.idZona, this.route})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<FileResponse>(
-      stream: DefaultCacheManager()
+      stream: CustomCacheManager()
           .getFileStream(foto, withProgress: true),
-      builder: (context, snapshot) {
+      builder: (context, snapshot) { 
         Widget body;
 
         var loading = !snapshot.hasData || snapshot.data is DownloadProgress;
@@ -72,11 +73,7 @@ class DownloadZonaPage extends StatelessWidget {
           );
         } else if (loading) {
 
-          body = ProgressIndicator(progress: snapshot.data as DownloadProgress);/* (this.cargando == null)?ProgressIndicator(progress: snapshot.data as DownloadProgress)
-                                        :this.cargando; */
-
-
-
+          body = ProgressIndicator(progress: snapshot.data as DownloadProgress);
         } else {
           body = FileInfoWidget(
             fileInfo: snapshot.data as FileInfo,
@@ -84,6 +81,7 @@ class DownloadZonaPage extends StatelessWidget {
             pedidoMinimo: pedidoMinimo,
             descripcion: descripcion,
             idZona: idZona,
+            route: route,
             devolucion: this.devolucion,
           );
         }
@@ -137,8 +135,9 @@ class FileInfoWidget extends StatelessWidget {
   final String pedidoMinimo;
   final String descripcion;
   final String idZona;
+  final String route;
 
-  const FileInfoWidget({Key key, this.fileInfo,this.devolucion, this.nombre, this.pedidoMinimo, this.descripcion, this.idZona})
+  const FileInfoWidget({Key key, this.fileInfo,this.devolucion, this.nombre, this.pedidoMinimo, this.descripcion, this.idZona, this.route})
       : super(key: key);
 
   @override
@@ -160,6 +159,7 @@ class FileInfoWidget extends StatelessWidget {
             zona.zonaNombre = nombre;
             zona.zonaPedidoMinimo=pedidoMinimo;
             zona.zonaDescripcion=descripcion;
+            zona.route=route;
 
             Navigator.pushNamed(context, 'zoomDireccion', arguments: zona);
           },

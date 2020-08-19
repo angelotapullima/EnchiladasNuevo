@@ -17,21 +17,25 @@ class ZoomFotoDireccion extends StatelessWidget {
       appBar: AppBar(
         actions: <Widget>[
           Center(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FlatButton(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FlatButton(
                 onPressed: () async {
                   final res = await utils.agregarZona(context, zona.idZona);
                   if (res) {
-                    pedidoCorrecto(context);
+                    pedidoCorrecto(context, zona);
                   } else {}
                 },
                 child: Text(
                   'Aceptar Imágen',
                   style: TextStyle(
-                      color: Colors.white, fontSize: responsive.ip(1.5)),
-                )),
-          ))
+                    color: Colors.white,
+                    fontSize: responsive.ip(1.5),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
       body: Center(
@@ -43,23 +47,33 @@ class ZoomFotoDireccion extends StatelessWidget {
     );
   }
 
-  void pedidoCorrecto(BuildContext context) {
+  void pedidoCorrecto(BuildContext context, Zona zona) {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Su zona fue ingresada correctamente'),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () async {
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                  },
-                  child: Text('Continuar')),
-            ],
-          );
-        });
+      context: context,
+      barrierDismissible: true,
+      builder: (contextd) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          title: Text('Su zona fue ingresada correctamente'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () async {
+                if (zona.route == 'carrito') {
+                  Navigator.popUntil(
+                    context,
+                    ModalRoute.withName('/'),
+                  );
+                } else if (zona.route == 'pago') {
+                  Navigator.popUntil(context, ModalRoute.withName('detallePago'));
+                }
+              },
+              child: Text('Continuar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

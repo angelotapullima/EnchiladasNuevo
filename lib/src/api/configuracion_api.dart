@@ -8,6 +8,7 @@ import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:http/http.dart' as http;
 
 class ConfiguracionApi {
@@ -42,6 +43,9 @@ class ConfiguracionApi {
               decodedData['result']['data']['zonas'][i]['zona_descripcion'];
 
           await zonaDatabase.insertarZonaDb(zona);
+
+          var file = CustomCacheManager().downloadFile(zona.zonaImagen);
+          print('file $file');
 
           ProductosData productos = ProductosData();
 

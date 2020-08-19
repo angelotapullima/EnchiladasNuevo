@@ -17,8 +17,8 @@ class OrdenesApi {
   final pedidoDatabase = PedidoDatabase();
   final userDatabase = UsuarioDatabase();
   final direccionDatabase = DireccionDatabase();
-
-  Future<int> enviarpedido(PedidoServer pedido) async {
+ 
+  Future<Link> enviarpedido(PedidoServer pedido) async {
     try {
       final url = '$_url/api/pedido/insertar_pedido';
 
@@ -86,10 +86,8 @@ class OrdenesApi {
       });
       
 
-      print('Response status: $response');
-      final decodedData = json.decode(response.body);
-      print(response.body);
-      utils.showToast(response.body, 2);
+      //print('Response status: $response');
+      final decodedData = json.decode(response.body); 
 
       if (decodedData['result']['code'] == 1) {
         PedidoServer pedidosServer =
@@ -97,7 +95,7 @@ class OrdenesApi {
         final pedidoInsertado =
             await pedidoDatabase.insertarPedido(pedidosServer);
 
-        print(pedidoInsertado);
+        //print(pedidoInsertado);
 
         for (int i = 0;
             i < decodedData['result']['pedido']['productos'].length;
@@ -124,9 +122,15 @@ class OrdenesApi {
           await pedidoDatabase.insertarDetallePedido(productoServer);
         }
 
+        var link = decodedData['result']['pago_online']['link'];
+
+        Link linkcito = Link();
+        linkcito.resp=1;
+        linkcito.link=link;
+
         //list.add(pedidosServer);
 
-        return 1;
+        return linkcito;
       } else if (decodedData['result']['code'] == 8) {
         final carritoDatabase = CarritoDatabase();
         for (int i = 0;
@@ -147,14 +151,27 @@ class OrdenesApi {
 
           await carritoDatabase.insertarCarritoDb(carrito);
         }
-        return 8;
+        String link ="";
+        Link linkcito = Link();
+        linkcito.resp=8;
+        linkcito.link=link;
+        return linkcito;
       } else {
-        return 2;
+
+        String link ="";
+        Link linkcito = Link();
+        linkcito.resp=2;
+        linkcito.link=link;
+        return linkcito;
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast("Problemas con la conexión a internet", 2);
-      return 2;
+      String link ="";
+        Link linkcito = Link();
+        linkcito.resp=2;
+        linkcito.link=link;
+        return linkcito;
     }
   }
 
@@ -225,4 +242,12 @@ class OrdenesApi {
       return [];
     }
   }
+}
+
+
+class Link {
+  int resp;
+  String link;
+
+  Link({this.resp, this.link});
 }

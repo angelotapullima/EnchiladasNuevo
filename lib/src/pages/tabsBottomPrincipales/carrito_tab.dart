@@ -1,6 +1,4 @@
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/database/carrito_database.dart';
-
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/direccion_model.dart';
 import 'package:enchiladasapp/src/models/user.dart';
@@ -39,6 +37,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     utils.agregarDireccion(
         context, addresito, position.latitude, position.longitude, "");
   }
+
   TextEditingController observacionProducto = TextEditingController();
   TextEditingController telefonoController = TextEditingController();
   @override
@@ -207,18 +206,17 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                     color: Colors.grey[50]),
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: StreamBuilder(
-                    stream: usuarioBloc.usuarioStream,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<User>> snapshotUser) {
-                      if (snapshotUser.hasData) {
-                        if(snapshotUser.data.length>0){
-                          return ListView(
+                  stream: usuarioBloc.usuarioStream,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<User>> snapshotUser) {
+                    if (snapshotUser.hasData) {
+                      if (snapshotUser.data.length > 0) {
+                        return ListView(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           children: <Widget>[
                             _direccion(),
                             _zona(context),
-                            //_numeroTelefono(context, snapshotUser.data),
                             _listaproductos(responsive, carritoBloc),
                             _deliveryRapido(responsive),
                             _resumenPedido(
@@ -226,19 +224,14 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                             _pagarCarrito(responsive),
                           ],
                         );
-                        }else{
-                          return Center(
-                            child:Text('no hay usuario')
-                          );
-                        }
-                        
                       } else {
-                        return Center(child: CupertinoActivityIndicator());
+                        return Center(child: Text('no hay usuario'));
                       }
-                    })
-
-                /* , */
-                ),
+                    } else {
+                      return Center(child: CupertinoActivityIndicator());
+                    }
+                  },
+                )),
           ),
         ],
       ),
@@ -252,65 +245,71 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       }
     }
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        padding: EdgeInsets.symmetric(horizontal: 5),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(blurRadius: 3, color: Colors.black26),
-            ],
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(13)),
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            physics: ScrollPhysics(),
-            itemCount: carrito.length + 1,
-            itemBuilder: (context, i) {
-              if (i == 0) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      top: responsive.hp(1.2),
-                      left: responsive.wp(2),
-                      right: responsive.wp(2)),
-                  child: Text(
-                    'Productos',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2.8)),
-                  ),
-                );
-              }
-              final index = i - 1;
-              return _itemPedido(responsive, carrito[index]);
-            }));
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(blurRadius: 3, color: Colors.black26),
+          ],
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(13)),
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        physics: ScrollPhysics(),
+        itemCount: carrito.length + 1,
+        itemBuilder: (context, i) {
+          if (i == 0) {
+            return Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(1.2),
+                left: responsive.wp(2),
+                right: responsive.wp(2),
+              ),
+              child: Text(
+                'Productos',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: responsive.ip(2.8),
+                ),
+              ),
+            );
+          }
+          final index = i - 1;
+          return _itemPedido(responsive, carrito[index]);
+        },
+      ),
+    );
   }
 
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
     final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
         double.parse(carrito.productoCantidad));
 
-        var observacionProducto = 'Toca para agregar descripción';
-        if(carrito.productoObservacion!=null && carrito.productoObservacion !=' '){
-          observacionProducto = carrito.productoObservacion;
-        }
+    var observacionProducto = 'Toca para agregar descripción';
+    if (carrito.productoObservacion != null &&
+        carrito.productoObservacion != ' ') {
+      observacionProducto = carrito.productoObservacion;
+    }
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
+        padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
         child: (carrito.productoTipo != '1')
             ? Column(
-              children: <Widget>[
-                Row(
+                children: <Widget>[
+                  Row(
                     children: <Widget>[
                       Container(
                         width: responsive.wp(35),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: FadeInImage(
-                              placeholder: AssetImage('assets/jar-loading.gif'),
-                              fit: BoxFit.fill,
-                              image: NetworkImage(
-                                  'http://guabba.com/capitan2/media/12.png')),
+                            placeholder: AssetImage('assets/jar-loading.gif'),
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                                'http://guabba.com/capitan2/media/12.png'),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -324,16 +323,18 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                             Text(
                               carrito.productoNombre,
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: responsive.ip(1.8)),
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.8),
+                              ),
                             ),
                             Text(
                               '$preciofinal',
                               style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: responsive.ip(2)),
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(2),
+                              ),
                             ),
                           ],
                         ),
@@ -343,15 +344,18 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                           //crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             IconButton(
-                                icon: Icon(
-                                  Icons.delete_outline,
-                                  size: responsive.ip(3),
-                                ),
-                                onPressed: () {
-                                  final carritoDatabase = CarritoDatabase();
-                                  carritoDatabase
-                                      .deteleProductoCarrito(carrito.idProducto);
-                                }),
+                              icon: Icon(
+                                Icons.delete_outline,
+                                size: responsive.ip(3),
+                              ),
+                              onPressed: () {
+                                utils.deleteProductoCarrito(
+                                    context, carrito.idProducto);
+                                /* final carritoDatabase = CarritoDatabase();
+                                carritoDatabase
+                                    .deteleProductoCarrito(carrito.idProducto); */
+                              },
+                            ),
                             Container(
                                 child: CantidadTab(
                                     carrito: carrito, llamada: this.llamado))
@@ -359,99 +363,109 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         ),
                       )
                     ],
-                  ),GestureDetector(
-                  child: Row(children: <Widget>[
-                    Icon(Icons.mode_edit,color: Colors.red,),
-                    Expanded(child: Text('$observacionProducto'))
-                  ],),
-                  onTap: (){
-                    dialogoObservacionProducto('${carrito.idProducto}');
-                  },
-                )
-              ],
-            )
+                  ),
+                  GestureDetector(
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.mode_edit,
+                          color: Colors.red,
+                        ),
+                        Expanded(child: Text('$observacionProducto'))
+                      ],
+                    ),
+                    onTap: () {
+                      dialogoObservacionProducto('${carrito.idProducto}');
+                    },
+                  )
+                ],
+              )
             : Container());
   }
+
   void dialogoObservacionProducto(String id) {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Ingrese la observación del producto'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: observacionProducto,
-                ),
-                //Text('Producto agregado al carrito correctamente'),
-                SizedBox(
-                  height: 20.0,
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    utils.actualizarObservacion(context, observacionProducto.text,id);
-
-                    observacionProducto.text='';
-
-                    Navigator.pop(context);
-                  },
-                  child: Text('Aceptar')),
+      context: context,
+      barrierDismissible: true,
+      builder: (contextd) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          title: Text('Ingrese la observación del producto'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: observacionProducto,
+              ),
+              //Text('Producto agregado al carrito correctamente'),
+              SizedBox(
+                height: 20.0,
+              ),
             ],
-          );
-        });
-  }
+          ),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar'),
+            ),
+            FlatButton(
+                onPressed: () async {
+                  utils.actualizarObservacion(
+                      context, observacionProducto.text, id);
 
-  
+                  observacionProducto.text = '';
+
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar')),
+          ],
+        );
+      },
+    );
+  }
 
   void dialogoIngresarTelefono(BuildContext context) {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Ingrese su número de Teléfono'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: telefonoController,
-                ),
-                //Text('Producto agregado al carrito correctamente'),
-                SizedBox(
-                  height: 20.0,
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    utils.agregarTelefono(context, telefonoController.text);
-
-                    Navigator.pop(context);
-                  },
-                  child: Text('Continuar')),
+      context: context,
+      barrierDismissible: true,
+      builder: (contextd) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          title: Text('Ingrese su número de Teléfono'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: telefonoController,
+              ),
+              //Text('Producto agregado al carrito correctamente'),
+              SizedBox(
+                height: 20.0,
+              ),
             ],
-          );
-        });
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('cancelar')),
+            FlatButton(
+              onPressed: () async {
+                utils.agregarTelefono(context, telefonoController.text);
+
+                Navigator.pop(context);
+              },
+              child: Text('Continuar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _numeroTelefono(BuildContext context, List<User> user) {
@@ -489,15 +503,16 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
 
   Widget _telephone(BuildContext context, String agregar, String telefono) {
     return Container(
-        padding: EdgeInsets.all(8),
-        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(13)),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-            Widget>[
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      decoration: BoxDecoration(
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
+          color: Colors.white,
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(13)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -518,19 +533,28 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               ),
             ],
           ),
-          Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-            Text('+51 ',
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '+51 ',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 22)),
-            Text('$telefono',
+                    fontSize: 22),
+              ),
+              Text(
+                '$telefono',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 22)),
-          ])
-        ]));
+                    fontSize: 22),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget _zona(BuildContext context) {
@@ -544,36 +568,40 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
           if (snapshot.data.length > 0) {
             return zonaDatos(context, 'Cambiar', snapshot.data);
           } else {
-            return zonadatosFalsos(context );
+            return zonadatosFalsos(context);
           }
         } else {
-          return zonadatosFalsos( context);
+          return zonadatosFalsos(context);
         }
       },
     );
   }
 
-  Widget zonadatosFalsos(BuildContext context){
+  Widget zonadatosFalsos(BuildContext context) {
     final responsive = Responsive.of(context);
     return Container(
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-          color: Colors.white,
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(13)),
+        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
+        color: Colors.white,
+        border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(13),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Zona de entrega',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2))),
+              Text(
+                'Zona de entrega',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: responsive.ip(2),
+                ),
+              ),
               FlatButton(
                 child: Text(
                   'Agregar',
@@ -581,7 +609,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, 'selZona');
+                  Navigator.pushNamed(context, 'selZona', arguments: 'carrito');
                 },
               ),
             ],
@@ -593,13 +621,11 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 fontWeight: FontWeight.bold,
                 fontSize: responsive.ip(2)),
           ),
-          
         ],
       ),
     );
-  
   }
-  
+
   Widget zonaDatos(BuildContext context, String agregar, List<Zona> zonas) {
     final responsive = Responsive.of(context);
     var zonacitos = 'Elegir zona';
@@ -613,21 +639,27 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-          color: Colors.white,
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(13)),
+        boxShadow: [
+          BoxShadow(color: Colors.black26, blurRadius: 3),
+        ],
+        color: Colors.white,
+        border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(13),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Zona de entrega',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2))),
+              Text(
+                'Zona de entrega',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: responsive.ip(2),
+                ),
+              ),
               FlatButton(
                 child: Text(
                   '$agregar',
@@ -635,7 +667,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, 'selZona');
+                  Navigator.pushNamed(context, 'selZona', arguments: 'carrito');
                 },
               ),
             ],
@@ -653,9 +685,10 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
           Text(
             'El monto de su pedido debe ser mayor a ${zonas[0].zonaPedidoMinimo}, sino se le agregará una comisión de ${zonas[0].zonaPrecio} soles.',
             style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: responsive.ip(1.3)),
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: responsive.ip(1.3),
+            ),
           ),
         ],
       ),
@@ -680,53 +713,57 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       ref = referencia;
     }
     return Container(
-        padding: EdgeInsets.all(8),
-        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(13)),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      decoration: BoxDecoration(
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
+          color: Colors.white,
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(13)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Dirección de envío',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18)),
-                  FlatButton(
-                    child: Text(
-                      '$agg',
-                      style: TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'sel_Direccion');
-                    },
-                  ),
-                ],
-              ),
               Text(
-                '$addresito',
+                'Dirección de envío',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
               ),
-              SizedBox(
-                height: 5,
+              FlatButton(
+                child: Text(
+                  '$agg',
+                  style:
+                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'sel_Direccion');
+                },
               ),
-              Row(children: <Widget>[
-                Text('Referencia : ',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-                Text('$ref'),
-              ])
-            ]));
+            ],
+          ),
+          Text(
+            '$addresito',
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            children: <Widget>[
+              Text('Referencia : ',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold)),
+              Text('$ref'),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget _resumenPedido(BuildContext context, Responsive responsive,
@@ -785,23 +822,33 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     return Padding(
       padding: EdgeInsets.all(responsive.wp(2)),
       child: Container(
-          decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-              color: Colors.white,
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(5)),
-          child: Padding(
-            padding: EdgeInsets.all(responsive.wp(2)),
-            child: Column(children: [
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(color: Colors.black26, blurRadius: 3),
+            ],
+            color: Colors.white,
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(5)),
+        child: Padding(
+          padding: EdgeInsets.all(responsive.wp(2)),
+          child: Column(
+            children: [
               Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    'Sub Total',
-                    style: TextStyle(fontSize: responsive.ip(2)),
-                  )),
-                  Text('S/ $subtotal2',
-                      style: TextStyle(fontSize: responsive.ip(2))),
+                    child: Text(
+                      'Sub Total',
+                      style: TextStyle(
+                        fontSize: responsive.ip(2),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'S/ $subtotal2',
+                    style: TextStyle(
+                      fontSize: responsive.ip(2),
+                    ),
+                  ),
                 ],
               ),
               SizedBox(
@@ -810,10 +857,19 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text('Entrega Rápida',
-                          style: TextStyle(fontSize: responsive.ip(2)))),
-                  Text('S/ $precioDelivery2',
-                      style: TextStyle(fontSize: responsive.ip(2)))
+                    child: Text(
+                      'Entrega Rápida',
+                      style: TextStyle(
+                        fontSize: responsive.ip(2),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'S/ $precioDelivery2',
+                    style: TextStyle(
+                      fontSize: responsive.ip(2),
+                    ),
+                  )
                 ],
               ),
               SizedBox(
@@ -826,17 +882,27 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         Row(
                           children: <Widget>[
                             Expanded(
-                                child: Text('Comisión por Delivery',
-                                    style:
-                                        TextStyle(fontSize: responsive.ip(2)))),
-                            Text('S/ $comisionDeliveryZona2',
-                                style: TextStyle(fontSize: responsive.ip(2)))
+                              child: Text(
+                                'Comisión por Delivery',
+                                style: TextStyle(
+                                  fontSize: responsive.ip(2),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'S/ $comisionDeliveryZona2',
+                              style: TextStyle(
+                                fontSize: responsive.ip(2),
+                              ),
+                            )
                           ],
                         ),
                         Text(
                           'Su total del pedido no llego al mínimo establecido para su zona, por lo tanto se le cobrará un recargo de $pedidoMinimo2 soles',
                           style: TextStyle(
-                              color: Colors.red, fontSize: responsive.ip(1.5)),
+                            color: Colors.red,
+                            fontSize: responsive.ip(1.5),
+                          ),
                         ),
                         SizedBox(
                           height: responsive.hp(2),
@@ -848,29 +914,38 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    'Total a pagar',
-                    style: TextStyle(
+                    child: Text(
+                      'Total a pagar',
+                      style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2.2)),
-                  )),
-                  Text('S/ $total2',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(2.2)))
+                        fontSize: responsive.ip(2.2),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'S/ $total2',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(2.2),
+                    ),
+                  )
                 ],
               ),
-            ]),
-          )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Widget _pagarCarrito(Responsive responsive) {
     return GestureDetector(
       child: Padding(
-        padding: EdgeInsets.all(responsive.wp(2)),
+        padding: EdgeInsets.all(
+          responsive.wp(2),
+        ),
         child: Container(
           width: double.infinity,
           child: Column(
@@ -878,21 +953,24 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               SizedBox(
                 width: double.infinity,
                 child: RaisedButton(
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    child: Text(
-                      'Ordenar Pedido',
-                      style: TextStyle(fontSize: responsive.ip(2)),
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  child: Text(
+                    'Ordenar Pedido',
+                    style: TextStyle(
+                      fontSize: responsive.ip(2),
                     ),
-                    onPressed: () {
-                      final prefs = Preferences();
+                  ),
+                  onPressed: () {
+                    final prefs = Preferences();
 
-                      if (prefs.email != null && prefs.email != "") {
-                        Navigator.pushNamed(context, 'detallePago');
-                      } else {
-                        pedirLogueo();
-                      }
-                    }),
+                    if (prefs.email != null && prefs.email != "") {
+                      Navigator.pushNamed(context, 'detallePago');
+                    } else {
+                      pedirLogueo();
+                    }
+                  },
+                ),
               ),
             ],
           ),
@@ -912,29 +990,33 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
 
   void pedirLogueo() {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Debe registrarse para Ordenar'),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, 'login', (route) => false);
-                  },
-                  child: Text('Continuar')),
-            ],
-          );
-        });
+      context: context,
+      barrierDismissible: true,
+      builder: (contextd) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          title: Text('Debe registrarse para Ordenar'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+              child: Text('Cancelar'),
+            ),
+            FlatButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, 'login', (route) => false);
+              },
+              child: Text('Continuar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _deliveryRapido(Responsive responsive) {
@@ -942,21 +1024,26 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-          color: Colors.white,
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(13)),
+        boxShadow: [
+          BoxShadow(color: Colors.black26, blurRadius: 3),
+        ],
+        color: Colors.white,
+        border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(13),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Agregar entrega rápida',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)),
+              Text(
+                'Agregar entrega rápida',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
               Switch.adaptive(
                 value: estadoDelivery,
                 onChanged: (bool state) async {
@@ -981,6 +1068,4 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       ),
     );
   }
-
-
 }

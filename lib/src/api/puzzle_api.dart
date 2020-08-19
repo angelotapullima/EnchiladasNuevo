@@ -1,10 +1,11 @@
 import 'package:enchiladasapp/src/database/ranking_database.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:async';
-import 'dart:convert';
+import 'dart:convert'; 
 
 class PuzzleApi {
   final String _url = 'https://delivery.lacasadelasenchiladas.pe';
@@ -31,6 +32,9 @@ class PuzzleApi {
           puzzle.imagenFin = decodedData['result']['data'][i]['imagen_fin'];
           puzzle.imagenEstado =
               decodedData['result']['data'][i]['imagen_estado'];
+
+              var file = CustomCacheManager().downloadFile(puzzle.imagenRuta);
+          print('file $file');
           list.add(puzzle);
         }
       }

@@ -125,67 +125,103 @@ class _DetallePagoState extends State<DetallePago> {
     final date = DateFormat("dd.MM.yyyy").format(DateTime.now());
     return SafeArea(
       child: Container(
-          margin: EdgeInsets.only(
-              left: responsive.wp(5),
-              right: responsive.wp(5),
-              top: responsive.hp(1)),
-          padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(13),
-            border: Border.all(color: Colors.grey[200]),
+        margin: EdgeInsets.only(
+          /* left: responsive.wp(5),
+            right: responsive.wp(5), */
+          top: responsive.hp(1),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(13),
+          border: Border.all(
+            color: Colors.grey[200],
           ),
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: <Widget>[
-              Text('Resumen de Orden',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: responsive.ip(2.5),
-                      fontWeight: FontWeight.bold)),
-              SizedBox(
-                height: responsive.hp(1),
-              ),
-              Container(
+        ),
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Text(
+              'Resumen de Orden',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: responsive.ip(2.5),
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: responsive.hp(1),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: Container(
                 height: responsive.hp(6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(date.toString(),
                         style: TextStyle(
-                            color: Colors.grey, fontSize: responsive.ip(2))),
+                            color: Colors.black, fontSize: responsive.ip(2))),
                     Image.asset('assets/logo_enchilada.png'),
                   ],
                 ),
               ),
-              SizedBox(
-                height: responsive.hp(2),
-              ),
-              Text('Productos',
+            ),
+            SizedBox(
+              height: responsive.hp(2),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: Text('Productos',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: responsive.ip(2.5),
                       fontWeight: FontWeight.bold)),
-              SizedBox(
-                height: responsive.hp(2),
+            ),
+            SizedBox(
+              height: responsive.hp(2),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: _listaProductos(responsive, carrito),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: _deliveryRapido(responsive, carrito),
+            ),
+            Divider(),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              color: Colors.grey[200],
+              child: Column(
+                children: <Widget>[
+                  _numeroTelefono(usuarioBloc, context, responsive),
+                  Divider(),
+                  _direccion(context, responsive),
+                  Divider(),
+                  _zona(context),
+                  Divider(),
+                ],
               ),
-              _listaProductos(responsive, carrito),
-              Divider(),
-              _deliveryRapido(responsive, carrito),
-              Divider(),
-              _numeroTelefono(usuarioBloc, context, responsive),
-              Divider(),
-              _direccion(context, responsive),
-              Divider(),
-              _zona(context),
-              Divider(),
-              _tipoComprobante(context, responsive),
-              Divider(),
-              _tipoPago(responsive),
-              Divider(),
-              _pagarCarrito(context, responsive)
-            ],
-          )),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: _tipoComprobante(context, responsive),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: _tipoPago(responsive),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: _pagarCarrito(context, responsive),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -990,7 +1026,9 @@ class _DetallePagoState extends State<DetallePago> {
               showProcessingDialog();
               final res = await pedidoApi.enviarpedido(pedido);
               print('respuesta de la ptmr $res');
-              if (res == 1) {
+              if (res.resp == 1) {
+
+                print(res.link);
                 //final carritoBloc = ProviderBloc.carrito(context);
                 Navigator.pop(context);
                 pedidoCorrecto();
@@ -1095,7 +1133,7 @@ class _DetallePagoState extends State<DetallePago> {
                     TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, 'selZona');
+                Navigator.pushNamed(context, 'selZona', arguments: 'pago');
               },
             ),
           ],
@@ -1138,7 +1176,7 @@ class _DetallePagoState extends State<DetallePago> {
                     TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, 'selZona');
+                Navigator.pushNamed(context, 'selZona', arguments: 'pago');
               },
             ),
           ],

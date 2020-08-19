@@ -68,38 +68,35 @@ class _MapsSampleState extends State<MapsSample> {
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Icon(Icons.check),
-      ),
-      body: SafeArea(
-        child: Stack(
+      body: Stack(
           children: <Widget>[
-            GoogleMap(
-              markers: _markers,
-              mapType: _defaultMapType,
-              myLocationEnabled: true,
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: currentPosition,
-              onCameraMove: (CameraPosition position) {
-                _timer?.cancel();
-                _timer = null;
-                _timer = new Timer(Duration(seconds: 1), () async {
-                  print('${position.target}');
+            Container(
+              height: responsive.hp(65),
+              child: GoogleMap(
+                
+                markers: _markers,
+                mapType: _defaultMapType,
+                myLocationEnabled: true,
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: currentPosition,
+                onCameraMove: (CameraPosition position) {
+                  _timer?.cancel();
+                  _timer = null;
+                  _timer = new Timer(Duration(seconds: 1), () async {
+                    print('${position.target}');
 
-                  //agregarMarket(position.target);
-                  _cargarGeocoding(context, position.target.latitude,
-                      position.target.longitude);
+                    //agregarMarket(position.target);
+                    _cargarGeocoding(context, position.target.latitude,
+                        position.target.longitude);
 
-                  setState(() {});
-                });
-              },
+                    setState(() {});
+                  });
+                },
+              ),
             ),
             Positioned(
-              top: 10,
-              left: 10,
+              top: responsive.hp(5),
+              left: responsive.wp(3),
               child: GestureDetector(
                 child: CircleContainer(
                   radius: responsive.ip(2.5),
@@ -112,15 +109,17 @@ class _MapsSampleState extends State<MapsSample> {
               ),
             ),
             _modalDireccion(context, responsive),
-            Center(
-              child: Icon(
-                FontAwesomeIcons.mapPin,
-                color: Colors.red,
+            Container(
+              height: responsive.hp(65),
+              child: Center(
+                child: Icon(
+                  FontAwesomeIcons.mapPin,
+                  color: Colors.red,
+                ),
               ),
             )
           ],
         ),
-      ),
     );
   }
 
@@ -177,13 +176,13 @@ class _MapsSampleState extends State<MapsSample> {
     String refe = "";
     direccionController.text = direccion;
     if (referencia.isEmpty || referencia == null) {
-      refe = 'Referencia';
+      refe = 'Agregar referencia de dirección';
     } else {
       refe = referencia;
     }
     referenciaController.text = refe;
     return Padding(
-      padding: EdgeInsets.only(top: responsive.hp(70)),
+      padding: EdgeInsets.only(top: responsive.hp(65)),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
         width: double.infinity,
@@ -200,14 +199,28 @@ class _MapsSampleState extends State<MapsSample> {
               height: responsive.wp(2),
             ),
             Text(
-              'Dirección',
+              'Dirección de entrega',
               style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: responsive.ip(2.5)),
+                fontWeight: FontWeight.bold,
+                fontSize: responsive.ip(2.5),
+              ),
             ),
-            FlatButton(
+            SizedBox(
+              height: responsive.hp(2),
+            ),
+            Container(
+              padding: EdgeInsets.all(
+                responsive.ip(.5),
+              ),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey[200]),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
+                  SizedBox(
+                    width: responsive.wp(5),
+                  ),
                   Icon(
                     FontAwesomeIcons.mapMarked,
                     color: Colors.red,
@@ -216,43 +229,97 @@ class _MapsSampleState extends State<MapsSample> {
                     width: responsive.wp(5),
                   ),
                   Expanded(
-                      child: Text(
-                    direccion,
-                    style: TextStyle(fontSize: responsive.ip(2)),
-                  )),
+                    child: Text(
+                      direccion,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: responsive.ip(2),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: responsive.wp(5),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.pencilAlt,
+                    ),
+                    color: Colors.red,
+                    onPressed: () {
+                      dialogoIngresarDireccion();
+                    },
+                  )
                 ],
               ),
-              onPressed: () {
-                dialogoIngresarDireccion();
-              },
             ),
-            Padding(
-              padding: EdgeInsets.only(right: responsive.wp(10)),
-              child: FlatButton(
+            SizedBox(
+              height: responsive.hp(1),
+            ),
+            Container(
+              padding: EdgeInsets.all(
+                responsive.ip(.5),
+              ),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey[200]),
+              child: GestureDetector(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
+                    SizedBox(
+                      width: responsive.wp(5),
+                    ),
                     Icon(
-                      FontAwesomeIcons.pencilAlt,
+                      Icons.add,
                       color: Colors.red,
                     ),
                     SizedBox(
                       width: responsive.wp(5),
                     ),
                     Expanded(
-                        child: Text(
-                      refe,
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: responsive.ip(2)),
-                    )),
+                      child: Text(
+                        refe,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: responsive.ip(2)),
+                      ),
+                    ),
+                    SizedBox(
+                      width: responsive.wp(5),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        FontAwesomeIcons.pencilAlt,
+                      ),
+                      color: Colors.red,
+                      onPressed: () {
+                        dialogoIngresarReferencia();
+                      },
+                    )
                   ],
-                ),
-                onPressed: () {
+                ),onTap: (){
                   dialogoIngresarReferencia();
                 },
               ),
-            )
+            ),
+            SizedBox(
+              height: responsive.hp(1),
+            ),
+             Container(
+               width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.red),
+                child: FlatButton(
+                  child: Text(
+                    'Confirmar',
+                    style: TextStyle(fontSize: responsive.ip(2),color: Colors.white),
+                  ),onPressed: () {
+                Navigator.pop(context);
+              },
+                ),
+              ) 
           ],
         ),
       ),

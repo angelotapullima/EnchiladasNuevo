@@ -143,7 +143,13 @@ class DatabaseProvider {
           'id_producto VARCHAR'
           ')');
 
-           
+           /* await db.execute('CREATE TABLE Puzzle ('
+          'id_puzzle VARCHAR PRIMARY KEY,'
+          'nombre VARCHAR,' 
+          'tiempo VARCHAR,'
+          'foto VARCHAR,'
+          'fecha VARCHAR'
+          ')'); */
     });
   }
 

@@ -1,33 +1,33 @@
-
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-Widget widgetDireccion(String imagen, String titulo, String monto, String descripcion,
-    Responsive responsive) {
+Widget widgetDireccion(String imagen, String titulo, String monto,
+    String descripcion, Responsive responsive) {
   return Column(
     children: <Widget>[
       SizedBox(
         height: responsive.hp(10),
       ),
       Container(
-          height: responsive.hp(45), 
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            child: CachedNetworkImage(
-              cacheManager: CustomCacheManager(),
-              imageUrl: imagen,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
+        height: responsive.hp(45),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          child: CachedNetworkImage(
+            cacheManager: CustomCacheManager(),
+            imageUrl: imagen,
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
                   image: imageProvider,
                   fit: BoxFit.contain,
-                )),
+                ),
               ),
             ),
-          )),
-       
+          ),
+        ),
+      ),
       Text(
         titulo,
         textAlign: TextAlign.center,

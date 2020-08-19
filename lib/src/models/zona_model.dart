@@ -8,6 +8,8 @@ class Zona {
   String idProducto;
   String zonaDescripcion;
   String zonaPrecio;
+  String route;
+  String zonaEstado;
 
   Zona({
     this.idZona,
@@ -17,6 +19,7 @@ class Zona {
     this.idProducto,
     this.zonaDescripcion,
     this.zonaPrecio,
+    this.zonaEstado,
   });
 
   factory Zona.fromJson(Map<String, dynamic> json) => Zona(
@@ -26,6 +29,7 @@ class Zona {
     zonaImagen: json["zona_imagen"],
     idProducto: json["id_producto"],
     zonaDescripcion: json["zona_descripcion"],
+    zonaEstado: json["zona_estado"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -35,5 +39,6 @@ class Zona {
     "zona_imagen": zonaImagen,
     "id_producto": idProducto,
     "zona_descripcion": zonaDescripcion,
+    "zona_estado": zonaEstado,
   };
 }

@@ -1,14 +1,12 @@
- 
-
-
 import 'package:enchiladasapp/pp.dart';
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
+import 'package:enchiladasapp/src/pages/detalle_producto.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
 import 'package:enchiladasapp/src/pages/market_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
-import 'package:enchiladasapp/src/pages/seleccion_zona_page.dart';
+import 'package:enchiladasapp/src/pages/seleccion_zona_carrito_page.dart';
 import 'package:enchiladasapp/src/pages/zoom_foto_direccion.dart';
 import 'package:enchiladasapp/src/pushProvider/push_notifications.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +20,6 @@ import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/pages/login_page.dart';
 import 'package:enchiladasapp/src/pages/splash.dart';
-import 'package:enchiladasapp/src/pages/detalle_producto.dart';
 import 'package:enchiladasapp/src/pages/home_page.dart';
 import 'package:enchiladasapp/src/pages/desicion_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes_page.dart';
@@ -34,18 +31,17 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-
-
-Future<void> showNotificationWithIconBadge(ReceivedNotification notification) async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'icon badge channel', 'icon badge name', 'icon badge description');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails(badgeNumber: 1);
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, '${notification.title}', '${notification.body}', platformChannelSpecifics,
-        payload: notification.payload);
-  }
+Future<void> showNotificationWithIconBadge(
+    ReceivedNotification notification) async {
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'icon badge channel', 'icon badge name', 'icon badge description');
+  var iOSPlatformChannelSpecifics = IOSNotificationDetails(badgeNumber: 1);
+  var platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(0, '${notification.title}',
+      '${notification.body}', platformChannelSpecifics,
+      payload: notification.payload);
+}
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -66,8 +62,7 @@ void main() async {
 
   await prefs.initPrefs();
 
-
-notificationAppLaunchDetails =
+  notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
   var initializationSettingsAndroid = AndroidInitializationSettings('logo');
@@ -92,8 +87,6 @@ notificationAppLaunchDetails =
     selectNotificationSubject.add(payload);
   });
 
-   
-
   final appleSignInAvailable = await AppleSignInAvailable.check();
   initializeDateFormatting('es_MX').then(
     (_) => runApp(
@@ -103,11 +96,9 @@ notificationAppLaunchDetails =
       ),
     ),
   );
- 
+
   //runApp(MyApp());
 }
-
- 
 
 class MyApp extends StatefulWidget {
   @override
@@ -127,7 +118,6 @@ class _MyAppState extends State<MyApp> {
       navigatorkey.currentState.pushNamed('timeline', arguments: event);
     });
 
-
     _requestIOSPermissions();
     _configureDidReceiveLocalNotificationSubject();
     _configureSelectNotificationSubject();
@@ -136,8 +126,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-
-void _requestIOSPermissions() {
+  void _requestIOSPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
@@ -149,49 +138,50 @@ void _requestIOSPermissions() {
   }
 
   void _configureDidReceiveLocalNotificationSubject() {
-    didReceiveLocalNotificationSubject.stream
-        .listen((ReceivedNotification receivedNotification) async {
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) => CupertinoAlertDialog(
-          title: receivedNotification.title != null
-              ? Text(receivedNotification.title)
-              : null,
-          content: receivedNotification.body != null
-              ? Text(receivedNotification.body)
-              : null,
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text('Ok'),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
-      await navigatorkey.currentState.pushNamed('timeline',arguments: receivedNotification.payload);
-              },
-            )
-          ],
-        ),
-      );
-    });
+    didReceiveLocalNotificationSubject.stream.listen(
+      (ReceivedNotification receivedNotification) async {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) => CupertinoAlertDialog(
+            title: receivedNotification.title != null
+                ? Text(receivedNotification.title)
+                : null,
+            content: receivedNotification.body != null
+                ? Text(receivedNotification.body)
+                : null,
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text('Ok'),
+                onPressed: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
+                  await navigatorkey.currentState.pushNamed('timeline',
+                      arguments: receivedNotification.payload);
+                },
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void _configureSelectNotificationSubject() {
-    selectNotificationSubject.stream.listen((String payload) async {
-      await navigatorkey.currentState.pushNamed('timeline',arguments: payload);
-      
-      
-      
-       
-    });
+    selectNotificationSubject.stream.listen(
+      (String payload) async {
+        await navigatorkey.currentState
+            .pushNamed('timeline', arguments: payload);
+      },
+    );
   }
 
-@override
+  @override
   void dispose() {
-    
     didReceiveLocalNotificationSubject.close();
     selectNotificationSubject.close();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return ProviderBloc(
@@ -211,7 +201,7 @@ void _requestIOSPermissions() {
           'login': (BuildContext context) => LoginPage(),
           'splash': (BuildContext context) => Splash(),
           'desicion': (BuildContext context) => DesicionPage(),
-          'detalleP': (BuildContext context) => DetalleProducto(),
+          'detalleP': (BuildContext context) => DetalleProductitos(),
           'detallePago': (BuildContext context) => DetallePago(),
           'sel_Direccion': (BuildContext context) => MapsSample(),
           'combo': (BuildContext context) => CategoriasEspecialesPage(),
@@ -231,5 +221,4 @@ void _requestIOSPermissions() {
       ),
     );
   }
-} 
- 
+}

@@ -89,6 +89,17 @@ Future<bool> agregarZona(BuildContext context,String idZona)async{
   }
 }
 
+void deleteProductoCarrito(BuildContext context,int idProdcuto){
+
+  //Carrito carrito = new Carrito();
+  final carritoDatabase = CarritoDatabase();
+
+  final carritoBloc = ProviderBloc.carrito(context);
+
+  carritoDatabase.deteleProductoCarrito(idProdcuto);
+  carritoBloc.obtenerCarrito();
+
+}
 void agregarCarrito(
     ProductosData productosData, BuildContext context, String cantidad) async {
   Carrito carrito = new Carrito();
@@ -119,7 +130,7 @@ void agregarCarrito(
       print('Database response : $resInsertar');
     }
   }
-  showToast('Producto agregado correctamente', 1);
+  //showToast('Producto agregado correctamente', 1);
 
   carritoBloc.obtenerCarrito();
   //_mostrarAlert(context);

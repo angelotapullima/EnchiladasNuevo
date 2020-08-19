@@ -279,7 +279,6 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     final Responsive responsive = new Responsive.of(context);
 
 
-    print(' 1 pe ${productosData.idProducto}');
 
     return GestureDetector(
       child: Container(
