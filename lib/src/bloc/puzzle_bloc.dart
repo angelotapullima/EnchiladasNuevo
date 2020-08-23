@@ -1,6 +1,7 @@
 
 
 import 'package:enchiladasapp/src/api/puzzle_api.dart';
+import 'package:enchiladasapp/src/database/puzzle_database.dart';
 import 'package:enchiladasapp/src/database/ranking_database.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:rxdart/rxdart.dart';
@@ -8,6 +9,7 @@ import 'package:rxdart/rxdart.dart';
 class PuzzleBloc{
   final puzzleApi =PuzzleApi();
   final rankingDatabase =RankingDatabase();
+  final puzzleDatabase=PuzzleDatabase();
   final _puzzleController = new BehaviorSubject<List<PuzzleDatum>>();
   final _puzzleTiemposController = new BehaviorSubject<List<RankingPuzzle>>();
   final _cargandoTiempo = new BehaviorSubject<bool>();
@@ -23,7 +25,9 @@ class PuzzleBloc{
   }
 
   void obtenerPuzzle( )async{
-    _puzzleController.sink.add(await puzzleApi.obtenerImagenesPuzzle());
+    _puzzleController.sink.add(await puzzleDatabase.consultarPuzzle());
+    await puzzleApi.obtenerImagenesPuzzle();
+    _puzzleController.sink.add(await puzzleDatabase.consultarPuzzle());
   }
 
   void obtenerTiempos( String fecha)async{

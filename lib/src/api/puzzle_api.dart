@@ -1,3 +1,4 @@
+import 'package:enchiladasapp/src/database/puzzle_database.dart';
 import 'package:enchiladasapp/src/database/ranking_database.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
@@ -11,11 +12,12 @@ class PuzzleApi {
   final String _url = 'https://delivery.lacasadelasenchiladas.pe';
   final prefs = Preferences();
   final rankingDatabase=RankingDatabase();
+  final puzzleDatabase = PuzzleDatabase();
   Future<List<PuzzleDatum>> obtenerImagenesPuzzle() async {
     final url = '$_url/api/puzzle/listar_imagenes_activa';
     final list = List<PuzzleDatum>();
     final resp = await http.post(url, body: {'app': 'true', 'tn': prefs.token});
-
+ 
     final decodedData = json.decode(resp.body);
     if (decodedData['result']['code'] == 1) {
       if (decodedData['result']['data'].length > 0) {
@@ -35,6 +37,7 @@ class PuzzleApi {
 
               var file = CustomCacheManager().downloadFile(puzzle.imagenRuta);
           print('file $file');
+          await puzzleDatabase.insertarPuzzle(puzzle);
           list.add(puzzle);
         }
       }

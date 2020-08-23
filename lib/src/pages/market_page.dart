@@ -5,6 +5,7 @@ import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -66,7 +67,7 @@ class MarketPage extends StatelessWidget {
                   size: responsive.ip(3.5),
                 ),
                 onPressed: () {
-                  showSearch(context: context, delegate: DataSearch());
+                  showSearch(context: context, delegate: DataSearch(hintText: 'Buscar'));
                 },
               )
             ],
@@ -305,6 +306,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager(),
                   placeholder: (context, url) => Image(
                       image: AssetImage('assets/jar-loading.gif'),
                       fit: BoxFit.cover),

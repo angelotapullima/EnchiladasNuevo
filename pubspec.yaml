@@ -61,6 +61,8 @@ dependencies:
   apple_sign_in: ^0.1.0
   flutter_secure_storage: ^3.2.1+1
   flutter_local_notifications: ^1.4.4+2
+  webview_flutter: ^0.3.22+1
+  flutter_ticket_widget: ^0.0.1
   #sign_in_with_apple: ^2.5.2
 
 

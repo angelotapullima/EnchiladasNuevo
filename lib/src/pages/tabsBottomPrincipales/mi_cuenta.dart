@@ -92,11 +92,11 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
               ],
             )
           ]),
-          _ordenes(responsive),
+          (prefs.rol == '5') ? _ordenes(responsive) : Container(),
           SizedBox(
             height: responsive.hp(2),
           ),
-          _pedidos(responsive),
+          (prefs.rol == '6') ? _pedidos(responsive) : Container(),
           SizedBox(
             height: responsive.hp(2),
           ),
@@ -108,15 +108,12 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
           Padding(
             padding: EdgeInsets.all(responsive.ip(1.5)),
             child: InkWell(
-              onTap: () async{
-                
+              onTap: () async {
                 final pref = Preferences();
                 if (pref.email != "" && pref.email != null) {
                   pref.clearPreferences();
                   Auth.instance.logOut(context);
                 } else {
-                  
-                   
                   Navigator.pushNamedAndRemoveUntil(
                       context, 'login', (route) => false);
                 }
@@ -151,29 +148,41 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
 
   Widget _asistencia(Responsive responsive) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+      padding: EdgeInsets.symmetric(
+        horizontal: responsive.wp(3),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Asistencia',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: responsive.ip(3),
-                  color: Colors.red)),
+          Text(
+            'Asistencia',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: responsive.ip(3),
+                color: Colors.red),
+          ),
           SizedBox(
             height: responsive.hp(1.5),
           ),
           Container(
             decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: Colors.grey[300])),
+              boxShadow: [
+                BoxShadow(color: Colors.black12, blurRadius: 3),
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                color: Colors.grey[300],
+              ),
+            ),
             child: Column(
               children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.all(responsive.ip(1)),
-                    child: Row(children: <Widget>[
+                /* Padding(
+                  padding: EdgeInsets.all(
+                    responsive.ip(1),
+                  ),
+                  child: Row(
+                    children: <Widget>[
                       Icon(
                         Icons.card_giftcard,
                         color: Colors.red,
@@ -184,14 +193,20 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       Text(
                         'Guía para mejor manejo de la App',
                         style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: responsive.ip(1.8)),
+                          fontWeight: FontWeight.w800,
+                          fontSize: responsive.ip(1.8),
+                        ),
                       )
-                    ])),
-                Divider(),
+                    ],
+                  ),
+                ),
+                Divider(), */
                 Padding(
-                    padding: EdgeInsets.all(responsive.ip(1)),
-                    child: Row(children: <Widget>[
+                  padding: EdgeInsets.all(
+                    responsive.ip(1),
+                  ),
+                  child: Row(
+                    children: <Widget>[
                       Icon(
                         Icons.card_giftcard,
                         color: Colors.red,
@@ -199,15 +214,21 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       SizedBox(
                         width: responsive.wp(1.5),
                       ),
-                      Text('Contactar con el equipo de Soporte',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: responsive.ip(1.8)))
-                    ])),
+                      Text(
+                        'Contactar con el equipo de Soporte',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: responsive.ip(1.8),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 Divider(),
                 Padding(
-                    padding: EdgeInsets.all(responsive.ip(1)),
-                    child: Row(children: <Widget>[
+                  padding: EdgeInsets.all(responsive.ip(1)),
+                  child: Row(
+                    children: <Widget>[
                       Icon(
                         Icons.card_giftcard,
                         color: Colors.red,
@@ -215,11 +236,16 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       SizedBox(
                         width: responsive.wp(1.5),
                       ),
-                      Text('Deja un Comentario',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: responsive.ip(1.8)))
-                    ]))
+                      Text(
+                        'Deja un Comentario',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: responsive.ip(1.8),
+                        ),
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           )
@@ -227,7 +253,6 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
       ),
     );
   }
-
 
   Widget _ordenes(Responsive responsive) {
     return Padding(
@@ -272,11 +297,11 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                   onTap: () {
                     final prefs = new Preferences();
 
-                    if(prefs.email != "" && prefs.email != null){
-                    Navigator.pushNamed(context, 'ordenes');
-                    }else{
-                      utils.showToast( 'Debe estar registrado para ver esta opción',2);
-
+                    if (prefs.email != "" && prefs.email != null) {
+                      Navigator.pushNamed(context, 'ordenes');
+                    } else {
+                      utils.showToast(
+                          'Debe estar registrado para ver esta opción', 2);
                     }
                   },
                 ),
@@ -331,11 +356,11 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                   onTap: () {
                     final prefs = new Preferences();
 
-                    if(prefs.email != "" && prefs.email != null){
-                    Navigator.pushNamed(context, 'pedidosRepartidor');
-                    }else{
-                      utils.showToast('Debe estar registrado para ver esta opción',2);
-
+                    if (prefs.email != "" && prefs.email != null) {
+                      Navigator.pushNamed(context, 'pedidosRepartidor');
+                    } else {
+                      utils.showToast(
+                          'Debe estar registrado para ver esta opción', 2);
                     }
                   },
                 ),
@@ -346,10 +371,6 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
       ),
     );
   }
-
-
-
-
 
   Widget _aplicacion(Responsive responsive) {
     return Padding(

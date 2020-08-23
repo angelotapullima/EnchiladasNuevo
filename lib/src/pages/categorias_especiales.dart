@@ -26,7 +26,6 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
     productosIdBloc.cargandoProductosFalse();
     productosIdBloc.obtenerProductosEnchiladasPorCategoria(arg.productId);
 
-
     return Scaffold(
         body: Stack(children: <Widget>[
       Container(
@@ -47,44 +46,50 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
           AppBar(
             elevation: 0,
             title: Text(title),
-            actions: <Widget>[
+            /* actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.card_giftcard),
                 onPressed: () {},
               )
-            ],
+            ], */
           ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadiusDirectional.only(
-                      topStart: Radius.circular(13),
-                      topEnd: Radius.circular(13)),
-                  color: Colors.grey[50]),
+                borderRadius: BorderRadiusDirectional.only(
+                  topStart: Radius.circular(13),
+                  topEnd: Radius.circular(13),
+                ),
+                color: Colors.grey[50],
+              ),
               //padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
               child: StreamBuilder(
-                  stream: productosIdBloc.productosEnchiladasStream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<ProductosData>> snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data.length > 0) {
-                        return ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, i) =>
-                                _itemPedido(context, snapshot.data[i]));
-                      } else {
-                        return Center(
-                          child: CupertinoActivityIndicator(),
-                        );
-                      }
+                stream: productosIdBloc.productosEnchiladasStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<ProductosData>> snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data.length > 0) {
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, i) => _itemPedido(
+                          context,
+                          snapshot.data[i],
+                        ),
+                      );
                     } else {
                       return Center(
                         child: CupertinoActivityIndicator(),
                       );
                     }
-                  }),
+                  } else {
+                    return Center(
+                      child: CupertinoActivityIndicator(),
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ],

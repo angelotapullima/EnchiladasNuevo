@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,7 +35,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
         color: Colors.red,
       ),
       _favoritos(responsive, favoritosBloc),
-    ]));
+    ],),);
   }
 
   Widget _favoritos(Responsive responsive, FavoritosBloc favoritosBloc) {
@@ -45,7 +47,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
             child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(2),vertical: responsive.hp(2)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -56,14 +58,14 @@ class _FavoritosTabState extends State<FavoritosTab> {
                         fontSize: responsive.ip(2.6),
                         fontWeight: FontWeight.bold),
                   ),
-                  IconButton(
+                  /* IconButton(
                     icon: Icon(
                       Icons.card_giftcard,
                       color: Colors.white,
                       size: responsive.ip(3.5),
                     ),
                     onPressed: () {},
-                  )
+                  ) */
                 ],
               ),
             ),
@@ -184,12 +186,24 @@ class _FavoritosTabState extends State<FavoritosTab> {
                 width: responsive.wp(35),
                 child:  ClipRRect(
                     borderRadius: BorderRadius.circular(13),
-                    child: FadeInImage(
-                        placeholder: AssetImage('assets/jar-loading.gif'),
-                        fit: BoxFit.contain,
-                        image: NetworkImage(
-                            'https://sifu.unileversolutions.com/image/es-MX/recipe-topvisual/2/1260-709/hamburguesa-clasica-50425188.jpg')),
-                  ),
+                    child: CachedNetworkImage(
+                            cacheManager: CustomCacheManager(),
+                            placeholder: (context, url) => Image(
+                                image: AssetImage('assets/jar-loading.gif'),
+                                fit: BoxFit.cover),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: productosData.productoFoto,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                           ),
               ),
             Expanded(
               child: Padding(

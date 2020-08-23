@@ -1,4 +1,3 @@
-
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/user.dart';
@@ -18,9 +17,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     checkLoggedInState();
 
@@ -30,7 +28,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void checkLoggedInState() async {
-
     final userId = await FlutterSecureStorage().read(key: "userId");
     if (userId == null) {
       print("No stored user ID");
@@ -61,8 +58,7 @@ class _LoginPageState extends State<LoginPage> {
         break;
     }
   }
-   
-  
+
   bool isLoggedIn = false;
 
   LoginBloc loginBloc;
@@ -130,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _columDatos(
       BuildContext context, Responsive responsive, LoginBloc loginBloc) {
     final appleSignInAvailable =
-        Provider.of<AppleSignInAvailable>(context, listen: false); 
+        Provider.of<AppleSignInAvailable>(context, listen: false);
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: responsive.ip(5)),
@@ -163,39 +159,53 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Text(
               'Por aqui podrás disfrutar lo mejor de lo nuestro de forma más rápida',
-              style:
-                  TextStyle(color: Colors.white, fontSize: responsive.ip(1.6)),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: responsive.ip(1.6),
+              ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: responsive.ip(2)),
+            SizedBox(
+              height: responsive.ip(2),
+            ),
             GestureDetector(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(8)),
-                  padding: EdgeInsets.all(responsive.ip(1)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Iniciar con Facebook',
-                          style: TextStyle(
-                              color: Colors.white, fontSize: responsive.ip(2))),
-                      SizedBox(
-                        width: responsive.ip(1.2),
-                      ),
-                      Icon(
-                        FontAwesomeIcons.facebook,
-                        color: Colors.white,
-                        size: responsive.ip(2.5),
-                      )
-                    ],
-                  ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                onTap: () async {
-                  final user = await Auth.instance.facebook(context);
-                  goto(context, user, loginBloc);
-                }),
-            SizedBox(height: responsive.ip(1)),
+                padding: EdgeInsets.all(
+                  responsive.ip(1),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Iniciar con Facebook',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: responsive.ip(2),
+                      ),
+                    ),
+                    SizedBox(
+                      width: responsive.ip(1.2),
+                    ),
+                    Icon(
+                      FontAwesomeIcons.facebook,
+                      color: Colors.white,
+                      size: responsive.ip(2.5),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () async {
+                final user = await Auth.instance.facebook(context);
+                goto(context, user, loginBloc);
+              },
+            ),
+            SizedBox(
+              height: responsive.ip(1),
+            ),
             GestureDetector(
               child: Container(
                 padding: EdgeInsets.all(responsive.ip(1)),
@@ -226,19 +236,16 @@ class _LoginPageState extends State<LoginPage> {
               },
             ),
             SizedBox(height: responsive.ip(1)),
-             (appleSignInAvailable.isAvailable)
-                  ? AppleSignInButton(
-                      style: ButtonStyle.black, // style as needed
-                      type: ButtonType.signIn, // style as needed
-                      onPressed: () async{
-                        /*final user = await Auth.instance.signInWithApple();
-                goto(context, user, loginBloc);*/
-
-                Navigator.pushReplacementNamed(context, 'sign');
-                      },
-                    )
-                  : Container(),  
-            
+            (appleSignInAvailable.isAvailable)
+                ? AppleSignInButton(
+                    style: ButtonStyle.black, // style as needed
+                    type: ButtonType.signIn, // style as needed
+                    onPressed: () async {
+                      final user = await Auth.instance.signInWithApple();
+                      goto(context, user, loginBloc);
+                    },
+                  )
+                : Container(),
             Expanded(
               child: Container(),
             ),
@@ -268,4 +275,3 @@ class AppleSignInAvailable {
     return AppleSignInAvailable(await AppleSignIn.isAvailable());
   }
 }
- 

@@ -1,4 +1,5 @@
 import 'package:enchiladasapp/src/search/search_delegate.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/provider_widget.dart';
@@ -89,7 +90,7 @@ class CategoriasPage extends StatelessWidget {
                     size: responsive.ip(3.5),
                   ),
                   onPressed: () {
-                    showSearch(context: context, delegate: DataSearch());
+                    showSearch(context: context, delegate: DataSearch(hintText: 'Buscar'));
                   },
                 )
               ],
@@ -290,7 +291,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
         margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5)),
         //height: responsive.hp(13),
         child: Row(
-          children: <Widget>[
+          children: <Widget>[ 
             Hero(
               tag: '${productosData.idProducto}',
               child: Container(
@@ -299,6 +300,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
+                    cacheManager: CustomCacheManager(),
                     placeholder: (context, url) => Image(
                         image: AssetImage('assets/jar-loading.gif'),
                         fit: BoxFit.cover),

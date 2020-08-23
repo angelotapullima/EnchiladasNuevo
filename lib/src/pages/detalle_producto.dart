@@ -6,6 +6,7 @@ import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -268,6 +269,7 @@ class _DetalleProductitosState extends State<DetalleProductitos> {
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20)),
                 child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager(),
                   placeholder: (context, url) => Image(
                       image: AssetImage('assets/jar-loading.gif'),
                       fit: BoxFit.cover),
@@ -877,10 +879,21 @@ class _DetalleProductitosState extends State<DetalleProductitos> {
                       width: responsive.wp(35),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: FadeInImage(
-                            placeholder: AssetImage('assets/jar-loading.gif'),
-                            fit: BoxFit.fill,
-                            image: NetworkImage('${carrito.productoFoto}')),
+                        child: CachedNetworkImage(
+                    cacheManager: CustomCacheManager(),
+                    placeholder: (context, url) => Image(
+                        image: AssetImage('assets/jar-loading.gif'),
+                        fit: BoxFit.cover),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    imageUrl: carrito.productoFoto,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                      )),
+                    ),
+                  ),
                       ),
                     ),
                     SizedBox(

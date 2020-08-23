@@ -70,6 +70,7 @@ class UsuarioApi {
         'id_rel': idRel,
         'person_name': pName,
         'app': 'true',
+        'user_image': foto,
         'user_email': uEmail
       });
 
@@ -83,12 +84,14 @@ class UsuarioApi {
         final idUser = decodedData['data']['c_u'];
         final idPerson = decodedData['data']['c_p'];
         final token = decodedData['data']['tn'];
+        final rol = decodedData['data']['ru'];
 
         prefs.personName = pName;
         prefs.foto = foto;
         prefs.email = uEmail;
         prefs.token = token;
         prefs.idUser = idUser;
+        prefs.rol = rol;
 
         String dni = "";
         String telefono = "";

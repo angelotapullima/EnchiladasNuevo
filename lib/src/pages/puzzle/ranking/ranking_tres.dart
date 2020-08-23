@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/material.dart';
 
 class RankingTres extends StatelessWidget {
@@ -7,8 +9,6 @@ class RankingTres extends StatelessWidget {
   const RankingTres({Key key, this.list}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
-
     String imagen1 = list[0].userImage;
     String imagen2 = list[1].userImage;
     String imagen3 = list[2].userImage;
@@ -27,7 +27,7 @@ class RankingTres extends StatelessWidget {
             child: CirculoItenRanking(
               nombre: list[0].personName,
               tiempo: list[0].puzzleTiempo,
-              foto: 'https://delivery.lacasadelasenchiladas.pe/$imagen1',
+              foto: '$imagen1',
             ),
           ),
           Positioned(
@@ -36,16 +36,16 @@ class RankingTres extends StatelessWidget {
             child: CirculoItenRanking(
               nombre: list[1].personName,
               tiempo: list[1].puzzleTiempo,
-              foto: 'https://delivery.lacasadelasenchiladas.pe/$imagen2',
+              foto: '$imagen2',
             ),
           ),
           Positioned(
             top: responsive.hp(50),
             right: responsive.wp(4),
             child: CirculoItenRanking(
-               nombre: list[2].personName,
+              nombre: list[2].personName,
               tiempo: list[2].puzzleTiempo,
-              foto: 'https://delivery.lacasadelasenchiladas.pe/$imagen3',
+              foto: '$imagen3',
             ),
           ),
         ],
@@ -85,12 +85,24 @@ class CirculoItenRanking extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(100.0),
-              child: FadeInImage(
-                  height: responsive.ip(15),
-                  width: responsive.ip(15),
-                  fit: BoxFit.cover,
-                  placeholder: AssetImage('assets/ladrillos.png'),
-                  image: NetworkImage(foto)),
+              child: CachedNetworkImage(
+                height: responsive.ip(15),
+                width: responsive.ip(15),
+                cacheManager: CustomCacheManager(),
+                placeholder: (context, url) => Image(
+                    image: AssetImage('assets/ladrillos.png'),
+                    fit: BoxFit.cover),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                imageUrl: foto,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
             ),
             Text(
               nombre,

@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/material.dart';
 
 class RankingUno extends StatelessWidget {
@@ -25,13 +27,26 @@ class RankingUno extends StatelessWidget {
                   Text(list[0].personName,style: TextStyle(color:Colors.white),),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(100.0),
-                    child: FadeInImage(
-                        height: responsive.ip(20),
-                        width: responsive.ip(20),
-                        fit: BoxFit.cover,
-                        placeholder: AssetImage('assets/jar-loading.gif'),
-                        image: NetworkImage(
-                           'https://delivery.lacasadelasenchiladas.pe/$imagen1')),
+                    child: CachedNetworkImage(
+                height: responsive.ip(15),
+                width: responsive.ip(15),
+                cacheManager: CustomCacheManager(),
+                placeholder: (context, url) => Image(
+                    image: AssetImage('assets/jar-loading.gif'),
+                    fit: BoxFit.cover),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                imageUrl: '$imagen1',
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              )
+              
+               
                   ),
                   Text(list[0].puzzleTiempo,style: TextStyle(color:Colors.white),),
                 ],

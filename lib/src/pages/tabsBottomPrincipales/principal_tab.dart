@@ -1,6 +1,8 @@
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
+import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +48,16 @@ class PrincipalTab extends StatelessWidget {
       alias = 'Bienvenido';
     }
 
+    final noLogin = IconButton(
+      icon: Icon(
+        Icons.person,
+        color: Colors.white,
+        size: responsive.ip(2.3),
+      ),
+      onPressed: () {
+        Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+      },
+    );
     return Stack(
       children: <Widget>[
         Container(
@@ -71,41 +83,40 @@ class PrincipalTab extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {
-                            showSearch(
-                                context: context, delegate: DataSearch());
-                          },
-                          icon: Icon(
-                            Icons.search,
-                            color: Colors.white,
-                            size: responsive.ip(3.5),
-                          )),
+                        onPressed: () {
+                          showSearch(
+                            context: context,
+                            delegate: DataSearch(hintText: 'Buscar'),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                          size: responsive.ip(3.5),
+                        ),
+                      ),
                       SizedBox(
                         width: responsive.wp(2),
                       ),
-                      CircleAvatar(
-                          radius: responsive.ip(2),
-                          child: (prefs.email != "" && prefs.email != null)
-                              ? (prefs.foto != null)
-                                  ? ClipOval(
-                                      child: Image.network(
+                      (prefs.email != "" && prefs.email != null)
+                          ? (prefs.foto != null)
+                              ? CircleAvatar(
+                                  radius: responsive.ip(2),
+                                  child: ClipOval(
+                                    child: Image.network(
                                       prefs.foto,
                                       width: responsive.ip(4),
                                       height: responsive.ip(4),
                                       fit: BoxFit.contain,
-                                    ))
-                                  : getAlias(nombre, responsive)
-                              : Center(
-                                  child: IconButton(
-                                      icon: Icon(
-                                        Icons.person,
-                                        size: responsive.ip(2.3),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context, 'login', (route) => false);
-                                      }),
-                                ),),
+                                    ),
+                                  ),
+                                )
+                              : getAlias(nombre, responsive)
+                          : CircleContainer(
+                              radius: responsive.ip(2.3),
+                              color: Colors.red[800],
+                              widget: noLogin,
+                            )
                     ],
                   ),
                 ],
@@ -141,8 +152,7 @@ class PrincipalTab extends StatelessWidget {
                   SizedBox(
                     height: responsive.hp(1.5),
                   ),
-                  
-                  _categorias(responsive,context ),
+                  _categorias(responsive, context),
                   SizedBox(
                     height: responsive.hp(1.5),
                   ),
@@ -152,7 +162,7 @@ class PrincipalTab extends StatelessWidget {
                   ),
                 ],
               ),
-            )));
+            ),),);
   }
 
   Widget _comboDelDia(BuildContext context, Responsive responsive) {
@@ -206,7 +216,7 @@ class PrincipalTab extends StatelessWidget {
     );
   }
 
-  Widget _market247(Responsive responsive,BuildContext context) {
+  Widget _market247(Responsive responsive, BuildContext context) {
     return GestureDetector(
       child: Container(
         width: double.infinity,
@@ -218,15 +228,14 @@ class PrincipalTab extends StatelessWidget {
               fit: BoxFit.cover,
             )),
       ),
-      onTap: (){
+      onTap: () {
         Navigator.pushNamed(context, 'market');
       },
     );
   }
 
-
- 
   Widget _puzzle(BuildContext context, Responsive responsive) {
+    final prefs = new Preferences();
     return GestureDetector(
       child: Container(
         width: double.infinity,
@@ -237,10 +246,15 @@ class PrincipalTab extends StatelessWidget {
             child: Image(
               image: AssetImage('assets/enchilada-puzle.png'),
               fit: BoxFit.cover,
-            )),
+            ),),
       ),
       onTap: () {
+        if(prefs.rol == '5') {
+
         Navigator.pushNamed(context, 'HomePuzzle');
+        }else{
+          utils.showToast('Debe registrarse para acceder al Puzzle', 2);
+        }
       },
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/direccion_model.dart';
@@ -7,6 +8,7 @@ import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -78,21 +80,22 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
   Widget _miOrden(
       Responsive responsive, CarritoBloc carritoBloc, UsuarioBloc usuarioBloc) {
     final sinDatos = SafeArea(
-        child: Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Sus Pedidos',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: responsive.ip(2.6),
-                    fontWeight: FontWeight.bold),
-              ),
-              IconButton(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(2), vertical: responsive.hp(2)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Sus Pedidos',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(2.6),
+                      fontWeight: FontWeight.bold),
+                ),
+                /* IconButton(
                 icon: Icon(
                   Icons.card_giftcard,
                   color: Colors.white,
@@ -101,16 +104,17 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 onPressed: () {
                   setState(() {});
                 },
-              )
-            ],
+              ) */
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Container(
+          Expanded(
+            child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadiusDirectional.only(
-                      topStart: Radius.circular(13),
-                      topEnd: Radius.circular(13)),
+                    topStart: Radius.circular(13),
+                    topEnd: Radius.circular(13),
+                  ),
                   color: Colors.grey[50]),
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Center(
@@ -135,10 +139,12 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                     )
                   ],
                 ),
-              )),
-        )
-      ],
-    ));
+              ),
+            ),
+          )
+        ],
+      ),
+    );
     return StreamBuilder(
         stream: carritoBloc.carritoIdStream,
         builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
@@ -173,7 +179,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+            padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(2), vertical: responsive.hp(1.2)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -184,7 +191,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       fontSize: responsive.ip(2.6),
                       fontWeight: FontWeight.bold),
                 ),
-                IconButton(
+                /* IconButton(
                   icon: Icon(
                     Icons.card_giftcard,
                     color: Colors.white,
@@ -193,7 +200,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                   onPressed: () {
                     setState(() {});
                   },
-                )
+                ) */
               ],
             ),
           ),
@@ -304,11 +311,22 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         width: responsive.wp(35),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: FadeInImage(
-                            placeholder: AssetImage('assets/jar-loading.gif'),
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                                'http://guabba.com/capitan2/media/12.png'),
+                          child: CachedNetworkImage(
+                            cacheManager: CustomCacheManager(),
+                            placeholder: (context, url) => Image(
+                                image: AssetImage('assets/jar-loading.gif'),
+                                fit: BoxFit.cover),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: carrito.productoFoto,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),

@@ -5,6 +5,7 @@ import 'package:enchiladasapp/src/pages/puzzle/ranking/ranking_dos.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking/ranking_tres.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking/ranking_uno.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_calendar_widget/date_helper.dart'; 
@@ -81,13 +82,27 @@ class RankingPage extends StatelessWidget {
     return Container(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100.0),
-        child: FadeInImage(
+        child: CachedNetworkImage(
+              
             height: size.width * 0.28,
             width: size.width * 0.28,
-            fit: BoxFit.cover,
-            placeholder: AssetImage('assets/ladrillos.png'),
-            image: NetworkImage(
-                '$foto'),),
+              cacheManager: CustomCacheManager(),
+              placeholder: (context, url) => Image(
+                  image: AssetImage('assets/ladrillos.png'),
+                  fit: BoxFit.cover),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl:
+                  '$foto',
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                )),
+              ),
+            ),
+            
+            
       ),
     );
   }
@@ -103,6 +118,7 @@ class RankingPage extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             child: CachedNetworkImage(
+              cacheManager: CustomCacheManager(),
               placeholder: (context, url) => Image(
                   image: AssetImage('assets/ladrillos.png'),
                   fit: BoxFit.cover),
@@ -257,13 +273,25 @@ class RankingPage extends StatelessWidget {
           ),
           ClipRRect(
             borderRadius: BorderRadius.circular(100.0),
-            child: FadeInImage(
-                height: responsive.wp(10),
-                width: responsive.wp(10),
-                fit: BoxFit.cover,
-                placeholder: AssetImage('assets/jar-loading.gif'),
-                image: NetworkImage(
-                    'https://delivery.lacasadelasenchiladas.pe/${ranking.userImage}')),
+            child: CachedNetworkImage(
+              height: responsive.wp(10),
+              width: responsive.wp(10),
+              cacheManager: CustomCacheManager(),
+              placeholder: (context, url) => Image(
+                  image: AssetImage('assets/jar-loading.gif'),
+                  fit: BoxFit.cover),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl:
+                  'https://delivery.lacasadelasenchiladas.pe/${ranking.userImage}',
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                )),
+              ),
+            ),
+            
           ),
           SizedBox(
             width: 10.0,

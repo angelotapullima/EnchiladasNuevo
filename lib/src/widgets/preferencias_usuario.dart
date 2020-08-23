@@ -70,4 +70,12 @@ class Preferences {
     _prefs.setString('idUser', value);
   }
 
+  get rol{
+    return _prefs.getString('rol');
+  }
+
+  set rol(String value){
+    _prefs.setString('rol', value);
+  }
+
 }

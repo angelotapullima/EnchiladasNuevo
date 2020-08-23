@@ -1,14 +1,21 @@
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DataSearch extends SearchDelegate {
-  String seleccion = '';
+  DataSearch({
+    String hintText,
+  }) : super(
+          searchFieldLabel: hintText,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
 
- 
+  String seleccion = '';
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -48,7 +55,7 @@ class DataSearch extends SearchDelegate {
 
     final productosBloc = ProviderBloc.prod(context);
     productosBloc.obtenerProductoPorQuery('$query');
-    final responsive= Responsive.of(context);
+    final responsive = Responsive.of(context);
     print('query $query');
     return StreamBuilder(
         stream: productosBloc.productosQueryStream,
@@ -57,19 +64,34 @@ class DataSearch extends SearchDelegate {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) =>
-                      _itemPedido(context, snapshot.data[i]));
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, i) => _itemPedido(
+                  context,
+                  snapshot.data[i],
+                ),
+              );
             } else {
-              return Center(child: Text('No existen productos con ese nombre',style: TextStyle(fontSize:responsive.ip(1.9) ),));
+              return Center(
+                  child: Text(
+                'No existen productos con ese nombre',
+                style: TextStyle(
+                  fontSize: responsive.ip(1.9),
+                ),
+              ));
             }
           } else {
-            return Center(child: Text('Hubo un error',style: TextStyle(fontSize:responsive.ip(1.9) )));
+            return Center(
+              child: Text(
+                'Hubo un error',
+                style: TextStyle(
+                  fontSize: responsive.ip(1.9),
+                ),
+              ),
+            );
           }
         });
-   
   }
 
   @override
@@ -81,11 +103,10 @@ class DataSearch extends SearchDelegate {
         ),
       );
     }
-   
 
     final productosBloc = ProviderBloc.prod(context);
     productosBloc.obtenerProductoPorQuery('$query');
-    final responsive= Responsive.of(context);
+    final responsive = Responsive.of(context);
     print('query $query');
     return StreamBuilder(
         stream: productosBloc.productosQueryStream,
@@ -100,10 +121,24 @@ class DataSearch extends SearchDelegate {
                   itemBuilder: (context, i) =>
                       _itemPedido(context, snapshot.data[i]));
             } else {
-              return Center(child: Text('No existen productos con ese nombre',style: TextStyle(fontSize:responsive.ip(1.9) ),));
+              return Center(
+                child: Text(
+                  'No existen productos con ese nombre',
+                  style: TextStyle(
+                    fontSize: responsive.ip(1.9),
+                  ),
+                ),
+              );
             }
           } else {
-            return Center(child: Text('Hubo un error',style: TextStyle(fontSize:responsive.ip(1.9) )));
+            return Center(
+              child: Text(
+                'Hubo un error',
+                style: TextStyle(
+                  fontSize: responsive.ip(1.9),
+                ),
+              ),
+            );
           }
         });
   }
@@ -113,12 +148,17 @@ class DataSearch extends SearchDelegate {
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.symmetric(
-            vertical: responsive.hp(0.5), horizontal: responsive.wp(3)),
-        padding: EdgeInsets.only(right: responsive.wp(3)),
+          vertical: responsive.hp(0.5),
+          horizontal: responsive.wp(3),
+        ),
+        padding: EdgeInsets.only(
+          right: responsive.wp(3),
+        ),
         decoration: BoxDecoration(
-            color: Colors.grey[50],
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(13)),
+          color: Colors.grey[50],
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(13),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -126,16 +166,29 @@ class DataSearch extends SearchDelegate {
               width: responsive.wp(35),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(13),
-                child: FadeInImage(
-                    placeholder: AssetImage('assets/jar-loading.gif'),
-                    fit: BoxFit.contain,
-                    image: NetworkImage(
-                        'https://sifu.unileversolutions.com/image/es-MX/recipe-topvisual/2/1260-709/hamburguesa-clasica-50425188.jpg')),
+                child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager(),
+                  placeholder: (context, url) => Image(
+                      image: AssetImage('assets/jar-loading.gif'),
+                      fit: BoxFit.cover),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl: productosData.productoFoto,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: responsive.wp(.8)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: responsive.wp(.8),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,16 +196,18 @@ class DataSearch extends SearchDelegate {
                     Text(
                       productosData.productoNombre,
                       style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(1.8)),
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: responsive.ip(1.8),
+                      ),
                     ),
                     Text(
                       productosData.productoPrecio,
                       style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(2)),
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: responsive.ip(2),
+                      ),
                     ),
                   ],
                 ),

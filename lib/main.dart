@@ -1,4 +1,4 @@
-import 'package:enchiladasapp/pp.dart';
+
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
@@ -7,6 +7,8 @@ import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
 import 'package:enchiladasapp/src/pages/seleccion_zona_carrito_page.dart';
+import 'package:enchiladasapp/src/pages/ticket.dart';
+import 'package:enchiladasapp/src/pages/webview.dart';
 import 'package:enchiladasapp/src/pages/zoom_foto_direccion.dart';
 import 'package:enchiladasapp/src/pushProvider/push_notifications.dart';
 import 'package:flutter/cupertino.dart';
@@ -216,7 +218,8 @@ class _MyAppState extends State<MyApp> {
           'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
           'market': (BuildContext context) => MarketPage(),
           'timeline': (BuildContext context) => DeliveryTimeline(),
-          'sign': (BuildContext context) => Peru(),
+          'webView': (BuildContext context) => WebViewExample(),
+          'ticket': (BuildContext context) => Ticket(),
         },
       ),
     );

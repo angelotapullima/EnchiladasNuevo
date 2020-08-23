@@ -469,16 +469,22 @@ class _DetallePagoState extends State<DetallePago> {
             ],
           ),
           Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-            Text('+51 ',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsive.ip(2.1))),
-            Text('$telefono',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsive.ip(2.1)))
+            Text(
+              '+51 ',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: responsive.ip(2.1),
+              ),
+            ),
+            Text(
+              '$telefono',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: responsive.ip(2.1),
+              ),
+            )
           ])
         ]);
   }
@@ -849,87 +855,98 @@ class _DetallePagoState extends State<DetallePago> {
   void dialogoValidarRuc() {
     final usuarioApi = UsuarioApi();
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Ingrese su número de RUC'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: comprobanteController,
-                ),
-                //Text('Producto agregado al carrito correctamente'),
-                SizedBox(
-                  height: 20.0,
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    if (comprobanteController.text.length > 0) {
-                      Navigator.pop(context);
-                      showProcessingDialog();
-                      final List<Ruc> dato = await usuarioApi
-                          .consultarRuc(comprobanteController.text);
-
-                      if (dato.length > 0) {
-                        Navigator.pop(context);
-                        ruc = dato[0].ruc;
-                        razonSocial = dato[0].razonSocial;
-                        mostrarErrorRuc = false;
-                        setState(() {});
-                      } else {
-                        print('fue pe');
-                        _comprobanteRadioValue(context, 0);
-                        errorRuc = 'Ingrese un RUC válido';
-                        mostrarErrorRuc = true;
-                        Navigator.pop(context);
-                      }
-                    } else {
-                      utils.showToast('el campo no debe estar vacio', 2);
-                    }
-                  },
-                  child: Text('validar')),
+      context: context,
+      barrierDismissible: true,
+      builder: (contextd) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          title: Text('Ingrese su número de RUC'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: comprobanteController,
+              ),
+              //Text('Producto agregado al carrito correctamente'),
+              SizedBox(
+                height: 20.0,
+              ),
             ],
-          );
-        });
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('cancelar')),
+            FlatButton(
+                onPressed: () async {
+                  if (comprobanteController.text.length > 0) {
+                    Navigator.pop(context);
+                    showProcessingDialog();
+                    final List<Ruc> dato = await usuarioApi
+                        .consultarRuc(comprobanteController.text);
+
+                    if (dato.length > 0) {
+                      Navigator.pop(context);
+                      ruc = dato[0].ruc;
+                      razonSocial = dato[0].razonSocial;
+                      mostrarErrorRuc = false;
+                      setState(() {});
+                    } else {
+                      print('fue pe');
+                      _comprobanteRadioValue(context, 0);
+                      errorRuc = 'Ingrese un RUC válido';
+                      mostrarErrorRuc = true;
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    utils.showToast('el campo no debe estar vacio', 2);
+                  }
+                },
+                child: Text('validar')),
+          ],
+        );
+      },
+    );
   }
 
   void showProcessingDialog() async {
     return showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-              content: Container(
-                  width: 250.0,
-                  height: 100.0,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text("Validando...",
-                            style: TextStyle(
-                                fontFamily: "OpenSans",
-                                color: Color(0xFF5B6978)))
-                      ])));
-        });
+      barrierDismissible: true,
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+          content: Container(
+            width: 250.0,
+            height: 100.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  "Validando...",
+                  style: TextStyle(
+                    fontFamily: "OpenSans",
+                    color: Color(0xFF5B6978),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void dialogoIngresarTelefono() {
@@ -1027,16 +1044,22 @@ class _DetallePagoState extends State<DetallePago> {
               final res = await pedidoApi.enviarpedido(pedido);
               print('respuesta de la ptmr $res');
               if (res.resp == 1) {
-
                 print(res.link);
+
+                if (res.link != "") {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'webView', arguments: res.link);
+                } else {
+                  Navigator.pop(context);
+                  pedidoCorrecto();
+                }
                 //final carritoBloc = ProviderBloc.carrito(context);
-                Navigator.pop(context);
-                pedidoCorrecto();
+
                 /* final carritoDatabase = CarritoDatabase();
                 carritoDatabase.deleteCarritoDb();
                 utils.agregarZona(context, '');
                 carritoBloc.obtenerCarrito(); */
-              } else if (res == 8) {
+              } else if (res.resp == 8) {
                 utils.showToast(
                     'Estamos actualizando los datos de los productos, intentelo más tarde',
                     2);

@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_calendar_widget/date_helper.dart';
@@ -155,13 +157,23 @@ class _RankingReportState extends State<RankingReport> {
     final circulo = Container(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100.0),
-        child: FadeInImage(
-            height: size.width * 0.25,
-            width: size.width * 0.25,
-            fit: BoxFit.cover,
-            placeholder: AssetImage('assets/jar-loading.gif'),
-            image: NetworkImage(
-                'https://ep01.epimg.net/elpais/imagenes/2019/06/24/icon/1561369019_449523_1561456608_noticia_normal.jpg')),
+        child: CachedNetworkImage(
+          height: size.width * 0.25,
+          width: size.width * 0.25,
+          cacheManager: CustomCacheManager(),
+          placeholder: (context, url) => Image(
+              image: AssetImage('assets/jar-loading.gif'), fit: BoxFit.cover),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+          imageUrl:
+              'https://ep01.epimg.net/elpais/imagenes/2019/06/24/icon/1561369019_449523_1561456608_noticia_normal.jpg',
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.fill,
+            )),
+          ),
+        ),
       ),
     );
     return Container(
@@ -291,13 +303,24 @@ class _RankingReportState extends State<RankingReport> {
           ),
           ClipRRect(
             borderRadius: BorderRadius.circular(100.0),
-            child: FadeInImage(
-                height: responsive.wp(10),
-                width: responsive.wp(10),
-                fit: BoxFit.cover,
-                placeholder: AssetImage('assets/jar-loading.gif'),
-                image: NetworkImage(
-                    'https://delivery.lacasadelasenchiladas.pe/${ranking.userImage}')),
+            child: CachedNetworkImage(
+              height: responsive.wp(10),
+              width: responsive.wp(10),
+              cacheManager: CustomCacheManager(),
+              placeholder: (context, url) => Image(
+                  image: AssetImage('assets/jar-loading.gif'),
+                  fit: BoxFit.cover),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl:
+                  'https://delivery.lacasadelasenchiladas.pe/${ranking.userImage}',
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                )),
+              ),
+            ),
           ),
           SizedBox(
             width: 10.0,
