@@ -24,37 +24,52 @@ class RankingUno extends StatelessWidget {
               height: responsive.ip(28),
               child: Column(
                 children: <Widget>[
-                  Text(list[0].personName,style: TextStyle(color:Colors.white),),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(100.0),
-                    child: CachedNetworkImage(
-                height: responsive.ip(15),
-                width: responsive.ip(15),
-                cacheManager: CustomCacheManager(),
-                placeholder: (context, url) => Image(
-                    image: AssetImage('assets/jar-loading.gif'),
-                    fit: BoxFit.cover),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: '$imagen1',
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+                  Text(
+                    list[0].personName,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(2.5),
                     ),
                   ),
-                ),
-              )
-              
-               
+                  SizedBox(height: responsive.hp(2),),
+                  //Text('list[0].personName',style: TextStyle(color:Colors.white,fontSize: responsive.ip(2)),),
+                  Container(
+                    height: responsive.ip(18),
+                    width: responsive.ip(18),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100.0),
+                        child: CachedNetworkImage(
+                          cacheManager: CustomCacheManager(),
+                          placeholder: (context, url) => Image(
+                              image: AssetImage('assets/jar-loading.gif'),
+                              fit: BoxFit.cover),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          imageUrl: '$imagen1',
+                          //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        )),
                   ),
-                  Text(list[0].puzzleTiempo,style: TextStyle(color:Colors.white),),
+                  SizedBox(height: responsive.hp(2),),
+                  Text(
+                    list[0].puzzleTiempo,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(2.5),
+                    ),
+                  ),
+                  //Text('list[0].puzzleTiempo',style: TextStyle(color:Colors.white,fontSize: responsive.ip(2)),),
                 ],
               ),
             ),
           ),
-          
-          
         ],
       ),
     );

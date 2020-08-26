@@ -90,6 +90,7 @@ class Auth {
         assert(await user.getIdToken() != null); */
 
         final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+        print(currentUser);
         /* assert(user.uid == currentUser.uid); */
 
         print("Facebook username ${user.displayName}");

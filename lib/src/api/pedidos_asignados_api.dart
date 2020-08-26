@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/models/pedidos_asignados_model.dart';
 import 'package:enchiladasapp/src/models/user.dart';
-import 'package:enchiladasapp/src/utils/utilidades.dart' as utils; 
+import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:fluttertoast/fluttertoast.dart'; 
 
 import 'package:http/http.dart' as http;
 
@@ -89,7 +90,7 @@ class PedidosAsignadosApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(  "Problemas con la conexión a internet",2);
+      utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
       return [];
     }
   }

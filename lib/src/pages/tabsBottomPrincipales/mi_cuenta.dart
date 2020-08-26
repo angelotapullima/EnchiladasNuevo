@@ -5,6 +5,7 @@ import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MiCuentaTab extends StatefulWidget {
   @override
@@ -282,7 +283,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       child: Row(children: <Widget>[
                         Icon(
                           Icons.card_giftcard,
-                          color: Colors.red,
+                          color: Colors.red, 
                         ),
                         SizedBox(
                           width: responsive.wp(1.5),
@@ -301,7 +302,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       Navigator.pushNamed(context, 'ordenes');
                     } else {
                       utils.showToast(
-                          'Debe estar registrado para ver esta opción', 2);
+                          'Debe estar registrado para ver esta opción', 2,ToastGravity.TOP);
                     }
                   },
                 ),
@@ -360,7 +361,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       Navigator.pushNamed(context, 'pedidosRepartidor');
                     } else {
                       utils.showToast(
-                          'Debe estar registrado para ver esta opción', 2);
+                          'Debe estar registrado para ver esta opción', 2,ToastGravity.TOP);
                     }
                   },
                 ),

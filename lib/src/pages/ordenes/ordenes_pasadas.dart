@@ -94,6 +94,32 @@ class OrdenesPasadas extends StatelessWidget {
   _itemPedido(BuildContext context, PedidoServer data) {
     final responsive = Responsive.of(context);
 
+    var colores = Colors.black;
+    var estadoItem = 'Enviado';
+
+    if (data.pedidoEstado == '1') {
+      colores = Colors.blue;
+      estadoItem = 'Aceptado';
+    } else if (data.pedidoEstado == '2') {
+      colores = Colors.yellow;
+      estadoItem = 'Asignado';
+    } else if (data.pedidoEstado == '3') {
+      colores = Colors.orange;
+      estadoItem = 'En camino';
+    } else if (data.pedidoEstado == '4') {
+      colores = Colors.green;
+      estadoItem = 'Entregado';
+    } else if (data.pedidoEstado == '5') {
+      colores = Colors.red;
+      estadoItem = 'cancelado';
+    }else if(data.pedidoEstado == '0'){
+
+      if(data.pedidoEstadoPago =='1'){
+        colores = Colors.green;
+      estadoItem = 'Pagado';
+      }
+    }
+
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
@@ -120,11 +146,11 @@ class OrdenesPasadas extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius:
                       BorderRadiusDirectional.all(Radius.circular(10)),
-                      color: Colors.green),
+                      color: colores),
                   padding: EdgeInsets.symmetric(
                       horizontal: responsive.wp(1.5),
                       vertical: responsive.hp(0.5)),
-                  child: Text('estado',
+                  child: Text('$estadoItem',
                       style: TextStyle(
                           color: Colors.white, fontSize: responsive.ip(1.5))),
                 )

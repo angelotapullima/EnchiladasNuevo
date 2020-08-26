@@ -96,6 +96,8 @@ class RankingPuzzle{
     this.idImagen,
   });
 
+  
+
   String idPuzzle;
   String personName;
   String puzzleTiempo;

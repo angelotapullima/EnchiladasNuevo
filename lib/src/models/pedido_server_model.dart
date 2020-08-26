@@ -103,7 +103,7 @@ class PedidoServer {
         pedidoFecha:  json["pedido_fecha"],
         pedidoHora: json["pedido_hora"],
         productos: List<ProductoServer>.from(json["productos"].map((x) => ProductoServer.fromJson(x))),
-    );
+    ); 
 
     factory PedidoServer.fromJson2(Map<String, dynamic> json) => PedidoServer(
         idPedido: json["id_pedido"],

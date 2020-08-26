@@ -2,7 +2,6 @@ import 'package:enchiladasapp/src/database/puzzle_database.dart';
 import 'package:enchiladasapp/src/database/ranking_database.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
-import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:async';
@@ -35,8 +34,8 @@ class PuzzleApi {
           puzzle.imagenEstado =
               decodedData['result']['data'][i]['imagen_estado'];
 
-              var file = CustomCacheManager().downloadFile(puzzle.imagenRuta);
-          print('file $file');
+              //var file = CustomCacheManager().downloadFile(puzzle.imagenRuta);
+          //print('file $file');
           await puzzleDatabase.insertarPuzzle(puzzle);
           list.add(puzzle);
         }

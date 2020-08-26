@@ -18,35 +18,32 @@ class RankingTres extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           _background(context),
-          AppBar(
-            backgroundColor: Colors.transparent,
-          ),
           Positioned(
-            top: responsive.hp(28),
+            top: responsive.hp(25),
             right: responsive.wp(30),
             child: CirculoItenRanking(
-              nombre: list[0].personName,
-              tiempo: list[0].puzzleTiempo,
-              foto: '$imagen1',
-            ),
+                nombre: list[0].personName,
+                tiempo: list[0].puzzleTiempo,
+                foto: '$imagen1'),
           ),
           Positioned(
             top: responsive.hp(50),
             left: responsive.wp(4),
             child: CirculoItenRanking(
-              nombre: list[1].personName,
-              tiempo: list[1].puzzleTiempo,
-              foto: '$imagen2',
-            ),
+                nombre: 'list[1].personName',
+                tiempo: 'list[1].puzzleTiempo',
+                foto: '$imagen2'),
           ),
           Positioned(
             top: responsive.hp(50),
             right: responsive.wp(4),
             child: CirculoItenRanking(
-              nombre: list[2].personName,
-              tiempo: list[2].puzzleTiempo,
-              foto: '$imagen3',
-            ),
+                nombre: 'list[2].personName',
+                tiempo: 'list[2].puzzleTiempo',
+                foto: '$imagen3'),
+          ),
+          AppBar(
+            backgroundColor: Colors.transparent,
           ),
         ],
       ),
@@ -79,15 +76,16 @@ class CirculoItenRanking extends StatelessWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
     return Container(
-        height: responsive.ip(24),
-        width: responsive.ip(16),
-        child: Column(
-          children: <Widget>[
-            ClipRRect(
+      height: responsive.ip(29),
+      width: responsive.ip(16),
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: responsive.ip(15),
+            width: responsive.ip(15),
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(100.0),
               child: CachedNetworkImage(
-                height: responsive.ip(15),
-                width: responsive.ip(15),
                 cacheManager: CustomCacheManager(),
                 placeholder: (context, url) => Image(
                     image: AssetImage('assets/ladrillos.png'),
@@ -104,13 +102,19 @@ class CirculoItenRanking extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              nombre,
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-            Text(tiempo, style: TextStyle(color: Colors.white))
-          ],
-        ));
+          ),
+          Text(
+            nombre,
+            style: TextStyle(color: Colors.white, fontSize: responsive.ip(2)),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            tiempo,
+            style: TextStyle(color: Colors.white, fontSize: responsive.ip(2)),
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+    );
   }
 }

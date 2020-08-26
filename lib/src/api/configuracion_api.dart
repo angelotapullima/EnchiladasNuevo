@@ -9,6 +9,7 @@ import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/widgets/zona_direction.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class ConfiguracionApi {
@@ -104,7 +105,7 @@ class ConfiguracionApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast("Problemas con la conexión a internet", 2);
+      utils.showToast("Problemas con la conexión a internet", 2,ToastGravity.TOP);
       return false;
     }
   }

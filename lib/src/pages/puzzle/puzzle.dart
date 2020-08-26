@@ -1,8 +1,8 @@
 import 'package:enchiladasapp/src/api/puzzle_api.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
+import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -45,7 +45,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
   }
 
   Future getImage(String path) async {
-    var image = await DefaultCacheManager().getSingleFile(path);
+    var image = await CustomCacheManager().getSingleFile(path);
 
     print('image: $image');
     if (image != null) {

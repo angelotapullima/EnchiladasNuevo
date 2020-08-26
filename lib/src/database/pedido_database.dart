@@ -33,7 +33,7 @@ class PedidoDatabase {
   }
   Future<List<PedidoServer>> obtenerTodosLosPedidosPasados() async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Pedido where pedido_estado = 4 and pedido_estado = 5");
+    final res = await db.rawQuery("SELECT * FROM Pedido where pedido_estado in(4,5)");
 
     List<PedidoServer> list = res.isNotEmpty
         ? res.map((c) => PedidoServer.fromJson2(c)).toList()
@@ -41,6 +41,19 @@ class PedidoDatabase {
 
     return list;
   }
+
+
+Future<List<PedidoServer>> obtenerPedidosPendiente() async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery("SELECT * FROM Pedido where pedido_estado = 0");
+
+    List<PedidoServer> list = res.isNotEmpty
+        ? res.map((c) => PedidoServer.fromJson2(c)).toList()
+        : [];
+
+    return list;
+  }
+
 
   Future<List<PedidoServer>> obtenerPedidoPorId(String id) async {
     try {

@@ -105,6 +105,12 @@ class OrdenesPendientes extends StatelessWidget {
     } else if (data.pedidoEstado == '5') {
       colores = Colors.red;
       estadoItem = 'cancelado';
+    }else if(data.pedidoEstado == '0'){
+
+      if(data.pedidoEstadoPago =='1'){
+        colores = Colors.green;
+      estadoItem = 'Pagado';
+      }
     }
 
     return GestureDetector(

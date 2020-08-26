@@ -32,7 +32,7 @@ class DeliveryTimeline extends StatelessWidget {
                             codigo: snapshot.data[0].pedidoCodigo),
                         (snapshot.data[0].pedidoEstado == '3')
                             ? _botonTracking(
-                                context, snapshot.data[0].pedidoEstado)
+                                context, snapshot.data[0].idPedido)
                             : Container(),
                         _TimelineDelivery(
                           id: int.parse(
@@ -54,6 +54,8 @@ class DeliveryTimeline extends StatelessWidget {
   }
 
   Widget _botonTracking(BuildContext context, String id) {
+
+    print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
     return FlatButton(
       onPressed: () {

@@ -4,7 +4,10 @@ import 'package:enchiladasapp/src/api/usuario_api.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/database/carrito_database.dart';
 import 'package:enchiladasapp/src/database/direccion_database.dart';
+import 'package:enchiladasapp/src/database/pedido_database.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
+import 'package:enchiladasapp/src/models/argumentDetallePedido.dart';
+import 'package:enchiladasapp/src/models/argumentsWebview.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/direccion_model.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
@@ -16,6 +19,7 @@ import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class DetallePago extends StatefulWidget {
@@ -62,7 +66,7 @@ class _DetallePagoState extends State<DetallePago> {
           //_result = ...
           break;
         case 1:
-          dialogoValidarRuc();
+          modalRuc();
           break;
       }
     });
@@ -81,7 +85,7 @@ class _DetallePagoState extends State<DetallePago> {
           break;
         case 1:
           print('1');
-          dialogoIngresarMonto(context, responsive);
+          _modalCambiarMetodoPago(context, responsive);
           break;
       }
     });
@@ -123,6 +127,7 @@ class _DetallePagoState extends State<DetallePago> {
   Widget _contenido(BuildContext context, Responsive responsive,
       List<Carrito> carrito, UsuarioBloc usuarioBloc) {
     final date = DateFormat("dd.MM.yyyy").format(DateTime.now());
+
     return SafeArea(
       child: Container(
         margin: EdgeInsets.only(
@@ -463,7 +468,7 @@ class _DetallePagoState extends State<DetallePago> {
                       TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 onPressed: () {
-                  dialogoIngresarTelefono();
+                  modaltelefono(responsive);
                 },
               ),
             ],
@@ -681,11 +686,14 @@ class _DetallePagoState extends State<DetallePago> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Tipo de pago',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: responsive.ip(1.8))),
+        Text(
+          'Tipo de pago',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: responsive.ip(1.8),
+          ),
+        ),
         GestureDetector(
           onTap: () {
             _tipoPagoRadioValue(context, 0, responsive);
@@ -695,7 +703,11 @@ class _DetallePagoState extends State<DetallePago> {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  _tipoPagoRadioValue(context, 0, responsive);
+                  _tipoPagoRadioValue(
+                    context,
+                    0,
+                    responsive,
+                  );
                 },
                 child: Container(
                     child: Row(
@@ -802,7 +814,7 @@ class _DetallePagoState extends State<DetallePago> {
                       style: TextStyle(fontSize: responsive.ip(2)),
                     ),
                     onPressed: () {
-                      _pagarcarrito();
+                      _pagarcarrito(responsive);
                       //Navigator.pushNamed(context, 'detallePago');
                     }),
               ),
@@ -814,99 +826,58 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  void dialogoIngresarMonto(BuildContext context, Responsive responsive) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Ingrese el monto con el que pagará'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
+  void _modalButtonPedidoPendiente(context, Responsive responsive) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.only(
+                topEnd: Radius.circular(20),
+                topStart: Radius.circular(20),
+              ),
+              color: Colors.white),
+          child: Padding(
+            padding: EdgeInsets.only(
+                top: responsive.hp(2),
+                left: responsive.wp(5),
+                right: responsive.wp(5)),
+            child: Column(
               children: <Widget>[
-                TextField(
-                  controller: tipoPagoController,
-                  keyboardType: TextInputType.number,
+                Text(
+                  'Existen pedidos pendientes, por favor revise su historial de pedidos',
+                  style: TextStyle(
+                      fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                 ),
-                //Text('Producto agregado al carrito correctamente'),
                 SizedBox(
-                  height: responsive.hp(1),
+                  height: responsive.hp(2),
                 ),
+                Container(
+                  height: responsive.hp(30),
+                  child: Image(
+                    image: AssetImage('assets/logo_enchilada.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'ordenes');
+                  },
+                  child: Container(
+                    color: Colors.red,
+                    padding: EdgeInsets.all(8),
+                    child: Text(
+                      'ver pedidos pendientes',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: responsive.ip(2),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Text('validar')),
-            ],
-          );
-        });
-  }
-
-  void dialogoValidarRuc() {
-    final usuarioApi = UsuarioApi();
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (contextd) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Ingrese su número de RUC'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                controller: comprobanteController,
-              ),
-              //Text('Producto agregado al carrito correctamente'),
-              SizedBox(
-                height: 20.0,
-              ),
-            ],
           ),
-          actions: <Widget>[
-            FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('cancelar')),
-            FlatButton(
-                onPressed: () async {
-                  if (comprobanteController.text.length > 0) {
-                    Navigator.pop(context);
-                    showProcessingDialog();
-                    final List<Ruc> dato = await usuarioApi
-                        .consultarRuc(comprobanteController.text);
-
-                    if (dato.length > 0) {
-                      Navigator.pop(context);
-                      ruc = dato[0].ruc;
-                      razonSocial = dato[0].razonSocial;
-                      mostrarErrorRuc = false;
-                      setState(() {});
-                    } else {
-                      print('fue pe');
-                      _comprobanteRadioValue(context, 0);
-                      errorRuc = 'Ingrese un RUC válido';
-                      mostrarErrorRuc = true;
-                      Navigator.pop(context);
-                    }
-                  } else {
-                    utils.showToast('el campo no debe estar vacio', 2);
-                  }
-                },
-                child: Text('validar')),
-          ],
         );
       },
     );
@@ -949,50 +920,347 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  void dialogoIngresarTelefono() {
-    showDialog(
+  void _modalCambiarMetodoPago(context, Responsive responsive) {
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: true,
-      builder: (contextd) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Ingrese su número de Teléfono'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                controller: telefonoController,
-                keyboardType: TextInputType.number,
-              ),
-              //Text('Producto agregado al carrito correctamente'),
-              SizedBox(
-                height: 20.0,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancelar'),
-            ),
-            FlatButton(
-              onPressed: () async {
-                utils.agregarTelefono(context, telefonoController.text);
+      isScrollControlled: true,
+      builder: (BuildContext context2) {
+        final nuevoMetodoPagoBloc = ProviderBloc.npago(context2);
+        nuevoMetodoPagoBloc.obtenerMontoCarrito();
+        return StreamBuilder(
+          stream: nuevoMetodoPagoBloc.vueltoStream,
+          builder: (BuildContext context, AsyncSnapshot snapshotvuelto) {
+            double vuelto = 0;
+            if (nuevoMetodoPagoBloc.valorVuelto == null) {
+            } else {
+              vuelto = nuevoMetodoPagoBloc.valorVuelto;
+            }
 
-                Navigator.pop(context);
+            return StreamBuilder(
+              stream: nuevoMetodoPagoBloc.montoCarritoStream,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Container(
+                    padding: MediaQuery.of(context).viewInsets,
+                    margin: EdgeInsets.only(top: responsive.hp(10)),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadiusDirectional.only(
+                          topEnd: Radius.circular(20),
+                          topStart: Radius.circular(20),
+                        ),
+                        color: Colors.white),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: responsive.hp(2),
+                        left: responsive.wp(5),
+                        right: responsive.wp(5),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Ingrese el monto con el que pagará',
+                            style: TextStyle(
+                                fontSize: responsive.ip(2),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: responsive.hp(2),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                width: responsive.wp(5),
+                                child: Text('S/ '),
+                              ),
+                              Container(
+                                width: responsive.wp(60),
+                                child: TextField(
+                                  controller: tipoPagoController,
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (val) {
+                                    if (val.length > 0) {
+                                      nuevoMetodoPagoBloc.validarPago2(val,
+                                          '${nuevoMetodoPagoBloc.montoCarrito}');
+                                    } else {
+                                      nuevoMetodoPagoBloc.validarPago2(
+                                          val, '0');
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: responsive.hp(2),
+                          ),
+                          Text(
+                              'Precio : S/ ${nuevoMetodoPagoBloc.montoCarrito}'),
+                          Row(
+                            children: <Widget>[
+                              (vuelto > 0)
+                                  ? Text(
+                                      'Vuelto : S/ $vuelto',
+                                      style: TextStyle(color: Colors.black),
+                                    )
+                                  : Text('Vuelto : S/ $vuelto',
+                                      style: TextStyle(color: Colors.red))
+                            ],
+                          ),
+                          SizedBox(
+                            height: responsive.hp(2),
+                          ),
+                          Center(
+                            child: FlatButton(
+                              onPressed: () async {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: responsive.ip(5),
+                                  vertical: responsive.ip(1),
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Colors.red),
+                                child: Text(
+                                  'Confirmar',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
               },
-              child: Text('Continuar'),
-            ),
-          ],
+            );
+          },
         );
       },
     );
   }
 
-  void _pagarcarrito() async {
+  void modaltelefono(Responsive responsive) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final nuevoMetodoPagoBloc = ProviderBloc.npago(context);
+
+        return StreamBuilder(
+          stream: nuevoMetodoPagoBloc.telefonoStream,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            bool validacion = false;
+            if (nuevoMetodoPagoBloc.valorValidacionTelefono == null) {
+            } else {
+              validacion = nuevoMetodoPagoBloc.valorValidacionTelefono;
+            }
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Container(
+                padding: MediaQuery.of(context).viewInsets,
+                margin: EdgeInsets.only(top: responsive.hp(10)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadiusDirectional.only(
+                      topEnd: Radius.circular(20),
+                      topStart: Radius.circular(20),
+                    ),
+                    color: Colors.white),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: responsive.hp(2),
+                    left: responsive.wp(5),
+                    right: responsive.wp(5),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Ingrese su número de Teléfono',
+                        style: TextStyle(
+                            fontSize: responsive.ip(2.5),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width: responsive.wp(12),
+                            child: Text(
+                              '+51',
+                              style: TextStyle(
+                                  fontSize: responsive.ip(2.5),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                              width: responsive.wp(75),
+                              child: TextField(
+                                controller: telefonoController,
+                                keyboardType: TextInputType.number,
+                                onChanged: (valor) {
+                                  nuevoMetodoPagoBloc.validarTelefono(valor);
+                                },
+                              ))
+                        ],
+                      ),
+                      (validacion)
+                          ? Container()
+                          : Text(
+                              'El número debe tener más de 9 dígitos',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                      SizedBox(
+                        height: responsive.hp(3),
+                      ),
+                      FlatButton(
+                        onPressed: () async {
+                          utils.agregarTelefono(
+                              context, telefonoController.text);
+
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.ip(5),
+                            vertical: responsive.ip(1),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.red),
+                          child: Text(
+                            'Confirmar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void modalRuc() {
+    final usuarioApi = UsuarioApi();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final responsive = Responsive.of(context);
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            padding: MediaQuery.of(context).viewInsets,
+            margin: EdgeInsets.only(top: responsive.hp(10)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(20),
+                  topStart: Radius.circular(20),
+                ),
+                color: Colors.white),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(2),
+                left: responsive.wp(5),
+                right: responsive.wp(5),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Ingrese su número de RUC',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    controller: comprobanteController,
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  FlatButton(
+                    onPressed: () async {
+                      if (comprobanteController.text.length > 0) {
+                        //Navigator.pop(context);
+                        showProcessingDialog();
+                        final List<Ruc> dato = await usuarioApi
+                            .consultarRuc(comprobanteController.text);
+
+                        if (dato.length > 0) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          ruc = dato[0].ruc;
+                          razonSocial = dato[0].razonSocial;
+                          mostrarErrorRuc = false;
+                          pasoFactura = true;
+                          setState(() {});
+                        } else {
+                          Navigator.pop(context);
+                          //Navigator.pop(context);
+                          print('fue pe');
+                          _comprobanteRadioValue(context, 0);
+                          errorRuc = 'Ingrese un RUC válido';
+                          mostrarErrorRuc = true;
+                          Navigator.pop(context);
+                        }
+                      } else {
+                        utils.showToast('el campo no debe estar vacio', 2,
+                            ToastGravity.TOP);
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.ip(5),
+                        vertical: responsive.ip(1),
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.red),
+                      child: Text(
+                        'Confirmar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _pagarcarrito(Responsive responsive) async {
     final pedidoApi = OrdenesApi();
     final usuarioDatabase = UsuarioDatabase();
     final direccionDatabase = DireccionDatabase();
@@ -1000,92 +1268,116 @@ class _DetallePagoState extends State<DetallePago> {
     final user = await usuarioDatabase.obtenerUsUario();
     final direccion = await direccionDatabase.obtenerdireccion();
 
-    if (direccion[0].direccion != "" && direccion[0].direccion != null) {
-      if (user[0].idZona != "" && user[0].idZona != null) {
-        if (user[0].telefono != "" && user[0].telefono != null) {
-          PedidoServer pedido = new PedidoServer();
-          if (_comprobanteValue == 0) {
-            //selecciona Boleta
-            pedido.pedidoTipoComprobante = "6";
-            pedido.pedidoCodPersona = "1";
-            pasoFactura = true;
-          } else {
-            //seleccciona Factura
-            pedido.pedidoTipoComprobante = "7";
-            pedido.pedidoCodPersona = "2";
-            if (ruc == "") {
-              pasoFactura = false;
-            } else {
-              pasoFactura = true;
-            }
-          }
-          pedido.pedidoMontoFinal = precioPedido.toString();
-          if (_tipoPagoValue == 0) {
-            pedido.pedidoMontoPago = '0';
-            pedido.pedidoVueltoPago = "0";
-            pedido.pedidoFormaPago = "3";
-            pedido.pedidoEstadoPago = "0";
-            pasoefectivo = true;
-          } else {
-            pedido.pedidoMontoPago = montoPago;
-            pedido.pedidoVueltoPago = vuelto.toString();
-            pedido.pedidoFormaPago = "4";
-            pedido.pedidoEstadoPago = "1";
-            if (vuelto < 0) {
-              pasoefectivo = false;
-            } else {
-              pasoefectivo = true;
-            }
-          }
+    final pedidoDatabase = PedidoDatabase();
+    final listPedido = await pedidoDatabase.obtenerPedidosPendiente();
 
-          if (pasoefectivo) {
-            if (pasoFactura) {
-              showProcessingDialog();
-              final res = await pedidoApi.enviarpedido(pedido);
-              print('respuesta de la ptmr $res');
-              if (res.resp == 1) {
-                print(res.link);
-
-                if (res.link != "") {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, 'webView', arguments: res.link);
+    if (listPedido.length > 0) {
+      _modalButtonPedidoPendiente(context, responsive);
+    } else {
+      if (direccion[0].direccion != "" && direccion[0].direccion != null) {
+        if (user[0].idZona != "" && user[0].idZona != null) {
+          if (user[0].telefono != "" && user[0].telefono != null) {
+            if (_comprobanteValue == 1 || _comprobanteValue == 0) {
+              if (_tipoPagoValue == 1 || _tipoPagoValue == 0) {
+                PedidoServer pedido = new PedidoServer();
+                if (_comprobanteValue == 0) {
+                  //selecciona Boleta
+                  pedido.pedidoTipoComprobante = "6";
+                  pedido.pedidoCodPersona = "1";
+                  pasoFactura = true;
                 } else {
-                  Navigator.pop(context);
-                  pedidoCorrecto();
+                  //seleccciona Factura
+                  pedido.pedidoTipoComprobante = "7";
+                  pedido.pedidoCodPersona = comprobanteController.text;
                 }
-                //final carritoBloc = ProviderBloc.carrito(context);
+                pedido.pedidoMontoFinal = precioPedido.toString();
+                if (_tipoPagoValue == 0) {
+                  pedido.pedidoMontoPago = '0';
+                  pedido.pedidoVueltoPago = "0";
+                  pedido.pedidoFormaPago = "3";
+                  pedido.pedidoEstadoPago = "0";
+                  pasoefectivo = true;
+                } else {
+                  pedido.pedidoMontoPago = montoPago;
+                  pedido.pedidoVueltoPago = vuelto.toString();
+                  pedido.pedidoFormaPago = "4";
+                  pedido.pedidoEstadoPago = "1";
+                  if (vuelto < 0) {
+                    pasoefectivo = false;
+                  } else {
+                    pasoefectivo = true;
+                  }
+                }
 
-                /* final carritoDatabase = CarritoDatabase();
-                carritoDatabase.deleteCarritoDb();
-                utils.agregarZona(context, '');
-                carritoBloc.obtenerCarrito(); */
-              } else if (res.resp == 8) {
-                utils.showToast(
-                    'Estamos actualizando los datos de los productos, intentelo más tarde',
-                    2);
-                //OCURRIO UNA ACTUALIZACION DE PRODUCTOS
-                final categoriasApi = CategoriasApi();
-                categoriasApi.obtenerAmbos();
-                Navigator.pop(context);
+                if (pasoefectivo) {
+                  if (pasoFactura) {
+                    showProcessingDialog();
+                    final res = await pedidoApi.enviarpedido(pedido);
+                    print('respuesta de la ptmr $res');
+                    if (res.resp == 1) {
+                      print(res.link);
+
+                      if (res.link != "") {
+                        Navigator.pop(context);
+                        ArgumentsDetallePago argumentsDetallePago =
+                            ArgumentsDetallePago();
+                        argumentsDetallePago.link = res.link;
+                        argumentsDetallePago.idPedido = res.idPedido;
+                        Navigator.pushNamed(context, 'webView',
+                            arguments: argumentsDetallePago);
+                      } else {
+                        Navigator.pop(context);
+                        ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                        argumentsWebview.idPedido = res.idPedido;
+                        argumentsWebview.codigo = '1';
+
+                        Navigator.pushNamed(context, 'ticket',
+                            arguments: argumentsWebview);
+                        //Navigator.pop(context);
+                        //pedidoCorrecto();
+                      }
+                    } else if (res.resp == 8) {
+                      utils.showToast(
+                          'Estamos actualizando los datos de los productos, intentelo más tarde',
+                          2,
+                          ToastGravity.TOP);
+                      //OCURRIO UNA ACTUALIZACION DE PRODUCTOS
+                      final categoriasApi = CategoriasApi();
+                      categoriasApi.obtenerAmbos();
+                      Navigator.pop(context);
+                    } else {
+                      utils.showToast('Ocurrio un error, intentelo más tarde',
+                          2, ToastGravity.TOP);
+                      //Ocurrio un error
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    utils.showToast(
+                        'Debe ingresar un Comprobante de pago válido',
+                        2,
+                        ToastGravity.TOP);
+                  }
+                }
               } else {
-                utils.showToast('Ocurrio un error, intentelo más tarde', 2);
-                //Ocurrio un error
-                Navigator.pop(context);
+                utils.showToast(
+                    'Debe seleccionar un Tipo de  pago ', 2, ToastGravity.TOP);
               }
             } else {
-              utils.showToast('Debe ingresar un Comprobante de pago válido', 2);
+              utils.showToast('Debe seleccionar un comprobante de  pago ', 2,
+                  ToastGravity.TOP);
             }
           } else {
-            utils.showToast('Debe ingresar un Tipo de pago válido', 2);
+            utils.showToast('Ingrese un número de teléfono de entrega', 2,
+                ToastGravity.TOP);
           }
         } else {
-          utils.showToast('Ingrese un número de teléfono de entrega', 2);
+          utils.showToast(
+              'Debe registrar una zona de entrega', 2, ToastGravity.TOP);
         }
       } else {
-        utils.showToast('Debe registrar una zona de entrega', 2);
+        utils.showToast(
+            'Ingrese una dirección de entrega', 2, ToastGravity.TOP);
       }
-    } else {
-      utils.showToast('Ingrese una dirección de entrega', 2);
     }
   }
 

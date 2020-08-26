@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'package:enchiladasapp/src/models/argumentDetallePedido.dart';
+import 'package:enchiladasapp/src/models/argumentsWebview.dart';
+import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-
 
 class WebViewExample extends StatefulWidget {
   @override
@@ -15,61 +16,189 @@ class _WebViewExampleState extends State<WebViewExample> {
 
   @override
   Widget build(BuildContext context) {
-    final String url = ModalRoute.of(context).settings.arguments;
+    final ArgumentsDetallePago args = ModalRoute.of(context).settings.arguments;
+    final responsive = Responsive.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title:  Text('Pago Online'),
-        // This drop down menu demonstrates that Flutter widgets can be shown over the web view.
-        actions: <Widget>[
-          NavigationControls(_controller.future),
-          //SampleMenu(_controller.future),
-        ], 
+    return WillPopScope(
+      onWillPop: () => showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (c) => Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ), //this right here
+          child: Container(
+            height: responsive.hp(30),
+            width: responsive.wp(90),
+            child: Padding(
+              padding: EdgeInsets.all(
+                responsive.ip(2),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: responsive.ip(7),
+                        width: responsive.ip(7),
+                        child: Image.asset('assets/logo_enchilada.png'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
+                  Text(
+                    'El pago está en proceso',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      fontSize: responsive.ip(2.5),
+                    ),
+                  ),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
+                  Text(
+                    'Estas seguro de salir ?',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.red,
+                      fontSize: responsive.ip(2),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text('Si'),
+                        onPressed: () => Navigator.pop(c, true),
+                      ),
+                      FlatButton(
+                        child: Text('No'),
+                        onPressed: () => Navigator.pop(c, false),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
-      // We're using a Builder here so we have a context that is below the Scaffold
-      // to allow calling Scaffold.of(context) so we can show a snackbar.
-      body: Builder(
-        builder: (BuildContext context) {
-          return WebView(
-            initialUrl: url,
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (WebViewController webViewController) {
-              _controller.complete(webViewController);
-            },
-            // elimine esto cuando los literales de colección se establezcan.
-            // ignore: prefer_collection_literals
-            javascriptChannels: <JavascriptChannel>[
-              _toasterJavascriptChannel(context),
-            ].toSet(),
-            navigationDelegate: (NavigationRequest request) {
-              if (request.url.startsWith('https://www.youtube.com/')) {
-                print('blocking navigation to $request}');
-                return NavigationDecision.prevent;
-              }
-              print('allowing navigation to $request');
-              return NavigationDecision.navigate;
-            },
-            onPageStarted: (String url) {
-              print('Page started loading: $url');
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Pago Online'),
+          // This drop down menu demonstrates that Flutter widgets can be shown over the web view.
+          actions: <Widget>[
+            NavigationControls(_controller.future),
+            //SampleMenu(_controller.future),
+          ],
+        ),
+        // We're using a Builder here so we have a context that is below the Scaffold
+        // to allow calling Scaffold.of(context) so we can show a snackbar.
+        body: Builder(
+          builder: (BuildContext context) {
+            return WebView(
 
-              if(url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO'){
-                Navigator.pop(context);
-              }else if(url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO'){
-                Navigator.pop(context);
-              }else if(url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO'){
-                Navigator.pop(context);
-              }else if(url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR'){
-                Navigator.pop(context);
-              }
-            },
-            onPageFinished: (String url) {
-              print('Page finished loading: $url');
+              initialUrl: args.link,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+              },
+              // elimine esto cuando los literales de colección se establezcan.
+              // ignore: prefer_collection_literals
+              javascriptChannels: <JavascriptChannel>[
+                _toasterJavascriptChannel(context),
+              ].toSet(),
+              navigationDelegate: (NavigationRequest request) {
+                if (request.url.startsWith('www.google.com')) {
+                  print('blocking navigation to $request}');
+                  return NavigationDecision.prevent;
+                }
+                print('allowing navigation to $request');
+                return NavigationDecision.navigate;
+              },
+              onPageStarted: (String url) {
+                print('Page started loading: $url');
 
-              
-            },
-            gestureNavigationEnabled: true,
-          );
-        },
+                if (url ==
+                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
+                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                  argumentsWebview.idPedido = args.idPedido;
+                  argumentsWebview.codigo = '1';
+
+                  Navigator.pushNamed(context, 'ticket',
+                      arguments: argumentsWebview);
+                } else if (url ==
+                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
+                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                  argumentsWebview.idPedido = args.idPedido;
+                  argumentsWebview.codigo = '2';
+
+                  Navigator.pushNamed(context, 'ticket',
+                      arguments: argumentsWebview);
+                } else if (url ==
+                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
+                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                  argumentsWebview.idPedido = args.idPedido;
+                  argumentsWebview.codigo = '3';
+
+                  Navigator.pushNamed(context, 'ticket',
+                      arguments: argumentsWebview);
+                } else if (url ==
+                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
+                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                  argumentsWebview.idPedido = args.idPedido;
+                  argumentsWebview.codigo = '4';
+
+                  Navigator.pushNamed(context, 'ticket',
+                      arguments: argumentsWebview);
+                }
+              },
+              onPageFinished: (String url) {
+               /*  print('Page finished loading: $url');
+
+                if (url ==
+                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
+                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                  argumentsWebview.idPedido = args.idPedido;
+                  argumentsWebview.codigo = '1';
+
+                  Navigator.pushNamed(context, 'ticket',
+                      arguments: argumentsWebview);
+                } else if (url ==
+                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
+                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                  argumentsWebview.idPedido = args.idPedido;
+                  argumentsWebview.codigo = '2';
+
+                  Navigator.pushNamed(context, 'ticket',
+                      arguments: argumentsWebview);
+                } else if (url ==
+                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
+                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                  argumentsWebview.idPedido = args.idPedido;
+                  argumentsWebview.codigo = '3';
+
+                  Navigator.pushNamed(context, 'ticket',
+                      arguments: argumentsWebview);
+                } else if (url ==
+                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
+                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                  argumentsWebview.idPedido = args.idPedido;
+                  argumentsWebview.codigo = '4';
+
+                  Navigator.pushNamed(context, 'ticket',
+                      arguments: argumentsWebview);
+                } */
+              },
+              gestureNavigationEnabled: true,
+            );
+          },
+        ),
       ),
     );
   }
@@ -147,4 +276,4 @@ class NavigationControls extends StatelessWidget {
       },
     );
   }
-} 
+}

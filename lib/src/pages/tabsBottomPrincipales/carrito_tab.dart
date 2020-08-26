@@ -13,8 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:geolocator/geolocator.dart';
-
 class MiOrdenTab extends StatefulWidget {
   @override
   _MiOrdenTabState createState() => _MiOrdenTabState();
@@ -27,7 +25,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
 
   bool estadoDelivery = false;
 
-  void _obtenerUbicacion(BuildContext context) async {
+  /* void _obtenerUbicacion(BuildContext context) async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     List<Placemark> placemark = await Geolocator()
@@ -38,7 +36,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
 
     utils.agregarDireccion(
         context, addresito, position.latitude, position.longitude, "");
-  }
+  } */
 
   TextEditingController observacionProducto = TextEditingController();
   TextEditingController telefonoController = TextEditingController();
@@ -52,7 +50,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
 
   @override
   Widget build(BuildContext context) {
-    _obtenerUbicacion(context);
+    //_obtenerUbicacion(context);
     final Responsive responsive = new Responsive.of(context);
 
     final carritoBloc = ProviderBloc.carrito(context);
@@ -180,7 +178,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: responsive.wp(2), vertical: responsive.hp(1.2)),
+                horizontal: responsive.wp(2), vertical: responsive.hp(2)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

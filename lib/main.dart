@@ -220,6 +220,13 @@ class _MyAppState extends State<MyApp> {
           'timeline': (BuildContext context) => DeliveryTimeline(),
           'webView': (BuildContext context) => WebViewExample(),
           'ticket': (BuildContext context) => Ticket(),
+
+/* 
+
+          'r1': (BuildContext context) => RankingUno(),
+          'r2': (BuildContext context) => RankingDos(),
+          'r3': (BuildContext context) => RankingTres(),
+          '>3': (BuildContext context) => Mayor3(), */
         },
       ),
     );

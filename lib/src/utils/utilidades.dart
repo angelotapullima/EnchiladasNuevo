@@ -199,11 +199,11 @@ void actualizarObservacion(BuildContext context, String observacion, String id) 
   carritoBloc.obtenerCarrito();
 }
 
-void showToast( String msg, int duration) {
+void showToast( String msg, int duration,ToastGravity gravity) {
   Fluttertoast.showToast(
       msg:  '$msg',
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
+      gravity: gravity,
       timeInSecForIosWeb: duration,
       backgroundColor: Colors.black,
       textColor: Colors.white,

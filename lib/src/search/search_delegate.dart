@@ -164,6 +164,7 @@ class DataSearch extends SearchDelegate {
           children: <Widget>[
             Container(
               width: responsive.wp(35),
+              height: responsive.hp(10),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(13),
                 child: CachedNetworkImage(

@@ -66,8 +66,10 @@ class _MapaClienteState extends State<MapaCliente> {
 
     timer = Timer.periodic(Duration(seconds: 3), (Timer t) {
       if (banderaTimer) {
+        print('pedido true ');
         trackingRepartidor(idPedidoTrack);
       } else {
+        print('cancelar pedido ');
         timer.cancel();
       }
     });
@@ -297,7 +299,7 @@ class _MapaClienteState extends State<MapaCliente> {
   }
   LatLng destino,repartidor;
   void trackingRepartidor(String idPedido) async {
-    print('empezamos el timer');
+    print('empezamos el timer $idPedido');
     final trackingApi = TrackingApi();
     final list = await trackingApi.trackingRepartidor(idPedido);
     if (list.length > 0) {

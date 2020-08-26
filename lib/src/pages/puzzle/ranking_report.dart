@@ -19,7 +19,7 @@ class _RankingReportState extends State<RankingReport> {
   DateTime firstDate;
   DateTime lastDate;
   String fechaBusqueda;
-  String diaDeLaSemana;
+  //String diaDeLaSemana;
   String dateFormat = 'dd';
   String monthFormat = 'MMM';
   String weekDayFormat = 'EEE';
@@ -39,7 +39,7 @@ class _RankingReportState extends State<RankingReport> {
     firstDate = toDateMonthYear(today.subtract(Duration(days: days - 15)));
     lastDate = toDateMonthYear(today.add(Duration(days: days - 15)));
     fechaBusqueda = today.toString();
-    diaDeLaSemana = today.weekday.toString();
+    //diaDeLaSemana = today.weekday.toString();
     initialSelectedDates = feedInitialSelectedDates(today);
     super.initState();
   }
@@ -49,8 +49,9 @@ class _RankingReportState extends State<RankingReport> {
     final responsive = Responsive.of(context);
     final puzzleBloc = ProviderBloc.puzzle(context);
 
-    var horafotmat = today.toString().split(' ');
+    var horafotmat = fechaBusqueda.toString().split(' ');
     var horaformat1 = horafotmat[0];
+    print('este es  : $horaformat1');
     puzzleBloc.obtenerTiempos(horaformat1);
 
     Future.delayed(Duration(milliseconds: 1), () {
@@ -112,7 +113,7 @@ class _RankingReportState extends State<RankingReport> {
 
               setState(() {
                 fechaBusqueda = date.toString();
-                diaDeLaSemana = date.weekday.toString();
+                //diaDeLaSemana = date.weekday.toString();
                 //canchasBloc.obtenerReservasPorIDCancha(canchas.canchaId,canchas.idEmpresa,fechaBusqueda);
               });
             },
@@ -125,8 +126,7 @@ class _RankingReportState extends State<RankingReport> {
                   AsyncSnapshot<List<RankingPuzzle>> snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data.length > 0) {
-                    return contenidoRanking(
-                        context, '0', responsive, snapshot.data);
+                    return contenidoRanking(context, responsive, snapshot.data);
                   } else {
                     return Center(child: Text('no hay datos'));
                   }
@@ -139,198 +139,71 @@ class _RankingReportState extends State<RankingReport> {
     );
   }
 
-  Widget contenidoRanking(BuildContext context, String time,
-      Responsive responsive, List<RankingPuzzle> data) {
-    return CustomScrollView(slivers: <Widget>[
-      _crearAppbar(context, time),
-      SliverList(
-        delegate: SliverChildBuilderDelegate((BuildContext context, int i) {
-          return _cardRanking(responsive, data[i]);
-        }, childCount: data.length),
-      )
-    ]);
-  }
-
-  Widget _crearFondo(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    final circulo = Container(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(100.0),
-        child: CachedNetworkImage(
-          height: size.width * 0.25,
-          width: size.width * 0.25,
-          cacheManager: CustomCacheManager(),
-          placeholder: (context, url) => Image(
-              image: AssetImage('assets/jar-loading.gif'), fit: BoxFit.cover),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-          imageUrl:
-              'https://ep01.epimg.net/elpais/imagenes/2019/06/24/icon/1561369019_449523_1561456608_noticia_normal.jpg',
-          imageBuilder: (context, imageProvider) => Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.fill,
-            )),
-          ),
-        ),
-      ),
-    );
-    return Container(
-      height: size.height * 0.35,
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            decoration: new BoxDecoration(
-              color: Colors.black12,
-              image: new DecorationImage(
-                image: new ExactAssetImage('assets/ladrillos.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: size.width * 0.28,
-                      padding: EdgeInsets.only(top: size.height * 0.13),
-                      child: Column(
-                        children: <Widget>[
-                          circulo,
-                          Text(
-                            'Angelo Tapullima Del Aguila',
-
-                            textAlign: TextAlign.center,
-                            //overflow:TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: size.width * 0.28,
-                      padding: EdgeInsets.only(top: size.height * 0.05),
-                      child: Column(
-                        children: <Widget>[
-                          circulo,
-                          Text(
-                            'Angelo Tapullima Del Aguila',
-                            textAlign: TextAlign.center,
-                            //overflow:TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: size.width * 0.28,
-                      padding: EdgeInsets.only(top: size.height * 0.18),
-                      child: Column(
-                        children: <Widget>[
-                          circulo,
-                          Text(
-                            'Angelo Tapullima Del Aguila',
-                            textAlign: TextAlign.center,
-                            //overflow:TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+  Widget contenidoRanking(
+      BuildContext context, Responsive responsive, List<RankingPuzzle> data) {
+    return ListView.builder(
+      itemCount: data.length,
+      itemBuilder: (context, i) {
+        return _cardRanking(responsive, data[i],i+1);
+      },
     );
   }
 
-  Widget _crearAppbar(BuildContext context, String time) {
-    final size = MediaQuery.of(context).size;
-    return SliverAppBar(
-      shape: ContinuousRectangleBorder(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40))),
-      elevation: 2.0,
-      backgroundColor: Colors.red,
-      expandedHeight: size.height * 0.4,
-      floating: true,
-      pinned: true,
-      leading: Icon(
-        Icons.add,
-        color: Colors.transparent,
-      ),
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title: Text(
-          time,
-          style: TextStyle(color: Colors.white, fontSize: 16.0),
-        ),
-        background: _crearFondo(context),
-      ),
-    );
-  }
-
-  Widget _cardRanking(Responsive responsive, RankingPuzzle ranking) {
+  Widget _cardRanking(Responsive responsive, 
+    RankingPuzzle ranking,int index) {
     return Card(
-      elevation: 3.0,
-      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      child: Container(
-        padding: EdgeInsets.all(10.0),
-        child: Row(children: <Widget>[
-          Text(
-            '4',
-            style: TextStyle(fontSize: 18.0),
-          ),
-          SizedBox(
-            width: 5.0,
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100.0),
-            child: CachedNetworkImage(
+        elevation: 3.0,
+        margin: EdgeInsets.symmetric(horizontal: responsive.wp(2), vertical: responsive.hp(.8)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Container(
+          padding: EdgeInsets.all(responsive.ip(1)),
+          child: Row(children: <Widget>[
+            Text(
+              '$index',
+              style: TextStyle(fontSize:responsive.ip(2),fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: responsive.wp(2),
+            ),
+            Container(
               height: responsive.wp(10),
               width: responsive.wp(10),
-              cacheManager: CustomCacheManager(),
-              placeholder: (context, url) => Image(
-                  image: AssetImage('assets/jar-loading.gif'),
-                  fit: BoxFit.cover),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              imageUrl:
-                  'https://delivery.lacasadelasenchiladas.pe/${ranking.userImage}',
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                )),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager(),
+                  placeholder: (context, url) => Image(
+                      image: AssetImage('assets/jar-loading.gif'),
+                      fit: BoxFit.cover),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl:'${ranking.userImage}',
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),),
+                  ),
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          Expanded(
-            child: Text('${ranking.personName}'),
-          ),
-          Text('${ranking.puzzleTiempo}'),
-        ]),
-      ),
+            SizedBox(
+              
+              width: responsive.wp(2),
+            ),
+            Expanded(
+              child: Text('${ranking.personName}',style: TextStyle(fontSize: responsive.ip(1.8))),
+              //child: Text('Angelo Tapullima Del Aguila',style: TextStyle(fontSize: responsive.ip(1.8)),),
+            ), SizedBox(
+              
+              width: responsive.wp(2),
+            ),
+            Text('${ranking.puzzleTiempo}',style: TextStyle(fontSize: responsive.ip(1.8))),
+            //Text('00:00:00'),
+          ]),
+        ),
+    
     );
   }
 }

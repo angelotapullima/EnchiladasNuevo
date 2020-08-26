@@ -28,32 +28,37 @@ class RankingDos extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         list[0].personName,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(100.0),
-                        child: CachedNetworkImage(
-                          height: responsive.wp(10),
-                          width: responsive.wp(10),
-                          cacheManager: CustomCacheManager(),
-                          placeholder: (context, url) => Image(
-                              image: AssetImage('assets/jar-loading.gif'),
-                              fit: BoxFit.cover),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                          imageUrl: '$imagen1',
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            )),
+                      SizedBox(height: responsive.hp(1),),
+                      Container(
+                            height: responsive.ip(15),
+                            width: responsive.ip(15),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: CachedNetworkImage(
+                            cacheManager: CustomCacheManager(),
+                            placeholder: (context, url) => Image(
+                                image: AssetImage('assets/jar-loading.gif'),
+                                fit: BoxFit.cover),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: '$imagen1',
+                            //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              )),
+                            ),
                           ),
                         ),
                       ),
+                      SizedBox(height: responsive.hp(1),),
                       Text(
                         list[0].puzzleTiempo,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
                       ),
                     ],
                   ),
@@ -64,33 +69,38 @@ class RankingDos extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         list[1].personName,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(100.0),
-                        child: CachedNetworkImage(
-                          height: responsive.ip(15),
-                          width: responsive.ip(15),
-                          cacheManager: CustomCacheManager(),
-                          placeholder: (context, url) => Image(
-                              image: AssetImage('assets/jar-loading.gif'),
-                              fit: BoxFit.cover),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                          imageUrl: '$imagen2',
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
+                      SizedBox(height: responsive.hp(1),),
+                      Container(
+                            height: responsive.ip(15),
+                            width: responsive.ip(15),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: CachedNetworkImage(
+                            cacheManager: CustomCacheManager(),
+                            placeholder: (context, url) => Image(
+                                image: AssetImage('assets/jar-loading.gif'),
+                                fit: BoxFit.cover),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
+                            imageUrl: '$imagen2',
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
+                      SizedBox(height: responsive.hp(1),),
                       Text(
                         list[1].puzzleTiempo,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
                       ),
                     ],
                   ),

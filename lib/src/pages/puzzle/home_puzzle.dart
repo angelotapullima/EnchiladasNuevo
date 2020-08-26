@@ -33,13 +33,18 @@ class HomePuzzle extends StatelessWidget {
               title: Text(''),
               actions: <Widget>[
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(1)),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(1),
+                  ),
                   child: GestureDetector(
                     child: Center(
-                        child: Text(
-                      'Ver Ranking',
-                      style: TextStyle(fontSize: responsive.ip(2)),
-                    )),
+                      child: Text(
+                        'Ver Ranking',
+                        style: TextStyle(
+                          fontSize: responsive.ip(2),
+                        ),
+                      ),
+                    ),
                     onTap: () {
                       Navigator.pushNamed(context, 'rankingReport',
                           arguments: '0');
@@ -63,7 +68,8 @@ class HomePuzzle extends StatelessWidget {
             if (snapshot.data.length > 0) {
               return _stackTarjetas(context, snapshot.data, responsive);
             } else {
-              return Center(child: Text('no hay Fotos'));
+              return Center(child: CupertinoActivityIndicator());
+              //return Center(child: Text('no hay Fotos'));
             }
           } else {
             return Center(child: CupertinoActivityIndicator());

@@ -16,7 +16,7 @@ class _OrdenesPageState extends State<OrdenesPage> {
   @override
   void initState() {
     pageList.add(OrdenesPendientes());
-    pageList.add(OrdenesPasadas());
+    pageList.add(OrdenesPasadas()); 
     super.initState();
   }
 

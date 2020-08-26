@@ -2,7 +2,8 @@ import 'package:enchiladasapp/src/database/categorias_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
-import 'package:enchiladasapp/src/utils/utilidades.dart' as utils; 
+import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:fluttertoast/fluttertoast.dart'; 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -121,7 +122,7 @@ class CategoriasApi {
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
 
-      utils.showToast(  "Problemas con la conexión a internet",2);
+      utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
       return false;
     }
   }
@@ -173,7 +174,7 @@ class CategoriasApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(  "Problemas con la conexión a internet",2);
+      utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
       return [];
     }
   }
@@ -228,7 +229,7 @@ class CategoriasApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(  "Problemas con la conexión a internet",2);
+      utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
       return [];
     }
   }

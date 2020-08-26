@@ -69,57 +69,56 @@ class _MapsSampleState extends State<MapsSample> {
     final responsive = Responsive.of(context);
     return Scaffold(
       body: Stack(
-          children: <Widget>[
-            Container(
-              height: responsive.hp(65),
-              child: GoogleMap(
-                
-                markers: _markers,
-                mapType: _defaultMapType,
-                myLocationEnabled: true,
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: currentPosition,
-                onCameraMove: (CameraPosition position) {
-                  _timer?.cancel();
-                  _timer = null;
-                  _timer = new Timer(Duration(seconds: 1), () async {
-                    print('${position.target}');
+        children: <Widget>[
+          Container(
+            height: responsive.hp(65),
+            child: GoogleMap(
+              markers: _markers,
+              mapType: _defaultMapType,
+              myLocationEnabled: true,
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: currentPosition,
+              onCameraMove: (CameraPosition position) {
+                _timer?.cancel();
+                _timer = null;
+                _timer = new Timer(Duration(seconds: 1), () async {
+                  print('grg ${position.target}');
 
-                    //agregarMarket(position.target);
-                    _cargarGeocoding(context, position.target.latitude,
-                        position.target.longitude);
+                  //agregarMarket(position.target);
+                  _cargarGeocoding(context, position.target.latitude,
+                          position.target.longitude); 
 
-                    setState(() {});
-                  });
-                },
+                  setState(() {});
+                });
+              },
+            ),
+          ),
+          Positioned(
+            top: responsive.hp(5),
+            left: responsive.wp(3),
+            child: GestureDetector(
+              child: CircleContainer(
+                radius: responsive.ip(2.5),
+                color: Colors.grey[200],
+                widget: Icon(Icons.arrow_back, color: Colors.black),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          _modalDireccion(context, responsive),
+          Container(
+            height: responsive.hp(65),
+            child: Center(
+              child: Icon(
+                FontAwesomeIcons.mapPin,
+                color: Colors.red,
               ),
             ),
-            Positioned(
-              top: responsive.hp(5),
-              left: responsive.wp(3),
-              child: GestureDetector(
-                child: CircleContainer(
-                  radius: responsive.ip(2.5),
-                  color: Colors.grey[200],
-                  widget: Icon(Icons.arrow_back, color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            _modalDireccion(context, responsive),
-            Container(
-              height: responsive.hp(65),
-              child: Center(
-                child: Icon(
-                  FontAwesomeIcons.mapPin,
-                  color: Colors.red,
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
+      ),
     );
   }
 
@@ -298,7 +297,8 @@ class _MapsSampleState extends State<MapsSample> {
                       },
                     )
                   ],
-                ),onTap: (){
+                ),
+                onTap: () {
                   dialogoIngresarReferencia();
                 },
               ),
@@ -306,20 +306,21 @@ class _MapsSampleState extends State<MapsSample> {
             SizedBox(
               height: responsive.hp(1),
             ),
-             Container(
-               width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.red),
-                child: FlatButton(
-                  child: Text(
-                    'Confirmar',
-                    style: TextStyle(fontSize: responsive.ip(2),color: Colors.white),
-                  ),onPressed: () {
-                Navigator.pop(context);
-              },
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20), color: Colors.red),
+              child: FlatButton(
+                child: Text(
+                  'Confirmar',
+                  style: TextStyle(
+                      fontSize: responsive.ip(2), color: Colors.white),
                 ),
-              ) 
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
           ],
         ),
       ),

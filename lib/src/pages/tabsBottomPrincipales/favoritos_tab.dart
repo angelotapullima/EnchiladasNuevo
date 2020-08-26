@@ -117,7 +117,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
         }
       },
     );
-  }
+  } 
 
   Widget _listaFavoritos(Responsive responsive, List<ProductosData> favoritos) {
     return SafeArea(

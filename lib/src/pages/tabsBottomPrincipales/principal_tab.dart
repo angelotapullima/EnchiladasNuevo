@@ -7,6 +7,7 @@ import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PrincipalTab extends StatelessWidget {
   @override
@@ -253,7 +254,7 @@ class PrincipalTab extends StatelessWidget {
 
         Navigator.pushNamed(context, 'HomePuzzle');
         }else{
-          utils.showToast('Debe registrarse para acceder al Puzzle', 2);
+          utils.showToast('Debe registrarse para acceder al Puzzle', 2,ToastGravity.TOP);
         }
       },
     );

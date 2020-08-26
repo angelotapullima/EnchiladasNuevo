@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:enchiladasapp/src/api/token_api.dart';
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:enchiladasapp/main.dart' as main;
 
 class PushNotificationProvider {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();

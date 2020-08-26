@@ -1,3 +1,11 @@
+import 'package:enchiladasapp/src/bloc/provider.dart';
+import 'package:enchiladasapp/src/database/carrito_database.dart';
+import 'package:enchiladasapp/src/models/argumentsWebview.dart';
+import 'package:enchiladasapp/src/models/pedido_server_model.dart';
+import 'package:enchiladasapp/src/utils/circle.dart';
+import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticket_widget/flutter_ticket_widget.dart';
 
@@ -9,9 +17,325 @@ class Ticket extends StatefulWidget {
 class _HomeScreenState extends State<Ticket> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //backgroundColor: Colors.black,
-      body: Stack(children: <Widget>[
+    final ArgumentsWebview args = ModalRoute.of(context).settings.arguments;
+    final responsive = Responsive.of(context);
+    final pedidoBloc = ProviderBloc.pedido(context);
+
+    pedidoBloc.obtenerPedidoPorId(args.idPedido);
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.popUntil(
+                    context,
+                    ModalRoute.withName('/'),
+                  );
+      },
+          child: Scaffold(
+        //backgroundColor: Colors.black,
+        body: Stack(
+          children: <Widget>[
+            (args.codigo == '1')
+                ? pedidoCorrecto(context, responsive, pedidoBloc)
+                : Container(),
+            (args.codigo == "2") ? pedidoCancelado(responsive) : Container(),
+            (args.codigo == "3") ? pedidoRechazado(responsive) : Container(),
+            (args.codigo == "4") ? pedidoError(responsive) : Container(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget pedidoCorrecto(
+      BuildContext context, Responsive responsive, PedidoBloc pedidoBloc) {
+    final carritoBloc = ProviderBloc.carrito(context);
+
+    final carritoDatabase = CarritoDatabase();
+    carritoDatabase.deleteCarritoDb();
+    utils.agregarZona(context, '');
+    carritoBloc.obtenerCarrito();
+    pedidoBloc.obtenerPedidosPendientes(context);
+    return Stack(children: <Widget>[
+      Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: new BoxDecoration(
+          color: Colors.black12,
+          image: new DecorationImage(
+            image: new ExactAssetImage('assets/ladrillos.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: responsive.hp(2),
+            horizontal: responsive.wp(2),
+          ),
+          child: FlutterTicketWidget(
+            width: double.infinity,
+            height: double.infinity,
+            isCornerRounded: true,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(1),
+              ),
+              child: StreamBuilder(
+                stream: pedidoBloc.pedidoIdStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<PedidoServer>> snapshot) {
+                  if (snapshot.hasData) {
+                    return detalleTickets(responsive, snapshot.data[0]);
+                  } else {
+                    return Center(child: CupertinoActivityIndicator());
+                  }
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        top: responsive.hp(8),
+        left: responsive.wp(4),
+        child: GestureDetector(
+          child: CircleContainer(
+            radius: responsive.ip(2.5),
+            color: Colors.grey[100],
+            widget: Icon(Icons.arrow_back, color: Colors.black),
+          ),
+          onTap: () {
+            Navigator.popUntil(
+              context,
+              ModalRoute.withName('/'),
+            );
+          },
+        ),
+      ),
+    ]);
+  }
+
+  Widget detalleTickets(Responsive responsive, PedidoServer pedido) {
+    var tipoPago;
+    if (pedido.pedidoTipoComprobante == '6') {
+      tipoPago = 'Boleta';
+    } else {
+      tipoPago = 'Factura';
+    }
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: responsive.ip(9),
+                width: responsive.ip(9),
+                child: Image.asset('assets/logo_enchilada.png'),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              top: responsive.hp(1),
+            ),
+            child: Center(
+              child: Text(
+                'Comprobante de Pago',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: responsive.ip(2.5),
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              top: responsive.hp(2.5),
+              left: responsive.wp(10),
+              right: responsive.wp(10),
+            ),
+            child: Column(
+              children: <Widget>[
+                ticketDetailsWidget('Fecha', '${pedido.pedidoFecha}', 'Hora',
+                    '${pedido.pedidoHora}', responsive),
+                SizedBox(
+                  height: responsive.hp(1.5),
+                ),
+                ticketDetailsWidget(
+                    'Cliente', '${pedido.pedidoNombre}', '', '', responsive),
+                SizedBox(
+                  height: responsive.hp(1.5),
+                ),
+                ticketDetailsWidget('Tipo de Pago', '$tipoPago', 'Código',
+                    '${pedido.pedidoCodigo}', responsive),
+                SizedBox(
+                  height: responsive.hp(1.5),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: responsive.hp(1)),
+            child: Center(
+              child: Text(
+                'Productos',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: responsive.ip(2.5),
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                top: responsive.hp(1),
+                left: responsive.wp(10),
+                right: responsive.wp(10)),
+            child: listProducts(
+                context, responsive, pedido.idPedido, pedido.pedidoTotal),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget listProducts(
+      BuildContext context, Responsive responsive, String id, String total) {
+    final pedidoBloc = ProviderBloc.pedido(context);
+    pedidoBloc.obtenerDetallePedido(id);
+
+    return StreamBuilder(
+        stream: pedidoBloc.detallePedidoStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return products(responsive, snapshot.data, total);
+            } else {
+              return Center(child: CupertinoActivityIndicator());
+            }
+          } else {
+            return Center(child: CupertinoActivityIndicator());
+          }
+        });
+  }
+
+  ListView products(
+      Responsive responsive, List<ProductoServer> productos, String totalex) {
+    final total = Container(
+        margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
+        child: Column(
+          children: <Widget>[
+            Divider(),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text('Total',
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize: responsive.ip(2.5),
+                          fontWeight: FontWeight.bold)),
+                ),
+                SizedBox(
+                  width: responsive.wp(5),
+                ),
+                Text('S/ $totalex',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ],
+        ));
+    return ListView.builder(
+      itemCount: productos.length + 1,
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      physics: ScrollPhysics(),
+      itemBuilder: (context, i) {
+        if (i == productos.length) {
+          return total;
+        }
+        return Padding(
+          padding: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  '${productos[i].productoNombre} x ${productos[i].detalleCantidad}',
+                  style: TextStyle(fontSize: responsive.ip(2)),
+                ),
+              ),
+              SizedBox(
+                width: responsive.wp(5),
+              ),
+              Text(
+                'S/.${productos[i].detallePrecioTotal}',
+                style: TextStyle(
+                    fontSize: responsive.ip(2),
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget ticketDetailsWidget(String firstTitle, String firstDesc,
+      String secondTitle, String secondDesc, Responsive responsive) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              firstTitle,
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: responsive.hp(1)),
+              child: Text(
+                firstDesc,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            )
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              secondTitle,
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: responsive.hp(1)),
+              child: Text(
+                secondDesc,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget pedidoRechazado(Responsive responsive) {
+    return Stack(
+      children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width,
           decoration: new BoxDecoration(
@@ -23,172 +347,64 @@ class _HomeScreenState extends State<Ticket> {
           ),
         ),
         Center(
-          child: FlutterTicketWidget(
-            width: 350.0,
-            height: 500.0,
-            isCornerRounded: true,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        width: 120.0,
-                        height: 25.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          border: Border.all(width: 1.0, color: Colors.green),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Business Class',
-                            style: TextStyle(color: Colors.green),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            'SLM',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Icon(
-                              Icons.flight_takeoff,
-                              color: Colors.pink,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              'BTL',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: Text(
-                      'Flight Ticket',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 25.0),
-                    child: Column(
-                      children: <Widget>[
-                        ticketDetailsWidget(
-                            'Passengers', 'Ilona', 'Date', '24-12-2018'),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 12.0, right: 40.0),
-                          child: ticketDetailsWidget(
-                              'Flight', '76836A45', 'Gate', '66B'),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 12.0, right: 40.0),
-                          child: ticketDetailsWidget(
-                              'Class', 'Business', 'Seat', '21B'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 80.0, left: 30.0, right: 30.0),
-                    child: Container(
-                      width: 250.0,
-                      height: 60.0,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/logo_enchilada.png'),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 10.0, left: 75.0, right: 75.0),
-                    child: Text(
-                      '9824 0972 1742 1298',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+          child: Text(
+            'El págo Fue rechazado',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: responsive.ip(2),
             ),
           ),
-        ),
-      ]),
+        )
+      ],
     );
   }
 
-  Widget ticketDetailsWidget(String firstTitle, String firstDesc,
-      String secondTitle, String secondDesc) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget pedidoError(Responsive responsive) {
+    return Stack(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                firstTitle,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  firstDesc,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-              )
-            ],
+        Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: new BoxDecoration(
+            color: Colors.black12,
+            image: new DecorationImage(
+              image: new ExactAssetImage('assets/ladrillos.png'),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                secondTitle,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  secondDesc,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-              )
-            ],
+        Center(
+          child: Text(
+            'Ocurrio un error con el págo',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: responsive.ip(2),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget pedidoCancelado(Responsive responsive) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: new BoxDecoration(
+            color: Colors.black12,
+            image: new DecorationImage(
+              image: new ExactAssetImage('assets/ladrillos.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Center(
+          child: Text(
+            'El págo Fue Cancelado',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: responsive.ip(2),
+            ),
           ),
         )
       ],
