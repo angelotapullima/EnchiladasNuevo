@@ -14,14 +14,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 
-class DetalleProductitos extends StatefulWidget {
-  const DetalleProductitos({Key key}) : super(key: key);
+class DetalleProductos extends StatefulWidget {
+  const DetalleProductos({Key key}) : super(key: key);
 
   @override
   _DetalleProductitosState createState() => _DetalleProductitosState();
 }
 
-class _DetalleProductitosState extends State<DetalleProductitos> {
+class _DetalleProductitosState extends State<DetalleProductos> {
   bool estadoDelivery = false;
   TextEditingController observacionProducto = TextEditingController();
 
@@ -248,7 +248,7 @@ class _DetalleProductitosState extends State<DetalleProductitos> {
 
   Widget _backgroundImage(BuildContext context, ProductosData carrito) {
     final size = MediaQuery.of(context).size;
-    print('2 pe ${carrito.idProducto}');
+    
 
     return SafeArea(
       child: Column(
@@ -581,7 +581,7 @@ class _DetalleProductitosState extends State<DetalleProductitos> {
           ),
           decoration: BoxDecoration(
               borderRadius: BorderRadiusDirectional.only(
-                  topEnd: Radius.circular(20), topStart: Radius.circular(20)),
+                  topEnd: Radius.circular(20), topStart: Radius.circular(20),),
               color: Colors.red),
           child: Row(
             children: <Widget>[
@@ -589,7 +589,7 @@ class _DetalleProductitosState extends State<DetalleProductitos> {
                   child: Text(
                 'Monto S/ $total',
                 style: TextStyle(
-                    color: Colors.white, fontSize: responsive.ip(2.8)),
+                    color: Colors.white, fontSize: responsive.ip(2.8),),
               )),
               Stack(
                 children: <Widget>[
@@ -608,7 +608,7 @@ class _DetalleProductitosState extends State<DetalleProductitos> {
                           '$cant',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: responsive.ip(1.5)),
+                              fontSize: responsive.ip(1.5),),
                         ),
                         alignment: Alignment.center,
                         width: responsive.ip(1.9),

@@ -132,7 +132,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 ),
                 child: new Center(
                   child: new Text(
-                    'Cerrar sessión',
+                    'Cerrar sesión',
                     style: new TextStyle(
                         fontSize: responsive.ip(2),
                         fontWeight: FontWeight.w800,
@@ -261,7 +261,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Ordenes',
+          Text('Órdenes',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: responsive.ip(3),
@@ -289,7 +289,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                           width: responsive.wp(1.5),
                         ),
                         Text(
-                          'Ordenes Realizadas',
+                          'Órdenes Realizadas',
                           style: TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: responsive.ip(1.8)),

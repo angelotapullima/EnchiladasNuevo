@@ -67,7 +67,9 @@ class MarketPage extends StatelessWidget {
                   size: responsive.ip(3.5),
                 ),
                 onPressed: () {
-                  showSearch(context: context, delegate: DataSearch(hintText: 'Buscar'));
+                  showSearch(
+                      context: context,
+                      delegate: DataSearch(hintText: 'Buscar'));
                 },
               )
             ],
@@ -91,7 +93,7 @@ class MarketPage extends StatelessWidget {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data.length > 0) {
-                          return _conte(
+                          return _conte(context,
                               anchoCategorias, anchoProductos, snapshot.data);
                         } else {
                           return Center(
@@ -112,25 +114,33 @@ class MarketPage extends StatelessWidget {
     );
   }
 
-  Widget _conte(double anchoCategorias, double anchoProductos,
-      List<CategoriaData> categorias) {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: anchoCategorias,
-          child: CategoriasProducto(
-            ancho: anchoCategorias,
-            data: categorias,
-          ),
-        ),
-        Container(
-          width: anchoProductos,
-          child: ProductosIdPage(
-            ancho: anchoProductos,
-            index: categorias[0].idCategoria,
-          ),
-        )
-      ],
+  Widget _conte(BuildContext context, double anchoCategorias,
+      double anchoProductos, List<CategoriaData> categorias) {
+    final marketBloc = ProviderBloc.market(context);
+    marketBloc.changeIndexPage(categorias[0].idCategoria);
+
+    return StreamBuilder(
+      stream: marketBloc.indexStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Row(
+          children: <Widget>[
+            Container(
+              width: anchoCategorias,
+              child: CategoriasProducto(
+                ancho: anchoCategorias,
+                data: categorias,
+              ),
+            ),
+            Container(
+              width: anchoProductos,
+              child: ProductosIdPage(
+                ancho: anchoProductos,
+                index: marketBloc.index,
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }
@@ -222,12 +232,9 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                 //setState(() {});
                 marketBloc.changeIndexPage(categoria.idCategoria);
 
-                productosIdBloc.cargandoProductosFalse();
+                /* productosIdBloc.cargandoProductosFalse();
                 productosIdBloc
-                    .obtenerProductosMarketPorCategoria(categoria.idCategoria);
-                /*Provider.of<PaginacionCategoria>(context, listen: false)
-                    .currentIndex = categoria.idCategoria;*/
-                //Navigator.pushNamed(context, 'ProductosID',arguments: categoria);
+                    .obtenerProductosMarketPorCategoria(marketBloc.index); */
               });
         });
   }
@@ -249,6 +256,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
   Widget build(BuildContext context) {
     //final _currenIndex = Provider.of<PaginacionCategoria>(context).currentIndex;
     final productosIdBloc = ProviderBloc.prod(context);
+    productosIdBloc.obtenerProductosMarketPorCategoria(widget.index);
 
     return Scaffold(
       body: _listaProductosId(productosIdBloc),
@@ -268,8 +276,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
 
               return ListView.builder(
                 itemCount: productos.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _itemPedido(context, productos[index]);
+                itemBuilder: (BuildContext context, int indexed) {
+                  return _itemPedido(context, productos[indexed]);
                 },
               );
             }
@@ -311,7 +319,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                       image: AssetImage('assets/jar-loading.gif'),
                       fit: BoxFit.cover),
                   errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: 'http://guabba.com/capitan2/media/12.png',
+                  imageUrl: '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
@@ -351,8 +359,10 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     ? IconButton(
                         onPressed: () {
                           setState(() {
-                            utils.quitarFavoritos(context, productosData);
+                            utils.quitarFavoritos(
+                              context, productosData);
                           });
+                          
                         },
                         icon: Icon(
                           FontAwesomeIcons.solidHeart,
@@ -362,7 +372,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     : IconButton(
                         onPressed: () {
                           setState(() {
-                            utils.agregarFavoritos(context, productosData);
+                            
+                          utils.agregarFavoritos(context, productosData);
                           });
                         },
                         icon: Icon(

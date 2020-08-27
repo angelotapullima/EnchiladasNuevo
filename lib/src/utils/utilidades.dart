@@ -33,6 +33,29 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   //_mostrarAlert(context);
 }
 
+
+void agregarFavoritosMarket(BuildContext context, ProductosData productosData,String categoria) async {
+  
+  
+  final productosIdBloc = ProviderBloc.prod(context);
+  ProductosData productos = new ProductosData();
+  final productoDatabase = ProductoDatabase();
+
+  productos.idProducto = productosData.idProducto;
+  productos.idCategoria = productosData.idCategoria;
+  productos.productoNombre = productosData.productoNombre;
+  productos.productoFoto = productosData.productoFoto;
+  productos.productoPrecio = productosData.productoPrecio;
+  productos.productoUnidad = productosData.productoUnidad;
+  productos.productoEstado = productosData.productoEstado;
+  productos.productoFavorito = 1;
+
+  final res = await productoDatabase.updateProductosDb(productos);
+  print('Database response : $res');
+
+  productosIdBloc.obtenerProductosMarketPorCategoria(categoria);
+  //_mostrarAlert(context);
+}
 Future<bool> agregarDeliveryRapido(BuildContext context)async{
   final carritoBloc = ProviderBloc.carrito(context);
   final deliveryRapidoDatabase = DeliveryRapidoDatabase();
@@ -159,6 +182,27 @@ void quitarFavoritos(BuildContext context, ProductosData productosData) async {
 
   //_mostrarAlert(context);
   favoritosBloc.obtenerProductosFavoritos();
+}
+
+void quitarFavoritosMarket(BuildContext context, ProductosData productosData,String categotia) async {
+  ProductosData productos = new ProductosData();
+  final productoDatabase = ProductoDatabase();
+  final productosIdBloc = ProviderBloc.prod(context);
+
+  productos.idProducto = productosData.idProducto;
+  productos.idCategoria = productosData.idCategoria;
+  productos.productoNombre = productosData.productoNombre;
+  productos.productoFoto = productosData.productoFoto;
+  productos.productoPrecio = productosData.productoPrecio;
+  productos.productoUnidad = productosData.productoUnidad;
+  productos.productoEstado = productosData.productoEstado;
+  productos.productoFavorito = 0;
+
+  final res = await productoDatabase.updateProductosDb(productos);
+  print('Database response : $res');
+
+  //_mostrarAlert(context);
+  productosIdBloc.obtenerProductosMarketPorCategoria(categotia);
 }
 
 void agregarDireccion(BuildContext context, String addres, double latitud,

@@ -28,14 +28,17 @@ class _FavoritosTabState extends State<FavoritosTab> {
       print('favoritos');
     });
     return Scaffold(
-        body: Stack(children: <Widget>[
-      Container(
-        height: double.infinity,
-        width: double.infinity,
-        color: Colors.red,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: Colors.red,
+          ),
+          _favoritos(responsive, favoritosBloc),
+        ],
       ),
-      _favoritos(responsive, favoritosBloc),
-    ],),);
+    );
   }
 
   Widget _favoritos(Responsive responsive, FavoritosBloc favoritosBloc) {
@@ -47,7 +50,10 @@ class _FavoritosTabState extends State<FavoritosTab> {
             child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(2),vertical: responsive.hp(2)),
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(2),
+                vertical: responsive.hp(2),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -117,14 +123,15 @@ class _FavoritosTabState extends State<FavoritosTab> {
         }
       },
     );
-  } 
+  }
 
   Widget _listaFavoritos(Responsive responsive, List<ProductosData> favoritos) {
     return SafeArea(
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+            padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(2), vertical: responsive.hp(2)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -135,7 +142,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
                       fontSize: responsive.ip(2.7),
                       fontWeight: FontWeight.bold),
                 ),
-                IconButton(
+                /* IconButton(
                   icon: Icon(
                     Icons.card_giftcard,
                     color: Colors.white,
@@ -144,7 +151,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
                   onPressed: () {
                     setState(() {});
                   },
-                )
+                ) */
               ],
             ),
           ),
@@ -173,7 +180,9 @@ class _FavoritosTabState extends State<FavoritosTab> {
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.symmetric(
-            vertical: responsive.hp(0.5), horizontal: responsive.wp(3)),
+          vertical: responsive.hp(0.5),
+          horizontal: responsive.wp(3),
+        ),
         padding: EdgeInsets.only(right: responsive.wp(3)),
         decoration: BoxDecoration(
             color: Colors.grey[50],
@@ -182,29 +191,29 @@ class _FavoritosTabState extends State<FavoritosTab> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-             Container(
-                width: responsive.wp(35),
-                child:  ClipRRect(
-                    borderRadius: BorderRadius.circular(13),
-                    child: CachedNetworkImage(
-                            cacheManager: CustomCacheManager(),
-                            placeholder: (context, url) => Image(
-                                image: AssetImage('assets/jar-loading.gif'),
-                                fit: BoxFit.cover),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                            imageUrl: productosData.productoFoto,
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                           ),
+            Container(
+              width: responsive.wp(28),
+              height: responsive.hp(12),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager(),
+                  placeholder: (context, url) => Image(
+                      image: AssetImage('assets/jar-loading.gif'),
+                      fit: BoxFit.cover),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl:
+                      '${productosData.productoFoto}',
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.fill,
+                    )),
+                  ),
+                ),
               ),
+            ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: responsive.wp(.8)),
@@ -266,12 +275,9 @@ class _FavoritosTabState extends State<FavoritosTab> {
           ],
         ),
       ),
-      onTap: (){
+      onTap: () {
         Navigator.pushNamed(context, 'detalleP', arguments: productosData);
       },
-
     );
   }
- 
- 
- }
+}

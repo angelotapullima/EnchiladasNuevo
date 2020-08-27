@@ -113,7 +113,7 @@ class HomePuzzle extends StatelessWidget {
                 puzzle[(_scrollController.offset ~/ size.width)].imagenRuta;
             Navigator.pushNamed(context, 'puzzle', arguments: rankingPuzzle);
           },
-          child: Text("Empieze ya!".toUpperCase(),
+          child: Text("Empezar ahora!".toUpperCase(),
               style: TextStyle(fontSize: responsive.ip(1.8))),
         ),
       ),

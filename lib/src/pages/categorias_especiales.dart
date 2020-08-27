@@ -124,7 +124,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                       fit: BoxFit.cover),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl:
-                      'https://comidaperuana.life/wp-content/uploads/2019/08/pollo-a-la-brasa_700x467.jpg',
+                      '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(

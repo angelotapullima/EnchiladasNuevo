@@ -116,7 +116,7 @@ class ProgressIndicator extends StatelessWidget {
           ),
           SizedBox(width: responsive.wp(5)),
           Text(
-            'Obteniendo Imágen',
+            'Obteniendo Imagen',
             style: TextStyle(fontSize: responsive.ip(2)),
           ),
         ],

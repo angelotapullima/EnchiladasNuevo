@@ -1,6 +1,6 @@
 
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
-import 'package:enchiladasapp/src/pages/detalle_producto.dart';
+import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
 import 'package:enchiladasapp/src/pages/market_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
@@ -204,6 +204,7 @@ class _MyAppState extends State<MyApp> {
           'splash': (BuildContext context) => Splash(),
           'desicion': (BuildContext context) => DesicionPage(),
           'detalleP': (BuildContext context) => DetalleProductitos(),
+          //'detalleP': (BuildContext context) => DetalleProductitos(),
           'detallePago': (BuildContext context) => DetallePago(),
           'sel_Direccion': (BuildContext context) => MapsSample(),
           'combo': (BuildContext context) => CategoriasEspecialesPage(),

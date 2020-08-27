@@ -134,7 +134,7 @@ class ProviderBloc extends InheritedWidget {
   static MarketNaviBloc market(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .marketNaviBloc;
-  }
+  } 
 
   static NuevoMetodoPagoBloc npago(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
