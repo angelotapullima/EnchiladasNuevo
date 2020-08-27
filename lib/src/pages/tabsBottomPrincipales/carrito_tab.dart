@@ -12,6 +12,7 @@ import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MiOrdenTab extends StatefulWidget {
   @override
@@ -306,7 +307,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                   Row(
                     children: <Widget>[
                       Container(
-                        width: responsive.wp(35),
+                        width: responsive.wp(30),
+                        height: responsive.hp(12),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: CachedNetworkImage(
@@ -316,12 +318,12 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                                 fit: BoxFit.cover),
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
-                            imageUrl: carrito.productoFoto,
+                            imageUrl: '${carrito.productoFoto}',
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: imageProvider,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fill,
                                 ),
                               ),
                             ),
@@ -380,64 +382,120 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       )
                     ],
                   ),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
                   GestureDetector(
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.mode_edit,
-                          color: Colors.red,
-                        ),
-                        Expanded(child: Text('$observacionProducto'))
-                      ],
-                    ),
                     onTap: () {
-                      dialogoObservacionProducto('${carrito.idProducto}');
+                      modaldialogoObservacionProducto('${carrito.idProducto}');
                     },
+                    child: Container(
+                      color: Colors.white,
+                      width: double.infinity,
+                      child: Row(
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.mode_edit,
+                              size: responsive.ip(3.5),
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              modaldialogoObservacionProducto(
+                                  '${carrito.idProducto}');
+                            },
+                          ),
+                          Expanded(
+                            child: Text(
+                              '$observacionProducto',
+                              style: TextStyle(fontSize: responsive.ip(2)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   )
                 ],
               )
             : Container());
   }
 
-  void dialogoObservacionProducto(String id) {
-    showDialog(
+  void modaldialogoObservacionProducto(String id) {
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: true,
-      builder: (contextd) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Ingrese la observación del producto'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                controller: observacionProducto,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final responsive = Responsive.of(context);
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            padding: MediaQuery.of(context).viewInsets,
+            margin: EdgeInsets.only(top: responsive.hp(10)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(20),
+                  topStart: Radius.circular(20),
+                ),
+                color: Colors.white),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(2),
+                left: responsive.wp(5),
+                right: responsive.wp(5),
               ),
-              //Text('Producto agregado al carrito correctamente'),
-              SizedBox(
-                height: 20.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Ingrese la observación del producto',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    controller: observacionProducto,
+                  ),
+                  SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  FlatButton(
+                    onPressed: () async {
+                      if (observacionProducto.text.length > 0) {
+                        utils.actualizarObservacion(
+                            context, observacionProducto.text, id);
+
+                        observacionProducto.text = '';
+
+                        Navigator.pop(context);
+                      } else {
+                        utils.showToast('El campo no puede quedar vacio', 2,
+                            ToastGravity.TOP);
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.ip(5),
+                        vertical: responsive.ip(1),
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.red),
+                      child: Text(
+                        'Aceptar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
               ),
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancelar'),
             ),
-            FlatButton(
-                onPressed: () async {
-                  utils.actualizarObservacion(
-                      context, observacionProducto.text, id);
-
-                  observacionProducto.text = '';
-
-                  Navigator.pop(context);
-                },
-                child: Text('Aceptar')),
-          ],
+          ),
         );
       },
     );
@@ -611,7 +669,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Zona de entrega',
+                'Zona de Entrega',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -743,7 +801,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Dirección de envío',
+                'Dirección de Envío',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

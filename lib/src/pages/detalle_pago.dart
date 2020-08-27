@@ -1158,7 +1158,7 @@ class _DetallePagoState extends State<DetallePago> {
           },
         );
       },
-    );
+    ); 
   }
 
   void modalRuc() {

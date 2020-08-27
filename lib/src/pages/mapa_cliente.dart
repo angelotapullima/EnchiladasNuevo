@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart'; 
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapaCliente extends StatefulWidget {
   @override
@@ -25,6 +25,7 @@ class _MapaClienteState extends State<MapaCliente> {
   double longitude = -73.2714435;
   bool banderaTimer = true;
   Timer timer;
+  int cant = 0;
 
   void _obtenerUbicacion() async {
     Position position = await Geolocator()
@@ -50,10 +51,10 @@ class _MapaClienteState extends State<MapaCliente> {
   }
 
   String idPedidoTrack = "0";
-  String nombreRepartidor='--';
-  String distancia='';
-  String direccionEntrega='--';
-  String idRepartidor='--';
+  String nombreRepartidor = '--';
+  String distancia = '';
+  String direccionEntrega = '--';
+  String idRepartidor = '--';
   String imagenRepartidor;
   @override
   void initState() {
@@ -64,7 +65,7 @@ class _MapaClienteState extends State<MapaCliente> {
       zoom: 19,
     );
 
-    timer = Timer.periodic(Duration(seconds: 3), (Timer t) {
+     timer = Timer.periodic(Duration(seconds: 3), (Timer t) {
       if (banderaTimer) {
         print('pedido true ');
         trackingRepartidor(idPedidoTrack);
@@ -83,6 +84,8 @@ class _MapaClienteState extends State<MapaCliente> {
     print('id pedido $idPedido');
     final responsive = Responsive.of(context);
 
+   
+    /*  */
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -152,13 +155,6 @@ class _MapaClienteState extends State<MapaCliente> {
                                   ],
                                 ),
                               ),
-                              CircleContainer(
-                                  radius: responsive.ip(3),
-                                  color: Colors.amberAccent,
-                                  widget: Icon(
-                                    Icons.call,
-                                    size: responsive.ip(3),
-                                  ))
                             ],
                           ),
                         )),
@@ -172,27 +168,34 @@ class _MapaClienteState extends State<MapaCliente> {
                             color: Colors.white,
                             child: Column(
                               children: <Widget>[
-                                Icon(Icons.directions_transit,color: Colors.red,),
+                                Icon(
+                                  Icons.directions_transit,
+                                  color: Colors.red,
+                                ),
                                 Container(
-                                  margin: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: responsive.hp(.5)),
                                   width: responsive.wp(1),
                                   height: responsive.hp(2),
                                   color: Colors.orange,
                                 ),
                                 Container(
-                                  margin: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: responsive.hp(.5)),
                                   width: responsive.wp(1),
                                   height: responsive.hp(2),
                                   color: Colors.orange,
                                 ),
                                 Container(
-                                  margin: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: responsive.hp(.5)),
                                   width: responsive.wp(1),
                                   height: responsive.hp(2),
                                   color: Colors.orange,
                                 ),
                                 Container(
-                                  margin: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: responsive.hp(.5)),
                                   width: responsive.wp(1),
                                   height: responsive.hp(2),
                                   color: Colors.orange,
@@ -207,11 +210,24 @@ class _MapaClienteState extends State<MapaCliente> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Distancia aprox. de Repartidor',style: TextStyle(fontSize: responsive.ip(2)),),
-                                Text('$distancia Km', style: TextStyle(fontSize: responsive.ip(2.1),fontWeight: FontWeight.bold)),
-                                SizedBox(height: responsive.hp(8),),
-                                Text('Dirección de entrega', style: TextStyle(fontSize: responsive.ip(2))),
-                                Text('$direccionEntrega', style: TextStyle(fontSize: responsive.ip(2.1),fontWeight: FontWeight.bold)),
+                                Text(
+                                  'Distancia aprox. de Repartidor',
+                                  style: TextStyle(fontSize: responsive.ip(2)),
+                                ),
+                                Text('$distancia Km',
+                                    style: TextStyle(
+                                        fontSize: responsive.ip(2.1),
+                                        fontWeight: FontWeight.bold)),
+                                SizedBox(
+                                  height: responsive.hp(8),
+                                ),
+                                Text('Dirección de entrega',
+                                    style:
+                                        TextStyle(fontSize: responsive.ip(2))),
+                                Text('$direccionEntrega',
+                                    style: TextStyle(
+                                        fontSize: responsive.ip(2.1),
+                                        fontWeight: FontWeight.bold)),
                               ],
                             ),
                           )
@@ -221,7 +237,21 @@ class _MapaClienteState extends State<MapaCliente> {
                   ],
                 ),
               ),
-            )
+            ),
+            Positioned(
+              top: responsive.hp(2.8),
+              left: responsive.wp(3),
+              child: GestureDetector(
+                child: CircleContainer(
+                  radius: responsive.ip(2.5),
+                  color: Colors.grey[200],
+                  widget: Icon(Icons.arrow_back, color: Colors.black),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -297,65 +327,59 @@ class _MapaClienteState extends State<MapaCliente> {
           icon: sourceIcon));
     });
   }
-  LatLng destino,repartidor;
+
+  LatLng destino, repartidor;
   void trackingRepartidor(String idPedido) async {
     print('empezamos el timer $idPedido');
     final trackingApi = TrackingApi();
     final list = await trackingApi.trackingRepartidor(idPedido);
     if (list.length > 0) {
       print('resp aceptada');
-
-      if(list[0].pedidoEstado =='3'){
+      print(list[0].pedidoEstado);
+      if (list[0].pedidoEstado == '3') {
         if (count == 1) {
+          nombreRepartidor = list[0].personName;
 
-        nombreRepartidor = list[0].personName;
-        
-         direccionEntrega=list[0].pedidoDireccion;
-         idRepartidor=list[0].idRepartidor;
-         imagenRepartidor=list[0].userImage;
-        //repartidor = list[0].
-        repartidor = LatLng(
-            double.parse(list[0].trackingX), double.parse(list[0].trackingY));
-        destino = LatLng(
-            double.parse(list[0].pedidoX), double.parse(list[0].pedidoY));
+          direccionEntrega = list[0].pedidoDireccion;
+          idRepartidor = list[0].idRepartidor;
+          imagenRepartidor = list[0].userImage;
+          //repartidor = list[0].
+          repartidor = LatLng(
+              double.parse(list[0].trackingX), double.parse(list[0].trackingY));
+          destino = LatLng(
+              double.parse(list[0].pedidoX), double.parse(list[0].pedidoY));
 
-            
-        showPinsOnMap(repartidor, destino);
-        count++;
-        setState(() {
-          
-        });
+          showPinsOnMap(repartidor, destino);
+          count++;
+          setState(() {});
+        } else {
+          //actualixavion de prueba
+          nombreRepartidor = list[0].personName;
+
+          direccionEntrega = list[0].pedidoDireccion;
+          idRepartidor = list[0].idRepartidor;
+          imagenRepartidor = list[0].userImage;
+          print("latitud ${list[0].trackingX} , longitud ${list[0].trackingY}");
+          repartidor = LatLng(
+              double.parse(list[0].trackingX), double.parse(list[0].trackingY));
+          updatePinOnMap(
+              double.parse(list[0].trackingX), double.parse(list[0].trackingY));
+          var distance = GeoUtils.distanceInKmBetweenEarthCoordinates(
+              repartidor.latitude,
+              repartidor.longitude,
+              destino.latitude,
+              destino.longitude);
+          print('distance $distance');
+          distancia = distance.toString();
+          distancia = utils.format(distance);
+
+          setState(() {});
+        }
       } else {
-        
-        //actualixavion de prueba
-        nombreRepartidor = list[0].personName;
-        
-         direccionEntrega=list[0].pedidoDireccion;
-         idRepartidor=list[0].idRepartidor;
-         imagenRepartidor=list[0].userImage;
-        print("latitud ${list[0].trackingX} , longitud ${list[0].trackingY}");
-        repartidor = LatLng(
-            double.parse(list[0].trackingX), double.parse(list[0].trackingY));
-        updatePinOnMap(
-            double.parse(list[0].trackingX), double.parse(list[0].trackingY));
-            var distance =  GeoUtils.distanceInKmBetweenEarthCoordinates(repartidor.latitude, repartidor.longitude, destino.latitude, destino.longitude);
-            print('distance $distance');
-            distancia = distance.toString();
-            distancia = utils.format(distance);
-
-        setState(() {
-          
-        });
-      }
-      }else{
         //mostrar funcion de que el pedido ya fue
-        banderaTimer=false;
+        banderaTimer = false;
         _pedidoYaFue(context);
-
       }
-      
-
-      
     } else {
       Fluttertoast.showToast(
           msg: 'Problemas con la conexion a internet',
@@ -367,7 +391,6 @@ class _MapaClienteState extends State<MapaCliente> {
           fontSize: 16.0);
     }
   }
-
 
   void _pedidoYaFue(BuildContext context) {
     showDialog(
@@ -388,5 +411,4 @@ class _MapaClienteState extends State<MapaCliente> {
           );
         });
   }
-
 }

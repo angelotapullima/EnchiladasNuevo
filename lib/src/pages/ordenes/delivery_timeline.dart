@@ -188,8 +188,8 @@ class _TimelineDelivery extends StatelessWidget {
             rightChild: _RightChild(
               disabled: disabled1,
               asset: 'assets/delivery/ENCHILADAS-03.svg',
-              title: 'Order Confirmed',
-              message: 'Su pedido fue confirmado',
+              title: 'Order Confirmada',
+              message: 'Su pedido fue confirmado.',
             ),
             topLineStyle: LineStyle(
               color: timeline1,
@@ -206,8 +206,8 @@ class _TimelineDelivery extends StatelessWidget {
             rightChild: _RightChild(
               disabled: disabled2,
               asset: 'assets/delivery/ENCHILADAS-04.svg',
-              title: 'Order Asignada ',
-              message: 'Su pedido fue asigando al repartidor.',
+              title: 'Orden Asignada ',
+              message: 'Su pedido fue asignado al repartidor.',
             ),
             topLineStyle: LineStyle(
               color: timeline2,
@@ -225,7 +225,7 @@ class _TimelineDelivery extends StatelessWidget {
               disabled: disabled3,
               asset: 'assets/delivery/ENCHILADAS-05.svg',
               title: 'Pedido en camino',
-              message: 'Su pedido Está en camino',
+              message: 'Su pedido Está en camino.',
             ),
             topLineStyle: LineStyle(
               color: timeline3,
@@ -244,7 +244,7 @@ class _TimelineDelivery extends StatelessWidget {
               disabled: disabled4,
               asset: 'assets/delivery/ENCHILADAS-06.svg',
               title: 'Su pedido Fue entregado',
-              message: 'El pedido se entrego correctamente',
+              message: 'El pedido se entrego correctamente.',
             ),
             topLineStyle: LineStyle(
               color: timeline4,

@@ -74,6 +74,7 @@ class UsuarioApi {
         'user_image': foto,
         'user_email': uEmail
       });
+      
 
       final decodedData = json.decode(resp.body);
       final code = decodedData['result']['code'];

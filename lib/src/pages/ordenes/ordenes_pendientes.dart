@@ -94,7 +94,7 @@ class OrdenesPendientes extends StatelessWidget {
       colores = Colors.blue;
       estadoItem = 'Aceptado';
     } else if (data.pedidoEstado == '2') {
-      colores = Colors.yellow;
+      colores = Colors.purple;
       estadoItem = 'Asignado';
     } else if (data.pedidoEstado == '3') {
       colores = Colors.orange;
@@ -105,11 +105,10 @@ class OrdenesPendientes extends StatelessWidget {
     } else if (data.pedidoEstado == '5') {
       colores = Colors.red;
       estadoItem = 'cancelado';
-    }else if(data.pedidoEstado == '0'){
-
-      if(data.pedidoEstadoPago =='1'){
+    } else if (data.pedidoEstado == '0') {
+      if (data.pedidoEstadoPago == '1') {
         colores = Colors.green;
-      estadoItem = 'Pagado';
+        estadoItem = 'Pagado';
       }
     }
 
@@ -117,12 +116,18 @@ class OrdenesPendientes extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey[300]),
-            borderRadius: BorderRadius.all(Radius.circular(13)),
+            borderRadius: BorderRadius.all(
+              Radius.circular(13),
+            ),
             color: Colors.grey[50]),
         padding: EdgeInsets.symmetric(
-            horizontal: responsive.wp(3), vertical: responsive.hp(2)),
+          horizontal: responsive.wp(3),
+          vertical: responsive.hp(2),
+        ),
         margin: EdgeInsets.symmetric(
-            horizontal: responsive.wp(3), vertical: responsive.hp(0.2)),
+          horizontal: responsive.wp(3),
+          vertical: responsive.hp(0.2),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
@@ -130,22 +135,32 @@ class OrdenesPendientes extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                    child: Text('${data.pedidoNombre}',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: responsive.ip(2.5)))),
+                  child: Text(
+                    '${data.pedidoNombre}',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(2.5),
+                    ),
+                  ),
+                ),
                 Container(
                   decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadiusDirectional.all(Radius.circular(10)),
+                      borderRadius: BorderRadiusDirectional.all(
+                        Radius.circular(10),
+                      ),
                       color: colores),
                   padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(1.5),
-                      vertical: responsive.hp(0.5)),
-                  child: Text('$estadoItem',
-                      style: TextStyle(
-                          color: Colors.white, fontSize: responsive.ip(1.5))),
+                    horizontal: responsive.wp(1.5),
+                    vertical: responsive.hp(0.5),
+                  ),
+                  child: Text(
+                    '$estadoItem',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(1.5),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -154,11 +169,14 @@ class OrdenesPendientes extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Text('Dirección : ',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2))),
+                Text(
+                  'Dirección : ',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2),
+                  ),
+                ),
                 Expanded(child: Text('${data.pedidoDireccion} ')),
               ],
             ),
@@ -167,12 +185,17 @@ class OrdenesPendientes extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Text('Referencia : ',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2))),
-                Expanded(child: Text('${data.pedidoReferencia} ')),
+                Text(
+                  'Referencia : ',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2),
+                  ),
+                ),
+                Expanded(
+                  child: Text('${data.pedidoReferencia} '),
+                ),
               ],
             ),
             SizedBox(

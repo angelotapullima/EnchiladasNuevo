@@ -128,7 +128,7 @@ class _RankingReportState extends State<RankingReport> {
                   if (snapshot.data.length > 0) {
                     return contenidoRanking(context, responsive, snapshot.data);
                   } else {
-                    return Center(child: Text('no hay datos'));
+                    return Center(child: Text('No hay datos'));
                   }
                 } else {
                   return Center(child: CupertinoActivityIndicator());

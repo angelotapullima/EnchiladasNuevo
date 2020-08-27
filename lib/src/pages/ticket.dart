@@ -23,13 +23,13 @@ class _HomeScreenState extends State<Ticket> {
 
     pedidoBloc.obtenerPedidoPorId(args.idPedido);
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         Navigator.popUntil(
-                    context,
-                    ModalRoute.withName('/'),
-                  );
+          context,
+          ModalRoute.withName('/'),
+        );
       },
-          child: Scaffold(
+      child: Scaffold(
         //backgroundColor: Colors.black,
         body: Stack(
           children: <Widget>[
@@ -118,7 +118,7 @@ class _HomeScreenState extends State<Ticket> {
     var tipoPago;
     if (pedido.pedidoTipoComprobante == '6') {
       tipoPago = 'Boleta';
-    } else {
+    } else if (pedido.pedidoTipoComprobante == '7'){
       tipoPago = 'Factura';
     }
     return SingleChildScrollView(
@@ -222,6 +222,8 @@ class _HomeScreenState extends State<Ticket> {
 
   ListView products(
       Responsive responsive, List<ProductoServer> productos, String totalex) {
+
+        var totalito = utils.format(double.parse(totalex));
     final total = Container(
         margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
         child: Column(
@@ -239,7 +241,7 @@ class _HomeScreenState extends State<Ticket> {
                 SizedBox(
                   width: responsive.wp(5),
                 ),
-                Text('S/ $totalex',
+                Text('S/ $totalito',
                     style: TextStyle(
                         color: Colors.red,
                         fontSize: responsive.ip(2.5),

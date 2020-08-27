@@ -1,4 +1,3 @@
-
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:enchiladasapp/src/utils/dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,32 +31,31 @@ class Auth {
       progressDialog.show();
 
       final GoogleSignInAccount googleSignInAccount =
-          await _googleSignIn.signIn(); 
-              final GoogleSignInAuthentication googleSignInAuthentication =await googleSignInAccount.authentication;
+          await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-            final AuthCredential credential = GoogleAuthProvider.getCredential(
-              accessToken: googleSignInAuthentication.accessToken,
-              idToken: googleSignInAuthentication.idToken,
-            );
-            final FirebaseUser user =
-                (await _firebaseAuth.signInWithCredential(credential)).user;
-                //print(user.providerData[1].email);
-                 // print(user.providerData[0].email);
-            //assert(user.email != null);
-            //assert(user.displayName != null);
-            //assert(!user.isAnonymous);
-            //assert(await user.getIdToken() != null);
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      final FirebaseUser user =
+          (await _firebaseAuth.signInWithCredential(credential)).user;
+      //print(user.providerData[1].email);
+      // print(user.providerData[0].email);
+      //assert(user.email != null);
+      //assert(user.displayName != null);
+      //assert(!user.isAnonymous);
+      //assert(await user.getIdToken() != null);
 
-            final FirebaseUser currentUser = await _firebaseAuth.currentUser();
-            assert(user.uid == currentUser.uid);
+      final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+      assert(user.uid == currentUser.uid);
 
-            print('firebase client ${user.displayName}');
-            return user;
-           
-      
+      print('firebase client ${user.displayName}');
+      return user;
 
       //progressDialog.dismiss();
-      
+
     } catch (e) {
       print(e);
       progressDialog.dismiss();
@@ -82,7 +80,7 @@ class Auth {
 
         final FirebaseUser user =
             (await _firebaseAuth.signInWithCredential(credential)).user;
-            /* print(user.providerData[1].email);
+        /* print(user.providerData[1].email);
             print(user.providerData[0].email); */
         //assert(user.email != null);
         /* assert(user.displayName != null);
@@ -116,20 +114,22 @@ class Auth {
     }
   }
 
+  Future<FirebaseUser> signInWithApple(BuildContext context) async {
+    
 
-  Future<FirebaseUser> signInWithApple({List<Scope> scopes = const []}) async {
+    ProgressDialog progressDialog = ProgressDialog(context);
+    progressDialog.show();
     // 1. perform the sign-in request
-    final result = await AppleSignIn.performRequests(
-        [AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    final AuthorizationResult result = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
     ]);
     // 2. check the result
     switch (result.status) {
       case AuthorizationStatus.authorized:
-
-      // Store user ID
+        print(result.credential.fullName.familyName);
+        // Store user ID
         await FlutterSecureStorage()
             .write(key: "userId", value: result.credential.user);
-
 
         final appleIdCredential = result.credential;
         final oAuthProvider = OAuthProvider(providerId: 'apple.com');
@@ -140,21 +140,30 @@ class Auth {
         );
         final authResult = await _firebaseAuth.signInWithCredential(credential);
         final firebaseUser = authResult.user;
-        if (scopes.contains(Scope.fullName)) { 
+        if (result.credential.fullName.familyName != null &&
+            result.credential.fullName.familyName != "") {
           final updateUser = UserUpdateInfo();
           updateUser.displayName =
               '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
           await firebaseUser.updateProfile(updateUser);
+
+          final FirebaseUser f = await _firebaseAuth.currentUser();
+          return f ;
         }
+
+        progressDialog.dismiss();
         return firebaseUser;
+
       case AuthorizationStatus.error:
         print(result.error.toString());
+        progressDialog.dismiss();
         throw PlatformException(
           code: 'ERROR_AUTHORIZATION_DENIED',
           message: result.error.toString(),
         );
 
       case AuthorizationStatus.cancelled:
+        progressDialog.dismiss();
         throw PlatformException(
           code: 'ERROR_ABORTED_BY_USER',
           message: 'Sign in aborted by user',
@@ -163,12 +172,10 @@ class Auth {
     return null;
   }
 
-  
   Future<void> logOut(BuildContext context) async {
-
     final data = (await user).providerData;
     String providerId = "firebase";
- 
+
     for (final provider in data) {
       if (provider.providerId != 'firebase') {
         providerId = provider.providerId;
@@ -176,7 +183,6 @@ class Auth {
       }
     }
 
-    
     switch (providerId) {
       case "facebook.com":
         await _firebaseAuth.signOut();
@@ -191,7 +197,7 @@ class Auth {
       case "phone":
         break;
     }
-     
+
     await _firebaseAuth.signOut();
 
     Navigator.pushNamedAndRemoveUntil(context, 'splash', (_) => false);

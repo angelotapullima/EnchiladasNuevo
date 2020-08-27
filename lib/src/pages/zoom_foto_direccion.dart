@@ -27,10 +27,10 @@ class ZoomFotoDireccion extends StatelessWidget {
                   } else {}
                 },
                 child: Text(
-                  'Aceptar Imágen',
+                  'Aceptar Imagen',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: responsive.ip(1.5),
+                    fontSize: responsive.ip(2),
                   ),
                 ),
               ),
@@ -56,7 +56,7 @@ class ZoomFotoDireccion extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          title: Text('Su zona fue ingresada correctamente'),
+          title: Text('¡Su zona fue ingresada correctamente!'),
           actions: <Widget>[
             FlatButton(
               onPressed: () async {

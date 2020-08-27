@@ -67,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
   void goto(
       BuildContext context, FirebaseUser user, LoginBloc loginBloc) async {
     ProgressDialog progressDialog = new ProgressDialog(context);
+    progressDialog.show();
     String email;
     if (user != null) {
       usuario.personName = user.displayName;
@@ -241,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: ButtonStyle.black, // style as needed
                     type: ButtonType.signIn, // style as needed
                     onPressed: () async {
-                      final user = await Auth.instance.signInWithApple();
+                      final user = await Auth.instance.signInWithApple(context);
                       goto(context, user, loginBloc);
                     },
                   )

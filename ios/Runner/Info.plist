@@ -41,6 +41,10 @@
 	<true/>
 	<key>FacebookAppID</key>
 	<string>694814964640748</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>FacebookDisplayName</key>
 	<string>Enchiladas App</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -56,10 +60,6 @@
 	<string>Necesitamos acceso a su ubicación para la entrega de pedidos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Necesitamos acceso a su ubicación para la entrega de pedidos.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>location</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

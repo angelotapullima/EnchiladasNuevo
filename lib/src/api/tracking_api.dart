@@ -44,7 +44,7 @@ class TrackingApi {
         'id_entrega': idEntrega
       });
       final decodedData = json.decode(resp.body);
-      final code = decodedData['success'];
+      final code = decodedData['result']['code'];
       if (code == 1 || code ==8) {
         return 1;
       } else {

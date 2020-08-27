@@ -178,30 +178,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
             ),
             child: Column(
               children: <Widget>[
-                /* Padding(
-                  padding: EdgeInsets.all(
-                    responsive.ip(1),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.card_giftcard,
-                        color: Colors.red,
-                      ),
-                      SizedBox(
-                        width: responsive.wp(1.5),
-                      ),
-                      Text(
-                        'Guía para mejor manejo de la App',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: responsive.ip(1.8),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Divider(), */
+                
                 Padding(
                   padding: EdgeInsets.all(
                     responsive.ip(1),
@@ -353,7 +330,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                               fontWeight: FontWeight.w800,
                               fontSize: responsive.ip(1.8)),
                         )
-                      ])),
+                      ]),),
                   onTap: () {
                     final prefs = new Preferences();
 

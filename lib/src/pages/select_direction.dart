@@ -4,6 +4,7 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/direccion_model.dart';
 import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
@@ -86,7 +87,7 @@ class _MapsSampleState extends State<MapsSample> {
 
                   //agregarMarket(position.target);
                   _cargarGeocoding(context, position.target.latitude,
-                          position.target.longitude); 
+                      position.target.longitude);
 
                   setState(() {});
                 });
@@ -173,13 +174,13 @@ class _MapsSampleState extends State<MapsSample> {
   Widget contenidoDireccion(
       Responsive responsive, String direccion, String referencia) {
     String refe = "";
-    direccionController.text = direccion;
+    //direccionController.text = direccion;
     if (referencia.isEmpty || referencia == null) {
-      refe = 'Agregar referencia de dirección';
+      refe = 'Agregar Referencia de Dirección';
     } else {
       refe = referencia;
     }
-    referenciaController.text = refe;
+    //referenciaController.text = refe;
     return Padding(
       padding: EdgeInsets.only(top: responsive.hp(65)),
       child: Container(
@@ -187,7 +188,9 @@ class _MapsSampleState extends State<MapsSample> {
         width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadiusDirectional.only(
-                topStart: Radius.circular(20), topEnd: Radius.circular(20)),
+              topStart: Radius.circular(20),
+              topEnd: Radius.circular(20),
+            ),
             boxShadow: [
               BoxShadow(color: Colors.black26, blurRadius: 5),
             ],
@@ -246,7 +249,7 @@ class _MapsSampleState extends State<MapsSample> {
                     ),
                     color: Colors.red,
                     onPressed: () {
-                      dialogoIngresarDireccion();
+                      modalIngresarDireccion();
                     },
                   )
                 ],
@@ -293,13 +296,13 @@ class _MapsSampleState extends State<MapsSample> {
                       ),
                       color: Colors.red,
                       onPressed: () {
-                        dialogoIngresarReferencia();
+                        modalIngresarReferencia();
                       },
                     )
                   ],
                 ),
                 onTap: () {
-                  dialogoIngresarReferencia();
+                  modalIngresarReferencia();
                 },
               ),
             ),
@@ -327,83 +330,168 @@ class _MapsSampleState extends State<MapsSample> {
     );
   }
 
-  void dialogoIngresarReferencia() {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Ingrese referencia de la dirección'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: referenciaController,
+  void modalIngresarReferencia() {
+    referenciaController.text="";
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final responsive = Responsive.of(context);
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            padding: MediaQuery.of(context).viewInsets,
+            margin: EdgeInsets.only(top: responsive.hp(10)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(20),
+                  topStart: Radius.circular(20),
                 ),
-                //Text('Producto agregado al carrito correctamente'),
-                SizedBox(
-                  height: 20.0,
-                ),
-              ],
+                color: Colors.white),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(2),
+                left: responsive.wp(5),
+                right: responsive.wp(5),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Ingrese Referencia de Dirección',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    controller: referenciaController,
+                  ),
+                  SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  FlatButton(
+                    onPressed: () async {
+                      if (referenciaController.text.length > 0) {
+                        utils.agregarDireccion(
+                            context,
+                            direccionController.text,
+                            latitude,
+                            longitude,
+                            referenciaController.text);
+
+                        Navigator.pop(context);
+                      } else {
+                        utils.showToast(
+                            'El campo no puede ser vacio', 2, ToastGravity.TOP);
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.ip(5),
+                        vertical: responsive.ip(1),
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.red),
+                      child: Text(
+                        'Confirmar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
+              ),
             ),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    utils.agregarDireccion(context, direccionController.text,
+          ),
+        );
+      },
+    );
+  }
+
+  void modalIngresarDireccion() {
+    direccionController.text="";
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final responsive = Responsive.of(context);
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            padding: MediaQuery.of(context).viewInsets,
+            margin: EdgeInsets.only(top: responsive.hp(10)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(20),
+                  topStart: Radius.circular(20),
+                ),
+                color: Colors.white),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(2),
+                left: responsive.wp(5),
+                right: responsive.wp(5),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Ingrese su Dirección',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    controller: direccionController,
+                  ),
+                  SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  FlatButton(
+                    onPressed: () async {
+                      if (direccionController.text.length > 0) {
+                        utils.agregarDireccion(context, direccionController.text,
                         latitude, longitude, referenciaController.text);
 
                     Navigator.pop(context);
-                  },
-                  child: Text('Ok')),
-            ],
-          );
-        });
-  }
-
-  void dialogoIngresarDireccion() {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Ingrese su Dirección'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: direccionController,
-                ),
-                //Text('Producto agregado al carrito correctamente'),
-                SizedBox(
-                  height: 20.0,
-                ),
-              ],
+                      } else {
+                        utils.showToast(
+                            'El campo no puede ser vacio', 2, ToastGravity.TOP);
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.ip(5),
+                        vertical: responsive.ip(1),
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.red),
+                      child: Text(
+                        'Confirmar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
+              ),
             ),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('cancelar')),
-              FlatButton(
-                  onPressed: () async {
-                    utils.agregarDireccion(context, direccionController.text,
-                        latitude, longitude, referenciaController.text);
-
-                    Navigator.pop(context);
-                  },
-                  child: Text('ok')),
-            ],
-          );
-        });
+          ),
+        );
+      },
+    );
   }
-}
+
+  }

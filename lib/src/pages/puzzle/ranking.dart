@@ -41,7 +41,7 @@ class RankingPage extends StatelessWidget {
                   //return Container();
                 }
               } else {
-                return Center(child: Text('no hay datos'));
+                return Center(child: Text('No hay datos'));
               }
             } else {
               return Center(child: CupertinoActivityIndicator());

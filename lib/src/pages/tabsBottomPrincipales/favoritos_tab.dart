@@ -49,7 +49,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
         final sinDatos = SafeArea(
             child: Column(
           children: <Widget>[
-            Padding(
+            Padding( 
               padding: EdgeInsets.symmetric(
                 horizontal: responsive.wp(2),
                 vertical: responsive.hp(2),

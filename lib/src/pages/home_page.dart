@@ -40,7 +40,10 @@ class _HomePageState extends State<HomePage> {
     carritoBloc.obtenerCarrito();
 
     final bottomBloc = ProviderBloc.bottom(context);
+    if(bottomBloc.page==null){
+
     bottomBloc.changePage(0);
+    }
 
     return Scaffold(
       body: StreamBuilder(

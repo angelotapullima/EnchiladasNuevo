@@ -1,8 +1,9 @@
-import 'package:enchiladasapp/src/api/tracking_api.dart'; 
+import 'package:enchiladasapp/src/api/tracking_api.dart';
 import 'package:enchiladasapp/src/models/pedidos_asignados_model.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -24,7 +25,9 @@ class MapaRepartidorState extends State<MapaRepartidor> {
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = Set<Marker>();
   final prefs = Preferences();
-
+  bool mostrarCargandoTracking = false;
+  bool pedidoTracking;
+  int  cant=0;
 // for my custom marker pins
   BitmapDescriptor sourceIcon;
   BitmapDescriptor destinationIcon;
@@ -45,7 +48,8 @@ class MapaRepartidorState extends State<MapaRepartidor> {
 
     // subscribe to changes in the user's location
     // by "listening" to the location's onLocationChanged event
-    locationSubscription  =location.onLocationChanged().listen((LocationData cLoc) {
+    locationSubscription =
+        location.onLocationChanged().listen((LocationData cLoc) {
       // cLoc contains the lat and long of the
       // current user's position in real time,
       // so we're holding on to it
@@ -54,19 +58,19 @@ class MapaRepartidorState extends State<MapaRepartidor> {
     });
     // set custom marker pins
     setSourceAndDestinationIcons();
-    // set the initial location 
+    // set the initial location
     setInitialLocation();
   }
+
   @override
   void dispose() {
-    locationSubscription.cancel(); 
+    locationSubscription.cancel();
     super.dispose();
-    
   }
 
   void setSourceAndDestinationIcons() async {
-    BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.0),
-            'assets/pin_movil.png')
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(devicePixelRatio: 2.0), 'assets/pin_movil.png')
         .then((onValue) {
       sourceIcon = onValue;
     });
@@ -92,8 +96,20 @@ class MapaRepartidorState extends State<MapaRepartidor> {
 
   @override
   Widget build(BuildContext context) {
+
     final PedidoAsignados data = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
+
+    if(cant==0){
+      if(data.pedidoEstado == '2'){
+      pedidoTracking = true;
+    }else{
+
+      pedidoTracking = false;
+    }
+    }
+    
+
     CameraPosition initialCameraPosition = CameraPosition(
         zoom: CAMERA_ZOOM,
         tilt: CAMERA_TILT,
@@ -107,163 +123,199 @@ class MapaRepartidorState extends State<MapaRepartidor> {
           bearing: CAMERA_BEARING);
     }
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            GoogleMap(
-                myLocationEnabled: true,
-                compassEnabled: true,
-                tiltGesturesEnabled: false,
-                markers: _markers,
-                mapType: MapType.normal,
-                initialCameraPosition: initialCameraPosition,
-                onTap: (LatLng loc) {},
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                  // my map has completed being created;
-                  // i'm ready to show the pins on the map
-                  showPinsOnMap();
-                }),
-            Positioned(
-                top: responsive.hp(1),
-                left: responsive.wp(18),
-                right: responsive.wp(18),
-                child: (prefs.tracking == 'activado')
-                    ? GestureDetector(
-                        child: CircleContainer(
-                            widget: Text(
-                              ' Terminar Tracking',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: responsive.ip(2)),
-                            ),
-                            radius: responsive.hp(3),
-                            color: Colors.red),
-                        onTap: () {
-                          activarTracking(data.idEntrega);
-                        },
-                      )
-                    : GestureDetector(
-                        child: CircleContainer(
-                            widget: Text(
-                              'Empezar Tracking',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: responsive.ip(2)),
-                            ),
-                            radius: responsive.hp(3),
-                            color: Colors.green),
-                        onTap: () {
-                          activarTracking(data.idEntrega);
-                        },
-                      )),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[300]),
-                    borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20)),
-                    color: Colors.grey[50]),
-                padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(3), vertical: responsive.hp(2)),
-
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                            child: Text('${data.pedidoNombre}',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: responsive.ip(2.5)))),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadiusDirectional.all(
-                                  Radius.circular(10)),
-                              color: Colors.green),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: responsive.wp(1.5),
-                              vertical: responsive.hp(0.5)),
-                          child: Text('estado',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: responsive.ip(1.5))),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text('Dirección : ',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsive.ip(2))),
-                        Expanded(child: Text('${data.pedidoDireccion} ')),
-                      ],
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text('Referencia : ',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsive.ip(2))),
-                        Expanded(child: Text('${data.pedidoReferencia} ')),
-                      ],
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text('Teléfono : ',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsive.ip(2))),
-                        Expanded(child: Text(' ${data.pedidoTelefono}')),
-                      ],
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text('Fecha : ',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsive.ip(2))),
-                        Expanded(child: Text(' ${data.pedidoFecha}')),
-                      ],
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Text('S/. ${data.pedidoTotal}',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: responsive.ip(3)))
-                  ],
-                ),
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+              myLocationEnabled: true,
+              compassEnabled: true,
+              tiltGesturesEnabled: false,
+              markers: _markers,
+              mapType: MapType.normal,
+              initialCameraPosition: initialCameraPosition,
+              onTap: (LatLng loc) {},
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+                // my map has completed being created;
+                // i'm ready to show the pins on the map
+                showPinsOnMap();
+              }),
+          Positioned(
+            top: responsive.hp(2.8),
+            left: responsive.wp(18),
+            right: responsive.wp(18),
+            child: (!pedidoTracking)
+                ? GestureDetector(
+                    child: CircleContainer(
+                        widget: Text(
+                          ' Terminar Tracking',
+                          style: TextStyle(
+                              color: Colors.white, fontSize: responsive.ip(2)),
+                        ),
+                        radius: responsive.hp(3),
+                        color: Colors.red),
+                    onTap: () {
+                      activarTracking(data.idEntrega);
+                    },
+                  )
+                : GestureDetector(
+                    child: CircleContainer(
+                        widget: Text(
+                          'Empezar Tracking',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: responsive.ip(2),
+                          ),
+                        ),
+                        radius: responsive.hp(3),
+                        color: Colors.green),
+                    onTap: () {
+                      activarTracking(data.idEntrega);
+                    },
+                  ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  color: Colors.grey[50]),
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(3),
+                vertical: responsive.hp(2),
               ),
-            )
-          ],
-        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                          child: Text('${data.pedidoNombre}',
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: responsive.ip(2.5)))),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.all(
+                                Radius.circular(10)),
+                            color: Colors.green),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(1.5),
+                            vertical: responsive.hp(0.5)),
+                        child: Text('estado',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsive.ip(1.5))),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text('Dirección : ',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(2))),
+                      Expanded(child: Text('${data.pedidoDireccion} ')),
+                    ],
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text('Referencia : ',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(2))),
+                      Expanded(child: Text('${data.pedidoReferencia} ')),
+                    ],
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Teléfono : ',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsive.ip(2),
+                        ),
+                      ),
+                      Expanded(child: Text(' ${data.pedidoTelefono}')),
+                    ],
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text('Fecha : ',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(2))),
+                      Expanded(
+                        child: Text(' ${data.pedidoFecha}'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                  Text(
+                    'S/. ${data.pedidoTotal}',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(3),
+                    ),
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          (mostrarCargandoTracking == true)
+              ? Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.white.withOpacity(.7),
+                  child: Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                )
+              : Container(),
+          Positioned(
+            top: responsive.hp(2.8),
+            left: responsive.wp(3),
+            child: GestureDetector(
+              child: CircleContainer(
+                radius: responsive.ip(2.5),
+                color: Colors.grey[200],
+                widget: Icon(Icons.arrow_back, color: Colors.black),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -275,29 +327,49 @@ class MapaRepartidorState extends State<MapaRepartidor> {
     String idUser = prefs.idUser;
     final trackingApi = TrackingApi();
 
-    try { 
-      if (prefs.tracking == 'activado') {
+    try {
+      if (!pedidoTracking) {
+
+        setState(() {
+          mostrarCargandoTracking = true;
+        });
         final resp = await trackingApi.finalizarEntrega(idEntrega);
         if (resp == 1) {
+          setState(() {
+            mostrarCargandoTracking = false;
+          });
           estadoTracking = 'desactivado';
-          prefs.tracking = estadoTracking;
+          pedidoTracking=true;
           await platform.invokeMethod(
-              "location", "$estadoTracking  - $token - $idUser - $idEntrega");
-
-
+              "location", "$estadoTracking  - $token - $idUser - $idEntrega"); 
+        } else {
+          setState(() {
+            mostrarCargandoTracking = false;
+          });
         }
+        cant++;
       } else {
+        setState(() {
+          mostrarCargandoTracking = true;
+        });
         final resp = await trackingApi.iniciarEntrega(idEntrega);
         if (resp == 1) {
+          setState(() {
+            mostrarCargandoTracking = false;
+          });
           estadoTracking = 'activado';
 
-          prefs.tracking = estadoTracking;
+          pedidoTracking=false;
           await platform.invokeMethod(
-              "location", "$estadoTracking  - $token - $idUser - $idEntrega");
+              "location", "$estadoTracking  - $token - $idUser - $idEntrega");  
+        } else {
+          setState(() {
+            mostrarCargandoTracking = false;
+          });
         }
+        cant++;
       }
     } on Exception {}
-    setState(() {});
   }
 
   void showPinsOnMap() {
@@ -355,7 +427,4 @@ class MapaRepartidorState extends State<MapaRepartidor> {
           icon: sourceIcon));
     });
   }
-
-
-
 }
