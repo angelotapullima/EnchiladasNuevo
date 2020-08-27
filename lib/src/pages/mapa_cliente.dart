@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:enchiladasapp/src/api/tracking_api.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
@@ -65,14 +66,14 @@ class _MapaClienteState extends State<MapaCliente> {
       zoom: 19,
     );
 
-     timer = Timer.periodic(Duration(seconds: 3), (Timer t) {
-      if(banderaTimer){
+    timer = Timer.periodic(Duration(seconds: 3), (Timer t) {
+      if (banderaTimer) {
         print('pedido true ');
         trackingRepartidor(idPedidoTrack);
-     } else {
+      } else {
         print('cancelar pedido ');
         timer.cancel();
-      } 
+      }
     });
     super.initState();
   }
@@ -84,11 +85,9 @@ class _MapaClienteState extends State<MapaCliente> {
     print('id pedido $idPedido');
     final responsive = Responsive.of(context);
 
-   
     /*  */
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
+      body: Stack(
           children: <Widget>[
             Container(
               height: responsive.hp(62),
@@ -238,22 +237,24 @@ class _MapaClienteState extends State<MapaCliente> {
                 ),
               ),
             ),
-            Positioned(
-              top: responsive.hp(2.8),
-              left: responsive.wp(3),
-              child: GestureDetector(
-                child: CircleContainer(
-                  radius: responsive.ip(2.5),
-                  color: Colors.grey[200],
-                  widget: Icon(Icons.arrow_back, color: Colors.black),
+            SafeArea(
+              child: Positioned(
+                top: responsive.hp(1),
+                left: responsive.wp(3),
+                child: GestureDetector(
+                  child: CircleContainer(
+                    radius: responsive.ip(2.5),
+                    color: Colors.grey[200],
+                    widget: Icon(Icons.arrow_back, color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
               ),
             ),
           ],
-        ),
+        
       ),
     );
   }
@@ -262,17 +263,31 @@ class _MapaClienteState extends State<MapaCliente> {
   BitmapDescriptor destinationIcon;
 
   void setSourceAndDestinationIcons() async {
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(devicePixelRatio: 2.0), 'assets/pin_movil.png')
-        .then((onValue) {
-      sourceIcon = onValue;
-    });
+    if (Platform.isAndroid) {
+      BitmapDescriptor.fromAssetImage(
+              ImageConfiguration(devicePixelRatio: 2.0), 'assets/pin_movil.png')
+          .then((onValue) {
+        sourceIcon = onValue;
+      });
 
-    BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.0),
-            'assets/destination_map_marker.png')
-        .then((onValue) {
-      destinationIcon = onValue;
-    });
+      BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.0),
+              'assets/destination_map_marker.png')
+          .then((onValue) {
+        destinationIcon = onValue;
+      });
+    } else {
+      BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.0),
+              'assets/pin_movil_ios.png')
+          .then((onValue) {
+        sourceIcon = onValue;
+      });
+
+      BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.0),
+              'assets/destination_map_marker_ios.png')
+          .then((onValue) {
+        destinationIcon = onValue;
+      });
+    }
   }
 
   void showPinsOnMap(LatLng repartidor, LatLng destino) {
