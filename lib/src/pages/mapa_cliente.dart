@@ -66,13 +66,13 @@ class _MapaClienteState extends State<MapaCliente> {
     );
 
      timer = Timer.periodic(Duration(seconds: 3), (Timer t) {
-      if (banderaTimer) {
+      if(banderaTimer){
         print('pedido true ');
         trackingRepartidor(idPedidoTrack);
-      } else {
+     } else {
         print('cancelar pedido ');
         timer.cancel();
-      }
+      } 
     });
     super.initState();
   }
@@ -132,7 +132,7 @@ class _MapaClienteState extends State<MapaCliente> {
                                 radius: 25,
                                 child: ClipOval(
                                     child: Image.network(
-                                  'https://delivery.lacasadelasenchiladas.pe/$imagenRepartidor',
+                                  '$imagenRepartidor',
                                   width: 50,
                                   height: 50,
                                   fit: BoxFit.cover,

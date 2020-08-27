@@ -45,8 +45,8 @@ class ConfiguracionApi {
 
           await zonaDatabase.insertarZonaDb(zona);
 
-          var file = CustomCacheManager().downloadFile(zona.zonaImagen);
-          print('file $file');
+          /* var file = CustomCacheManager().downloadFile(zona.zonaImagen);
+          print('file $file'); */
 
           ProductosData productos = ProductosData();
 
