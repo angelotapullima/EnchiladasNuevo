@@ -1,9 +1,17 @@
 
+import 'package:after_layout/after_layout.dart';
+import 'package:enchiladasapp/src/pushProvider/push_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 
-class DesicionPage extends StatelessWidget {
+class DesicionPage extends StatefulWidget {
+   
+  @override
+  _DesicionPageState createState() => _DesicionPageState();
+}
+
+class _DesicionPageState extends State<DesicionPage> with AfterLayoutMixin {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
@@ -88,5 +96,11 @@ class DesicionPage extends StatelessWidget {
     );
   }
 
-  
+  @override
+  void afterFirstLayout(BuildContext context) {
+
+    print('desicionPage');
+    PushNotificationProvider pushNotificationProvider = PushNotificationProvider();
+    pushNotificationProvider.initNotification();
+  }
 }

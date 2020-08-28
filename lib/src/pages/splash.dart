@@ -1,6 +1,7 @@
 
 import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/api/configuracion_api.dart';
+import 'package:enchiladasapp/src/pushProvider/push_notifications.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,7 @@ class _SplashState extends State<Splash> with AfterLayoutMixin {
 
   @override
   void afterFirstLayout(BuildContext context) async{
-
+  
     _request();
     final categoriasApi = CategoriasApi();
     categoriasApi.obtenerAmbos();

@@ -52,15 +52,19 @@ class NuevoMetodoPagoBloc {
 
     if (user[0].idZona != " ") {
       final zona = await zonaDatabase.obtenerZonaPorId(user[0].idZona);
-      final producto =
+      if (zona.length > 0) {
+        final producto =
             await productoDatabase.consultarPorId(zona[0].idProducto);
 
+        if (precio > double.parse(zona[0].zonaPedidoMinimo)) {
+          _montoCarritoController.sink.add(precio);
+        } else {
+          precio = precio + double.parse(producto[0].productoPrecio);
+          _montoCarritoController.sink.add(precio);
+        }
+      }else{
 
-      if (precio > double.parse(zona[0].zonaPedidoMinimo)) {
-        _montoCarritoController.sink.add(precio);
-      } else {
-        precio = precio + double.parse(producto[0].productoPrecio);
-        _montoCarritoController.sink.add(precio);
+      _montoCarritoController.sink.add(precio);
       }
     } else {
       _montoCarritoController.sink.add(precio);

@@ -93,8 +93,8 @@ class MarketPage extends StatelessWidget {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data.length > 0) {
-                          return _conte(context,
-                              anchoCategorias, anchoProductos, snapshot.data);
+                          return _conte(context, anchoCategorias,
+                              anchoProductos, snapshot.data);
                         } else {
                           return Center(
                             child: Text('No hay datos de categorias'),
@@ -172,13 +172,14 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
 
   _listaCategorias(List<CategoriaData> categoriasBloc) {
     return Container(
-        color: Colors.transparent,
-        width: this.widget.ancho,
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: categoriasBloc.length,
-            itemBuilder: (context, i) =>
-                _listaItems(context, categoriasBloc[i])));
+      color: Colors.transparent,
+      width: this.widget.ancho,
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: categoriasBloc.length,
+        itemBuilder: (context, i) => _listaItems(context, categoriasBloc[i]),
+      ),
+    );
   }
 
   _listaItems(BuildContext context, CategoriaData categoria) {
@@ -359,10 +360,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     ? IconButton(
                         onPressed: () {
                           setState(() {
-                            utils.quitarFavoritos(
-                              context, productosData);
+                            utils.quitarFavoritos(context, productosData);
                           });
-                          
                         },
                         icon: Icon(
                           FontAwesomeIcons.solidHeart,
@@ -372,8 +371,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     : IconButton(
                         onPressed: () {
                           setState(() {
-                            
-                          utils.agregarFavoritos(context, productosData);
+                            utils.agregarFavoritos(context, productosData);
                           });
                         },
                         icon: Icon(

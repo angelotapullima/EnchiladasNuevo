@@ -158,9 +158,10 @@ class SeleccionZona extends StatelessWidget {
               descripcion: item.zonaDescripcion,
               idZona: item.idZona,
               route: argumento,
-              devolucion: widgetDireccion(item.zonaImagen, item.zonaNombre,
-                  item.zonaPedidoMinimo, item.zonaDescripcion, responsive),
-            ),
+              devolucion:  widgetDireccion(item.zonaImagen, item.zonaNombre,
+                    item.zonaPedidoMinimo, item.zonaDescripcion, responsive),
+              ),
+            
           ),
         )
         .toList();

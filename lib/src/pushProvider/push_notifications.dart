@@ -5,6 +5,8 @@ import 'package:enchiladasapp/src/api/token_api.dart';
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../../main.dart' as main;
+
 class PushNotificationProvider {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final _mensajesStreamController = StreamController<String>.broadcast();
@@ -42,7 +44,7 @@ class PushNotificationProvider {
       notification.title = title;
       notification.body = body;
       notification.payload = argumento;
-      //main.showNotificationWithIconBadge(notification);
+      main.showNotificationWithIconBadge(notification);
 
       //_mensajesStreamController.sink.add(event)
     }, onLaunch: (info) async {

@@ -102,7 +102,7 @@ class _WebViewExampleState extends State<WebViewExample> {
         body: Builder(
           builder: (BuildContext context) {
             return WebView(
-
+              
               initialUrl: args.link,
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (WebViewController webViewController) {
@@ -159,7 +159,7 @@ class _WebViewExampleState extends State<WebViewExample> {
                 }
               },
               onPageFinished: (String url) {
-               /*  print('Page finished loading: $url');
+                print('Page finished loading: $url');
 
                 if (url ==
                     'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
@@ -193,7 +193,7 @@ class _WebViewExampleState extends State<WebViewExample> {
 
                   Navigator.pushNamed(context, 'ticket',
                       arguments: argumentsWebview);
-                } */
+                } 
               },
               gestureNavigationEnabled: true,
             );

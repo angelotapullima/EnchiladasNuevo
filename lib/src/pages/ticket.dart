@@ -104,10 +104,13 @@ class _HomeScreenState extends State<Ticket> {
             widget: Icon(Icons.arrow_back, color: Colors.black),
           ),
           onTap: () {
-            Navigator.popUntil(
+
+            Navigator.pushNamed(context, 'ordenesPago');
+
+            /* Navigator.popUntil(
               context,
               ModalRoute.withName('/'),
-            );
+            );  */
           },
         ),
       ),

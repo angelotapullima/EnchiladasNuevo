@@ -36,7 +36,7 @@ class PedidoBloc {
     _pedidosPasadosController.sink.add(await pedidoApi.obtenerhistorialDePedidos());
     _pedidosPasadosController.sink.add(await pedidosDatabase.obtenerTodosLosPedidosPasados());
   }
-  void obtenerPedidoPorId(String id)async{
+  void obtenerPedidoPorId(String id)async{ 
     
     _pedidoIdController.sink.add(await pedidosDatabase.obtenerPedidoPorId(id));
   }

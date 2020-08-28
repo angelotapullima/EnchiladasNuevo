@@ -5,13 +5,13 @@ class PedidoDatabase {
   final dbprovider = DatabaseProvider.db;
 
   insertarPedido(PedidoServer pedido) async {
-    try {
+    try { 
       final db = await dbprovider.database;
 
       final res = await db.rawInsert(
-          "INSERT OR REPLACE INTO Pedido (id_pedido,pedido_total,pedido_dni,pedido_nombre,pedido_telefono,pedido_direccion,pedido_referencia,pedido_forma_pago,"
+          "INSERT OR REPLACE INTO Pedido (id_pedido,pedido_tipo_comprobante,pedido_cod_persona,pedido_total,pedido_dni,pedido_nombre,pedido_telefono,pedido_direccion,pedido_referencia,pedido_forma_pago,"
           "pedido_monto_pago,pedido_vuelto_pago,pedido_estado_pago,pedido_estado,pedido_codigo,pedido_fecha,pedido_hora) "
-          "VALUES ('${pedido.idPedido}','${pedido.pedidoTotal}','${pedido.pedidoDni}','${pedido.pedidoNombre}','${pedido.pedidoTelefono}','${pedido.pedidoDireccion}',"
+          "VALUES ('${pedido.idPedido}','${pedido.pedidoTipoComprobante}','${pedido.pedidoCodPersona}','${pedido.pedidoTotal}','${pedido.pedidoDni}','${pedido.pedidoNombre}','${pedido.pedidoTelefono}','${pedido.pedidoDireccion}',"
           "'${pedido.pedidoReferencia}','${pedido.pedidoFormaPago}','${pedido.pedidoMontoPago}','${pedido.pedidoVueltoPago}',${pedido.pedidoEstadoPago},"
           "${pedido.pedidoEstado},'${pedido.pedidoCodigo}','${pedido.pedidoFecha}','${pedido.pedidoHora}'"
           ")");
@@ -19,7 +19,7 @@ class PedidoDatabase {
     } catch (exception) {
       print(exception);
     }
-  }
+  } 
 
   Future<List<PedidoServer>> obtenerTodosLosPedidosPendientes() async {
     final db = await dbprovider.database;

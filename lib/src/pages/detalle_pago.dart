@@ -35,7 +35,6 @@ class _DetallePagoState extends State<DetallePago> {
   String ruc = "";
   String razonSocial = "";
   String montoPago = "";
-  double precioPedido = 0;
   double vuelto = 0;
   String errorRuc = "";
   bool mostrarErrorRuc = false;
@@ -73,7 +72,7 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   void _tipoPagoRadioValue(
-      BuildContext context, int value, Responsive responsive) {
+      BuildContext context, int value, Responsive responsive,double precio) {
     setState(() {
       _tipoPagoValue = value;
 
@@ -85,7 +84,7 @@ class _DetallePagoState extends State<DetallePago> {
           break;
         case 1:
           print('1');
-          _modalCambiarMetodoPago(context, responsive);
+          _modalCambiarMetodoPago(context, responsive,precio);
           break;
       }
     });
@@ -111,7 +110,7 @@ class _DetallePagoState extends State<DetallePago> {
         builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
-              return _contenido(
+              return _contenidoSuperior(
                   context, responsive, snapshot.data, usuarioBloc);
             } else {
               return Center(child: CupertinoActivityIndicator());
@@ -124,15 +123,71 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _contenido(BuildContext context, Responsive responsive,
+  Widget _contenidoSuperior(BuildContext context, Responsive responsive,
       List<Carrito> carrito, UsuarioBloc usuarioBloc) {
+    final zonaBloc = ProviderBloc.zona(context);
+    zonaBloc.obtenerUsuarioZona();
+
+    return StreamBuilder(
+      stream: zonaBloc.zonaUsuarioStream,
+      builder: (BuildContext context, AsyncSnapshot<List<Zona>> snapshot) {
+        double precio = 0;
+        double precioPedido = 0;
+        double precioSinDeliveryRapido = 0;
+        var deliveryComision = 0.0;
+        for (int i = 0; i < carrito.length; i++) {
+          if (carrito[i].productoTipo == '1') {
+            estadoDelivery = true;
+          } else {
+            precioSinDeliveryRapido = precioSinDeliveryRapido +
+                double.parse(carrito[i].productoCantidad) *
+                    double.parse(carrito[i].productoPrecio);
+          }
+          precio = precio +
+              double.parse(carrito[i].productoCantidad) *
+                  double.parse(carrito[i].productoPrecio);
+        }
+
+        precioPedido = precio;
+
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            if (precioSinDeliveryRapido >
+                double.parse(snapshot.data[0].zonaPedidoMinimo)) {
+              deliveryComision = 0;
+            } else {
+              deliveryComision = double.parse(snapshot.data[0].zonaPrecio);
+            }
+            precioPedido = precioPedido + deliveryComision;
+
+            return _contenido(context, responsive, carrito, usuarioBloc,
+                deliveryComision, precioPedido);
+          } else {
+            return _contenido(context, responsive, carrito, usuarioBloc,
+                deliveryComision, precioPedido);
+          }
+        } else {
+          return _contenido(context, responsive, carrito, usuarioBloc,
+              deliveryComision, precioPedido);
+        }
+       
+      },
+    );
+  }
+
+  Widget _contenido(
+      BuildContext context,
+      Responsive responsive,
+      List<Carrito> carrito,
+      UsuarioBloc usuarioBloc,
+      double deliveryComision,
+      double precioPedido) {
     final date = DateFormat("dd.MM.yyyy").format(DateTime.now());
 
     return SafeArea(
       child: Container(
         margin: EdgeInsets.only(
-          /* left: responsive.wp(5),
-            right: responsive.wp(5), */
+          
           top: responsive.hp(1),
         ),
         padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
@@ -157,15 +212,21 @@ class _DetallePagoState extends State<DetallePago> {
               height: responsive.hp(1),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
               child: Container(
                 height: responsive.hp(6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(date.toString(),
-                        style: TextStyle(
-                            color: Colors.black, fontSize: responsive.ip(2))),
+                    Text(
+                      date.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: responsive.ip(2),
+                      ),
+                    ),
                     Image.asset('assets/logo_enchilada.png'),
                   ],
                 ),
@@ -175,23 +236,31 @@ class _DetallePagoState extends State<DetallePago> {
               height: responsive.hp(2),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              child: Text('Productos',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: responsive.ip(2.5),
-                      fontWeight: FontWeight.bold)),
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: Text(
+                'Productos',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: responsive.ip(2.5),
+                    fontWeight: FontWeight.bold),
+              ),
             ),
             SizedBox(
               height: responsive.hp(2),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              child: _listaProductos(responsive, carrito),
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: _listaProductos(responsive, carrito,deliveryComision,precioPedido),
             ),
             Divider(),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
               child: _deliveryRapido(responsive, carrito),
             ),
             Divider(),
@@ -217,12 +286,12 @@ class _DetallePagoState extends State<DetallePago> {
             Divider(),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              child: _tipoPago(responsive),
+              child: _tipoPago(responsive,precioPedido),
             ),
             Divider(),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              child: _pagarCarrito(context, responsive),
+              child: _pagarCarrito(context, responsive,precioPedido),
             )
           ],
         ),
@@ -230,169 +299,77 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _listaProductos(Responsive responsive, List<Carrito> carrito) {
-    final zonaBloc = ProviderBloc.zona(context);
-    zonaBloc.obtenerUsuarioZona();
-
-    return StreamBuilder(
-        stream: zonaBloc.zonaUsuarioStream,
-        builder: (BuildContext context, AsyncSnapshot<List<Zona>> snapshot) {
-          double precio = 0;
-          double precioSinDeliveryRapido = 0;
-          var deliveryComision = 0.0;
-          for (int i = 0; i < carrito.length; i++) {
-            if (carrito[i].productoTipo == '1') {
-              estadoDelivery = true;
-            } else {
-              precioSinDeliveryRapido = precioSinDeliveryRapido +
-                  double.parse(carrito[i].productoCantidad) *
-                      double.parse(carrito[i].productoPrecio);
-            }
-            precio = precio +
-                double.parse(carrito[i].productoCantidad) *
-                    double.parse(carrito[i].productoPrecio);
-          }
-
-          precioPedido = precio;
-
-          var total = Column(
-            children: <Widget>[
-              (deliveryComision > 0)
-                  ? Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: responsive.hp(0.5)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text('COMISIÓN POR DELIVERY',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: responsive.ip(1.5))),
-                          ),
-                          Text('S/.$precio',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: responsive.ip(1.5))),
-                        ],
-                      ),
-                    )
-                  : Container(),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
+  Widget _listaProductos(Responsive responsive, List<Carrito> carrito,
+      double deliveryComision, double precioPedido) {
+    var total = Column(
+      children: <Widget>[
+        (deliveryComision > 0)
+            ? Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: responsive.hp(0.5),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
-                      child: Text('Total',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: responsive.ip(2),
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    Text('S/.$precioPedido',
+                      child: Text(
+                        'COMISIÓN POR DELIVERY',
                         style: TextStyle(
-                            color: Colors.red,
-                            fontSize: responsive.ip(2),
-                            fontWeight: FontWeight.bold)),
+                          color: Colors.black,
+                          fontSize: responsive.ip(1.5),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'S/.$deliveryComision',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: responsive.ip(1.5),
+                      ),
+                    ),
                   ],
                 ),
               )
+            : Container(),
+        Container(
+          margin: EdgeInsets.symmetric(
+            vertical: responsive.hp(1),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  'Total',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: responsive.ip(2),
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Text(
+                'S/.$precioPedido',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: responsive.ip(2),
+                    fontWeight: FontWeight.bold),
+              ),
             ],
-          );
+          ),
+        )
+      ],
+    );
 
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              if (precioSinDeliveryRapido >
-                  double.parse(snapshot.data[0].zonaPedidoMinimo)) {
-                deliveryComision = 0;
-              } else {
-                deliveryComision = double.parse(snapshot.data[0].zonaPrecio);
-              }
-              precioPedido = precioPedido + deliveryComision;
-              total = Column(
-                children: <Widget>[
-                  (deliveryComision > 0)
-                      ? Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: responsive.hp(0.5)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(
-                                child: Text('COMISIÓN POR DELIVERY',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: responsive.ip(1.5))),
-                              ),
-                              Text('S/.$deliveryComision',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: responsive.ip(1.5))),
-                            ],
-                          ),
-                        )
-                      : Container(),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: Text('Total',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: responsive.ip(2),
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        Text('S/.$precioPedido',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: responsive.ip(2),
-                                fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  )
-                ],
-              );
-
-              return ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  itemCount: carrito.length + 1,
-                  itemBuilder: (context, i) {
-                    if (i == carrito.length) {
-                      return total;
-                    }
-                    return _productos(responsive, carrito[i]);
-                  });
-            } else {
-              return ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  itemCount: carrito.length + 1,
-                  itemBuilder: (context, i) {
-                    if (i == carrito.length) {
-                      return total;
-                    }
-                    return _productos(responsive, carrito[i]);
-                  });
-            }
-          } else {
-            return ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemCount: carrito.length + 1,
-                itemBuilder: (context, i) {
-                  if (i == carrito.length) {
-                    return total;
-                  }
-                  return _productos(responsive, carrito[i]);
-                });
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        physics: ScrollPhysics(),
+        itemCount: carrito.length + 1,
+        itemBuilder: (context, i) {
+          if (i == carrito.length) {
+            return total;
           }
+          return _productos(responsive, carrito[i]);
         });
   }
 
@@ -660,10 +637,12 @@ class _DetallePagoState extends State<DetallePago> {
                           fontSize: responsive.ip(1.8),
                         ),
                       ),
-                      Text('$ruc',
-                          style: new TextStyle(
-                              fontSize: responsive.ip(1.8),
-                              fontWeight: FontWeight.bold))
+                      Text(
+                        '$ruc',
+                        style: new TextStyle(
+                            fontSize: responsive.ip(1.8),
+                            fontWeight: FontWeight.bold),
+                      )
                     ],
                   ),
                 ],
@@ -677,11 +656,11 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _tipoPago(Responsive responsive) {
+  Widget _tipoPago(Responsive responsive,double precio) {
     montoPago = tipoPagoController.text;
     vuelto = 0;
     if (montoPago != null && montoPago != "") {
-      vuelto = double.parse(montoPago) - precioPedido;
+      vuelto = double.parse(montoPago) - precio;
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -696,7 +675,7 @@ class _DetallePagoState extends State<DetallePago> {
         ),
         GestureDetector(
           onTap: () {
-            _tipoPagoRadioValue(context, 0, responsive);
+            _tipoPagoRadioValue(context, 0, responsive,precio);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -706,7 +685,7 @@ class _DetallePagoState extends State<DetallePago> {
                   _tipoPagoRadioValue(
                     context,
                     0,
-                    responsive,
+                    responsive,precio
                   );
                 },
                 child: Container(
@@ -716,7 +695,7 @@ class _DetallePagoState extends State<DetallePago> {
                       value: 0,
                       groupValue: _tipoPagoValue,
                       onChanged: (valor) {
-                        _tipoPagoRadioValue(context, valor, responsive);
+                        _tipoPagoRadioValue(context, valor, responsive,precio);
                       },
                     ),
                     Text(
@@ -728,7 +707,7 @@ class _DetallePagoState extends State<DetallePago> {
               ),
               GestureDetector(
                 onTap: () {
-                  _tipoPagoRadioValue(context, 1, responsive);
+                  _tipoPagoRadioValue(context, 1, responsive,precio);
                 },
                 child: Container(
                   child: Row(
@@ -737,7 +716,7 @@ class _DetallePagoState extends State<DetallePago> {
                         value: 1,
                         groupValue: _tipoPagoValue,
                         onChanged: (valor) {
-                          _tipoPagoRadioValue(context, valor, responsive);
+                          _tipoPagoRadioValue(context, valor, responsive,precio);
                         },
                       ),
                       Text(
@@ -753,40 +732,50 @@ class _DetallePagoState extends State<DetallePago> {
             ],
           ),
         ),
-        (montoPago != "" && montoPago != null)
+        (_tipoPagoValue == 1)
             ? (vuelto < 0)
                 ? Container(
                     child: Text(
-                        'El monto de pago debe ser superior al precio de la orden',
-                        style: TextStyle(
-                            fontSize: responsive.ip(1.8),
-                            fontWeight: FontWeight.bold)))
+                      'El monto de pago debe ser superior al precio de la orden',
+                      style: TextStyle(
+                          fontSize: responsive.ip(1.8),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
                 : Column(
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Text('Monto de Pago : ',
-                              style: TextStyle(
-                                fontSize: responsive.ip(1.8),
-                              )),
+                          Text(
+                            'Monto de Pago : ',
+                            style: TextStyle(
+                              fontSize: responsive.ip(1.8),
+                            ),
+                          ),
                           Expanded(
-                            child: Text('$montoPago',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.8),
-                                    fontWeight: FontWeight.bold)),
+                            child: Text(
+                              '$montoPago',
+                              style: TextStyle(
+                                  fontSize: responsive.ip(1.8),
+                                  fontWeight: FontWeight.bold),
+                            ),
                           )
                         ],
                       ),
                       Row(
                         children: <Widget>[
-                          Text('Vuelto ',
-                              style: TextStyle(
+                          Text(
+                            'Vuelto ',
+                            style: TextStyle(
+                              fontSize: responsive.ip(1.8),
+                            ),
+                          ),
+                          Text(
+                            '$vuelto',
+                            style: TextStyle(
                                 fontSize: responsive.ip(1.8),
-                              )),
-                          Text('$vuelto',
-                              style: TextStyle(
-                                  fontSize: responsive.ip(1.8),
-                                  fontWeight: FontWeight.bold))
+                                fontWeight: FontWeight.bold),
+                          )
                         ],
                       ),
                     ],
@@ -796,7 +785,7 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _pagarCarrito(BuildContext context, Responsive responsive) {
+  Widget _pagarCarrito(BuildContext context, Responsive responsive,double precio) {
     return GestureDetector(
       child: Padding(
         padding: EdgeInsets.all(responsive.wp(2)),
@@ -814,7 +803,7 @@ class _DetallePagoState extends State<DetallePago> {
                       style: TextStyle(fontSize: responsive.ip(2)),
                     ),
                     onPressed: () {
-                      _pagarcarrito(responsive);
+                      _pagarcarrito(responsive,precio);
                       //Navigator.pushNamed(context, 'detallePago');
                     }),
               ),
@@ -920,26 +909,23 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  void _modalCambiarMetodoPago(context, Responsive responsive) {
+  void _modalCambiarMetodoPago(context, Responsive responsive,double precio) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context2) {
         final nuevoMetodoPagoBloc = ProviderBloc.npago(context2);
-        nuevoMetodoPagoBloc.obtenerMontoCarrito();
+        
         return StreamBuilder(
           stream: nuevoMetodoPagoBloc.vueltoStream,
           builder: (BuildContext context, AsyncSnapshot snapshotvuelto) {
             double vuelto = 0;
+           
             if (nuevoMetodoPagoBloc.valorVuelto == null) {
             } else {
               vuelto = nuevoMetodoPagoBloc.valorVuelto;
             }
-
-            return StreamBuilder(
-              stream: nuevoMetodoPagoBloc.montoCarritoStream,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return GestureDetector(
+            return GestureDetector(
                   onTap: () {
                     FocusScope.of(context).unfocus();
                   },
@@ -985,7 +971,7 @@ class _DetallePagoState extends State<DetallePago> {
                                   onChanged: (val) {
                                     if (val.length > 0) {
                                       nuevoMetodoPagoBloc.validarPago2(val,
-                                          '${nuevoMetodoPagoBloc.montoCarrito}');
+                                          '$precio');
                                     } else {
                                       nuevoMetodoPagoBloc.validarPago2(
                                           val, '0');
@@ -999,7 +985,7 @@ class _DetallePagoState extends State<DetallePago> {
                             height: responsive.hp(2),
                           ),
                           Text(
-                              'Precio : S/ ${nuevoMetodoPagoBloc.montoCarrito}'),
+                              'Precio : S/ $precio'),
                           Row(
                             children: <Widget>[
                               (vuelto > 0)
@@ -1017,6 +1003,9 @@ class _DetallePagoState extends State<DetallePago> {
                           Center(
                             child: FlatButton(
                               onPressed: () async {
+                                setState(() {
+                                  
+                                });
                                 Navigator.pop(context);
                               },
                               child: Container(
@@ -1043,8 +1032,7 @@ class _DetallePagoState extends State<DetallePago> {
                     ),
                   ),
                 );
-              },
-            );
+              
           },
         );
       },
@@ -1158,7 +1146,7 @@ class _DetallePagoState extends State<DetallePago> {
           },
         );
       },
-    ); 
+    );
   }
 
   void modalRuc() {
@@ -1260,7 +1248,7 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  void _pagarcarrito(Responsive responsive) async {
+  void _pagarcarrito(Responsive responsive,double precio) async {
     final pedidoApi = OrdenesApi();
     final usuarioDatabase = UsuarioDatabase();
     final direccionDatabase = DireccionDatabase();
@@ -1290,7 +1278,7 @@ class _DetallePagoState extends State<DetallePago> {
                   pedido.pedidoTipoComprobante = "7";
                   pedido.pedidoCodPersona = comprobanteController.text;
                 }
-                pedido.pedidoMontoFinal = precioPedido.toString();
+                pedido.pedidoMontoFinal = precio.toString();
                 if (_tipoPagoValue == 0) {
                   pedido.pedidoMontoPago = '0';
                   pedido.pedidoVueltoPago = "0";
@@ -1357,6 +1345,9 @@ class _DetallePagoState extends State<DetallePago> {
                         2,
                         ToastGravity.TOP);
                   }
+                }else{
+                  utils.showToast(
+                    'El monto de pago debe ser mayor al monto del pedido ', 2, ToastGravity.TOP);
                 }
               } else {
                 utils.showToast(

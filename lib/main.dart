@@ -4,6 +4,7 @@ import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
 import 'package:enchiladasapp/src/pages/market_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
+import 'package:enchiladasapp/src/pages/ordenes/ordenes_pago_page.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
 import 'package:enchiladasapp/src/pages/seleccion_zona_carrito_page.dart';
@@ -24,7 +25,7 @@ import 'package:enchiladasapp/src/pages/login_page.dart';
 import 'package:enchiladasapp/src/pages/splash.dart';
 import 'package:enchiladasapp/src/pages/home_page.dart';
 import 'package:enchiladasapp/src/pages/desicion_page.dart';
-import 'package:enchiladasapp/src/pages/ordenes_page.dart';
+import 'package:enchiladasapp/src/pages/ordenes/ordenes_page.dart';
 import 'package:enchiladasapp/src/pages/pedidos_repartidor_page.dart';
 import 'package:enchiladasapp/src/pages/puzzle/home_puzzle.dart';
 import 'package:enchiladasapp/src/pages/puzzle/puzzle.dart';
@@ -209,6 +210,7 @@ class _MyAppState extends State<MyApp> {
           'sel_Direccion': (BuildContext context) => MapsSample(),
           'combo': (BuildContext context) => CategoriasEspecialesPage(),
           'ordenes': (BuildContext context) => OrdenesPage(),
+          'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
           'detallePedido': (BuildContext context) => DetallePedido(),
           'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
           'mapaRepartidor': (BuildContext context) => MapaRepartidor(),
