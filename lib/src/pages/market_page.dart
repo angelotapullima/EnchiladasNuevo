@@ -43,8 +43,8 @@ class MarketPage extends StatelessWidget {
 
   Widget rowDatos(BuildContext context, CategoriasBloc categoriasBloc) {
     final responsive = Responsive.of(context);
-    final anchoCategorias = responsive.wp(24);
-    final anchoProductos = responsive.wp(70);
+    final anchoCategorias = responsive.wp(20);
+    final anchoProductos = responsive.wp(75);
 
     return SafeArea(
       child: Column(
@@ -82,7 +82,7 @@ class MarketPage extends StatelessWidget {
                         topStart: Radius.circular(13)),
                     color: Colors.grey[50]),
                 padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(3), vertical: responsive.hp(1)),
+                    horizontal: responsive.wp(2), vertical: responsive.hp(1)), 
                 child: SmartRefresher(
                   controller: _refreshController,
                   onRefresh: () {
@@ -310,7 +310,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
         child: Row(
           children: <Widget>[
             Container(
-              width: responsive.wp(28),
+              width: responsive.wp(30),
               height: responsive.hp(12),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -331,6 +331,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                 ),
               ),
             ),
+            SizedBox(width: responsive.wp(1),),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -341,7 +342,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: responsive.ip(2),
+                        fontSize: responsive.ip(1.8),
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
@@ -349,7 +350,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2.5)),
+                        fontSize: responsive.ip(2)),
                   ),
                 ],
               ),

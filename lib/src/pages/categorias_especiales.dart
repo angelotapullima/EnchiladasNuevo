@@ -113,7 +113,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
         child: Row(
           children: <Widget>[
             Container(
-              width: responsive.wp(28),
+              width: responsive.wp(38),
               height: responsive.hp(12),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -135,6 +135,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                 ),
               ),
             ),
+            SizedBox(width: responsive.wp(2),),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,7 +146,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: responsive.ip(2),
+                        fontSize: responsive.ip(1.8),
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
@@ -153,7 +154,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                     style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2.5)),
+                        fontSize: responsive.ip(2)),
                   ),
                 ],
               ),

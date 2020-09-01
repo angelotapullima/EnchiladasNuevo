@@ -1,3 +1,4 @@
+import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,9 @@ class CategoriasPage extends StatelessWidget {
                     size: responsive.ip(3.5),
                   ),
                   onPressed: () {
-                    showSearch(context: context, delegate: DataSearch(hintText: 'Buscar'));
+                    showSearch(
+                        context: context,
+                        delegate: DataSearch(hintText: 'Buscar'));
                   },
                 )
               ],
@@ -279,8 +282,6 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
   Widget _itemPedido(BuildContext context, ProductosData productosData) {
     final Responsive responsive = new Responsive.of(context);
 
-
-
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
@@ -291,11 +292,11 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
         margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5)),
         //height: responsive.hp(13),
         child: Row(
-          children: <Widget>[ 
+          children: <Widget>[
             Hero(
               tag: '${productosData.idProducto}',
               child: Container(
-                width: responsive.wp(28),
+                width: responsive.wp(30),
                 height: responsive.hp(12),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
@@ -317,6 +318,9 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                 ),
               ),
             ),
+            SizedBox(
+              width: responsive.wp(1),
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -327,15 +331,17 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: responsive.ip(2),
+                        fontSize: responsive.ip(1.8),
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'S/ ${productosData.productoPrecio}',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2.5)),
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(2),
+                    ),
                   ),
                 ],
               ),
@@ -370,7 +376,22 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
         ),
       ),
       onTap: () {
-        Navigator.pushNamed(context, 'detalleP', arguments: productosData);
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 400),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return DetalleProductitos(productosData: productosData);
+              },
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+            ));
+        //Navigator.pushNamed(context, 'detalleP', arguments: productosData);
       },
     );
   }

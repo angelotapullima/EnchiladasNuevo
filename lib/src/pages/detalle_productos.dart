@@ -17,16 +17,23 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class DetalleProductitos extends StatefulWidget {
+
+
+  final ProductosData productosData;
+
+  const DetalleProductitos({Key key, @required this.productosData}) : super(key: key);
   @override
   _DetalleProducto createState() => _DetalleProducto();
 }
 
 class _DetalleProducto extends State<DetalleProductitos> {
+
   bool estadoDelivery = false;
   double _panelHeightOpen;
 
   TextEditingController observacionProducto = TextEditingController();
   PanelController panelController = new PanelController();
+
 
   @override
   void dispose() {
@@ -47,11 +54,11 @@ class _DetalleProducto extends State<DetalleProductitos> {
   @override
   Widget build(BuildContext context) {
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
-    final ProductosData productos = ModalRoute.of(context).settings.arguments;
+    //final ProductosData productos = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
     final productosIdBloc = ProviderBloc.prod(context);
 
-    productosIdBloc.obtenerProductoPorId(productos.idProducto);
+    productosIdBloc.obtenerProductoPorId(widget.productosData.idProducto);
 
     return Material(
       child: StreamBuilder(

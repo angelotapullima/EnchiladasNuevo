@@ -192,7 +192,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Container(
-              width: responsive.wp(28),
+              width: responsive.wp(32),
               height: responsive.hp(12),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -219,17 +219,19 @@ class _FavoritosTabState extends State<FavoritosTab> {
                 padding: EdgeInsets.symmetric(horizontal: responsive.wp(.8)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
                       productosData.productoNombre,
+                    textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: responsive.ip(1.8)),
                     ),
                     Text(
-                      productosData.productoPrecio,
+                      'S/ ${productosData.productoPrecio}',
+                    textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,

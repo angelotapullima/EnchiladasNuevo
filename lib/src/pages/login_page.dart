@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
               height: responsive.ip(2),
             ),
             Text(
-              'Por aqui podrás disfrutar lo mejor de lo nuestro de forma más rápida',
+              'Por aquí podrás disfrutar lo mejor de lo nuestro de forma más rápida',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: responsive.ip(1.6),

@@ -88,173 +88,178 @@ class _MapaClienteState extends State<MapaCliente> {
     /*  */
     return Scaffold(
       body: Stack(
-          children: <Widget>[
-            Container(
-              height: responsive.hp(62),
-              child: GoogleMap(
-                  myLocationEnabled: true,
-                  compassEnabled: true,
-                  tiltGesturesEnabled: true,
-                  markers: _markers,
-                  mapType: MapType.normal,
-                  initialCameraPosition: currentPosition,
-                  onTap: (LatLng loc) {},
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  }),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: responsive.hp(35),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                    color: Colors.white),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                        height: responsive.hp(12),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20)),
-                            color: Colors.red),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: responsive.wp(2),
-                              vertical: responsive.hp(2)),
-                          child: Row(
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 25,
-                                child: ClipOval(
-                                    child: Image.network(
-                                  '$imagenRepartidor',
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                )),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      '$nombreRepartidor',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: responsive.ip(2)),
-                                    ),
-                                    Text(
-                                      'Repartidor $idRepartidor',
-                                      style: TextStyle(color: Colors.white),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
-                      height: responsive.hp(23),
+        children: <Widget>[
+          Container(
+            height: responsive.hp(62),
+            child: GoogleMap(
+                myLocationEnabled: true,
+                compassEnabled: true,
+                tiltGesturesEnabled: true,
+                markers: _markers,
+                mapType: MapType.normal,
+                initialCameraPosition: currentPosition,
+                onTap: (LatLng loc) {},
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                }),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: responsive.hp(35),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  color: Colors.white),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: responsive.hp(12),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                        color: Colors.red),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.wp(2),
+                        vertical: responsive.hp(2),
+                      ),
                       child: Row(
                         children: <Widget>[
-                          Container(
-                            width: responsive.wp(20),
-                            color: Colors.white,
+                          CircleAvatar(
+                            radius: 25,
+                            child: ClipOval(
+                                child: Image.network(
+                              '$imagenRepartidor',
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            )),
+                          ),
+                          Expanded(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Icon(
-                                  Icons.directions_transit,
-                                  color: Colors.red,
+                                Text(
+                                  '$nombreRepartidor',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: responsive.ip(2)),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: responsive.hp(.5)),
-                                  width: responsive.wp(1),
-                                  height: responsive.hp(2),
-                                  color: Colors.orange,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: responsive.hp(.5)),
-                                  width: responsive.wp(1),
-                                  height: responsive.hp(2),
-                                  color: Colors.orange,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: responsive.hp(.5)),
-                                  width: responsive.wp(1),
-                                  height: responsive.hp(2),
-                                  color: Colors.orange,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: responsive.hp(.5)),
-                                  width: responsive.wp(1),
-                                  height: responsive.hp(2),
-                                  color: Colors.orange,
-                                ),
-                                Icon(Icons.map)
+                                Text(
+                                  'Repartidor $idRepartidor',
+                                  style: TextStyle(color: Colors.white),
+                                )
                               ],
                             ),
                           ),
-                          Container(
-                            width: responsive.wp(80),
-                            color: Colors.white,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Distancia aprox. de Repartidor',
-                                  style: TextStyle(fontSize: responsive.ip(2)),
-                                ),
-                                Text('$distancia Km',
-                                    style: TextStyle(
-                                        fontSize: responsive.ip(2.1),
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: responsive.hp(8),
-                                ),
-                                Text('Dirección de entrega',
-                                    style:
-                                        TextStyle(fontSize: responsive.ip(2))),
-                                Text('$direccionEntrega',
-                                    style: TextStyle(
-                                        fontSize: responsive.ip(2.1),
-                                        fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          )
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            SafeArea(
-              child: Positioned(
-                top: responsive.hp(1),
-                left: responsive.wp(3),
-                child: GestureDetector(
-                  child: CircleContainer(
-                    radius: responsive.ip(2.5),
-                    color: Colors.grey[200],
-                    widget: Icon(Icons.arrow_back, color: Colors.black),
+                    ),
                   ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
+                    height: responsive.hp(23),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: responsive.wp(20),
+                          color: Colors.white,
+                          child: Column(
+                            children: <Widget>[
+                              Icon(
+                                Icons.directions_transit,
+                                color: Colors.red,
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                  vertical: responsive.hp(.5),
+                                ),
+                                width: responsive.wp(1),
+                                height: responsive.hp(2),
+                                color: Colors.orange,
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                  vertical: responsive.hp(.5),
+                                ),
+                                width: responsive.wp(1),
+                                height: responsive.hp(2),
+                                color: Colors.orange,
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                  vertical: responsive.hp(.5),
+                                ),
+                                width: responsive.wp(1),
+                                height: responsive.hp(2),
+                                color: Colors.orange,
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                  vertical: responsive.hp(.5),
+                                ),
+                                width: responsive.wp(1),
+                                height: responsive.hp(2),
+                                color: Colors.orange,
+                              ),
+                              Icon(Icons.map)
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: responsive.wp(80),
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Distancia aprox. de Repartidor',
+                                style: TextStyle(fontSize: responsive.ip(2)),
+                              ),
+                              Text('$distancia Km',
+                                  style: TextStyle(
+                                      fontSize: responsive.ip(2.1),
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                height: responsive.hp(8),
+                              ),
+                              Text('Dirección de entrega',
+                                  style: TextStyle(fontSize: responsive.ip(2))),
+                              Text('$direccionEntrega',
+                                  style: TextStyle(
+                                      fontSize: responsive.ip(2.1),
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-          ],
-        
+          ),
+          Positioned(
+              top: responsive.hp(2),
+              left: responsive.wp(3),
+              child: GestureDetector(
+                child: CircleContainer(
+                  radius: responsive.ip(2.5),
+                  color: Colors.grey[200],
+                  widget: Icon(Icons.arrow_back, color: Colors.black),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            
+          ),
+        ],
       ),
     );
   }

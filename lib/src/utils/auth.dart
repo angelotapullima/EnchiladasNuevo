@@ -68,6 +68,7 @@ class Auth {
     try {
       progressDialog.show();
       final LoginResult result = await FacebookAuth.instance.login();
+      
 
       if (result.status == 200) {
         print('Facebook Login OK');
