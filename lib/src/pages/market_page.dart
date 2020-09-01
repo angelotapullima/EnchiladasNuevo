@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
@@ -385,7 +386,22 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
         ),
       ),
       onTap: () {
-        Navigator.pushNamed(context, 'detalleP', arguments: productosData);
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 400),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return DetalleProductitos(productosData: productosData);
+              },
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+            ));
+        //Navigator.pushNamed(context, 'detalleP', arguments: productosData);
       },
     );
   }

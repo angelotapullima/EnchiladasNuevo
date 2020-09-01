@@ -10,7 +10,13 @@ class DowloadImagen extends StatefulWidget {
   final Widget devolucion;
   final Widget cargando;
 
-  DowloadImagen({Key key, @required this.foto,@required this.devolucion,this.cargando, @required this.idImagen}) : super(key: key);
+  DowloadImagen(
+      {Key key,
+      @required this.foto,
+      @required this.devolucion,
+      this.cargando,
+      @required this.idImagen})
+      : super(key: key);
 
   @override
   _DescargaImagenState createState() => _DescargaImagenState();
@@ -21,8 +27,8 @@ class _DescargaImagenState extends State<DowloadImagen> {
 
   _downloadFile() {
     setState(() {
-      fileStream = CustomCacheManager()
-          .getFileStream(widget.foto, withProgress: true);
+      fileStream =
+          CustomCacheManager().getFileStream(widget.foto, withProgress: true);
     });
   }
 
@@ -41,7 +47,6 @@ class _DescargaImagenState extends State<DowloadImagen> {
   }
 }
 
-
 class DownloadPage extends StatelessWidget {
   final Stream<FileResponse> fileStream;
   final String foto;
@@ -49,14 +54,19 @@ class DownloadPage extends StatelessWidget {
   final Widget devolucion;
   final Widget cargando;
 
-  const DownloadPage({Key key, this.fileStream, this.foto,@required this.devolucion,this.cargando, this.idImagen})
+  const DownloadPage(
+      {Key key,
+      this.fileStream,
+      this.foto,
+      @required this.devolucion,
+      this.cargando,
+      this.idImagen})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<FileResponse>(
-      stream: CustomCacheManager()
-          .getFileStream(foto, withProgress: true),
+      stream: CustomCacheManager().getFileStream(foto, withProgress: true),
       builder: (context, snapshot) {
         Widget body;
 
@@ -68,17 +78,15 @@ class DownloadPage extends StatelessWidget {
             subtitle: Text(snapshot.error.toString()),
           );
         } else if (loading) {
-
-          body = ProgressIndicator(progress: snapshot.data as DownloadProgress);/* (this.cargando == null)?ProgressIndicator(progress: snapshot.data as DownloadProgress)
+          body = ProgressIndicator(progress: snapshot.data as DownloadProgress);
+          /* (this.cargando == null)?ProgressIndicator(progress: snapshot.data as DownloadProgress)
                                         :this.cargando; */
-
-
 
         } else {
           body = FileInfoWidget(
             fileInfo: snapshot.data as FileInfo,
             foto: foto,
-            idImagen:this.idImagen ,
+            idImagen: this.idImagen,
             devolucion: this.devolucion,
           );
         }
@@ -92,7 +100,6 @@ class DownloadPage extends StatelessWidget {
     );
   }
 }
-
 
 class ProgressIndicator extends StatelessWidget {
   final DownloadProgress progress;
@@ -127,35 +134,59 @@ class ProgressIndicator extends StatelessWidget {
 
 class FileInfoWidget extends StatelessWidget {
   final FileInfo fileInfo;
-  final String  foto;
-  final String  idImagen;
+  final String foto;
+  final String idImagen;
   final Widget devolucion;
 
-  const FileInfoWidget({Key key, this.fileInfo, this.foto,this.devolucion, this.idImagen})
+  const FileInfoWidget(
+      {Key key, this.fileInfo, this.foto, this.devolucion, this.idImagen})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
+    final responsive = Responsive.of(context);
     String path = fileInfo.originalUrl;
-    return Column(
+    return Stack(
       children: <Widget>[
-
-
         GestureDetector(
-
-
           child: this.devolucion,
           onTap: () {
-            RankingPuzzle puzzle= RankingPuzzle();
+            RankingPuzzle puzzle = RankingPuzzle();
             puzzle.path = path;
             puzzle.idImagen = idImagen;
 
-            //Navigator.pushNamed(context, 'puzzle', arguments: puzzle);
+            Navigator.pushNamed(context, 'puzzle', arguments: puzzle);
           },
         ),
+        
+        _button(context, responsive)
       ],
     );
     //Text(title)
+  }
+
+  Widget _button(BuildContext context, Responsive responsive) {
+    return Positioned(
+        bottom: responsive.hp(2),
+        left: responsive.wp(3),
+        right: responsive.wp(3),
+        child: ButtonTheme(
+          height: responsive.hp(6),
+          minWidth: responsive.wp(30),
+          child: RaisedButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            color: Colors.red,
+            textColor: Colors.white,
+            onPressed: () {},
+            child: Text(
+              "Empezar ahora!".toUpperCase(),
+              style: TextStyle(
+                fontSize: responsive.ip(1.8),
+              ),
+            ),
+          ),
+        ));
   }
 }

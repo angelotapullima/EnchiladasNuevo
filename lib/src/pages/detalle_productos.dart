@@ -5,6 +5,7 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/translate_animation.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
@@ -17,23 +18,19 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class DetalleProductitos extends StatefulWidget {
-
-
   final ProductosData productosData;
 
-  const DetalleProductitos({Key key, @required this.productosData}) : super(key: key);
+  const DetalleProductitos({Key key, this.productosData}) : super(key: key);
   @override
   _DetalleProducto createState() => _DetalleProducto();
 }
 
 class _DetalleProducto extends State<DetalleProductitos> {
-
   bool estadoDelivery = false;
   double _panelHeightOpen;
 
   TextEditingController observacionProducto = TextEditingController();
   PanelController panelController = new PanelController();
-
 
   @override
   void dispose() {
@@ -78,9 +75,13 @@ class _DetalleProducto extends State<DetalleProductitos> {
                   _background(),
                   _backgroundImage(context, snapshot.data[0]),
                   _crearAppbar(responsive),
-                  _contenido(snapshot.data[0], responsive, context),
+                  TranslateAnimation(
+                      duration: const Duration(milliseconds: 400),
+                      child: _contenido(snapshot.data[0], responsive, context)),
                 ]),
-                panelBuilder: (sc) => _carritoProductos(responsive, sc),
+                panelBuilder: (sc) => TranslateAnimation(
+                    duration: const Duration(milliseconds: 600),
+                    child: _carritoProductos(responsive, sc)),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(18.0),
                   topRight: Radius.circular(18.0),

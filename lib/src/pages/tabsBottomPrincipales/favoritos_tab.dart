@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/zona_direction.dart';
@@ -278,7 +279,22 @@ class _FavoritosTabState extends State<FavoritosTab> {
         ),
       ),
       onTap: () {
-        Navigator.pushNamed(context, 'detalleP', arguments: productosData);
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 400),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return DetalleProductitos(productosData: productosData);
+              },
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+            ));
+        //Navigator.pushNamed(context, 'detalleP', arguments: productosData);
       },
     );
   }

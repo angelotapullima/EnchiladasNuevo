@@ -83,13 +83,13 @@ class HomePuzzle extends StatelessWidget {
       children: <Widget>[
         _backgroundImage(puzzle, responsive),
         _carousel(context, puzzle, responsive),
-        _button(context, puzzle, responsive),
+        
       ],
     );
   }
 
   Widget _button(
-      BuildContext context, List<PuzzleDatum> puzzle, Responsive responsive) {
+      BuildContext context, List<PuzzleDatum> puzzle, Responsive responsive) { 
     final size = MediaQuery.of(context).size;
     return Positioned(
       bottom: responsive.hp(2),
@@ -113,8 +113,12 @@ class HomePuzzle extends StatelessWidget {
                 puzzle[(_scrollController.offset ~/ size.width)].imagenRuta;
             Navigator.pushNamed(context, 'puzzle', arguments: rankingPuzzle);
           },
-          child: Text("Empezar ahora!".toUpperCase(),
-              style: TextStyle(fontSize: responsive.ip(1.8))),
+          child: Text(
+            "Empezar ahora!".toUpperCase(),
+            style: TextStyle(
+              fontSize: responsive.ip(1.8),
+            ),
+          ),
         ),
       ),
     );
@@ -161,7 +165,7 @@ class HomePuzzle extends StatelessWidget {
           (item) => Container(
             child: DowloadImagen(
                 idImagen: item.idImagen,
-                devolucion: cardSlider(item.imagenRuta, responsive),
+                devolucion: cardSlider(context,puzzle, item.imagenRuta, responsive),
                 foto: item.imagenRuta),
           ),
         )
@@ -192,7 +196,7 @@ class HomePuzzle extends StatelessWidget {
     );
   }
 
-  Widget cardSlider(String imagen, Responsive responsive) {
+  Widget cardSlider(BuildContext context,  List<PuzzleDatum> puzzle,String imagen, Responsive responsive) {
     return Column(
       children: <Widget>[
         SizedBox(
@@ -213,7 +217,11 @@ class HomePuzzle extends StatelessWidget {
                   )),
                 ),
               ),
-            )),
+            )),SizedBox(
+          height: responsive.hp(20),
+        ),
+            /*  
+            _button(context, puzzle, responsive), */
       ],
     );
   }
