@@ -1,6 +1,6 @@
 import 'package:enchiladasapp/src/api/puzzle_api.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
-import 'package:enchiladasapp/src/widgets/zona_direction.dart';
+import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';

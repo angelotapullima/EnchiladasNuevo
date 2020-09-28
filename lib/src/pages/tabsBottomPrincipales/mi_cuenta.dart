@@ -178,7 +178,6 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
             ),
             child: Column(
               children: <Widget>[
-                
                 Padding(
                   padding: EdgeInsets.all(
                     responsive.ip(1),
@@ -246,45 +245,43 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
           SizedBox(
             height: responsive.hp(1.5),
           ),
-          Container(
-            decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: Colors.grey[300])),
-            child: Column(
-              children: <Widget>[
-                GestureDetector(
-                  child: Padding(
-                      padding: EdgeInsets.all(responsive.ip(1)),
-                      child: Row(children: <Widget>[
-                        Icon(
-                          Icons.card_giftcard,
-                          color: Colors.red, 
-                        ),
-                        SizedBox(
-                          width: responsive.wp(1.5),
-                        ),
-                        Text(
-                          'Órdenes Realizadas',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: responsive.ip(1.8)),
-                        )
-                      ])),
-                  onTap: () {
-                    final prefs = new Preferences();
+          GestureDetector(
+            onTap: () {
+              final prefs = new Preferences();
 
-                    if (prefs.email != "" && prefs.email != null) {
-                      Navigator.pushNamed(context, 'ordenes');
-                    } else {
-                      utils.showToast(
-                          'Debe estar registrado para ver esta opción', 2,ToastGravity.TOP);
-                    }
-                  },
-                ),
-              ],
-            ),
+              if (prefs.email != "" && prefs.email != null) {
+                Navigator.pushNamed(context, 'ordenes');
+              } else {
+                utils.showToast('Debe estar registrado para ver esta opción', 2,
+                    ToastGravity.TOP);
+              }
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(color: Colors.black12, blurRadius: 3)
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Colors.grey[300])),
+                child: Padding(
+                  padding: EdgeInsets.all(responsive.ip(1.3)),
+                  child: Row(children: <Widget>[
+                    Icon(
+                      Icons.card_giftcard,
+                      color: Colors.red,
+                    ),
+                    SizedBox(
+                      width: responsive.wp(1.5),
+                    ),
+                    Text(
+                      'Órdenes Realizadas',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: responsive.ip(1.8)),
+                    )
+                  ]),
+                )),
           )
         ],
       ),
@@ -305,44 +302,41 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
           SizedBox(
             height: responsive.hp(1.5),
           ),
-          Container(
-            decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: Colors.grey[300])),
-            child: Column(
-              children: <Widget>[
-                GestureDetector(
-                  child: Padding(
-                      padding: EdgeInsets.all(responsive.ip(1)),
-                      child: Row(children: <Widget>[
-                        Icon(
-                          Icons.card_giftcard,
-                          color: Colors.red,
-                        ),
-                        SizedBox(
-                          width: responsive.wp(1.5),
-                        ),
-                        Text(
-                          'Pedidos Asignados',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: responsive.ip(1.8)),
-                        )
-                      ]),),
-                  onTap: () {
-                    final prefs = new Preferences();
+          GestureDetector(
+            onTap: () {
+              final prefs = new Preferences();
 
-                    if (prefs.email != "" && prefs.email != null) {
-                      Navigator.pushNamed(context, 'pedidosRepartidor');
-                    } else {
-                      utils.showToast(
-                          'Debe estar registrado para ver esta opción', 2,ToastGravity.TOP);
-                    }
-                  },
-                ),
-              ],
+              if (prefs.email != "" && prefs.email != null) {
+                Navigator.pushNamed(context, 'pedidosRepartidor');
+              } else {
+                utils.showToast('Debe estar registrado para ver esta opción', 2,
+                    ToastGravity.TOP);
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Colors.grey[300])),
+              child: Padding(
+                  padding: EdgeInsets.all(responsive.ip(1.3)),
+                child: Row(children: <Widget>[
+                  Icon(
+                    Icons.card_giftcard,
+                    color: Colors.red,
+                  ),
+                  SizedBox(
+                    width: responsive.wp(1.5),
+                  ),
+                  Text(
+                    'Pedidos Asignados',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: responsive.ip(1.8)),
+                  )
+                ]),
+              ),
             ),
           )
         ],

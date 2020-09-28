@@ -3,20 +3,20 @@
 
 class DeliveryRapido {
   String idDelivery;
-  String idProducto;
+  String estado;
 
   DeliveryRapido({
     this.idDelivery,
-    this.idProducto,
+    this.estado,
   });
 
   factory DeliveryRapido.fromJson(Map<String, dynamic> json) => DeliveryRapido(
-    idDelivery: json["id_delivery"],
-    idProducto: json["id_producto"],
+    idDelivery: json["idDelivery"],
+    estado: json["estado"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id_delivery": idDelivery,
-    "id_producto": idProducto,
+    "idDelivery": idDelivery,
+    "id_producto": estado,
   };
 }

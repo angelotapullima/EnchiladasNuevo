@@ -1,5 +1,6 @@
 import 'package:enchiladasapp/src/database/database_provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
+import 'package:enchiladasapp/src/models/delivery_rapido_model.dart';
 
 class CarritoDatabase{
 
@@ -81,4 +82,38 @@ class CarritoDatabase{
     final res = await db.delete('Carrito',where: 'id_producto = ?',whereArgs: [id]);
     return res;
   }
+
+
+  insertarDeliveryRapido(DeliveryRapido deliveryRapido) async {
+    try {
+      final db = await dbprovider.database;
+
+      final res = await db.rawInsert(
+          "INSERT INTO DeliveryRapido (idDelivery,estado) "
+          "VALUES ('${deliveryRapido.idDelivery}','${deliveryRapido.estado}')");
+      return res;
+    } catch (exception) {
+      print(exception);
+    }
+  }
+
+  Future<List<DeliveryRapido>> obtenerDeliveryRapido() async {
+    final db = await dbprovider.database;
+    final res = await db.query('DeliveryRapido');
+
+    List<DeliveryRapido> list =
+        res.isNotEmpty ? res.map((c) => DeliveryRapido.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  deleteDeliveryRapido()async{
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete('DELETE FROM DeliveryRapido');
+
+    return res;
+  }
+
+  
 }

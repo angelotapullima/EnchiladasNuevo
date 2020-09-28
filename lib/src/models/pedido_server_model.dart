@@ -61,6 +61,7 @@ class PedidoServer {
         this.pedidoFecha,
         this.pedidoHora,
         this.productos,
+        this.pedidoLink,
         this.pedidoMontoFinal,
     });
 
@@ -83,6 +84,7 @@ class PedidoServer {
     String pedidoHora;
     String pedidoMontoFinal;
     List<ProductoServer> productos;
+    String pedidoLink;
 
     factory PedidoServer.fromJson(Map<String, dynamic> json) => PedidoServer(
         idPedido: json["id_pedido"],
@@ -113,7 +115,7 @@ class PedidoServer {
         pedidoTelefono: json["pedido_telefono"],
         pedidoDireccion: json["pedido_direccion"],
         pedidoReferencia: json["pedido_referencia"],
-        pedidoFormaPago: json["pedido_forma_pago"],
+        pedidoFormaPago: json["pedido_forma_pago"], 
         pedidoTipoComprobante: json["pedido_tipo_comprobante"],
         pedidoCodPersona: json["pedido_cod_persona"],
         pedidoMontoPago: json["pedido_monto_pago"],
@@ -122,6 +124,7 @@ class PedidoServer {
         pedidoEstado: json["pedido_estado"],
         pedidoCodigo: json["pedido_codigo"],
         pedidoFecha:  json["pedido_fecha"],
+        pedidoLink:  json["pedido_pago_link"],
         pedidoHora: json["pedido_hora"],
         //productos: List<ProductoServer>.from(json["productos"].map((x) => ProductoServer.fromJson(x))),
     );
@@ -143,10 +146,11 @@ class PedidoServer {
         "pedido_estado": pedidoEstado,
         "pedido_codigo": pedidoCodigo,
         "pedido_fecha":  pedidoFecha,
+        "pedido_pago_link":  pedidoLink,
         "pedido_hora": pedidoHora,
         "productos": List<dynamic>.from(productos.map((x) => x.toJson())),
     };
-}
+} 
 
 class ProductoServer {
     ProductoServer({

@@ -8,11 +8,12 @@ import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
-import 'package:enchiladasapp/src/widgets/zona_direction.dart';
+import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MiOrdenTab extends StatefulWidget {
   @override
@@ -25,19 +26,6 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
   }
 
   bool estadoDelivery = false;
-
-  /* void _obtenerUbicacion(BuildContext context) async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
-    //print(placemark);
-    final addresito =
-        "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare}";
-
-    utils.agregarDireccion(
-        context, addresito, position.latitude, position.longitude, "");
-  } */
 
   TextEditingController observacionProducto = TextEditingController();
   TextEditingController telefonoController = TextEditingController();
@@ -94,16 +82,6 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       fontSize: responsive.ip(2.6),
                       fontWeight: FontWeight.bold),
                 ),
-                /* IconButton(
-                icon: Icon(
-                  Icons.card_giftcard,
-                  color: Colors.white,
-                  size: responsive.ip(3.5),
-                ),
-                onPressed: () {
-                  setState(() {});
-                },
-              ) */
               ],
             ),
           ),
@@ -121,19 +99,23 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                        height: responsive.hp(20),
-                        child: SvgPicture.asset('assets/carrito.svg')),
+                      height: responsive.hp(20),
+                      child: SvgPicture.asset('assets/carrito.svg'),
+                    ),
                     SizedBox(
                       height: responsive.hp(3),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.wp(2),
+                      ),
                       child: Text(
                         'No hay Productos en el carrito',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.black, fontSize: responsive.ip(2.5)),
+                          color: Colors.black,
+                          fontSize: responsive.ip(2.5),
+                        ),
                       ),
                     )
                   ],
@@ -162,16 +144,12 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
   Widget _listaPedidos(Responsive responsive, List<Carrito> carritoBloc,
       UsuarioBloc usuarioBloc) {
     double subtotal = 0;
-    double valorDelivery = 0;
-    //double total = 0;
     for (int i = 0; i < carritoBloc.length; i++) {
       if (carritoBloc[i].productoTipo != '1') {
         subtotal = subtotal +
             (double.parse(carritoBloc[i].productoPrecio) *
                 double.parse(carritoBloc[i].productoCantidad));
-      } else {
-        valorDelivery = double.parse(carritoBloc[i].productoPrecio);
-      }
+      } 
     }
 
     return SafeArea(
@@ -179,7 +157,9 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: responsive.wp(2), vertical: responsive.hp(2)),
+              horizontal: responsive.wp(2),
+              vertical: responsive.hp(2),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -190,16 +170,6 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       fontSize: responsive.ip(2.6),
                       fontWeight: FontWeight.bold),
                 ),
-                /* IconButton(
-                  icon: Icon(
-                    Icons.card_giftcard,
-                    color: Colors.white,
-                    size: responsive.ip(3.5),
-                  ),
-                  onPressed: () {
-                    setState(() {});
-                  },
-                ) */
               ],
             ),
           ),
@@ -207,10 +177,10 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadiusDirectional.only(
-                        topStart: Radius.circular(13),
-                        topEnd: Radius.circular(13)),
+                      topStart: Radius.circular(13),
+                      topEnd: Radius.circular(13),
+                    ),
                     color: Colors.grey[50]),
-                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: StreamBuilder(
                   stream: usuarioBloc.usuarioStream,
                   builder: (BuildContext context,
@@ -220,13 +190,12 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         return ListView(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          children: <Widget>[
-                            _direccion(),
-                            _zona(context),
+                          children: <Widget>[/* 
+                            _direccion(responsive), */
+                            SizedBox(height: responsive.hp(2),),
                             _listaproductos(responsive, carritoBloc),
-                            _deliveryRapido(responsive),
-                            _resumenPedido(
-                                context, responsive, subtotal, valorDelivery),
+                            _resumenPedidoDetalle(
+                                 responsive, subtotal),
                             _pagarCarrito(responsive),
                           ],
                         );
@@ -254,12 +223,13 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       padding: EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(blurRadius: 3, color: Colors.black26),
-          ],
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(13)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(blurRadius: 3, color: Colors.black26),
+        ],
+        border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(13),
+      ),
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -290,24 +260,24 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
   }
 
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
+    print('carrito ${carrito.productoFoto}');
     final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
         double.parse(carrito.productoCantidad));
 
-    var observacionProducto = 'Toca para agregar descripción';
+    var observacionProducto = 'Toca para agregar Observación';
     if (carrito.productoObservacion != null &&
         carrito.productoObservacion != ' ') {
       observacionProducto = carrito.productoObservacion;
     }
 
     return Container(
-        padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
         child: (carrito.productoTipo != '1')
             ? Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
                       Container(
-                        width: responsive.wp(30),
+                        width: responsive.wp(35),
                         height: responsive.hp(12),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
@@ -347,7 +317,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                               ),
                             ),
                             Text(
-                              '$preciofinal',
+                              'S/. $preciofinal',
                               style: TextStyle(
                                 color: Colors.red,
                                 fontWeight: FontWeight.bold,
@@ -364,57 +334,47 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                             IconButton(
                               icon: Icon(
                                 Icons.delete_outline,
-                                size: responsive.ip(3),
+                                size: responsive.ip(4),
                               ),
                               onPressed: () {
                                 utils.deleteProductoCarrito(
                                     context, carrito.idProducto);
-                                /* final carritoDatabase = CarritoDatabase();
-                                carritoDatabase
-                                    .deteleProductoCarrito(carrito.idProducto); */
                               },
                             ),
                             Container(
-                                child: CantidadTab(
-                                    carrito: carrito, llamada: this.llamado))
+                              child: CantidadTab(
+                                  carrito: carrito, llamada: this.llamado),
+                            )
                           ],
                         ),
                       )
                     ],
                   ),
                   SizedBox(
-                    height: responsive.hp(2),
+                    height: responsive.hp(.6),
                   ),
                   GestureDetector(
                     onTap: () {
                       modaldialogoObservacionProducto('${carrito.idProducto}');
                     },
-                    child: Container(
-                      color: Colors.white,
-                      width: double.infinity,
-                      child: Row(
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(
-                              Icons.mode_edit,
-                              size: responsive.ip(3.5),
-                              color: Colors.red,
-                            ),
-                            onPressed: () {
-                              modaldialogoObservacionProducto(
-                                  '${carrito.idProducto}');
-                            },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.mode_edit,
+                          color: Colors.red,
+                        ),
+                        Expanded(
+                          child: Text(
+                            '$observacionProducto',
+                            style: TextStyle(fontSize: responsive.ip(2)),
                           ),
-                          Expanded(
-                            child: Text(
-                              '$observacionProducto',
-                              style: TextStyle(fontSize: responsive.ip(2)),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
                 ],
               )
             : Container());
@@ -501,60 +461,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     );
   }
 
-  void dialogoIngresarTelefono(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (contextd) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Ingrese su número de Teléfono'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                controller: telefonoController,
-              ),
-              //Text('Producto agregado al carrito correctamente'),
-              SizedBox(
-                height: 20.0,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('cancelar')),
-            FlatButton(
-              onPressed: () async {
-                utils.agregarTelefono(context, telefonoController.text);
-
-                Navigator.pop(context);
-              },
-              child: Text('Continuar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _numeroTelefono(BuildContext context, List<User> user) {
-    String telefono = '-';
-    String agregar = 'Agregar';
-    if (user[0].telefono != "") {
-      telefono = user[0].telefono;
-      agregar = 'Cambiar';
-      print('esto es prueba de telefono $telefono');
-    }
-
-    return _telephone(context, agregar, telefono);
-  }
-
-  Widget _direccion() {
+ /*  Widget _direccion(Responsive responsive) {
     final direcionBloc = ProviderBloc.dire(context);
     direcionBloc.obtenerDireccion();
 
@@ -563,289 +470,219 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       builder: (BuildContext context, AsyncSnapshot<List<Direccion>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
-            return direction(
-                snapshot.data[0].direccion, snapshot.data[0].referencia);
+            return _cardDireccion(responsive, context, snapshot.data);
           } else {
-            return direction("", "");
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
+              height: responsive.hp(10),
+              color: Colors.transparent,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    width: responsive.wp(85),
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return _tarjetasDireccion(responsive,
+                              'agregar Dirección', '', '0', '0', '0');
+                        }),
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Center(
+                      child: FloatingActionButton(
+                        mini: true,
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'sel_Direccion');
+                        },
+                        backgroundColor: Colors.red,
+                        child: Icon(Icons.add),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+            //return direction("", "");
           }
         } else {
-          return direction("", "");
+          return Container();
         }
       },
     );
   }
 
-  Widget _telephone(BuildContext context, String agregar, String telefono) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-          color: Colors.white,
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(13)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('Número de Teléfono',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)),
-              FlatButton(
-                child: Text(
-                  '$agregar',
-                  style:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  dialogoIngresarTelefono(context);
-                },
-              ),
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                '+51 ',
+  Widget _cardDireccion(Responsive responsive, BuildContext context,
+      List<Direccion> direcciones) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          height: responsive.hp(1),
+        ),
+        Row(
+          children: <Widget>[
+            Spacer(),
+            GestureDetector(
+              onTap: (){
+                Navigator.pushNamed(context, 'gestionarDirecciones');
+              },
+              child: Text(
+                'Gestionar Direcciones',
                 style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22),
+                    color: Colors.red,
+                    fontSize: responsive.ip(2),
+                    fontWeight: FontWeight.bold),
               ),
-              Text(
-                '$telefono',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _zona(BuildContext context) {
-    final zonaBloc = ProviderBloc.zona(context);
-    zonaBloc.obtenerUsuarioZona();
-
-    return StreamBuilder(
-      stream: zonaBloc.zonaUsuarioStream,
-      builder: (BuildContext context, AsyncSnapshot<List<Zona>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return zonaDatos(context, 'Cambiar', snapshot.data);
-          } else {
-            return zonadatosFalsos(context);
-          }
-        } else {
-          return zonadatosFalsos(context);
-        }
-      },
-    );
-  }
-
-  Widget zonadatosFalsos(BuildContext context) {
-    final responsive = Responsive.of(context);
-    return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      decoration: BoxDecoration(
-        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-        color: Colors.white,
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(13),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Zona de Entrega',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: responsive.ip(2),
-                ),
-              ),
-              FlatButton(
-                child: Text(
-                  'Agregar',
-                  style:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, 'selZona', arguments: 'carrito');
-                },
-              ),
-            ],
-          ),
-          Text(
-            'Elegir Zona',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: responsive.ip(2)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget zonaDatos(BuildContext context, String agregar, List<Zona> zonas) {
-    final responsive = Responsive.of(context);
-    var zonacitos = 'Elegir zona';
-    if (zonas != null) {
-      if (zonas.length > 0) {
-        zonacitos = zonas[0].zonaNombre;
-      }
-    }
-
-    return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(color: Colors.black26, blurRadius: 3),
-        ],
-        color: Colors.white,
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(13),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Zona de entrega',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: responsive.ip(2),
-                ),
-              ),
-              FlatButton(
-                child: Text(
-                  '$agregar',
-                  style:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, 'selZona', arguments: 'carrito');
-                },
-              ),
-            ],
-          ),
-          Text(
-            '$zonacitos',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: responsive.ip(2)),
-          ),
-          SizedBox(
-            height: responsive.hp(1),
-          ),
-          Text(
-            'El monto de su pedido debe ser mayor a ${zonas[0].zonaPedidoMinimo}, sino se le agregará una comisión de ${zonas[0].zonaPrecio} soles.',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: responsive.ip(1.3),
             ),
+            GestureDetector(onTap: (){
+                Navigator.pushNamed(context, 'gestionarDirecciones');
+              },
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.red,
+              ),
+            ),
+            SizedBox(
+              width: responsive.wp(3),
+            )
+          ],
+        ),
+        Container(
+          margin:
+              EdgeInsets.only(top: responsive.hp(1), bottom: responsive.hp(1)),
+          height: responsive.hp(10),
+          color: Colors.transparent,
+          child: Stack(
+            children: <Widget>[
+              Container(
+                width: responsive.wp(99),
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: direcciones.length + 1,
+                    itemBuilder: (context, i) {
+                      if (i == direcciones.length) {
+                        return Container(
+                          width: responsive.wp(13),
+                          color: Colors.transparent,
+                        );
+                      }
+                      int index = i;
+                      return _tarjetasDireccion(
+                          responsive,
+                          direcciones[index].direccion,
+                          direcciones[index].referencia,
+                          direcciones[index].seleccionado,
+                          '1',
+                          direcciones[index].id_direccion.toString());
+                    }),
+              ),
+              Positioned(
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: Center(
+                    child: FloatingActionButton(
+                      mini: true,
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'sel_Direccion');
+                      },
+                      backgroundColor: Colors.red,
+                      child: Icon(Icons.add),
+                    ),
+                  ))
+            ],
           ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  Widget _tarjetasDireccion(Responsive responsive, String direccion,
+      String referencia, String seleccionado, String tap, String idDireccion) {
+    var refe;
+    if (referencia.isEmpty) {
+      refe = ' Referencia';
+    } else {
+      refe = referencia;
+    }
+    return GestureDetector(
+      onTap: () {
+        if (tap == '0') {
+          Navigator.pushNamed(context, 'sel_Direccion');
+        } else {
+          utils.seleccionarDireccion(context, idDireccion);
+        }
+      },
+      child: Container(
+        width: responsive.wp(35),
+        padding: EdgeInsets.symmetric(
+          horizontal: responsive.wp(1.5),
+        ),
+        margin: EdgeInsets.symmetric(
+          horizontal: responsive.wp(1.5),
+          vertical: responsive.hp(.5),
+        ),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.red),
+            borderRadius: BorderRadius.circular(10),
+            color: (seleccionado == '0') ? Colors.white : Colors.red),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Icon(
+              FontAwesomeIcons.houseUser,
+              size: responsive.ip(3),
+              color: (seleccionado == '0') ? Colors.red : Colors.white,
+            ),
+            SizedBox(
+              width: responsive.wp(2),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '$direccion',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: (seleccionado == '0') ? Colors.red : Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(1.5),
+                    ),
+                  ),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
+                  Text(
+                    '$refe',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: (seleccionado == '0') ? Colors.red : Colors.white,
+                      fontSize: responsive.ip(1.5),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget direction(String addres, String referencia) {
-    String addresito;
-    String agg;
-    String ref;
-
-    if (addres.isEmpty || addres == null) {
-      addresito = "-";
-      agg = "Agregar";
-    } else {
-      addresito = addres;
-      agg = "Cambiar";
-    }
-    if (referencia.isEmpty || addres == null) {
-      ref = "Sin Datos";
-    } else {
-      ref = referencia;
-    }
-    return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-          color: Colors.white,
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(13)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Dirección de Envío',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-              ),
-              FlatButton(
-                child: Text(
-                  '$agg',
-                  style:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, 'sel_Direccion');
-                },
-              ),
-            ],
-          ),
-          Text(
-            '$addresito',
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Row(
-            children: <Widget>[
-              Text('Referencia : ',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold)),
-              Text('$ref'),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _resumenPedido(BuildContext context, Responsive responsive,
-      double subtotal, double precioDelivery) {
+   */
+  /* Widget _resumenPedido(BuildContext context, Responsive responsive,
+      double subtotal) {
     var total, deliveryComision = 0.0;
 
-    final zonaBloc = ProviderBloc.zona(context);
-    zonaBloc.obtenerUsuarioZona();
+    /* 
+    zonaBloc.obtenerUsuarioZona(); */
 
     return StreamBuilder(
       stream: zonaBloc.zonaUsuarioStream,
@@ -878,20 +715,12 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         }
       },
     );
-  }
+  } */
 
   Widget _resumenPedidoDetalle(
       Responsive responsive,
-      double comisionDeliveryZona,
-      double precioDelivery,
-      double total,
-      double pedidoMinimo,
-      double subtotal) {
-    final subtotal2 = utils.format(subtotal);
-    final comisionDeliveryZona2 = utils.format(comisionDeliveryZona);
-    final precioDelivery2 = utils.format(precioDelivery);
+      double total) {
     final total2 = utils.format(total);
-    final pedidoMinimo2 = utils.format(pedidoMinimo);
 
     return Padding(
       padding: EdgeInsets.all(responsive.wp(2)),
@@ -918,7 +747,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                     ),
                   ),
                   Text(
-                    'S/ $subtotal2',
+                    'S/ $total2',
                     style: TextStyle(
                       fontSize: responsive.ip(2),
                     ),
@@ -932,14 +761,14 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      'Entrega Rápida',
+                      'Envío',
                       style: TextStyle(
                         fontSize: responsive.ip(2),
                       ),
                     ),
                   ),
                   Text(
-                    'S/ $precioDelivery2',
+                    'S/ 0.00',
                     style: TextStyle(
                       fontSize: responsive.ip(2),
                     ),
@@ -949,41 +778,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               SizedBox(
                 height: responsive.hp(2),
               ),
-              (comisionDeliveryZona > 0)
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                'Comisión por Delivery',
-                                style: TextStyle(
-                                  fontSize: responsive.ip(2),
-                                ),
-                              ),
-                            ),
-                            Text(
-                              'S/ $comisionDeliveryZona2',
-                              style: TextStyle(
-                                fontSize: responsive.ip(2),
-                              ),
-                            )
-                          ],
-                        ),
-                        Text(
-                          'Su total del pedido no llego al mínimo establecido para su zona, por lo tanto se le cobrará un recargo de $pedidoMinimo2 soles',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: responsive.ip(1.5),
-                          ),
-                        ),
-                        SizedBox(
-                          height: responsive.hp(2),
-                        ),
-                      ],
-                    )
-                  : Container(),
+              
               Divider(),
               Row(
                 children: <Widget>[
@@ -1015,50 +810,36 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
   }
 
   Widget _pagarCarrito(Responsive responsive) {
-    return GestureDetector(
-      child: Padding(
-        padding: EdgeInsets.all(
-          responsive.wp(2),
-        ),
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                width: double.infinity,
-                child: RaisedButton(
-                  color: Colors.red,
-                  textColor: Colors.white,
-                  child: Text(
-                    'Ordenar Pedido',
-                    style: TextStyle(
-                      fontSize: responsive.ip(2),
-                    ),
-                  ),
-                  onPressed: () {
-                    final prefs = Preferences();
-
-                    if (prefs.email != null && prefs.email != "") {
-                      Navigator.pushNamed(context, 'detallePago');
-                    } else {
-                      pedirLogueo();
-                    }
-                  },
-                ),
-              ),
-            ],
+    return Padding(
+      padding: EdgeInsets.all(
+        responsive.wp(2),
+      ),
+      child: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+        width: double.infinity,
+        child: RaisedButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: BorderSide(color: Colors.red)),
+          color: Colors.red,
+          textColor: Colors.white,
+          child: Text(
+            'Ordenar Pedido',
+            style: TextStyle(
+              fontSize: responsive.ip(2),
+            ),
           ),
+          onPressed: () {
+            final prefs = Preferences();
+
+            if (prefs.email != null && prefs.email != "") {
+              Navigator.pushNamed(context, 'detallePago');
+            } else {
+              pedirLogueo();
+            }
+          },
         ),
       ),
-      onTap: () {
-        final prefs = Preferences();
-
-        if (prefs.email != null && prefs.email != "") {
-          Navigator.pushNamed(context, 'detallePago');
-        } else {
-          pedirLogueo();
-        }
-      },
     );
   }
 
@@ -1090,56 +871,6 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
           ],
         );
       },
-    );
-  }
-
-  Widget _deliveryRapido(Responsive responsive) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(color: Colors.black26, blurRadius: 3),
-        ],
-        color: Colors.white,
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(13),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Agregar entrega rápida',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-              ),
-              Switch.adaptive(
-                value: estadoDelivery,
-                onChanged: (bool state) async {
-                  print(state);
-                  estadoDelivery = state;
-
-                  if (estadoDelivery) {
-                    await utils.agregarDeliveryRapido(context);
-                  } else {
-                    await utils.quitarDeliveryRapido(context);
-                  }
-                  //setState(() {});
-                },
-              ),
-            ],
-          ),
-          Text(
-            'Tu pedido llegará en máximo 1 hora',
-            textAlign: TextAlign.start,
-          )
-        ],
-      ),
     );
   }
 }

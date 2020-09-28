@@ -7,16 +7,25 @@ class DireccionBloc {
   final direccionDatabase = DireccionDatabase();
 
 
-final _direccionController = new BehaviorSubject<List<Direccion>>();
-
-  Stream<List<Direccion>> get direccionStream => _direccionController.stream;
+final _direccionesController = new BehaviorSubject<List<Direccion>>();
+final _direccionZonaController = new BehaviorSubject<List<Direccion>>();
+ 
+  Stream<List<Direccion>> get direccionZonaStream => _direccionZonaController.stream;
+  Stream<List<Direccion>> get direccionesStream => _direccionesController.stream;
 
   dispose() {
-    _direccionController?.close();
+    _direccionesController?.close();
+    _direccionZonaController?.close();
+  }
+ 
+
+  void obtenerDireccionesConZonas()async{
+
+    _direccionZonaController.sink.add(await direccionDatabase.obtenerDireccionesConZonas()); 
   }
 
-  void obtenerDireccion( )async{ 
-    _direccionController.sink.add(await direccionDatabase.obtenerdireccion()); 
-    
+   void obtenerDirecciones()async{
+
+    _direccionesController.sink.add(await direccionDatabase.obtenerDirecciones()); 
   }
-}
+} 

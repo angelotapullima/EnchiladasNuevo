@@ -1,6 +1,8 @@
 
 
+import 'package:enchiladasapp/src/bloc/carrito_completo.dart';
 import 'package:enchiladasapp/src/bloc/nuevo_metodo_pago.dart';
+import 'package:enchiladasapp/src/bloc/pantalla_bloc.dart';
 import 'package:enchiladasapp/src/bloc/zona_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +58,8 @@ class ProviderBloc extends InheritedWidget {
   final puzzleBloc = PuzzleBloc();
   final zonaBloc = ZonaBloc();
   final nuevoMetodoPagoBloc = NuevoMetodoPagoBloc();
+  final carritoCompletoBloc = CarritoCompletoBloc();
+  final pantallaBloc = PantallaBloc();
 
   static ProviderBloc _instancia;
 
@@ -139,6 +143,16 @@ class ProviderBloc extends InheritedWidget {
   static NuevoMetodoPagoBloc npago(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .nuevoMetodoPagoBloc;
+  }
+
+  static CarritoCompletoBloc carritoCompleto(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .carritoCompletoBloc;
+  }
+
+  static PantallaBloc pantalla(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .pantallaBloc;
   }
     
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -5,7 +7,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class OrdenesPendientes extends StatelessWidget {
+class OrdenesPendientes extends StatefulWidget {
+  @override
+  _OrdenesPendientesState createState() => _OrdenesPendientesState();
+}
+
+class _OrdenesPendientesState extends State<OrdenesPendientes> {
+  Timer timer;
+
+  bool banderaTimer = true;
+
+  @override
+  void dispose() {
+    banderaTimer = false;
+    print('dispose bb');
+
+    timer.cancel();
+    super.dispose();
+  }
+
   final _refreshController = RefreshController(initialRefresh: false);
 
   void _onRefresh(BuildContext context) async {
@@ -18,7 +38,21 @@ class OrdenesPendientes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pedidoBloc = ProviderBloc.pedido(context);
+
     pedidoBloc.obtenerPedidosPendientes(context);
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
+      if (banderaTimer) {
+        print('ordenes pendientes true ');
+        pedidoBloc.obtenerPedidosPendientes(context);
+      } else {
+        print('ordenes pendientes false ');
+        timer.cancel();
+      }
+    });
+
+/* 
+    final pedidoBloc = ProviderBloc.pedido(context);
+    pedidoBloc.obtenerPedidosPendientes(context); */
     final responsive = Responsive.of(context);
 
     return Scaffold(
@@ -236,6 +270,8 @@ class OrdenesPendientes extends StatelessWidget {
         ),
       ),
       onTap: () {
+        banderaTimer =false;
+        
         Navigator.pushNamed(context, 'detallePedido', arguments: data);
       },
     );

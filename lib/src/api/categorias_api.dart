@@ -1,9 +1,11 @@
 import 'package:enchiladasapp/src/database/categorias_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
+import 'package:enchiladasapp/src/database/temporizador_database.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/temporizador_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:fluttertoast/fluttertoast.dart'; 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -11,6 +13,7 @@ class CategoriasApi {
   final String _url = 'https://delivery.lacasadelasenchiladas.pe';
   final categoriasDatabase = CategoriasDatabase();
   final productoDatabase = ProductoDatabase();
+  final temporizadorDatabase = TemporizadorDatabase();
 
   Future<bool> obtenerAmbos() async {
     try {
@@ -18,102 +21,85 @@ class CategoriasApi {
       final resp = await http.post(url, body: {});
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       if (decodedData == null) return false;
-      
 
       for (int i = 0; i < decodedData['result']['data'].length; i++) {
         if (decodedData['result']['data'].length > 0) {
-          final id = decodedData['result']['data'][i]['id_categoria'];
-          final dato = await categoriasDatabase.consultarPorId(id);
           CategoriaData categoriaData = CategoriaData();
 
-          categoriaData.idCategoria = decodedData['result']['data'][i]['id_categoria'];
-          categoriaData.categoriaNombre = decodedData['result']['data'][i]['categoria_nombre'];
-          categoriaData.categoriaEstado = decodedData['result']['data'][i]['categoria_estado'];
-          categoriaData.categoriaMostrarApp = decodedData['result']['data'][i]['categoria_mostrar_app'];
-          categoriaData.categoriaTipo = decodedData['result']['data'][i]['categoria_tipo'];
+          categoriaData.idCategoria =
+              decodedData['result']['data'][i]['id_categoria'];
+          categoriaData.categoriaNombre =
+              decodedData['result']['data'][i]['categoria_nombre'];
+          categoriaData.categoriaIcono =
+              decodedData['result']['data'][i]['categoria_icono'];
+          categoriaData.categoriaTipo =
+              decodedData['result']['data'][i]['categoria_tipo'];
+          categoriaData.categoriaFoto =
+              decodedData['result']['data'][i]['categoria_foto'];
+              categoriaData.categoriaBanner =decodedData['result']['data'][i]['categoria_banner'];
+          categoriaData.categoriaPromocion =
+              decodedData['result']['data'][i]['categoria_promocion'];
+          categoriaData.categoriaEstado =
+              decodedData['result']['data'][i]['categoria_estado'];
+          categoriaData.categoriaMostrarApp =
+              decodedData['result']['data'][i]['categoria_mostrar_app'];
 
-          if (dato.length > 0) {
-            categoriaData.categoriaCod = dato[0].categoriaCod;
-            categoriaData.idAlmacen = dato[0].idAlmacen;
+          categoriasDatabase.insertarCategoriasDb(categoriaData);
 
-            categoriasDatabase.updateCategoriaDb(categoriaData);
-            var productos = List<dynamic>();
-            productos = decodedData['result']['data'][i]['productos'];
-            //print('productos tamaño ${productos.length}');
+          //TEMPORIZADOR
 
-            for (int x = 0; x < productos.length; x++) {
-              final idproducto = productos[x]['id_producto'];
-              final datoproducto =
-                  await productoDatabase.consultarPorId(idproducto);
-              //print('id productos ${datoproducto.length}');
+          var temporizador = List<dynamic>();
+          temporizador = decodedData['result']['data'][i]['temporizador'];
 
-              ProductosData productosData = ProductosData();
+          TemporizadorModel temporizadorModel = TemporizadorModel();
+          temporizadorModel.idTemporizador = decodedData['result']['data'][i]['id_categoria'];
+          temporizadorModel.temporizadorTipo = temporizador[0]['temporizador_tipo'];
+          temporizadorModel.temporizadorFechainicio = temporizador[0]['temporizador_fechainicio'];
+          temporizadorModel.temporizadorFechafin = temporizador[0]['temporizador_fechafin'];
+          temporizadorModel.temporizadorHorainicio = temporizador[0]['temporizador_horainicio'];
+          temporizadorModel.temporizadorHorafin = temporizador[0]['temporizador_horafin'];
+          temporizadorModel.temporizadorLunes = temporizador[0]['temporizador_dias']['Lunes'];
+          temporizadorModel.temporizadorMartes = temporizador[0]['temporizador_dias']['Martes'];
+          temporizadorModel.temporizadorMiercoles = temporizador[0]['temporizador_dias']['Miercoles'];
+          temporizadorModel.temporizadorJueves = temporizador[0]['temporizador_dias']['Jueves'];
+          temporizadorModel.temporizadorViernes = temporizador[0]['temporizador_dias']['Viernes'];
+          temporizadorModel.temporizadorSabado = temporizador[0]['temporizador_dias']['Sabado'];
+          temporizadorModel.temporizadorDomingo = temporizador[0]['temporizador_dias']['Domingo'];
 
-              productosData.idProducto = productos[x]['id_producto'];
-              productosData.idCategoria = productos[x]['id_categoria'];
-              productosData.productoNombre = productos[x]['producto_nombre'];
-              productosData.productoFoto = productos[x]['producto_foto'];
-              productosData.productoPrecio = productos[x]['producto_precio'];
-              productosData.productoUnidad = productos[x]['producto_unidad'];
-              productosData.productoEstado = productos[x]['producto_estado'];
-              productosData.productoDescripcion = productos[x]['producto_detalle'];
+          await temporizadorDatabase.insertarTemporizador(temporizadorModel);
 
-              if (datoproducto.length > 0) {
-                productosData.productoFavorito =
-                    datoproducto[0].productoFavorito;
-                productoDatabase.updateProductosDb(productosData);
-                //print('actualizado producto ${productosData.idProducto}  ');
-              } else {
-                productosData.productoFavorito = 0;
+          //PRODUCTOS
+          var productos = List<dynamic>();
+          productos = decodedData['result']['data'][i]['productos'];
+          //print('productos tamaño ${productos.length}');
 
-                productoDatabase.insertarProductosDb(productosData);
-                //print('nuevo producto ${productosData.idProducto}  ');
-              }
+          for (int x = 0; x < productos.length; x++) {
+            final idproducto = productos[x]['id_producto'];
+            final datoproducto =
+                await productoDatabase.consultarPorId(idproducto);
+            //print('id productos ${datoproducto.length}');
+            ProductosData productosData = ProductosData();
+            productosData.idProducto = productos[x]['id_producto'];
+            productosData.idCategoria = productos[x]['id_categoria'];
+            productosData.productoNombre = productos[x]['producto_nombre'];
+            productosData.productoFoto = productos[x]['producto_foto'];
+            productosData.productoPrecio = productos[x]['producto_precio'];
+            productosData.productoUnidad = productos[x]['producto_unidad'];
+            productosData.productoEstado = productos[x]['producto_estado'];
+            productosData.productoDescripcion =
+                productos[x]['producto_detalle'];
+
+            if (datoproducto.length > 0) {
+              productosData.productoFavorito = datoproducto[0].productoFavorito;
+              productoDatabase.updateProductosDb(productosData);
+              //print('actualizado producto ${productosData.idProducto}  ');
+            } else {
+              productosData.productoFavorito = 0;
+
+              productoDatabase.insertarProductosDb(productosData);
+              //print('nuevo producto ${productosData.idProducto}  ');
             }
-
-            //print('actualizado categoria ${categoriaData.idCategoria}  ');
-          } else {
-            categoriaData.categoriaCod = " ";
-            categoriaData.idAlmacen = " ";
-
-            categoriasDatabase.insertarCategoriasDb(categoriaData);
-
-            var productos = List<dynamic>();
-            productos = decodedData['result']['data'][i]['productos'];
-            //print('productos tamaño ${productos.length}');
-
-            for (int x = 0; x < productos.length; x++) {
-              final idproducto = productos[x]['id_producto'];
-              final datoproducto =
-                  await productoDatabase.consultarPorId(idproducto);
-              //print('id productos ${datoproducto.length}');
-
-              ProductosData productosData = ProductosData();
-
-              productosData.idProducto = productos[x]['id_producto'];
-              productosData.idCategoria = productos[x]['id_categoria'];
-              productosData.productoNombre = productos[x]['producto_nombre'];
-              productosData.productoFoto = productos[x]['producto_foto'];
-              productosData.productoPrecio = productos[x]['producto_precio'];
-              productosData.productoUnidad = productos[x]['producto_unidad'];
-              productosData.productoEstado = productos[x]['producto_estado'];
-              productosData.productoDescripcion = productos[x]['producto_detalle'];
-
-              if (datoproducto.length > 0) {
-                productosData.productoFavorito =
-                    datoproducto[0].productoFavorito;
-                productoDatabase.updateProductosDb(productosData);
-                //print('actualizado producto ${productosData.idProducto}  ');
-              } else {
-                productosData.productoFavorito = 0;
-
-                productoDatabase.insertarProductosDb(productosData);
-                //print('nuevo producto ${productosData.idProducto}  ');
-              }
-            }
-            //print('nuevo categoria  ${categoriaData.idCategoria}');
           }
-
           //categoriasDatabase.insertarCategoriasDb(cate[i]);
         }
       }
@@ -122,7 +108,8 @@ class CategoriasApi {
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
 
-      utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
+      utils.showToast(
+          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return false;
     }
   }
@@ -147,13 +134,11 @@ class CategoriasApi {
           categoriaData.idCategoria = categorias.result.data[i].idCategoria;
           categoriaData.categoriaNombre =
               categorias.result.data[i].categoriaNombre;
-          categoriaData.categoriaCod = categorias.result.data[i].categoriaCod;
-          categoriaData.idAlmacen = categorias.result.data[i].idAlmacen;
           categoriaData.categoriaEstado =
               categorias.result.data[i].categoriaEstado;
 
           if (dato.length > 0) {
-            categoriasDatabase.updateCategoriaDb(categoriaData);
+            categoriasDatabase.insertarCategoriasDb(categoriaData);
 
             //'actualizado ${categoriaData.idCategoria}  ');
           } else {
@@ -174,13 +159,13 @@ class CategoriasApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
+      utils.showToast(
+          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return [];
     }
   }
 
-  Future<List<ProductosData>> obtenerProductoCategoria(
-       String id) async {
+  Future<List<ProductosData>> obtenerProductoCategoria(String id) async {
     try {
       final lista = List<ProductosData>();
 
@@ -229,7 +214,8 @@ class CategoriasApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
+      utils.showToast(
+          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return [];
     }
   }

@@ -9,7 +9,7 @@ import 'package:enchiladasapp/src/utils/translate_animation.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
-import 'package:enchiladasapp/src/widgets/zona_direction.dart';
+import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -72,21 +72,23 @@ class _DetalleProducto extends State<DetalleProductitos> {
                 parallaxOffset: 0.1,
                 backdropEnabled: true,
                 body: Stack(children: <Widget>[
-                  _background(),
+                  
                   _backgroundImage(context, snapshot.data[0]),
                   _crearAppbar(responsive),
                   TranslateAnimation(
-                      duration: const Duration(milliseconds: 400),
-                      child: _contenido(snapshot.data[0], responsive, context)),
+                    duration: const Duration(milliseconds: 400),
+                    child: _contenido(snapshot.data[0], responsive, context),
+                  ),
                 ]),
                 panelBuilder: (sc) => TranslateAnimation(
-                    duration: const Duration(milliseconds: 600),
-                    child: _carritoProductos(responsive, sc)),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(18.0),
-                  topRight: Radius.circular(18.0),
+                  duration: const Duration(milliseconds: 600),
+                  child: _carritoProductos(responsive, sc),
                 ),
-                onPanelSlide: (double pos) => setState(() {}),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                //onPanelSlide: (double pos) => setState(() {}),
               );
             } else {
               return Center(
@@ -186,7 +188,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
     );
     return Padding(
       padding: EdgeInsets.only(
-        top: responsive.hp(11),
+        top: responsive.hp(25),
       ),
       child: DraggableScrollableSheet(
         initialChildSize: 0.7,
@@ -273,13 +275,13 @@ class _DetalleProducto extends State<DetalleProductitos> {
             return Column(children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    if (panelController.isPanelOpen) {
-                      panelController.animatePanelToPosition(0);
-                    } else {
-                      panelController.animatePanelToPosition(1);
-                    }
-                  });
+                  //setState(() {
+                  if (panelController.isPanelOpen) {
+                    panelController.animatePanelToPosition(0);
+                  } else {
+                    panelController.animatePanelToPosition(1);
+                  }
+                  //});
                 },
                 child: panelRojoMonto(responsive, 0.00, '0'),
               ),
@@ -411,15 +413,15 @@ class _DetalleProducto extends State<DetalleProductitos> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            setState(
-              () {
-                if (panelController.isPanelOpen) {
-                  panelController.animatePanelToPosition(0);
-                } else {
-                  panelController.animatePanelToPosition(1);
-                }
-              },
-            );
+            /* setState(
+              () { */
+            if (panelController.isPanelOpen) {
+              panelController.animatePanelToPosition(0);
+            } else {
+              panelController.animatePanelToPosition(1);
+            }
+            /* },
+            ); */
           },
           child: panelRojoMonto(
             responsive,
@@ -428,16 +430,16 @@ class _DetalleProducto extends State<DetalleProductitos> {
           ),
         ),
         Expanded(
-            child: ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: <Widget>[
-            _resumenPedido(responsive, subtotal, valorDelivery),
-            _deliveryRapido(responsive),
-            _pagarCarrito(context, responsive),
-            _listaProductos(responsive, carrito),
-          ],
-        ))
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            children: <Widget>[
+              _resumenPedido(responsive, subtotal, valorDelivery),
+              _pagarCarrito(context, responsive),
+              _listaProductos(responsive, carrito),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -487,9 +489,10 @@ class _DetalleProducto extends State<DetalleProductitos> {
   }
 
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
+    print('detalle ${carrito.productoFoto}');
     final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
         double.parse(carrito.productoCantidad));
-    var observacionProducto = 'Toca para agregar descripción';
+    var observacionProducto = 'Toca para agregar una observación';
     if (carrito.productoObservacion != null &&
         carrito.productoObservacion != ' ') {
       observacionProducto = carrito.productoObservacion;
@@ -506,6 +509,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                   children: <Widget>[
                     Container(
                       width: responsive.wp(35),
+                      height: responsive.hp(12),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
@@ -515,13 +519,14 @@ class _DetalleProducto extends State<DetalleProductitos> {
                               fit: BoxFit.cover),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
-                          imageUrl: carrito.productoFoto,
+                          imageUrl: '${carrito.productoFoto}',
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
-                                image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.fill,
-                            )),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -765,42 +770,26 @@ class _DetalleProducto extends State<DetalleProductitos> {
 
   Widget _crearAppbar(Responsive responsive) {
     return Container(
-      height: responsive.hp(9),
+      height: kToolbarHeight,
       child: AppBar(
         backgroundColor: Colors.transparent,
       ),
     );
   }
 
-  Widget _background() {
-    return Container(
-      color: Colors.red,
-      width: double.infinity,
-      height: double.infinity,
-    );
-  }
 
   Widget _backgroundImage(BuildContext context, ProductosData carrito) {
     final size = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: Column(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-            ),
+    return Container(
+           
             width: double.infinity,
-            height: size.height * 0.38,
+            height: size.height * 0.50,
             child: Hero(
               tag: '${carrito.idProducto}',
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
+               
+
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager(),
                   placeholder: (context, url) => Image(
@@ -819,63 +808,11 @@ class _DetalleProducto extends State<DetalleProductitos> {
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-            ),
-          )
-        ],
-      ),
+          
     );
   }
 
-  Widget _deliveryRapido(Responsive responsive) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)],
-          color: Colors.white,
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(13)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('Agregar entrega rápida',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)),
-              Switch.adaptive(
-                value: estadoDelivery,
-                onChanged: (bool state) async {
-                  print(state);
-                  estadoDelivery = state;
-
-                  if (estadoDelivery) {
-                    await utils.agregarDeliveryRapido(context);
-                  } else {
-                    await utils.quitarDeliveryRapido(context);
-                  }
-                  //setState(() {});
-                },
-              ),
-            ],
-          ),
-          Text(
-            'Tu pedido llegará en máximo 1 hora',
-            textAlign: TextAlign.start,
-          )
-        ],
-      ),
-    );
-  }
-
-  void dialogoObservacionProducto(String id) {
+ void dialogoObservacionProducto(String id) {
     showDialog(
         context: context,
         barrierDismissible: true,

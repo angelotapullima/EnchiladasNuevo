@@ -1,13 +1,13 @@
 
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
+import 'package:enchiladasapp/src/pages/gestionar_direcciones.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
 import 'package:enchiladasapp/src/pages/market_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_pago_page.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
-import 'package:enchiladasapp/src/pages/seleccion_zona_carrito_page.dart';
 import 'package:enchiladasapp/src/pages/ticket.dart';
 import 'package:enchiladasapp/src/pages/webview.dart';
 import 'package:enchiladasapp/src/pages/zoom_foto_direccion.dart';
@@ -74,7 +74,7 @@ void main() async {
   var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
-      requestSoundPermission: false,
+      requestSoundPermission: true,
       onDidReceiveLocalNotification:
           (int id, String title, String body, String payload) async {
         didReceiveLocalNotificationSubject.add(ReceivedNotification(
@@ -215,7 +215,6 @@ class _MyAppState extends State<MyApp> {
           'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
           'mapaRepartidor': (BuildContext context) => MapaRepartidor(),
           'mapaCliente': (BuildContext context) => MapaCliente(),
-          'selZona': (BuildContext context) => SeleccionZona(),
           'ranking': (BuildContext context) => RankingPage(),
           'rankingReport': (BuildContext context) => RankingReport(),
           'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
@@ -223,6 +222,7 @@ class _MyAppState extends State<MyApp> {
           'timeline': (BuildContext context) => DeliveryTimeline(),
           'webView': (BuildContext context) => WebViewExample(),
           'ticket': (BuildContext context) => Ticket(),
+          'gestionarDirecciones': (BuildContext context) => GestionarDirecciones(),
 
 /* 
 

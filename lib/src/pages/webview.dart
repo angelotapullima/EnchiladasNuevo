@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:enchiladasapp/src/bloc/nuevo_metodo_pago.dart';
+import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/argumentDetallePedido.dart';
 import 'package:enchiladasapp/src/models/argumentsWebview.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -11,6 +14,7 @@ class WebViewExample extends StatefulWidget {
 }
 
 class _WebViewExampleState extends State<WebViewExample> {
+  
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
@@ -18,6 +22,8 @@ class _WebViewExampleState extends State<WebViewExample> {
   Widget build(BuildContext context) {
     final ArgumentsDetallePago args = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
+
+    final nuevoMetodoPagoBloc = ProviderBloc.npago(context);
 
     return WillPopScope(
       onWillPop: () => showDialog<bool>(
@@ -92,115 +98,132 @@ class _WebViewExampleState extends State<WebViewExample> {
         appBar: AppBar(
           title: Text('Pago Online'),
           // This drop down menu demonstrates that Flutter widgets can be shown over the web view.
-          actions: <Widget>[
+          /* actions: <Widget>[
             NavigationControls(_controller.future),
             //SampleMenu(_controller.future),
-          ],
+          ], */
         ),
         // We're using a Builder here so we have a context that is below the Scaffold
         // to allow calling Scaffold.of(context) so we can show a snackbar.
-        body: Builder(
-          builder: (BuildContext context) {
-            return WebView(
-              
-              initialUrl: args.link,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-              },
-              // elimine esto cuando los literales de colección se establezcan.
-              // ignore: prefer_collection_literals
-              javascriptChannels: <JavascriptChannel>[
-                _toasterJavascriptChannel(context),
-              ].toSet(),
-              navigationDelegate: (NavigationRequest request) {
-                if (request.url.startsWith('www.google.com')) {
-                  print('blocking navigation to $request}');
-                  return NavigationDecision.prevent;
-                }
-                print('allowing navigation to $request');
-                return NavigationDecision.navigate;
-              },
-              onPageStarted: (String url) {
-                print('Page started loading: $url');
-
-                if (url ==
-                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
-                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                  argumentsWebview.idPedido = args.idPedido;
-                  argumentsWebview.codigo = '1';
-
-                  Navigator.pushNamed(context, 'ticket',
-                      arguments: argumentsWebview);
-                } else if (url ==
-                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
-                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                  argumentsWebview.idPedido = args.idPedido;
-                  argumentsWebview.codigo = '2';
-
-                  Navigator.pushNamed(context, 'ticket',
-                      arguments: argumentsWebview);
-                } else if (url ==
-                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
-                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                  argumentsWebview.idPedido = args.idPedido;
-                  argumentsWebview.codigo = '3';
-
-                  Navigator.pushNamed(context, 'ticket',
-                      arguments: argumentsWebview);
-                } else if (url ==
-                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
-                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                  argumentsWebview.idPedido = args.idPedido;
-                  argumentsWebview.codigo = '4';
-
-                  Navigator.pushNamed(context, 'ticket',
-                      arguments: argumentsWebview);
-                }
-              },
-              onPageFinished: (String url) {
-                print('Page finished loading: $url');
-
-                if (url ==
-                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
-                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                  argumentsWebview.idPedido = args.idPedido;
-                  argumentsWebview.codigo = '1';
-
-                  Navigator.pushNamed(context, 'ticket',
-                      arguments: argumentsWebview);
-                } else if (url ==
-                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
-                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                  argumentsWebview.idPedido = args.idPedido;
-                  argumentsWebview.codigo = '2';
-
-                  Navigator.pushNamed(context, 'ticket',
-                      arguments: argumentsWebview);
-                } else if (url ==
-                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
-                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                  argumentsWebview.idPedido = args.idPedido;
-                  argumentsWebview.codigo = '3';
-
-                  Navigator.pushNamed(context, 'ticket',
-                      arguments: argumentsWebview);
-                } else if (url ==
-                    'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
-                  ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                  argumentsWebview.idPedido = args.idPedido;
-                  argumentsWebview.codigo = '4';
-
-                  Navigator.pushNamed(context, 'ticket',
-                      arguments: argumentsWebview);
-                } 
-              },
-              gestureNavigationEnabled: true,
-            );
-          },
-        ),
+        body: StreamBuilder(
+                 stream: nuevoMetodoPagoBloc.estadoWebview,
+                 builder: (context, snapshot) {
+                   return Stack(
+                     children: <Widget>[
+                       _contenidoWebview(args,nuevoMetodoPagoBloc),
+                       (nuevoMetodoPagoBloc.valorEstadoWe ==true)?Center(child:CupertinoActivityIndicator()):Container()
+                     ],
+                   );
+                 }
+               )
       ),
     );
+  }
+
+  Builder _contenidoWebview(ArgumentsDetallePago args,NuevoMetodoPagoBloc nuevoMetodoPagoBloc) {
+    return Builder(
+              builder: (BuildContext context) {
+                return WebView(
+                  initialUrl: args.link,
+                  javascriptMode: JavascriptMode.unrestricted,
+                  onWebViewCreated: (WebViewController webViewController) {
+                    _controller.complete(webViewController);
+                  },
+                  // elimine esto cuando los literales de colección se establezcan.
+                  // ignore: prefer_collection_literals
+                  javascriptChannels: <JavascriptChannel>[
+                    _toasterJavascriptChannel(context),
+                  ].toSet(),
+                  /* navigationDelegate: (NavigationRequest request) {
+                    if (request.url.startsWith('www.google.com')) {
+                      print('blocking navigation to $request}');
+                      return NavigationDecision.prevent;
+                    }
+                    print('allowing navigation to $request');
+                    return NavigationDecision.navigate;
+                  }, */
+                  onPageStarted: (String url) {
+                    
+                    print('Page started loading: $url');
+                    nuevoMetodoPagoBloc.changeEstadoWebview(true);
+
+                    if (url ==
+                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = args.idPedido;
+                      argumentsWebview.codigo = '1';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                    } else if (url ==
+                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = args.idPedido;
+                      argumentsWebview.codigo = '2';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                    } else if (url ==
+                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = args.idPedido;
+                      argumentsWebview.codigo = '3';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                    } else if (url ==
+                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = args.idPedido;
+                      argumentsWebview.codigo = '4';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                    }
+                  },
+                  onPageFinished: (String url) {
+
+                    nuevoMetodoPagoBloc.changeEstadoWebview(false);
+                    print('Page finished loading: $url');
+
+                    if (url ==
+                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = args.idPedido;
+                      argumentsWebview.codigo = '1';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                    } else if (url ==
+                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = args.idPedido;
+                      argumentsWebview.codigo = '2';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                    } else if (url ==
+                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = args.idPedido;
+                      argumentsWebview.codigo = '3';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                    } else if (url ==
+                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = args.idPedido;
+                      argumentsWebview.codigo = '4';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                    }
+                  },
+                  gestureNavigationEnabled: true,
+                );
+              },
+            );
   }
 
   JavascriptChannel _toasterJavascriptChannel(BuildContext context) {

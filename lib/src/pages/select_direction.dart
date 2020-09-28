@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/models/direccion_model.dart';
+import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,6 +19,10 @@ class MapsSample extends StatefulWidget {
 class _MapsSampleState extends State<MapsSample> {
   TextEditingController referenciaController = TextEditingController();
   TextEditingController direccionController = TextEditingController();
+
+  String dropdownDistrito = '';
+  int cantItems = 0;
+
   final Set<Marker> _markers = Set();
   MapType _defaultMapType = MapType.normal;
   Completer<GoogleMapController> _controller = Completer();
@@ -39,6 +43,8 @@ class _MapsSampleState extends State<MapsSample> {
   double latitude = -3.747620420285213;
   double longitude = -73.24365925043821;
   String direccion = "";
+  String refe = "";
+  String idDistrito;
   void _obtenerUbicacion() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -72,7 +78,7 @@ class _MapsSampleState extends State<MapsSample> {
       body: Stack(
         children: <Widget>[
           Container(
-            height: responsive.hp(65),
+            height: responsive.hp(61),
             child: GoogleMap(
               markers: _markers,
               mapType: _defaultMapType,
@@ -101,16 +107,16 @@ class _MapsSampleState extends State<MapsSample> {
               child: CircleContainer(
                 radius: responsive.ip(2.5),
                 color: Colors.grey[200],
-                widget: Icon(Icons.arrow_back, color: Colors.black),
+                widget: Center(child: BackButton()),
               ),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
           ),
-          _modalDireccion(context, responsive),
+          contenidoDireccion(context, responsive),
           Container(
-            height: responsive.hp(65),
+            height: responsive.hp(61),
             child: Center(
               child: Icon(
                 FontAwesomeIcons.mapPin,
@@ -144,194 +150,351 @@ class _MapsSampleState extends State<MapsSample> {
     List<Placemark> placemark =
         await Geolocator().placemarkFromCoordinates(latGeo, lonGeo);
     direccion = "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare}";
+
+    direccionController.text = direccion;
     print(direccion);
-    utils.agregarDireccion(context, direccion, latitude, longitude, "");
     latitude = latGeo;
     longitude = lonGeo;
+    setState(() {});
   }
 
-  Widget _modalDireccion(BuildContext context, Responsive responsive) {
-    final direcionBloc = ProviderBloc.dire(context);
-    direcionBloc.obtenerDireccion();
-
-    return StreamBuilder(
-      stream: direcionBloc.direccionStream,
-      builder: (BuildContext context, AsyncSnapshot<List<Direccion>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return contenidoDireccion(responsive, snapshot.data[0].direccion,
-                snapshot.data[0].referencia);
-          } else {
-            return contenidoDireccion(responsive, "", "");
-          }
-        } else {
-          return contenidoDireccion(responsive, "", "");
-        }
-      },
-    );
-  }
-
+  List<String> list;
   Widget contenidoDireccion(
-      Responsive responsive, String direccion, String referencia) {
-    String refe = "";
+    BuildContext context,
+    Responsive responsive,
+  ) {
+    final zonaBloc = ProviderBloc.zona(context);
+    zonaBloc.obtenerZonas();
     //direccionController.text = direccion;
-    if (referencia.isEmpty || referencia == null) {
-      refe = 'Agregar Referencia de Dirección';
+    if (refe.isEmpty) {
+      refe = '1';
     } else {
-      refe = referencia;
+      refe = refe;
     }
     //referenciaController.text = refe;
-    return Padding(
-      padding: EdgeInsets.only(top: responsive.hp(65)),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-        width: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadiusDirectional.only(
-              topStart: Radius.circular(20),
-              topEnd: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(color: Colors.black26, blurRadius: 5),
-            ],
-            color: Colors.white),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: responsive.wp(2),
-            ),
-            Text(
-              'Dirección de entrega',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: responsive.ip(2.5),
-              ),
-            ),
-            SizedBox(
-              height: responsive.hp(2),
-            ),
-            Container(
-              padding: EdgeInsets.all(
-                responsive.ip(.5),
-              ),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey[200]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  SizedBox(
-                    width: responsive.wp(5),
-                  ),
-                  Icon(
-                    FontAwesomeIcons.mapMarked,
-                    color: Colors.red,
-                  ),
-                  SizedBox(
-                    width: responsive.wp(5),
-                  ),
-                  Expanded(
-                    child: Text(
-                      direccion,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: responsive.ip(2),
+    return StreamBuilder(
+        stream: zonaBloc.zonasStream,
+        builder: (BuildContext context, AsyncSnapshot<List<Zona>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              if (cantItems == 0) {
+                list = List<String>();
+                list.add('Seleccionar Distrito');
+
+                for (int i = 0; i < snapshot.data.length; i++) {
+                  String nombreDistritos = snapshot.data[i].zonaNombre;
+                  list.add(nombreDistritos);
+                }
+                dropdownDistrito = 'Seleccionar Distrito';
+/* 
+                dropdownDistrito = "${snapshot.data[0].zonaNombre}";
+                idDistrito = "${snapshot.data[0].idZona}"; */
+              }
+
+              return Padding(
+                padding: EdgeInsets.only(top: responsive.hp(60)),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadiusDirectional.only(
+                        topStart: Radius.circular(20),
+                        topEnd: Radius.circular(20),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: responsive.wp(5),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.pencilAlt,
-                    ),
-                    color: Colors.red,
-                    onPressed: () {
-                      modalIngresarDireccion();
-                    },
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: responsive.hp(1),
-            ),
-            Container(
-              padding: EdgeInsets.all(
-                responsive.ip(.5),
-              ),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey[200]),
-              child: GestureDetector(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    SizedBox(
-                      width: responsive.wp(5),
-                    ),
-                    Icon(
-                      Icons.add,
-                      color: Colors.red,
-                    ),
-                    SizedBox(
-                      width: responsive.wp(5),
-                    ),
-                    Expanded(
-                      child: Text(
-                        refe,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: responsive.ip(2)),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black26, blurRadius: 5),
+                      ],
+                      color: Colors.white),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: responsive.wp(2),
                       ),
-                    ),
-                    SizedBox(
-                      width: responsive.wp(5),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        FontAwesomeIcons.pencilAlt,
+                      Text(
+                        'Dirección de entrega',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsive.ip(2.5),
+                        ),
                       ),
-                      color: Colors.red,
-                      onPressed: () {
-                        modalIngresarReferencia();
-                      },
-                    )
-                  ],
+                      SizedBox(
+                        height: responsive.hp(2),
+                      ),
+                      Container(
+                        height: responsive.hp(6),
+                        padding: EdgeInsets.all(
+                          responsive.ip(.5),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey[200]),
+                        child: GestureDetector(
+                          onTap: (){
+                            direccionController.text = direccion;
+                            modalIngresarDireccion();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              SizedBox(
+                                width: responsive.wp(5),
+                              ),
+                              Icon(
+                                FontAwesomeIcons.mapMarked,
+                                color: Colors.red,
+                                size: responsive.ip(2.5),
+                              ),
+                              SizedBox(
+                                width: responsive.wp(5),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  direccion,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: responsive.ip(2),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: responsive.wp(5),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  FontAwesomeIcons.pencilAlt,
+                                  size: responsive.ip(2.5),
+                                ),
+                                color: Colors.red,
+                                onPressed: () {
+                                  direccionController.text = direccion;
+                                  modalIngresarDireccion();
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
+                      Container(
+                        height: responsive.hp(6),
+                        padding: EdgeInsets.all(
+                          responsive.ip(.5),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey[200]),
+                        child: GestureDetector(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              SizedBox(
+                                width: responsive.wp(5),
+                              ),
+                              Icon(
+                                Icons.add,
+                                color: Colors.red,
+                                size: responsive.ip(2.5),
+                              ),
+                              SizedBox(
+                                width: responsive.wp(5),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  (refe == '1')
+                                      ? 'Agregar referencia de Dirección'
+                                      : refe,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style:
+                                      TextStyle(fontSize: responsive.ip(1.8)),
+                                ),
+                              ),
+                              SizedBox(
+                                width: responsive.wp(5),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  FontAwesomeIcons.pencilAlt,
+                                  size: responsive.ip(2.5),
+                                ),
+                                color: Colors.red,
+                                onPressed: () {
+                                  modalIngresarReferencia();
+                                },
+                              )
+                            ],
+                          ),
+                          onTap: () {
+                            modalIngresarReferencia();
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
+                      Container(
+                        height: responsive.hp(6),
+                        width: double.infinity,
+                        padding: EdgeInsets.all(
+                          responsive.ip(.5),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey[200]),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(4),
+                          ),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            border: Border.all(color: Colors.transparent),
+                          ),
+                          child: DropdownButton<String>(
+                            dropdownColor: Colors.white,
+                            value: dropdownDistrito,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: responsive.ip(2.5),
+                            ),
+                            underline: Container(),
+                            onChanged: (String data) {
+                              setState(() {
+                                dropdownDistrito = data;
+                                cantItems++;
+                                obtenerIdDistrito(data, snapshot.data);
+                              });
+                            },
+                            isExpanded: true,
+                            items: list.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: responsive.ip(2),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+
+                          if (direccionController.text == '') {
+                              utils.showToast('Por favor ingrese una dirección',
+                                  2, ToastGravity.TOP);
+                            } else {
+                              print( 'direcciones ${direccionController.text}' );
+                              if (referenciaController.text == '') {
+                                utils.showToast(
+                                    'Por favor ingrese una referencia',
+                                    2,
+                                    ToastGravity.TOP);
+                              } else {
+                                if (dropdownDistrito ==
+                                    'Seleccionar Distrito') {
+                                  utils.showToast(
+                                      'Por favor seleccione un distrito',
+                                      2,
+                                      ToastGravity.TOP);
+                                } else {
+                                  //aca es
+
+                                  utils.agregarDireccion(
+                                      context,
+                                      direccionController.text,
+                                      latitude,
+                                      longitude,
+                                      referenciaController.text,
+                                      idDistrito);
+                                  Navigator.pop(context);
+                                }
+                              }
+                            }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(top: responsive.hp(.8)),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.red),
+                          child: FlatButton(
+                            child: Text(
+                              'Confirmar',
+                              style: TextStyle(
+                                  fontSize: responsive.ip(2),
+                                  color: Colors.white),
+                            ),
+                            onPressed: () {
+                              if (direccionController.text == '') {
+                                utils.showToast('Por favor ingrese una dirección',
+                                    2, ToastGravity.TOP);
+                              } else {
+                                print( 'direcciones ${direccionController.text}' );
+                                if (referenciaController.text == '') {
+                                  utils.showToast(
+                                      'Por favor ingrese una referencia',
+                                      2,
+                                      ToastGravity.TOP);
+                                } else {
+                                  if (dropdownDistrito ==
+                                      'Seleccionar Distrito') {
+                                    utils.showToast(
+                                        'Por favor seleccione un distrito',
+                                        2,
+                                        ToastGravity.TOP);
+                                  } else {
+                                    //aca es
+
+                                    utils.agregarDireccion(
+                                        context,
+                                        direccionController.text,
+                                        latitude,
+                                        longitude,
+                                        referenciaController.text,
+                                        idDistrito);
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                onTap: () {
-                  modalIngresarReferencia();
-                },
-              ),
-            ),
-            SizedBox(
-              height: responsive.hp(1),
-            ),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colors.red),
-              child: FlatButton(
-                child: Text(
-                  'Confirmar',
-                  style: TextStyle(
-                      fontSize: responsive.ip(2), color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+              );
+            } else {
+              return Container();
+            }
+          } else {
+            return Container();
+          }
+        });
+  }
+
+  void obtenerIdDistrito(String dato, List<Zona> list) {
+    for (int i = 0; i < list.length; i++) {
+      if (dato == list[i].zonaNombre) {
+        idDistrito = list[i].idZona;
+      }
+    }
+    print(idDistrito);
   }
 
   void modalIngresarReferencia() {
-    referenciaController.text="";
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -373,19 +536,9 @@ class _MapsSampleState extends State<MapsSample> {
                   ),
                   FlatButton(
                     onPressed: () async {
-                      if (referenciaController.text.length > 0) {
-                        utils.agregarDireccion(
-                            context,
-                            direccionController.text,
-                            latitude,
-                            longitude,
-                            referenciaController.text);
-
-                        Navigator.pop(context);
-                      } else {
-                        utils.showToast(
-                            'El campo no puede ser vacio', 2, ToastGravity.TOP);
-                      }
+                      Navigator.pop(context);
+                      refe= referenciaController.text;
+                      setState(() {});
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -415,7 +568,7 @@ class _MapsSampleState extends State<MapsSample> {
   }
 
   void modalIngresarDireccion() {
-    direccionController.text="";
+    //direccionController.text = "";
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -457,15 +610,9 @@ class _MapsSampleState extends State<MapsSample> {
                   ),
                   FlatButton(
                     onPressed: () async {
-                      if (direccionController.text.length > 0) {
-                        utils.agregarDireccion(context, direccionController.text,
-                        latitude, longitude, referenciaController.text);
-
-                    Navigator.pop(context);
-                      } else {
-                        utils.showToast(
-                            'El campo no puede ser vacio', 2, ToastGravity.TOP);
-                      }
+                      Navigator.pop(context);
+                      direccion = direccionController.text;
+                      setState(() {});
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -493,5 +640,4 @@ class _MapsSampleState extends State<MapsSample> {
       },
     );
   }
-
-  }
+}

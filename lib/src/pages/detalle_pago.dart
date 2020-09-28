@@ -1,6 +1,7 @@
 import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/api/ordenes_api.dart';
 import 'package:enchiladasapp/src/api/usuario_api.dart';
+import 'package:enchiladasapp/src/bloc/carrito_completo.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/database/carrito_database.dart';
 import 'package:enchiladasapp/src/database/direccion_database.dart';
@@ -46,6 +47,10 @@ class _DetallePagoState extends State<DetallePago> {
 
   bool estadoDelivery = false;
 
+  //variables que necesitamos
+
+  double precioAPagar;
+
   @override
   void dispose() {
     // Limpia el controlador cuando el Widget se descarte
@@ -72,7 +77,7 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   void _tipoPagoRadioValue(
-      BuildContext context, int value, Responsive responsive,double precio) {
+      BuildContext context, int value, Responsive responsive, double precio) {
     setState(() {
       _tipoPagoValue = value;
 
@@ -84,7 +89,7 @@ class _DetallePagoState extends State<DetallePago> {
           break;
         case 1:
           print('1');
-          _modalCambiarMetodoPago(context, responsive,precio);
+          _modalCambiarMetodoPago(context, responsive, precio);
           break;
       }
     });
@@ -95,7 +100,7 @@ class _DetallePagoState extends State<DetallePago> {
     final Responsive responsive = new Responsive.of(context);
     final usuarioBloc = ProviderBloc.user(context);
     final carritoBloc = ProviderBloc.carrito(context);
-    carritoBloc.obtenerCarrito();
+    carritoBloc.obtenerDeliveryRapido();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -106,15 +111,15 @@ class _DetallePagoState extends State<DetallePago> {
         elevation: 0,
       ),
       body: StreamBuilder(
-        stream: carritoBloc.carritoIdStream,
-        builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
+        stream: carritoBloc.estadoDeliveryStream,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return _contenidoSuperior(
-                  context, responsive, snapshot.data, usuarioBloc);
+            if (snapshot.data) {
+              estadoDelivery = snapshot.data;
             } else {
-              return Center(child: CupertinoActivityIndicator());
+              estadoDelivery = snapshot.data;
             }
+            return _contenidoSuperior(context, responsive, usuarioBloc);
           } else {
             return Center(child: CupertinoActivityIndicator());
           }
@@ -123,71 +128,48 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _contenidoSuperior(BuildContext context, Responsive responsive,
-      List<Carrito> carrito, UsuarioBloc usuarioBloc) {
-    final zonaBloc = ProviderBloc.zona(context);
-    zonaBloc.obtenerUsuarioZona();
+  Widget _contenidoSuperior(
+      BuildContext context, Responsive responsive, UsuarioBloc usuarioBloc) {
+    final direccionBloc = ProviderBloc.dire(context);
+    direccionBloc.obtenerDireccionesConZonas();
 
     return StreamBuilder(
-      stream: zonaBloc.zonaUsuarioStream,
-      builder: (BuildContext context, AsyncSnapshot<List<Zona>> snapshot) {
-        double precio = 0;
-        double precioPedido = 0;
-        double precioSinDeliveryRapido = 0;
-        var deliveryComision = 0.0;
-        for (int i = 0; i < carrito.length; i++) {
-          if (carrito[i].productoTipo == '1') {
-            estadoDelivery = true;
-          } else {
-            precioSinDeliveryRapido = precioSinDeliveryRapido +
-                double.parse(carrito[i].productoCantidad) *
-                    double.parse(carrito[i].productoPrecio);
-          }
-          precio = precio +
-              double.parse(carrito[i].productoCantidad) *
-                  double.parse(carrito[i].productoPrecio);
-        }
-
-        precioPedido = precio;
+      stream: direccionBloc.direccionZonaStream,
+      builder: (BuildContext context, AsyncSnapshot<List<Direccion>> snapshot) {
+        List<Direccion> list = List<Direccion>();
 
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
-            if (precioSinDeliveryRapido >
-                double.parse(snapshot.data[0].zonaPedidoMinimo)) {
-              deliveryComision = 0;
-            } else {
-              deliveryComision = double.parse(snapshot.data[0].zonaPrecio);
-            }
-            precioPedido = precioPedido + deliveryComision;
-
-            return _contenido(context, responsive, carrito, usuarioBloc,
-                deliveryComision, precioPedido);
+            return _contenido(context, responsive, usuarioBloc, snapshot.data);
           } else {
-            return _contenido(context, responsive, carrito, usuarioBloc,
-                deliveryComision, precioPedido);
+            return _contenido(context, responsive, usuarioBloc, list);
           }
         } else {
-          return _contenido(context, responsive, carrito, usuarioBloc,
-              deliveryComision, precioPedido);
+          return _contenido(context, responsive, usuarioBloc, list);
         }
-       
       },
     );
   }
 
-  Widget _contenido(
-      BuildContext context,
-      Responsive responsive,
-      List<Carrito> carrito,
-      UsuarioBloc usuarioBloc,
-      double deliveryComision,
-      double precioPedido) {
+  Widget _contenido(BuildContext context, Responsive responsive,
+      UsuarioBloc usuarioBloc, List<Direccion> listDireccion) {
+    String direpe = '';
+    String refepe = '';
+    String distritope = '';
+    String datoLlegadaDelivery = '';
+
+    if (listDireccion.length > 0) {
+      direpe = listDireccion[0].direccion;
+      refepe = listDireccion[0].referencia;
+      distritope = listDireccion[0].zonaNombre;
+      datoLlegadaDelivery =
+          'Su pedido llegará en máximo ${listDireccion[0].zonaTiempo} minutos';
+    }
     final date = DateFormat("dd.MM.yyyy").format(DateTime.now());
 
     return SafeArea(
       child: Container(
         margin: EdgeInsets.only(
-          
           top: responsive.hp(1),
         ),
         padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
@@ -254,44 +236,52 @@ class _DetallePagoState extends State<DetallePago> {
               padding: EdgeInsets.symmetric(
                 horizontal: responsive.wp(5),
               ),
-              child: _listaProductos(responsive, carrito,deliveryComision,precioPedido),
+              child: _listaProductos(context, responsive),
+            ),
+            Divider(),
+            Divider(),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              color: Colors.grey[200],
+              child: Column(
+                children: <Widget>[
+                  _numeroTelefono(usuarioBloc, context, responsive),
+                  Divider(),
+                  _direccion(direpe, refepe, distritope, responsive),
+                  Divider(),
+                ],
+              ),
+            ),
+            (listDireccion.length > 0)
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: responsive.wp(5),
+                    ),
+                    child: _deliveryRapido(responsive, datoLlegadaDelivery),
+                  )
+                : Container(),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: _tipoComprobante(context, responsive),
             ),
             Divider(),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: responsive.wp(5),
               ),
-              child: _deliveryRapido(responsive, carrito),
+              child: _tipoPago(responsive),
             ),
             Divider(),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              color: Colors.grey[200],
-              child: Column(
-                children: <Widget>[
-                  _numeroTelefono(usuarioBloc, context, responsive),
-                  Divider(),
-                  _direccion(context, responsive),
-                  Divider(),
-                  _zona(context),
-                  Divider(),
-                ],
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
               ),
-            ),
-            Divider(),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              child: _tipoComprobante(context, responsive),
-            ),
-            Divider(),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              child: _tipoPago(responsive,precioPedido),
-            ),
-            Divider(),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              child: _pagarCarrito(context, responsive,precioPedido),
+              child: _pagarCarrito(context, responsive),
             )
           ],
         ),
@@ -299,102 +289,102 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _listaProductos(Responsive responsive, List<Carrito> carrito,
-      double deliveryComision, double precioPedido) {
-    var total = Column(
-      children: <Widget>[
-        (deliveryComision > 0)
-            ? Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: responsive.hp(0.5),
+  Widget _listaProductos(BuildContext context, Responsive responsive) {
+    final carritoCompletoBloc = ProviderBloc.carritoCompleto(context);
+    carritoCompletoBloc.obtenerCarritoCpmpleto();
+
+    return StreamBuilder(
+      stream: carritoCompletoBloc.carritoCompletoStream,
+      builder: (BuildContext context,
+          AsyncSnapshot<List<CarritoCompleto>> snapshot) {
+        if (snapshot.hasData) {
+          double precioTotal = 0.0;
+          for (int x = 0; x < snapshot.data.length; x++) {
+            precioTotal = precioTotal + double.parse(snapshot.data[x].precio);
+          }
+          String precioTotalFinal = utils.format(precioTotal);
+
+          precioAPagar = double.parse(precioTotalFinal);
+          var total = Container(
+            margin: EdgeInsets.symmetric(
+              vertical: responsive.hp(1),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    'Total',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: responsive.ip(2),
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        'COMISIÓN POR DELIVERY',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: responsive.ip(1.5),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'S/.$deliveryComision',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: responsive.ip(1.5),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : Container(),
-        Container(
-          margin: EdgeInsets.symmetric(
-            vertical: responsive.hp(1),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  'Total',
+                Text(
+                  'S/.$precioTotalFinal',
                   style: TextStyle(
                       color: Colors.red,
                       fontSize: responsive.ip(2),
                       fontWeight: FontWeight.bold),
                 ),
-              ),
-              Text(
-                'S/.$precioPedido',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: responsive.ip(2),
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        )
-      ],
-    );
+              ],
+            ),
+          );
+          return ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: snapshot.data.length + 1,
+              itemBuilder: (context, i) {
+                if (i == snapshot.data.length) {
+                  return total;
+                }
 
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        physics: ScrollPhysics(),
-        itemCount: carrito.length + 1,
-        itemBuilder: (context, i) {
-          if (i == carrito.length) {
-            return total;
-          }
-          return _productos(responsive, carrito[i]);
-        });
+                return _productos(responsive, snapshot.data[i]);
+              });
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 
-  Widget _productos(Responsive responsive, Carrito carrito) {
+  Widget _productos(Responsive responsive, CarritoCompleto carrito) {
     String nombre = "";
-    double precio = double.parse(carrito.productoCantidad) *
-        double.parse(carrito.productoPrecio);
-    if (int.parse(carrito.productoCantidad) > 1) {
-      nombre = "${carrito.productoNombre} x ${carrito.productoCantidad}";
+    String precioFinal;
+    double precio =
+        double.parse(carrito.cantidad) * double.parse(carrito.precio);
+
+    precioFinal = utils.format(precio);
+    if (int.parse(carrito.cantidad) > 1) {
+      nombre = "${carrito.producto} x ${carrito.cantidad}";
     } else {
-      nombre = "${carrito.productoNombre}";
+      nombre = "${carrito.producto}";
     }
     return Container(
-      margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5)),
+      margin: EdgeInsets.symmetric(
+        vertical: responsive.hp(0.5),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Text('$nombre',
-                style: TextStyle(
-                    color: Colors.black, fontSize: responsive.ip(1.5))),
+            child: Text(
+              '$nombre',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: responsive.ip(1.5),
+              ),
+            ),
           ),
-          Text('S/.$precio',
-              style:
-                  TextStyle(color: Colors.black, fontSize: responsive.ip(1.5))),
+          Text(
+            'S/.$precioFinal',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: responsive.ip(1.5),
+            ),
+          ),
         ],
       ),
     );
@@ -471,28 +461,8 @@ class _DetallePagoState extends State<DetallePago> {
         ]);
   }
 
-  Widget _direccion(BuildContext context, Responsive responsive) {
-    final direcionBloc = ProviderBloc.dire(context);
-    direcionBloc.obtenerDireccion();
-
-    return StreamBuilder(
-      stream: direcionBloc.direccionStream,
-      builder: (BuildContext context, AsyncSnapshot<List<Direccion>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return direction(snapshot.data[snapshot.data.length - 1].direccion,
-                snapshot.data[0].referencia, responsive);
-          } else {
-            return direction("", "", responsive);
-          }
-        } else {
-          return direction("", "", responsive);
-        }
-      },
-    );
-  }
-
-  Widget direction(String addres, String referencia, Responsive responsive) {
+  Widget _direccion(String addres, String referencia, String nombreDistrito,
+      Responsive responsive) {
     String addresito;
     String agg;
     String ref;
@@ -525,7 +495,8 @@ class _DetallePagoState extends State<DetallePago> {
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
             ),
             onPressed: () {
-              Navigator.pushNamed(context, 'sel_Direccion');
+              setState(() {});
+              Navigator.pushNamed(context, 'gestionarDirecciones');
             },
           ),
         ],
@@ -590,23 +561,24 @@ class _DetallePagoState extends State<DetallePago> {
                 _comprobanteRadioValue(context, 1);
               },
               child: Container(
-                  child: Row(
-                children: <Widget>[
-                  Radio(
-                    value: 1,
-                    groupValue: _comprobanteValue,
-                    onChanged: (valor) {
-                      _comprobanteRadioValue(context, valor);
-                    },
-                  ),
-                  Text(
-                    'Factura',
-                    style: new TextStyle(
-                      fontSize: responsive.ip(1.8),
+                child: Row(
+                  children: <Widget>[
+                    Radio(
+                      value: 1,
+                      groupValue: _comprobanteValue,
+                      onChanged: (valor) {
+                        _comprobanteRadioValue(context, valor);
+                      },
                     ),
-                  ),
-                ],
-              )),
+                    Text(
+                      'Factura',
+                      style: new TextStyle(
+                        fontSize: responsive.ip(1.8),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             )
           ],
         ),
@@ -656,11 +628,12 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _tipoPago(Responsive responsive,double precio) {
+  Widget _tipoPago(Responsive responsive) {
+
     montoPago = tipoPagoController.text;
     vuelto = 0;
     if (montoPago != null && montoPago != "") {
-      vuelto = double.parse(montoPago) - precio;
+      vuelto = double.parse(montoPago) - precioAPagar;
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -675,39 +648,37 @@ class _DetallePagoState extends State<DetallePago> {
         ),
         GestureDetector(
           onTap: () {
-            _tipoPagoRadioValue(context, 0, responsive,precio);
+            _tipoPagoRadioValue(context, 0, responsive, precioAPagar);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  _tipoPagoRadioValue(
-                    context,
-                    0,
-                    responsive,precio
-                  );
+                  _tipoPagoRadioValue(context, 0, responsive, precioAPagar);
                 },
                 child: Container(
-                    child: Row(
-                  children: <Widget>[
-                    Radio(
-                      value: 0,
-                      groupValue: _tipoPagoValue,
-                      onChanged: (valor) {
-                        _tipoPagoRadioValue(context, valor, responsive,precio);
-                      },
-                    ),
-                    Text(
-                      'Pago Online',
-                      style: TextStyle(fontSize: responsive.ip(1.8)),
-                    ),
-                  ],
-                )),
+                  child: Row(
+                    children: <Widget>[
+                      Radio(
+                        value: 0,
+                        groupValue: _tipoPagoValue,
+                        onChanged: (valor) {
+                          _tipoPagoRadioValue(
+                              context, valor, responsive, precioAPagar);
+                        },
+                      ),
+                      Text(
+                        'Pago Online',
+                        style: TextStyle(fontSize: responsive.ip(1.8)),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               GestureDetector(
                 onTap: () {
-                  _tipoPagoRadioValue(context, 1, responsive,precio);
+                  _tipoPagoRadioValue(context, 1, responsive, precioAPagar);
                 },
                 child: Container(
                   child: Row(
@@ -716,7 +687,8 @@ class _DetallePagoState extends State<DetallePago> {
                         value: 1,
                         groupValue: _tipoPagoValue,
                         onChanged: (valor) {
-                          _tipoPagoRadioValue(context, valor, responsive,precio);
+                          _tipoPagoRadioValue(
+                              context, valor, responsive, precioAPagar);
                         },
                       ),
                       Text(
@@ -785,7 +757,7 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _pagarCarrito(BuildContext context, Responsive responsive,double precio) {
+  Widget _pagarCarrito(BuildContext context, Responsive responsive) {
     return GestureDetector(
       child: Padding(
         padding: EdgeInsets.all(responsive.wp(2)),
@@ -803,7 +775,7 @@ class _DetallePagoState extends State<DetallePago> {
                       style: TextStyle(fontSize: responsive.ip(2)),
                     ),
                     onPressed: () {
-                      _pagarcarrito(responsive,precio);
+                    _pagarcarrito(responsive, precioAPagar);
                       //Navigator.pushNamed(context, 'detallePago');
                     }),
               ),
@@ -909,130 +881,127 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  void _modalCambiarMetodoPago(context, Responsive responsive,double precio) {
+  void _modalCambiarMetodoPago(context, Responsive responsive, double precio) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context2) {
         final nuevoMetodoPagoBloc = ProviderBloc.npago(context2);
-        
+
         return StreamBuilder(
           stream: nuevoMetodoPagoBloc.vueltoStream,
           builder: (BuildContext context, AsyncSnapshot snapshotvuelto) {
             double vuelto = 0;
-           
+
             if (nuevoMetodoPagoBloc.valorVuelto == null) {
             } else {
               vuelto = nuevoMetodoPagoBloc.valorVuelto;
             }
             return GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  child: Container(
-                    padding: MediaQuery.of(context).viewInsets,
-                    margin: EdgeInsets.only(top: responsive.hp(10)),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadiusDirectional.only(
-                          topEnd: Radius.circular(20),
-                          topStart: Radius.circular(20),
-                        ),
-                        color: Colors.white),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: responsive.hp(2),
-                        left: responsive.wp(5),
-                        right: responsive.wp(5),
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Container(
+                padding: MediaQuery.of(context).viewInsets,
+                margin: EdgeInsets.only(top: responsive.hp(10)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadiusDirectional.only(
+                      topEnd: Radius.circular(20),
+                      topStart: Radius.circular(20),
+                    ),
+                    color: Colors.white),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: responsive.hp(2),
+                    left: responsive.wp(5),
+                    right: responsive.wp(5),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Ingrese el monto con el que pagará',
+                        style: TextStyle(
+                            fontSize: responsive.ip(2),
+                            fontWeight: FontWeight.bold),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
+                      SizedBox(
+                        height: responsive.hp(2),
+                      ),
+                      Row(
                         children: <Widget>[
-                          Text(
-                            'Ingrese el monto con el que pagará',
-                            style: TextStyle(
-                                fontSize: responsive.ip(2),
-                                fontWeight: FontWeight.bold),
+                          Container(
+                            width: responsive.wp(5),
+                            child: Text('S/ '),
                           ),
-                          SizedBox(
-                            height: responsive.hp(2),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                width: responsive.wp(5),
-                                child: Text('S/ '),
-                              ),
-                              Container(
-                                width: responsive.wp(60),
-                                child: TextField(
-                                  controller: tipoPagoController,
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (val) {
-                                    if (val.length > 0) {
-                                      nuevoMetodoPagoBloc.validarPago2(val,
-                                          '$precio');
-                                    } else {
-                                      nuevoMetodoPagoBloc.validarPago2(
-                                          val, '0');
-                                    }
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: responsive.hp(2),
-                          ),
-                          Text(
-                              'Precio : S/ $precio'),
-                          Row(
-                            children: <Widget>[
-                              (vuelto > 0)
-                                  ? Text(
-                                      'Vuelto : S/ $vuelto',
-                                      style: TextStyle(color: Colors.black),
-                                    )
-                                  : Text('Vuelto : S/ $vuelto',
-                                      style: TextStyle(color: Colors.red))
-                            ],
-                          ),
-                          SizedBox(
-                            height: responsive.hp(2),
-                          ),
-                          Center(
-                            child: FlatButton(
-                              onPressed: () async {
-                                setState(() {
-                                  
-                                });
-                                Navigator.pop(context);
+                          Container(
+                            width: responsive.wp(60),
+                            child: TextField(
+                              controller: tipoPagoController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (val) {
+                                if (val.length > 0) {
+                                  nuevoMetodoPagoBloc.validarPago2(
+                                      val, '$precio');
+                                } else {
+                                  nuevoMetodoPagoBloc.validarPago2('0', '0');
+                                }
                               },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: responsive.ip(5),
-                                  vertical: responsive.ip(1),
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: Colors.red),
-                                child: Text(
-                                  'Confirmar',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 30,
-                          )
                         ],
                       ),
-                    ),
+                      SizedBox(
+                        height: responsive.hp(2),
+                      ),
+                      Text('Precio : S/ $precio'),
+                      Row(
+                        children: <Widget>[
+                          (vuelto > 0)
+                              ? Text(
+                                  'Vuelto : S/ $vuelto',
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : Text('Vuelto : S/ $vuelto',
+                                  style: TextStyle(color: Colors.red))
+                        ],
+                      ),
+                      SizedBox(
+                        height: responsive.hp(2),
+                      ),
+                      Center(
+                        child: FlatButton(
+                          onPressed: () async {
+                            setState(() {
+                              
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.ip(5),
+                              vertical: responsive.ip(1),
+                            ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Colors.red),
+                            child: Text(
+                              'Confirmar',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      )
+                    ],
                   ),
-                );
-              
+                ),
+              ),
+            );
           },
         );
       },
@@ -1097,6 +1066,7 @@ class _DetallePagoState extends State<DetallePago> {
                               width: responsive.wp(75),
                               child: TextField(
                                 controller: telefonoController,
+                                maxLength: 9,
                                 keyboardType: TextInputType.number,
                                 onChanged: (valor) {
                                   nuevoMetodoPagoBloc.validarTelefono(valor);
@@ -1248,13 +1218,14 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  void _pagarcarrito(Responsive responsive,double precio) async {
+
+  void _pagarcarrito(Responsive responsive, double precio) async {
     final pedidoApi = OrdenesApi();
     final usuarioDatabase = UsuarioDatabase();
     final direccionDatabase = DireccionDatabase();
 
     final user = await usuarioDatabase.obtenerUsUario();
-    final direccion = await direccionDatabase.obtenerdireccion();
+    final direccion = await direccionDatabase.obtenerDireccionesConZonas();
 
     final pedidoDatabase = PedidoDatabase();
     final listPedido = await pedidoDatabase.obtenerPedidosPendiente();
@@ -1262,8 +1233,8 @@ class _DetallePagoState extends State<DetallePago> {
     if (listPedido.length > 0) {
       _modalButtonPedidoPendiente(context, responsive);
     } else {
-      if (direccion[0].direccion != "" && direccion[0].direccion != null) {
-        if (user[0].idZona != "" && user[0].idZona != null) {
+      if (direccion.length>0) {
+        
           if (user[0].telefono != "" && user[0].telefono != null) {
             if (_comprobanteValue == 1 || _comprobanteValue == 0) {
               if (_tipoPagoValue == 1 || _tipoPagoValue == 0) {
@@ -1345,9 +1316,11 @@ class _DetallePagoState extends State<DetallePago> {
                         2,
                         ToastGravity.TOP);
                   }
-                }else{
+                } else {
                   utils.showToast(
-                    'El monto de pago debe ser mayor al monto del pedido ', 2, ToastGravity.TOP);
+                      'El monto de pago debe ser mayor al monto del pedido ',
+                      2,
+                      ToastGravity.TOP);
                 }
               } else {
                 utils.showToast(
@@ -1361,10 +1334,7 @@ class _DetallePagoState extends State<DetallePago> {
             utils.showToast('Ingrese un número de teléfono de entrega', 2,
                 ToastGravity.TOP);
           }
-        } else {
-          utils.showToast(
-              'Debe registrar una zona de entrega', 2, ToastGravity.TOP);
-        }
+        
       } else {
         utils.showToast(
             'Ingrese una dirección de entrega', 2, ToastGravity.TOP);
@@ -1397,26 +1367,6 @@ class _DetallePagoState extends State<DetallePago> {
             ],
           );
         });
-  }
-
-  Widget _zona(BuildContext context) {
-    final zonaBloc = ProviderBloc.zona(context);
-    //zonaBloc.obtenerUsuarioZona();
-
-    return StreamBuilder(
-      stream: zonaBloc.zonaUsuarioStream,
-      builder: (BuildContext context, AsyncSnapshot<List<Zona>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return zonaDatos(context, 'Cambiar', snapshot.data);
-          } else {
-            return zonadatosFalsos(context);
-          }
-        } else {
-          return zonadatosFalsos(context);
-        }
-      },
-    );
   }
 
   Widget zonadatosFalsos(BuildContext context) {
@@ -1498,7 +1448,7 @@ class _DetallePagoState extends State<DetallePago> {
           height: responsive.hp(1),
         ),
         Text(
-          'El monto de su pedido debe ser mayor a ${zonas[0].zonaPedidoMinimo}, sino se le agregará una comisión de ${zonas[0].zonaPrecio} soles.',
+          'El monto de su pedido debe ser mayor a ${zonas[0].zonaPedidoMinimo}, sino se le agregará una comisión de ${zonas[0].deliveryProductoNombre} soles.',
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -1508,41 +1458,36 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _deliveryRapido(Responsive responsive, List<Carrito> carrito) {
-    for (int i = 0; i < carrito.length; i++) {
-      if (carrito[i].productoTipo == '1') {
-        estadoDelivery = true;
-      }
-    }
+  Widget _deliveryRapido(Responsive responsive, String deliveryLLegada) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('Agregar entrega rápida',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsive.ip(2))),
+            Text(
+              'Agregar entrega rápida',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: responsive.ip(2),
+              ),
+            ),
             Switch.adaptive(
               value: estadoDelivery,
               onChanged: (bool state) async {
-                print(state);
-                estadoDelivery = state;
-
-                if (estadoDelivery) {
+                if (state) {
                   utils.agregarDeliveryRapido(context);
                 } else {
                   utils.quitarDeliveryRapido(context);
                 }
-                //setState(() {});
+                print(state);
               },
             ),
           ],
         ),
         Text(
-          'Tu pedido llegará en máximo 1 hora',
+          '$deliveryLLegada',
           textAlign: TextAlign.start,
         )
       ],

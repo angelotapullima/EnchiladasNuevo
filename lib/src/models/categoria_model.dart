@@ -42,38 +42,46 @@ class CategoriaData {
     CategoriaData({
         this.idCategoria,
         this.categoriaNombre,
-        this.categoriaCod,
-        this.idAlmacen,
         this.categoriaEstado,
-        this.categoriaMostrarApp,
         this.categoriaTipo,
+        this.categoriaPromocion,
+        this.categoriaFoto,
+        this.categoriaIcono,
+        this.categoriaMostrarApp,
+        this.categoriaBanner,
     });
 
     String idCategoria;
     String categoriaNombre;
-    String categoriaCod;
-    String idAlmacen;
     String categoriaEstado;
-    String categoriaMostrarApp;
     String categoriaTipo;
+    String categoriaPromocion;
+    String categoriaFoto;
+    String categoriaIcono;
+    String categoriaMostrarApp;
+    String categoriaBanner;
 
     factory CategoriaData.fromJson(Map<String, dynamic> json) => CategoriaData(
         idCategoria: json["id_categoria"],
         categoriaNombre: json["categoria_nombre"],
-        categoriaCod: json["categoria_cod"],
-        idAlmacen: json["id_almacen"],
         categoriaEstado: json["categoria_estado"],
-        categoriaMostrarApp: json["categoria_mostrar_app"],
         categoriaTipo: json["categoria_tipo"],
+        categoriaPromocion: json["categoria_promocion"],
+        categoriaFoto: json["categoria_foto"],
+        categoriaIcono: json["categoria_icono"],
+        categoriaMostrarApp: json["categoria_mostrar_app"],
+        categoriaBanner: json["categoria_banner"],
     );
 
     Map<String, dynamic> toJson() => {
         "id_categoria": idCategoria,
         "categoria_nombre": categoriaNombre,
-        "categoria_cod": categoriaCod,
-        "id_almacen": idAlmacen,
         "categoria_estado": categoriaEstado,
-        "categoria_mostrar_app": categoriaMostrarApp,
         "categoria_tipo": categoriaTipo,
+        "categoria_promocion": categoriaPromocion,
+        "categoria_foto": categoriaFoto,
+        "categoria_icono": categoriaIcono,
+        "categoria_mostrar_app": categoriaMostrarApp,
+        "categoria_banner": categoriaBanner,
     };
 }

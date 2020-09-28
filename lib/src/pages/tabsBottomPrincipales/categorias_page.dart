@@ -1,6 +1,6 @@
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
-import 'package:enchiladasapp/src/widgets/zona_direction.dart';
+import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/provider_widget.dart';
@@ -21,7 +21,7 @@ class CategoriasPage extends StatelessWidget {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasEnchiladas();
+    //categoriasBloc.obtenerCategoriasEnchiladas();
     _refreshController.refreshCompleted();
   }
 
@@ -369,7 +369,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                         icon: Icon(
                           FontAwesomeIcons.heart,
                           color: Colors.red,
-                        ))
+                        ),
+                      )
               ],
             ),
           ],
@@ -377,20 +378,21 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
       ),
       onTap: () {
         Navigator.push(
-            context,
-            PageRouteBuilder(
-              transitionDuration: const Duration(milliseconds: 400),
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitos(productosData: productosData);
-              },
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-            ));
+          context,
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 100),
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return DetalleProductitos(productosData: productosData);
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+          ),
+        );
         //Navigator.pushNamed(context, 'detalleP', arguments: productosData);
       },
     );

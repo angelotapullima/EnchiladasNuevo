@@ -32,4 +32,17 @@ class PuzzleDatabase{
 
       return list;
   } 
+
+
+  Future<List<PuzzleDatum>> obtenerPuzzle() async {
+      final db = await dbprovider.database;
+      final res =
+          await db.rawQuery("SELECT * FROM Puzzle ");
+
+      List<PuzzleDatum> list = res.isNotEmpty
+          ? res.map((c) => PuzzleDatum.fromJson(c)).toList()
+          : [];
+
+      return list;
+  } 
 }

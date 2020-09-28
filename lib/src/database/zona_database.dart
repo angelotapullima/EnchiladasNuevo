@@ -13,8 +13,8 @@ class ZonaDatabase{
       final db = await dbprovider.database;
 
       final res = await db.rawInsert(
-          "INSERT OR REPLACE INTO Zona (id_zona,zona_nombre,zona_pedido_minimo,zona_imagen,id_producto,zona_descripcion) "
-              "VALUES ('${zona.idZona}','${zona.zonaNombre}','${zona.zonaPedidoMinimo}','${zona.zonaImagen}','${zona.idProducto}','${zona.zonaDescripcion}'"
+          "INSERT OR REPLACE INTO Zona (id_zona,zona_nombre,zona_pedido_minimo,zona_imagen,zona_tiempo,recargo_producto_nombre,recargo_producto_precio,delivery_producto_nombre,delivery_producto_precio,zona_descripcion) "
+              "VALUES ('${zona.idZona}','${zona.zonaNombre}','${zona.zonaPedidoMinimo}','${zona.zonaImagen}','${zona.zonaTiempo}','${zona.recargoProductoNombre}','${zona.recargoProductoPrecio}','${zona.deliveryProductoNombre}','${zona.deliveryProductoPrecio}','${zona.zonaDescripcion}'"
               ")");
       return res;
     } catch (exception) {

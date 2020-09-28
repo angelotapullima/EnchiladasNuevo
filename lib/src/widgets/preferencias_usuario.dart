@@ -25,6 +25,15 @@ class Preferences {
   }
 
 
+  get estadoCarga{
+    return _prefs.getString('estadoCarga');
+  }
+
+  set estadoCarga(String value){
+
+    _prefs.setString('estadoCarga', value);
+  }
+
   get personName{
     return _prefs.getString('personName');
   }

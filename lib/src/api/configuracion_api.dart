@@ -1,14 +1,12 @@
 import 'dart:convert';
-
-import 'package:enchiladasapp/src/database/delivery_rapido_database.dart';
-import 'package:enchiladasapp/src/database/producto_database.dart';
+import 'package:enchiladasapp/src/database/pantalla_database.dart';
+import 'package:enchiladasapp/src/database/puzzle_database.dart';
 import 'package:enchiladasapp/src/database/zona_database.dart';
-import 'package:enchiladasapp/src/models/delivery_rapido_model.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/pantalla_model.dart';
+import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
-import 'package:enchiladasapp/src/widgets/zona_direction.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,8 +15,8 @@ class ConfiguracionApi {
 
   final prefs = new Preferences();
   final zonaDatabase = ZonaDatabase();
-  final productoDatabase = ProductoDatabase();
-  final deliveryRapidoDatabase = DeliveryRapidoDatabase();
+  final pantallaDatabase = PantallaDatabase();
+  final puzzleDatabase =  PuzzleDatabase();
 
   Future<bool> configuracion() async {
     try {
@@ -32,72 +30,59 @@ class ConfiguracionApi {
           Zona zona = Zona();
 
           zona.idZona = decodedData['result']['data']['zonas'][i]['id_zona'];
-          zona.zonaNombre =
-              decodedData['result']['data']['zonas'][i]['zona_nombre'];
-          zona.zonaPedidoMinimo =
-              decodedData['result']['data']['zonas'][i]['zona_pedido_minimo'];
-          zona.zonaImagen =
-              decodedData['result']['data']['zonas'][i]['zona_imagen'];
-          zona.idProducto =
-              decodedData['result']['data']['zonas'][i]['id_producto'];
-          zona.zonaDescripcion =
-              decodedData['result']['data']['zonas'][i]['zona_descripcion'];
+          zona.zonaNombre = decodedData['result']['data']['zonas'][i]['zona_nombre'];
+          zona.zonaPedidoMinimo =  decodedData['result']['data']['zonas'][i]['zona_pedido_minimo'];
+          zona.zonaImagen = decodedData['result']['data']['zonas'][i]['zona_imagen'];
+          zona.zonaDescripcion = decodedData['result']['data']['zonas'][i]['zona_descripcion'];
+          zona.zonaEstado = decodedData['result']['data']['zonas'][i]['zona_estado'];
+          zona.zonaTiempo = decodedData['result']['data']['zonas'][i]['zona_tiempo'];
+
+          zona.recargoProductoNombre = decodedData['result']['data']['zonas'][i]['recargo'][0]['recargo_producto_nombre'];
+          zona.recargoProductoPrecio = decodedData['result']['data']['zonas'][i]['recargo'][0]['recargo_producto_precio'];
+          zona.deliveryProductoNombre = decodedData['result']['data']['zonas'][i]['delivery_rapido'][0]['delivery_producto_nombre'];
+          zona.deliveryProductoPrecio = decodedData['result']['data']['zonas'][i]['delivery_rapido'][0]['delivery_producto_precio'];
 
           await zonaDatabase.insertarZonaDb(zona);
 
-          /* var file = CustomCacheManager().downloadFile(zona.zonaImagen);
-          print('file $file'); */
-
-          ProductosData productos = ProductosData();
-
-          productos.idProducto =
-              decodedData['result']['data']['zonas'][i]['id_producto'];
-          productos.idCategoria =
-              decodedData['result']['data']['zonas'][i]['id_categoria'];
-          productos.productoNombre =
-              decodedData['result']['data']['zonas'][i]['producto_nombre'];
-          productos.productoPrecio =
-              decodedData['result']['data']['zonas'][i]['producto_precio'];
-          productos.productoUnidad =
-              decodedData['result']['data']['zonas'][i]['producto_unidad'];
-          productos.productoEstado =
-              decodedData['result']['data']['zonas'][i]['producto_estado'];
-          productos.productoDescripcion =
-              decodedData['result']['data']['zonas'][i]['producto_detalle'];
-          productos.productoFoto = '0';
-          productos.productoFavorito = 0;
-
-          await productoDatabase.insertarProductosDb(productos);
         }
 
-        ProductosData productos = ProductosData();
 
-        productos.idCategoria =
-            decodedData['result']['data']['delivery_rapido']['id_categoria'];
-        productos.productoNombre =
-            decodedData['result']['data']['delivery_rapido']['producto_nombre'];
-        productos.productoPrecio =
-            decodedData['result']['data']['delivery_rapido']['producto_precio'];
-        productos.idProducto =
-            decodedData['result']['data']['delivery_rapido']['id_producto'];
-        productos.productoUnidad =
-            decodedData['result']['data']['delivery_rapido']['producto_unidad'];
-        productos.productoEstado =
-            decodedData['result']['data']['delivery_rapido']['producto_estado'];
-        productos.productoFoto =
-            decodedData['result']['data']['delivery_rapido']['producto_foto'];
+        for (int x = 0; x < decodedData['result']['data']['pantallas'].length; x++) {
+          PantallaModel pantalla = PantallaModel();
 
-        productos.productoDescripcion =
-            decodedData['result']['data']['delivery_rapido']['producto_detalle'];
-        productos.productoFavorito = 0;
+          pantalla.idPantalla = decodedData['result']['data']['pantallas'][x]['id_pantalla'];
+          pantalla.pantallaNombre = decodedData['result']['data']['pantallas'][x]['pantalla_nombre'];
+          pantalla.pantallaOrden =  decodedData['result']['data']['pantallas'][x]['pantalla_orden'];
+          pantalla.pantallaFoto = decodedData['result']['data']['pantallas'][x]['pantalla_foto'];
+          pantalla.pantallaEstado = decodedData['result']['data']['pantallas'][x]['pantalla_estado'];
+          pantalla.pantallCategoria = decodedData['result']['data']['pantallas'][x]['pantalla_categorias'][0]['id_categoria'];
 
-        await productoDatabase.insertarProductosDb(productos);
+          await pantallaDatabase.insertarPantalla(pantalla);
 
-        await deliveryRapidoDatabase.deleteDeliveryRapido();
-        DeliveryRapido deliveryRapido = DeliveryRapido();
-        deliveryRapido.idDelivery = "1";
-        deliveryRapido.idProducto = productos.idProducto;
-        await deliveryRapidoDatabase.insertarDeliveryRapidoDb(deliveryRapido);
+        }
+
+        for(int y = 0 ; y<decodedData['result']['data']['puzzle'].length;y++){
+
+          PuzzleDatum puzzle = PuzzleDatum();
+          puzzle.idImagen = decodedData['result']['data']['puzzle'][y]['id_imagen'];
+          puzzle.imagenRuta = decodedData['result']['data']['puzzle'][y]['imagen_ruta'];
+          puzzle.imagenTitulo = decodedData['result']['data']['puzzle'][y]['imagen_titulo'];
+              
+          puzzle.imagenSubida =
+              decodedData['result']['data']['puzzle'][y]['imagen_subida'];
+          puzzle.imagenInicio =
+              decodedData['result']['data']['puzzle'][y]['imagen_inicio'];
+          puzzle.imagenFin = decodedData['result']['data']['puzzle'][y]['imagen_fin'];
+          puzzle.imagenEstado =
+              decodedData['result']['data']['puzzle'][y]['imagen_estado'];
+
+              //var file = CustomCacheManager().downloadFile(puzzle.imagenRuta);
+          //print('file $file');
+          await puzzleDatabase.insertarPuzzle(puzzle);
+        }
+
+       
+         
 
         return true;
       } else {

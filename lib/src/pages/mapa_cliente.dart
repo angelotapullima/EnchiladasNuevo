@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:math' as math;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapaCliente extends StatefulWidget {
@@ -20,7 +21,7 @@ class MapaCliente extends StatefulWidget {
 class _MapaClienteState extends State<MapaCliente> {
   Completer<GoogleMapController> _controller = Completer();
   int count = 1;
-  Set<Marker> _markers = Set<Marker>();
+  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   CameraPosition currentPosition;
   double latitude = -3.7545224;
   double longitude = -73.2714435;
@@ -76,7 +77,7 @@ class _MapaClienteState extends State<MapaCliente> {
       }
     });
     super.initState();
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +91,12 @@ class _MapaClienteState extends State<MapaCliente> {
       body: Stack(
         children: <Widget>[
           Container(
-            height: responsive.hp(62),
+            height: responsive.hp(65),
             child: GoogleMap(
                 myLocationEnabled: true,
                 compassEnabled: true,
                 tiltGesturesEnabled: true,
-                markers: _markers,
+                markers: Set<Marker>.of(_markers.values),
                 mapType: MapType.normal,
                 initialCameraPosition: currentPosition,
                 onTap: (LatLng loc) {},
@@ -295,16 +296,33 @@ class _MapaClienteState extends State<MapaCliente> {
     }
   }
 
-  void showPinsOnMap(LatLng repartidor, LatLng destino) {
+  void showPinsOnMap(LatLng repartidor,String dato) {
     // get a LatLng for the source location
     // from the LocationData currentLocation object
-    if (repartidor != null) {
       var pinPosition = LatLng(repartidor.latitude, repartidor.longitude);
       // get a LatLng out of the LocationData object
-      var destPosition = LatLng(destino.latitude, destino.longitude);
+      //var destPosition = LatLng(destino.latitude, destino.longitude);
 
+      var icon;
+
+      if(dato=='repartidor'){
+        icon = sourceIcon;
+      }else{
+        icon=destinationIcon;
+      }
+    final MarkerId markerId = MarkerId(dato);
       // add the initial source location pin
-      _markers.add(Marker(
+      final Marker mark = Marker(
+          markerId: markerId,
+          position: pinPosition,
+          icon: icon);
+          setState(() {
+            
+      _markers[markerId] = mark;
+          });
+
+
+      /* _markers.add(Marker(
           markerId: MarkerId('sourcePin'),
           position: pinPosition,
           icon: sourceIcon));
@@ -312,15 +330,16 @@ class _MapaClienteState extends State<MapaCliente> {
       _markers.add(Marker(
           markerId: MarkerId('destPin'),
           position: destPosition,
-          icon: destinationIcon));
-    }
+          icon: destinationIcon)); */
+    
 
     // set the route lines on the map from source to destination
     // for more info follow this tutorial
     //setPolylines();
   }
 
-  void updatePinOnMap(double latitud, double longitud) async {
+var pinPosition;
+  void updatePinOnMap(double latitud, double longitud,double rotation) async {
     // create a new CameraPosition instance
     // every time the location changes, so the camera
     // follows the pin as it moves with an animation
@@ -336,15 +355,28 @@ class _MapaClienteState extends State<MapaCliente> {
     // that a widget update is due
     setState(() {
       // updated position
-      var pinPosition = LatLng(latitud, longitud);
+       pinPosition = LatLng(latitud, longitud);
+
+
+
 
       // the trick is to remove the marker (by id)
       // and add it again at the updated location
-      _markers.removeWhere((m) => m.markerId.value == 'sourcePin');
-      _markers.add(Marker(
-          markerId: MarkerId('sourcePin'),
-          position: pinPosition, // updated position
-          icon: sourceIcon));
+     final MarkerId markerId = MarkerId('repartidor');
+      final Marker markcito = _markers[markerId];
+
+
+      
+
+      _markers[markerId]=markcito.copyWith(
+        positionParam: pinPosition,rotationParam: rotation
+      );
+
+
+      
+
+
+
     });
   }
 
@@ -369,11 +401,22 @@ class _MapaClienteState extends State<MapaCliente> {
           destino = LatLng(
               double.parse(list[0].pedidoX), double.parse(list[0].pedidoY));
 
-          showPinsOnMap(repartidor, destino);
+          pinPosition = repartidor;
+          for(int i = 0;i<2;i++){
+            if(i==0){
+
+          showPinsOnMap(repartidor,'repartidor');
+            }else{
+
+          showPinsOnMap( destino,'destino');
+            }
+
+          }
           count++;
           setState(() {});
         } else {
           //actualixavion de prueba
+          //_markers.
           nombreRepartidor = list[0].personName;
 
           direccionEntrega = list[0].pedidoDireccion;
@@ -382,8 +425,11 @@ class _MapaClienteState extends State<MapaCliente> {
           print("latitud ${list[0].trackingX} , longitud ${list[0].trackingY}");
           repartidor = LatLng(
               double.parse(list[0].trackingX), double.parse(list[0].trackingY));
+
+
+          final rota = _getMyBearing(pinPosition, repartidor);
           updatePinOnMap(
-              double.parse(list[0].trackingX), double.parse(list[0].trackingY));
+              double.parse(list[0].trackingX), double.parse(list[0].trackingY),rota);
           var distance = GeoUtils.distanceInKmBetweenEarthCoordinates(
               repartidor.latitude,
               repartidor.longitude,
@@ -412,6 +458,13 @@ class _MapaClienteState extends State<MapaCliente> {
     }
   }
 
+  double _getMyBearing(LatLng lastPosition , LatLng currentPosition){
+    final dx =math.cos(math.pi/180 * lastPosition.latitude)*(currentPosition.longitude - lastPosition.longitude);
+    final dy = currentPosition.latitude - lastPosition.latitude;
+
+    final angle = math.atan2(dy,dx);
+    return 90-angle*180/math.pi;
+  }
   void _pedidoYaFue(BuildContext context) {
     showDialog(
         context: context,

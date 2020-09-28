@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:enchiladasapp/src/api/ordenes_api.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/argumentDetallePedido.dart';
@@ -16,18 +18,42 @@ class DetallePedido extends StatefulWidget {
 class _DetallePedidoState extends State<DetallePedido> {
   TextEditingController controllerMonto = new TextEditingController();
 
+   Timer timer;
+
+  bool banderaTimer = true;
   @override
   void dispose() {
+
+    banderaTimer = false;
+    print('dispose bb');
+
+    timer.cancel();
+
+
     controllerMonto.dispose();
     super.dispose();
   }
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     final PedidoServer pedido = ModalRoute.of(context).settings.arguments;
     final pedidoBloc = ProviderBloc.pedido(context);
     pedidoBloc.obtenerPedidoPorId(pedido.idPedido);
     final responsive = Responsive.of(context);
+
+
+
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      if (banderaTimer) {
+        print('detalle pedido true ');
+        pedidoBloc.obtenerPedidoPorId(pedido.idPedido);
+      } else {
+        print('detalle pedido false ');
+        timer.cancel();
+      }
+    });
+
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -53,11 +79,23 @@ class _DetallePedidoState extends State<DetallePedido> {
 
   Widget _contenido(
       BuildContext context, String idPedido, List<PedidoServer> pedido) {
+
+        bool completarPago = false;
     final responsive = new Responsive.of(context);
     String referencia = "-";
     if (pedido[0].pedidoReferencia != "") {
       referencia = pedido[0].pedidoReferencia;
     }
+
+    String formaPago = pedido[0].pedidoFormaPago;
+    String estadoPago = pedido[0].pedidoEstadoPago;
+
+    if(formaPago == '3' && estadoPago == '0' && pedido[0].pedidoLink!='' && pedido[0].pedidoLink!=null){
+      print('link de : ${pedido[0].pedidoLink}');
+      completarPago =true;
+
+    }
+
     return SafeArea(
       child: Column(
         children: <Widget>[
@@ -180,7 +218,11 @@ class _DetallePedidoState extends State<DetallePedido> {
                             fontWeight: FontWeight.bold),
                       ),
                       Divider(),
-                      (pedido[0].pedidoEstadoPago == '0')
+
+                      (!completarPago)?Column(
+                        children: <Widget>[
+
+                          (pedido[0].pedidoEstadoPago == '0')
                           ? (pedido[0].pedidoFormaPago == '3')?FlatButton(
                               onPressed: () async {
                                 showProcessingDialog(context);
@@ -215,6 +257,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                           : Container(),
                       FlatButton(
                         onPressed: () {
+                          banderaTimer =false;
                           Navigator.pushNamed(context, 'timeline',
                               arguments: '${pedido[0].idPedido}');
                           //Navigator.pushNamed(context, 'mapaCliente',arguments: '${pedido[0].idPedido}');
@@ -305,6 +348,33 @@ class _DetallePedidoState extends State<DetallePedido> {
                               ),
                             ):Container()
                           : Container()
+                        ],
+                      ):FlatButton(
+                        onPressed: () {
+                         ArgumentsDetallePago argumentsDetallePago =
+                            ArgumentsDetallePago();
+                        argumentsDetallePago.link = pedido[0].pedidoLink;
+                        argumentsDetallePago.idPedido = pedido[0].idPedido;
+                        Navigator.pushNamed(context, 'webView',
+                            arguments: argumentsDetallePago);
+                        },
+                        child: Container(
+                          width: responsive.wp(70),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.ip(5),
+                            vertical: responsive.ip(1),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.red),
+                          child: Text(
+                            'Completar el pago de pedido',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      
                     ],
                   ),
                 ),

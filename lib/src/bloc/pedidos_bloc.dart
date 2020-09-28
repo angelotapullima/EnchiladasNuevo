@@ -39,6 +39,8 @@ class PedidoBloc {
   void obtenerPedidoPorId(String id)async{ 
     
     _pedidoIdController.sink.add(await pedidosDatabase.obtenerPedidoPorId(id));
+    _pedidoIdController.sink.add(await pedidoApi.obtenerPedidoPorId(id));
+    _pedidoIdController.sink.add(await pedidosDatabase.obtenerPedidoPorId(id));
   }
 
   void obtenerDetallePedido(String id) async {

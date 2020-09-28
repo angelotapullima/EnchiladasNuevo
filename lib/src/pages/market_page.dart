@@ -6,7 +6,7 @@ import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:enchiladasapp/src/widgets/zona_direction.dart';
+import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -186,8 +186,8 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
   _listaItems(BuildContext context, CategoriaData categoria) {
     final size = MediaQuery.of(context).size;
     final responsive = Responsive.of(context);
-    final marketBloc = ProviderBloc.market(context);
-    final productosIdBloc = ProviderBloc.prod(context);
+    final marketBloc = ProviderBloc.market(context);/* 
+    final productosIdBloc = ProviderBloc.prod(context); */
 
     return StreamBuilder(
         stream: marketBloc.indexStream,

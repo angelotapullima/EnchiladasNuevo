@@ -1,8 +1,6 @@
-import 'package:enchiladasapp/src/database/carrito_database.dart';
+
+
 import 'package:enchiladasapp/src/database/pedido_database.dart';
-import 'package:enchiladasapp/src/database/producto_database.dart';
-import 'package:enchiladasapp/src/database/usuario_database.dart';
-import 'package:enchiladasapp/src/database/zona_database.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NuevoMetodoPagoBloc {
@@ -13,19 +11,24 @@ class NuevoMetodoPagoBloc {
   final _telefonoController = BehaviorSubject<bool>();
   final _montoCarritoController = BehaviorSubject<double>();
 
+  final _estadoWebviewController = BehaviorSubject<bool>();
+
   Stream<int> get selectValorRadioStream => _valorRadioController.stream;
   Stream<double> get vueltoStream => _vueltoController.stream;
   Stream<bool> get telefonoStream => _telefonoController.stream;
   Stream<double> get montoCarritoStream => _montoCarritoController.stream;
+  Stream<bool> get estadoWebview =>_estadoWebviewController.stream;
 
+  //funciones para cambio
   Function(int) get changeValorRadio => _valorRadioController.sink.add;
+  Function(bool) get changeEstadoWebview => _estadoWebviewController.sink.add;
 
   // Obtener el último valor ingresado a los streams
   int get valorRadio => _valorRadioController.value;
-
   double get valorVuelto => _vueltoController.value;
   bool get valorValidacionTelefono => _telefonoController.value;
   double get montoCarrito => _montoCarritoController.value;
+  bool get valorEstadoWe =>_estadoWebviewController.value;
 
   void validarPago(String idpedido, String monto) async {
     final pedido = await pedidoDatabase.obtenerPedidoPorId(idpedido);
@@ -35,13 +38,13 @@ class NuevoMetodoPagoBloc {
     _vueltoController.sink.add(res);
   }
 
-  void obtenerMontoCarrito() async {
+  /* void obtenerMontoCarrito() async {
     double precio = 0;
 
     final carritoDatabase = CarritoDatabase();
     final usuarioDatabase = UsuarioDatabase();
-    final zonaDatabase = ZonaDatabase();
-    final productoDatabase = ProductoDatabase();
+    final zonaDatabase = ZonaDatabase();/* 
+    final productoDatabase = ProductoDatabase(); */
     final carrito = await carritoDatabase.obtenerCarritoDB();
 
     for (int i = 0; i < carrito.length; i++) {
@@ -53,13 +56,13 @@ class NuevoMetodoPagoBloc {
     if (user[0].idZona != " ") {
       final zona = await zonaDatabase.obtenerZonaPorId(user[0].idZona);
       if (zona.length > 0) {
-        final producto =
-            await productoDatabase.consultarPorId(zona[0].idProducto);
+       /*  final producto =
+            await productoDatabase.consultarPorId(zona[0].idProducto); */
 
         if (precio > double.parse(zona[0].zonaPedidoMinimo)) {
           _montoCarritoController.sink.add(precio);
-        } else {
-          precio = precio + double.parse(producto[0].productoPrecio);
+        } else {/* 
+          precio = precio + double.parse(producto[0].productoPrecio); */
           _montoCarritoController.sink.add(precio);
         }
       }else{
@@ -71,7 +74,7 @@ class NuevoMetodoPagoBloc {
     }
   }
 
-  void validarPago2(String montoIngresado, String precioPedido) async {
+  */ void validarPago2(String montoIngresado, String precioPedido) async {
     double res = 0;
     double costo = double.parse(montoIngresado);
     res = costo - double.parse(precioPedido);
@@ -91,5 +94,6 @@ class NuevoMetodoPagoBloc {
     _vueltoController?.close();
     _telefonoController?.close();
     _montoCarritoController?.close();
+    _estadoWebviewController?.close();
   }
 }

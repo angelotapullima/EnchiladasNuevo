@@ -4,7 +4,7 @@ import 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/DowloadPage.dart';
-import 'package:enchiladasapp/src/widgets/zona_direction.dart';
+import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -88,7 +88,7 @@ class HomePuzzle extends StatelessWidget {
     );
   }
 
-  Widget _button(
+  /* Widget _button(
       BuildContext context, List<PuzzleDatum> puzzle, Responsive responsive) { 
     final size = MediaQuery.of(context).size;
     return Positioned(
@@ -124,7 +124,7 @@ class HomePuzzle extends StatelessWidget {
     );
   }
 
-  Widget _backgroundImage(List<PuzzleDatum> puzzle, Responsive responsive) {
+  */ Widget _backgroundImage(List<PuzzleDatum> puzzle, Responsive responsive) {
     //print("${pelicula[0].getPosterImg()}");
     return Container(
       width: double.infinity,
