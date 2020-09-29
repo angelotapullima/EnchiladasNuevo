@@ -20,7 +20,7 @@ class CategoriasBloc{
   Stream<bool> get cargandoCategoriasStream => _cargandoCategoriasController.stream;
 
   dispose(){
-    _categoriasEnchiladasController?.close();
+    _categoriasEnchiladasController?.close(); 
     _categoriasMarketController?.close();
     _cargandoCategoriasController?.close();
     _categoriasPromocionesController?.close();

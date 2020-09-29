@@ -1,5 +1,6 @@
 
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
+import 'package:enchiladasapp/src/pages/detalle_producto_foto.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/gestionar_direcciones.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
@@ -223,6 +224,7 @@ class _MyAppState extends State<MyApp> {
           'webView': (BuildContext context) => WebViewExample(),
           'ticket': (BuildContext context) => Ticket(),
           'gestionarDirecciones': (BuildContext context) => GestionarDirecciones(),
+          'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
 
 /* 
 

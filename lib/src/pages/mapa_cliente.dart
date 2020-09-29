@@ -59,7 +59,7 @@ class _MapaClienteState extends State<MapaCliente> {
   String idRepartidor = '--';
   String imagenRepartidor;
   @override
-  void initState() {
+  void initState() { 
     setSourceAndDestinationIcons();
     _obtenerUbicacion();
     currentPosition = CameraPosition(

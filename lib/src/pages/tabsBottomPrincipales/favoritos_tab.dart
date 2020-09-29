@@ -193,8 +193,8 @@ class _FavoritosTabState extends State<FavoritosTab> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Container(
-              width: responsive.wp(32),
-              height: responsive.hp(12),
+              width: responsive.ip(15),
+              height: responsive.ip(12),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(

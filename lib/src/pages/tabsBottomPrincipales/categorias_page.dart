@@ -243,7 +243,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     productosIdBloc.cargandoProductosFalse();
     productosIdBloc.obtenerProductosEnchiladasPorCategoria(_currenIndex);
 
-    return Scaffold(
+    return Scaffold( 
       body: _listaProductosId(productosIdBloc),
     );
   }

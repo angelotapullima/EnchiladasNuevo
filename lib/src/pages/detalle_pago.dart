@@ -9,7 +9,6 @@ import 'package:enchiladasapp/src/database/pedido_database.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/models/argumentDetallePedido.dart';
 import 'package:enchiladasapp/src/models/argumentsWebview.dart';
-import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/direccion_model.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
 import 'package:enchiladasapp/src/models/ruc_model.dart';
@@ -300,7 +299,9 @@ class _DetallePagoState extends State<DetallePago> {
         if (snapshot.hasData) {
           double precioTotal = 0.0;
           for (int x = 0; x < snapshot.data.length; x++) {
-            precioTotal = precioTotal + double.parse(snapshot.data[x].precio);
+            if (snapshot.data[x].precio != '') {
+              precioTotal = precioTotal + double.parse(snapshot.data[x].precio);
+            }
           }
           String precioTotalFinal = utils.format(precioTotal);
 
@@ -351,42 +352,58 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   Widget _productos(Responsive responsive, CarritoCompleto carrito) {
+    int estado = 0;
     String nombre = "";
     String precioFinal;
-    double precio =
-        double.parse(carrito.cantidad) * double.parse(carrito.precio);
+    if (carrito.precio != '') {
+      estado = 1;
+      double precio =
+          double.parse(carrito.cantidad) * double.parse(carrito.precio);
 
-    precioFinal = utils.format(precio);
-    if (int.parse(carrito.cantidad) > 1) {
-      nombre = "${carrito.producto} x ${carrito.cantidad}";
-    } else {
-      nombre = "${carrito.producto}";
+      precioFinal = utils.format(precio);
+      if (int.parse(carrito.cantidad) > 1) {
+        nombre = "${carrito.producto} x ${carrito.cantidad}";
+      } else {
+        nombre = "${carrito.producto}";
+      }
+    }else{nombre = "${carrito.producto}";
     }
+
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: responsive.hp(0.5),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
+      child: (estado == 1)
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    '$nombre',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: responsive.ip(1.5),
+                    ),
+                  ),
+                ),
+                Text(
+                  'S/.$precioFinal',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: responsive.ip(1.5),
+                  ),
+                ),
+              ],
+            )
+          : Expanded(
             child: Text(
-              '$nombre',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: responsive.ip(1.5),
+                '$nombre',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: responsive.ip(1.8),
+                ),
               ),
-            ),
           ),
-          Text(
-            'S/.$precioFinal',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: responsive.ip(1.5),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -629,7 +646,6 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   Widget _tipoPago(Responsive responsive) {
-
     montoPago = tipoPagoController.text;
     vuelto = 0;
     if (montoPago != null && montoPago != "") {
@@ -775,7 +791,7 @@ class _DetallePagoState extends State<DetallePago> {
                       style: TextStyle(fontSize: responsive.ip(2)),
                     ),
                     onPressed: () {
-                    _pagarcarrito(responsive, precioAPagar);
+                      _pagarcarrito(responsive, precioAPagar);
                       //Navigator.pushNamed(context, 'detallePago');
                     }),
               ),
@@ -800,9 +816,10 @@ class _DetallePagoState extends State<DetallePago> {
               color: Colors.white),
           child: Padding(
             padding: EdgeInsets.only(
-                top: responsive.hp(2),
-                left: responsive.wp(5),
-                right: responsive.wp(5)),
+              top: responsive.hp(2),
+              left: responsive.wp(5),
+              right: responsive.wp(5),
+            ),
             child: Column(
               children: <Widget>[
                 Text(
@@ -973,9 +990,7 @@ class _DetallePagoState extends State<DetallePago> {
                       Center(
                         child: FlatButton(
                           onPressed: () async {
-                            setState(() {
-                              
-                            });
+                            setState(() {});
                             Navigator.pop(context);
                           },
                           child: Container(
@@ -1181,6 +1196,7 @@ class _DetallePagoState extends State<DetallePago> {
                           Navigator.pop(context);
                           //Navigator.pop(context);
                           print('fue pe');
+                          pasoFactura = true;
                           _comprobanteRadioValue(context, 0);
                           errorRuc = 'Ingrese un RUC válido';
                           mostrarErrorRuc = true;
@@ -1218,7 +1234,6 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-
   void _pagarcarrito(Responsive responsive, double precio) async {
     final pedidoApi = OrdenesApi();
     final usuarioDatabase = UsuarioDatabase();
@@ -1233,108 +1248,104 @@ class _DetallePagoState extends State<DetallePago> {
     if (listPedido.length > 0) {
       _modalButtonPedidoPendiente(context, responsive);
     } else {
-      if (direccion.length>0) {
-        
-          if (user[0].telefono != "" && user[0].telefono != null) {
-            if (_comprobanteValue == 1 || _comprobanteValue == 0) {
-              if (_tipoPagoValue == 1 || _tipoPagoValue == 0) {
-                PedidoServer pedido = new PedidoServer();
-                if (_comprobanteValue == 0) {
-                  //selecciona Boleta
-                  pedido.pedidoTipoComprobante = "6";
-                  pedido.pedidoCodPersona = "1";
-                  pasoFactura = true;
+      if (direccion.length > 0) {
+        if (user[0].telefono != "" && user[0].telefono != null) {
+          if (_comprobanteValue == 1 || _comprobanteValue == 0) {
+            if (_tipoPagoValue == 1 || _tipoPagoValue == 0) {
+              PedidoServer pedido = new PedidoServer();
+              if (_comprobanteValue == 0) {
+                //selecciona Boleta
+                pedido.pedidoTipoComprobante = "6";
+                pedido.pedidoCodPersona = "1";
+                pasoFactura = true;
+              } else {
+                //seleccciona Factura
+                pedido.pedidoTipoComprobante = "7";
+                pedido.pedidoCodPersona = comprobanteController.text;
+              }
+              pedido.pedidoMontoFinal = precio.toString();
+              if (_tipoPagoValue == 0) {
+                pedido.pedidoMontoPago = '0';
+                pedido.pedidoVueltoPago = "0";
+                pedido.pedidoFormaPago = "3";
+                pedido.pedidoEstadoPago = "0";
+                pasoefectivo = true;
+              } else {
+                pedido.pedidoMontoPago = montoPago;
+                pedido.pedidoVueltoPago = vuelto.toString();
+                pedido.pedidoFormaPago = "4";
+                pedido.pedidoEstadoPago = "1";
+                if (vuelto < 0) {
+                  pasoefectivo = false;
                 } else {
-                  //seleccciona Factura
-                  pedido.pedidoTipoComprobante = "7";
-                  pedido.pedidoCodPersona = comprobanteController.text;
-                }
-                pedido.pedidoMontoFinal = precio.toString();
-                if (_tipoPagoValue == 0) {
-                  pedido.pedidoMontoPago = '0';
-                  pedido.pedidoVueltoPago = "0";
-                  pedido.pedidoFormaPago = "3";
-                  pedido.pedidoEstadoPago = "0";
                   pasoefectivo = true;
-                } else {
-                  pedido.pedidoMontoPago = montoPago;
-                  pedido.pedidoVueltoPago = vuelto.toString();
-                  pedido.pedidoFormaPago = "4";
-                  pedido.pedidoEstadoPago = "1";
-                  if (vuelto < 0) {
-                    pasoefectivo = false;
-                  } else {
-                    pasoefectivo = true;
-                  }
                 }
+              }
 
-                if (pasoefectivo) {
-                  if (pasoFactura) {
-                    showProcessingDialog();
-                    final res = await pedidoApi.enviarpedido(pedido);
-                    print('respuesta de la ptmr $res');
-                    if (res.resp == 1) {
-                      print(res.link);
+              if (pasoefectivo) {
+                if (pasoFactura) {
+                  showProcessingDialog();
+                  final res = await pedidoApi.enviarpedido(pedido);
+                  print('respuesta de la ptmr $res');
+                  if (res.resp == 1) {
+                    print(res.link);
 
-                      if (res.link != "") {
-                        Navigator.pop(context);
-                        ArgumentsDetallePago argumentsDetallePago =
-                            ArgumentsDetallePago();
-                        argumentsDetallePago.link = res.link;
-                        argumentsDetallePago.idPedido = res.idPedido;
-                        Navigator.pushNamed(context, 'webView',
-                            arguments: argumentsDetallePago);
-                      } else {
-                        Navigator.pop(context);
-                        ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                        argumentsWebview.idPedido = res.idPedido;
-                        argumentsWebview.codigo = '1';
-
-                        Navigator.pushNamed(context, 'ticket',
-                            arguments: argumentsWebview);
-                        //Navigator.pop(context);
-                        //pedidoCorrecto();
-                      }
-                    } else if (res.resp == 8) {
-                      utils.showToast(
-                          'Estamos actualizando los datos de los productos, intentelo más tarde',
-                          2,
-                          ToastGravity.TOP);
-                      //OCURRIO UNA ACTUALIZACION DE PRODUCTOS
-                      final categoriasApi = CategoriasApi();
-                      categoriasApi.obtenerAmbos();
+                    if (res.link != "") {
                       Navigator.pop(context);
+                      ArgumentsDetallePago argumentsDetallePago =
+                          ArgumentsDetallePago();
+                      argumentsDetallePago.link = res.link;
+                      argumentsDetallePago.idPedido = res.idPedido;
+                      Navigator.pushNamed(context, 'webView',
+                          arguments: argumentsDetallePago);
                     } else {
-                      utils.showToast('Ocurrio un error, intentelo más tarde',
-                          2, ToastGravity.TOP);
-                      //Ocurrio un error
                       Navigator.pop(context);
+                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = res.idPedido;
+                      argumentsWebview.codigo = '1';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+                      //Navigator.pop(context);
+                      //pedidoCorrecto();
                     }
-                  } else {
+                  } else if (res.resp == 8) {
                     utils.showToast(
-                        'Debe ingresar un Comprobante de pago válido',
+                        'Estamos actualizando los datos de los productos, intentelo más tarde',
                         2,
                         ToastGravity.TOP);
+                    //OCURRIO UNA ACTUALIZACION DE PRODUCTOS
+                    final categoriasApi = CategoriasApi();
+                    categoriasApi.obtenerAmbos();
+                    Navigator.pop(context);
+                  } else {
+                    utils.showToast('Ocurrio un error, intentelo más tarde', 2,
+                        ToastGravity.TOP);
+                    //Ocurrio un error
+                    Navigator.pop(context);
                   }
                 } else {
-                  utils.showToast(
-                      'El monto de pago debe ser mayor al monto del pedido ',
-                      2,
-                      ToastGravity.TOP);
+                  utils.showToast('Debe ingresar un Comprobante de pago válido',
+                      2, ToastGravity.TOP);
                 }
               } else {
                 utils.showToast(
-                    'Debe seleccionar un Tipo de  pago ', 2, ToastGravity.TOP);
+                    'El monto de pago debe ser mayor al monto del pedido ',
+                    2,
+                    ToastGravity.TOP);
               }
             } else {
-              utils.showToast('Debe seleccionar un comprobante de  pago ', 2,
-                  ToastGravity.TOP);
+              utils.showToast(
+                  'Debe seleccionar un Tipo de  pago ', 2, ToastGravity.TOP);
             }
           } else {
-            utils.showToast('Ingrese un número de teléfono de entrega', 2,
+            utils.showToast('Debe seleccionar un comprobante de  pago ', 2,
                 ToastGravity.TOP);
           }
-        
+        } else {
+          utils.showToast(
+              'Ingrese un número de teléfono de entrega', 2, ToastGravity.TOP);
+        }
       } else {
         utils.showToast(
             'Ingrese una dirección de entrega', 2, ToastGravity.TOP);

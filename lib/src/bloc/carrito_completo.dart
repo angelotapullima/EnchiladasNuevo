@@ -59,6 +59,14 @@ class CarritoCompletoBloc {
         carritoCompleto.cantidad = '1';
 
         listCarritoCompleto.add(carritoCompleto);
+
+
+        CarritoCompleto carritoCompleto2 = CarritoCompleto();
+        carritoCompleto2.producto = 'Tu pedido no cumple con el monto mínimo,para el distrito asignado que es de  S/.${carritoCompleto.precio}';
+        carritoCompleto2.precio = '';
+        carritoCompleto2.cantidad = '';
+
+        listCarritoCompleto.add(carritoCompleto2);
       }
 
       carritoCompleto.sink.add(listCarritoCompleto);

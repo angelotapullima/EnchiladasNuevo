@@ -72,7 +72,6 @@ class _DetalleProducto extends State<DetalleProductitos> {
                 parallaxOffset: 0.1,
                 backdropEnabled: true,
                 body: Stack(children: <Widget>[
-                  
                   _backgroundImage(context, snapshot.data[0]),
                   _crearAppbar(responsive),
                   TranslateAnimation(
@@ -186,8 +185,8 @@ class _DetalleProducto extends State<DetalleProductitos> {
     final precioProdcuto = utils.format(
       double.parse(productosData.productoPrecio),
     );
-    return Padding(
-      padding: EdgeInsets.only(
+    return Container(
+      margin: EdgeInsets.only(
         top: responsive.hp(25),
       ),
       child: DraggableScrollableSheet(
@@ -221,7 +220,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         ),
                       ),
                       SizedBox(
-                        width: responsive.wp(6),
+                        width: responsive.wp(3),
                       ),
                       Text(
                         'S/ $precioProdcuto',
@@ -777,42 +776,42 @@ class _DetalleProducto extends State<DetalleProductitos> {
     );
   }
 
-
   Widget _backgroundImage(BuildContext context, ProductosData carrito) {
     final size = MediaQuery.of(context).size;
 
-    return Container(
-           
-            width: double.infinity,
-            height: size.height * 0.50,
-            child: Hero(
-              tag: '${carrito.idProducto}',
-              child: ClipRRect(
-               
-
-                child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
-                  placeholder: (context, url) => Image(
-                      image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: '${carrito.productoFoto}',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, 'detalleProductoFoto',arguments: carrito);
+      },
+      child: Container(
+        width: double.infinity,
+        height: size.height * 0.50,
+        child: Hero(
+          tag: '${carrito.idProducto}',
+          child: ClipRRect(
+            child: CachedNetworkImage(
+              cacheManager: CustomCacheManager(),
+              placeholder: (context, url) => Image(
+                  image: AssetImage('assets/jar-loading.gif'),
+                  fit: BoxFit.cover),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl: '${carrito.productoFoto}',
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
             ),
-          
+          ),
+        ),
+      ),
     );
   }
 
- void dialogoObservacionProducto(String id) {
+  void dialogoObservacionProducto(String id) {
     showDialog(
         context: context,
         barrierDismissible: true,

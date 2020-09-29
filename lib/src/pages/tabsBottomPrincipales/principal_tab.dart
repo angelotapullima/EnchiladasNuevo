@@ -158,36 +158,36 @@ class PrincipalTab extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return Container(
               margin: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
-                decoration: BoxDecoration(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Arguments arg = new Arguments(
+                      "${promociones[index].categoriaNombre}",
+                      '${promociones[index].idCategoria}');
+                  Navigator.pushNamed(context, 'combo', arguments: arg);
+                },
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                Arguments arg = new Arguments(
-                    "${promociones[index].categoriaNombre}",
-                    '${promociones[index].idCategoria}');
-                Navigator.pushNamed(context, 'combo', arguments: arg);
-              },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                      cacheManager: CustomCacheManager(),
-                      placeholder: (context, url) => Image(
-                          image: AssetImage('assets/jar-loading.gif'),
-                          fit: BoxFit.cover),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: '${promociones[index].categoriaBanner}',
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
+                  child: CachedNetworkImage(
+                    cacheManager: CustomCacheManager(),
+                    placeholder: (context, url) => Image(
+                        image: AssetImage('assets/jar-loading.gif'),
+                        fit: BoxFit.cover),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    imageUrl: '${promociones[index].categoriaBanner}',
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
                 ),
+              ),
             );
           },
           onPageChanged: (int index) {
@@ -246,7 +246,7 @@ class PrincipalTab extends StatelessWidget {
                                   height: responsive.hp(25),
                                   child: Stack(
                                     children: <Widget>[
-                                      _buildPageView(responsive,cat.data),
+                                      _buildPageView(responsive, cat.data),
                                       _buildCircleIndicator(
                                           responsive, cat.data),
                                     ],
@@ -283,7 +283,6 @@ class PrincipalTab extends StatelessWidget {
     double anchoCard = 25.0;
     BoxFit boxfit;
     String tipo;
-
     if (pantallaModel.idPantalla == '5') {
       //combos
       altoList = 40.0;
@@ -314,6 +313,7 @@ class PrincipalTab extends StatelessWidget {
       altoList = 20.0;
       altoCard = 15.0;
       anchoCard = 35;
+      
 
       tipo = 'categoria';
 
@@ -331,174 +331,180 @@ class PrincipalTab extends StatelessWidget {
 
     return GestureDetector(
       child: Container(
-          margin: EdgeInsets.only(bottom: responsive.hp(1)),
-          width: double.infinity,
-          height: responsive.hp(altoList),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '${pantallaModel.pantallaNombre}',
-                      style: TextStyle(
-                          fontSize: responsive.ip(2.5),
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold),
+        margin: EdgeInsets.only(bottom: responsive.hp(1)),
+        width: double.infinity,
+        height: responsive.hp(altoList),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    '${pantallaModel.pantallaNombre}',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.5),
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      if (pantallaModel.idPantalla == '1') {
+                        final bottomBloc = ProviderBloc.bottom(context);
+                        bottomBloc.changePage(2);
+                      } else if (pantallaModel.idPantalla == '2') {
+                        Navigator.pushNamed(context, 'market');
+                      } else if (pantallaModel.idPantalla == '3') {
+                        Navigator.pushNamed(context, 'HomePuzzle');
+                      } else {
+                        Arguments arg = new Arguments(
+                            "${pantallaModel.pantallaNombre}",
+                            '${pantallaModel.pantallCategoria}');
+                        Navigator.pushNamed(context, 'combo', arguments: arg);
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.hp(1.5),
+                        vertical: responsive.hp(.5),
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            'Ver más',
+                            style: TextStyle(
+                                fontSize: responsive.ip(1.7),
+                                color: Colors.white),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                            size: responsive.ip(2.2),
+                          )
+                        ],
+                      ),
                     ),
-                    Spacer(),
-                    GestureDetector(
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: responsive.hp(1),
+            ),
+            Container(
+              height: responsive.hp(altoCard),
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: pantallaModel.items.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, i) {
+                    return GestureDetector(
                       onTap: () {
-                        if (pantallaModel.idPantalla == '1') {
-                          final bottomBloc = ProviderBloc.bottom(context);
-                          bottomBloc.changePage(2);
-                        } else if (pantallaModel.idPantalla == '2') {
-                          Navigator.pushNamed(context, 'market');
-                        } else if (pantallaModel.idPantalla == '3') {
-                          Navigator.pushNamed(context, 'HomePuzzle');
-                        } else {
+                        if (tipo == 'categoria') {
                           Arguments arg = new Arguments(
-                              "${pantallaModel.pantallaNombre}",
-                              '${pantallaModel.pantallCategoria}');
+                              "${pantallaModel.items[i].nombreItem}",
+                              '${pantallaModel.items[i].id}');
                           Navigator.pushNamed(context, 'combo', arguments: arg);
-                        }
+                        } else if (tipo == 'producto') {
+                          ProductosData productosData = ProductosData();
+                          productosData.idProducto = pantallaModel.items[i].id;
+
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration:
+                                  const Duration(milliseconds: 100),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return DetalleProductitos(
+                                    productosData: productosData);
+                              },
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        } else {}
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: responsive.hp(1.5),
-                            vertical: responsive.hp(.5)),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(100),
+                        width: responsive.wp(anchoCard),
+                        height: responsive.hp(altoCard),
+                        padding: EdgeInsets.only(
+                          left: responsive.wp(3),
                         ),
-                        child: Row(
+                        margin: EdgeInsets.only(
+                          right: responsive.wp(1.5),
+                        ),
+                        child: Stack(
                           children: <Widget>[
-                            Text(
-                              'Ver más',
-                              style: TextStyle(
-                                  fontSize: responsive.ip(1.7),
-                                  color: Colors.white),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: responsive.ip(2.2),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: responsive.hp(1),
-              ),
-              Container(
-                height: responsive.hp(altoCard),
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: pantallaModel.items.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, i) {
-                      return GestureDetector(
-                        onTap: () {
-                          if (tipo == 'categoria') {
-                            Arguments arg = new Arguments(
-                                "${pantallaModel.items[i].nombreItem}",
-                                '${pantallaModel.items[i].id}');
-                            Navigator.pushNamed(context, 'combo',
-                                arguments: arg);
-                          } else if (tipo == 'producto') {
-                            ProductosData productosData = ProductosData();
-                            productosData.idProducto =
-                                pantallaModel.items[i].id;
-
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                transitionDuration:
-                                    const Duration(milliseconds: 100),
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) {
-                                  return DetalleProductitos(
-                                      productosData: productosData);
-                                },
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          } else {}
-                        },
-                        child: Container(
-                          width: responsive.wp(anchoCard),
-                          height: responsive.hp(altoCard),
-                          padding: EdgeInsets.only(left: responsive.wp(3)),
-                          margin: EdgeInsets.only(right: responsive.wp(1.5)),
-                          child: Stack(
-                            children: <Widget>[
-                              Container(
-                                width: responsive.wp(anchoCard),
-                                height: responsive.hp(altoCard),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
-                                    cacheManager: CustomCacheManager(),
-                                    placeholder: (context, url) => Image(
-                                        image: AssetImage(
-                                            'assets/jar-loading.gif'),
-                                        fit: BoxFit.cover),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                    imageUrl:
-                                        '${pantallaModel.items[i].fotoItem}',
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: boxfit,
-                                        ),
+                            Container(
+                              width: responsive.wp(anchoCard),
+                              height: responsive.hp(altoCard),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: CachedNetworkImage(
+                                  cacheManager: CustomCacheManager(),
+                                  placeholder: (context, url) => Image(
+                                      image:
+                                          AssetImage('assets/jar-loading.gif'),
+                                      fit: BoxFit.cover),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  imageUrl:
+                                      '${pantallaModel.items[i].fotoItem}',
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: boxfit,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                  right: 0,
-                                  left: 0,
-                                  bottom: 0,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: responsive.hp(2)),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(.5),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Text(
-                                      '${pantallaModel.items[i].nombreItem}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: responsive.ip(2),
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ))
-                            ],
-                          ),
+                            ),
+                            Positioned(
+                              right: 0,
+                              left: 0,
+                              bottom: 0,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: responsive.hp(2),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(.5),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  '${pantallaModel.items[i].nombreItem}',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: responsive.ip(2),
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      );
-                    }),
-              )
-            ],
-          )),
+                      ),
+                    );
+                  }),
+            )
+          ],
+        ),
+      ),
       onTap: () {
         Arguments arg = new Arguments("Combos Delivery", '54');
         //Navigator.pushNamed(context, 'timeline', arguments: arg);

@@ -36,7 +36,8 @@ class CategoriasApi {
               decodedData['result']['data'][i]['categoria_tipo'];
           categoriaData.categoriaFoto =
               decodedData['result']['data'][i]['categoria_foto'];
-              categoriaData.categoriaBanner =decodedData['result']['data'][i]['categoria_banner'];
+          categoriaData.categoriaBanner =
+              decodedData['result']['data'][i]['categoria_banner'];
           categoriaData.categoriaPromocion =
               decodedData['result']['data'][i]['categoria_promocion'];
           categoriaData.categoriaEstado =
@@ -46,25 +47,39 @@ class CategoriasApi {
 
           categoriasDatabase.insertarCategoriasDb(categoriaData);
 
-          //TEMPORIZADOR
 
+
+          //TEMPORIZADOR
           var temporizador = List<dynamic>();
           temporizador = decodedData['result']['data'][i]['temporizador'];
 
           TemporizadorModel temporizadorModel = TemporizadorModel();
-          temporizadorModel.idTemporizador = decodedData['result']['data'][i]['id_categoria'];
-          temporizadorModel.temporizadorTipo = temporizador[0]['temporizador_tipo'];
-          temporizadorModel.temporizadorFechainicio = temporizador[0]['temporizador_fechainicio'];
-          temporizadorModel.temporizadorFechafin = temporizador[0]['temporizador_fechafin'];
-          temporizadorModel.temporizadorHorainicio = temporizador[0]['temporizador_horainicio'];
-          temporizadorModel.temporizadorHorafin = temporizador[0]['temporizador_horafin'];
-          temporizadorModel.temporizadorLunes = temporizador[0]['temporizador_dias']['Lunes'];
-          temporizadorModel.temporizadorMartes = temporizador[0]['temporizador_dias']['Martes'];
-          temporizadorModel.temporizadorMiercoles = temporizador[0]['temporizador_dias']['Miercoles'];
-          temporizadorModel.temporizadorJueves = temporizador[0]['temporizador_dias']['Jueves'];
-          temporizadorModel.temporizadorViernes = temporizador[0]['temporizador_dias']['Viernes'];
-          temporizadorModel.temporizadorSabado = temporizador[0]['temporizador_dias']['Sabado'];
-          temporizadorModel.temporizadorDomingo = temporizador[0]['temporizador_dias']['Domingo'];
+          temporizadorModel.idTemporizador =
+              decodedData['result']['data'][i]['id_categoria'];
+          temporizadorModel.temporizadorTipo =
+              temporizador[0]['temporizador_tipo'];
+          temporizadorModel.temporizadorFechainicio =
+              temporizador[0]['temporizador_fechainicio'];
+          temporizadorModel.temporizadorFechafin =
+              temporizador[0]['temporizador_fechafin'];
+          temporizadorModel.temporizadorHorainicio =
+              temporizador[0]['temporizador_horainicio'];
+          temporizadorModel.temporizadorHorafin =
+              temporizador[0]['temporizador_horafin'];
+          temporizadorModel.temporizadorLunes =
+              temporizador[0]['temporizador_dias']['Lunes'];
+          temporizadorModel.temporizadorMartes =
+              temporizador[0]['temporizador_dias']['Martes'];
+          temporizadorModel.temporizadorMiercoles =
+              temporizador[0]['temporizador_dias']['Miercoles'];
+          temporizadorModel.temporizadorJueves =
+              temporizador[0]['temporizador_dias']['Jueves'];
+          temporizadorModel.temporizadorViernes =
+              temporizador[0]['temporizador_dias']['Viernes'];
+          temporizadorModel.temporizadorSabado =
+              temporizador[0]['temporizador_dias']['Sabado'];
+          temporizadorModel.temporizadorDomingo =
+              temporizador[0]['temporizador_dias']['Domingo'];
 
           await temporizadorDatabase.insertarTemporizador(temporizadorModel);
 
@@ -123,19 +138,41 @@ class CategoriasApi {
 
       if (decodedData == null) return [];
 
-      Categorias categorias = Categorias.fromJson(decodedData);
+      CategoriaData categorias = CategoriaData(); //.fromJson(decodedData);
 
-      for (int i = 0; i < categorias.result.data.length; i++) {
-        if (categorias.result.data.length > 0) {
+      categorias.idCategoria = decodedData['result']['data'];
+
+      for (int i = 0; i < decodedData['result']['data'].length; i++) {
+        CategoriaData categorias = CategoriaData();
+
+        categorias.idCategoria =
+            decodedData['result']['data'][i]['id_categoria'];
+        categorias.categoriaTipo =
+            decodedData['result']['data'][i]['categoria_tipo'];
+        categorias.categoriaNombre =
+            decodedData['result']['data'][i]['categoria_nombre'];
+        categorias.categoriaIcono =
+            decodedData['result']['data'][i]['categoria_icono'];
+        categorias.categoriaPromocion =
+            decodedData['result']['data'][i]['categoria_promocion'];
+        categorias.categoriaFoto =
+            decodedData['result']['data'][i]['categoria_foto'];
+        categorias.categoriaBanner =
+            decodedData['result']['data'][i]['categoria_banner'];
+        categorias.categoriaEstado =
+            decodedData['result']['data'][i]['categoria_estado'];
+        categorias.categoriaMostrarApp =
+            decodedData['result']['data'][i]['categoria_mostrar_app'];
+
+        categoriasDatabase.insertarCategoriasDb(categorias);
+        /* if (categorias.result.data.length > 0) {
           final id = categorias.result.data[i].idCategoria;
           final dato = await categoriasDatabase.consultarPorId(id);
           CategoriaData categoriaData = CategoriaData();
 
-          categoriaData.idCategoria = categorias.result.data[i].idCategoria;
-          categoriaData.categoriaNombre =
-              categorias.result.data[i].categoriaNombre;
-          categoriaData.categoriaEstado =
-              categorias.result.data[i].categoriaEstado;
+          categoriaData.idCategoria     = categorias.result.data[i].idCategoria;
+          categoriaData.categoriaNombre = categorias.result.data[i].categoriaNombre;
+          categoriaData.categoriaEstado = categorias.result.data[i].categoriaEstado;
 
           if (dato.length > 0) {
             categoriasDatabase.insertarCategoriasDb(categoriaData);
@@ -148,8 +185,8 @@ class CategoriasApi {
           }
           lista.add(categoriaData);
 
-          categoriasDatabase.insertarCategoriasDb(categorias.result.data[i]);
-        }
+          
+        } */
       }
 
       if (lista.length < 0) {

@@ -40,8 +40,10 @@ class ZoomFotoDireccion extends StatelessWidget {
       ),
       body: Center(
         child: PhotoView(
-          imageProvider: CachedNetworkImageProvider(zona.zonaImagen,
-              cacheManager: CustomCacheManager()),
+          imageProvider: CachedNetworkImageProvider(
+            zona.zonaImagen,
+            cacheManager: CustomCacheManager(),
+          ),
         ),
       ),
     );
@@ -66,7 +68,8 @@ class ZoomFotoDireccion extends StatelessWidget {
                     ModalRoute.withName('/'),
                   );
                 } else if (zona.route == 'pago') {
-                  Navigator.popUntil(context, ModalRoute.withName('detallePago'));
+                  Navigator.popUntil(
+                      context, ModalRoute.withName('detallePago'));
                 }
               },
               child: Text('Continuar'),

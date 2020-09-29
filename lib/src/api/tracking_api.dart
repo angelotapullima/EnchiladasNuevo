@@ -17,7 +17,7 @@ class TrackingApi {
         'tn': prefs.token,
         'id_user': prefs.idUser,
         'app': 'true', 
-        'id_entrega': idEntrega
+        'id_entrega': idEntrega,
       });
       final decodedData = json.decode(resp.body);
       final code = decodedData['success'];
@@ -33,7 +33,7 @@ class TrackingApi {
     }
   }
 
-  Future<int> finalizarEntrega(String idEntrega) async {
+  Future<int> finalizarEntrega(String idEntrega,String comentarios) async {
     try {
       final url = '$_url/api/entrega/finalizar_entrega';
 
@@ -41,7 +41,8 @@ class TrackingApi {
         'tn': prefs.token,
         'id_user': prefs.idUser,
         'app': 'true',
-        'id_entrega': idEntrega
+        'id_entrega': idEntrega,
+        'entrega_comentarios': comentarios,
       });
       final decodedData = json.decode(resp.body);
       final code = decodedData['result']['code'];
