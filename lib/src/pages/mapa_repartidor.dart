@@ -199,13 +199,36 @@ class MapaRepartidorState extends State<MapaRepartidor> {
               right: 0,
               child: Column(
                 children: <Widget>[
-                  GestureDetector(
+                  (estadoTracking == 'activado')?GestureDetector(
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: responsive.wp(10),
                           vertical: responsive.hp(1.5)),
                       child: Text(
-                        'Activar ubicacción',
+                        'Activar ubicación',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: responsive.ip(2),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                          color: (estadoTracking == 'activado')
+                              ? Colors.red
+                              : Colors.green,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          )),
+                    ),
+                    onTap: () {
+                      activarUbicacion(data.idEntrega);
+                    },
+                  ):GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: responsive.wp(10),
+                          vertical: responsive.hp(1.5)),
+                      child: Text(
+                        'desactivar ubicación',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: responsive.ip(2),
@@ -443,6 +466,7 @@ class MapaRepartidorState extends State<MapaRepartidor> {
                       setState(() {
                         mostrarCargandoTracking = false;
                         pedidoTracking = true;
+                        Navigator.pop(context);
 
                         cant++;
                       });
