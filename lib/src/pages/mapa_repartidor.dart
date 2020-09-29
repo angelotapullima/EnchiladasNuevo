@@ -4,9 +4,11 @@ import 'package:enchiladasapp/src/api/tracking_api.dart';
 import 'package:enchiladasapp/src/models/pedidos_asignados_model.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
@@ -376,7 +378,8 @@ class MapaRepartidorState extends State<MapaRepartidor> {
     }
   }
 
-  void comentariosFinalizarEntrega(Responsive responsive) async {
+  void comentariosFinalizarEntrega(
+      Responsive responsive, String idEntrega) async {
     return showDialog(
       barrierDismissible: true,
       context: context,
@@ -389,22 +392,28 @@ class MapaRepartidorState extends State<MapaRepartidor> {
           ),
           contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
           content: Container(
-            margin: EdgeInsets.symmetric(horizontal: responsive.wp(10)),
+            margin: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
             width: double.infinity,
-            height: responsive.hp(10),
+            height: responsive.hp(28),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Ingrese los comentarios de la entrega'),
+                Text('Ingrese los comentarios de la entrega',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.7),
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold)),
                 SizedBox(
-                  width: 5,
+                  height: responsive.hp(5),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
+                      border: Border.all(color: Colors.red),
                       borderRadius: BorderRadius.circular(5)),
                   child: TextField(
+                    decoration:
+                        InputDecoration(hintText: 'Ingrese lo comentarios'),
                     controller: _comentariosController,
                     maxLines: 3,
                   ),
@@ -412,6 +421,40 @@ class MapaRepartidorState extends State<MapaRepartidor> {
               ],
             ),
           ),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+              child: Text('volver'),
+            ),
+            FlatButton(
+                onPressed: () async {
+                  final trackingApi = TrackingApi();
+                  if (_comentariosController.text.isEmpty) {
+                    //debe comentar algo pe tilin
+
+                    utils.showToast(
+                        'Por favor agregue comentarios', 2, ToastGravity.TOP);
+                  } else {
+                    final resp = await trackingApi.finalizarEntrega(
+                        idEntrega, _comentariosController.text);
+                    if (resp == 1) {
+                      setState(() {
+                        mostrarCargandoTracking = false;
+                        pedidoTracking = true;
+
+                        cant++;
+                      });
+                    } else {
+                      setState(() {
+                        mostrarCargandoTracking = false;
+                      });
+                    }
+                  }
+                },
+                child: Text('Continuar')),
+          ],
         );
       },
     );
@@ -419,28 +462,16 @@ class MapaRepartidorState extends State<MapaRepartidor> {
 
   void empezarTrackingApi(String idEntrega, Responsive responsive) async {
     final trackingApi = TrackingApi();
-
     try {
       if (!pedidoTracking) {
-        setState(() {
+         setState(() {
           mostrarCargandoTracking =
               true; //variable para mostrar la carga de la llamada de api
-        });
-
-        comentariosFinalizarEntrega(responsive);
-        /* final resp = await trackingApi.finalizarEntrega(idEntrega);
-        if (resp == 1) {
-          setState(() {
-            mostrarCargandoTracking = false;
-            pedidoTracking=true;
-          });
-        } else {
-          setState(() {
-            mostrarCargandoTracking = false;
-          });
-        } */
-        cant++;
+              comentariosFinalizarEntrega(responsive, idEntrega);
+        }); 
+        
       } else {
+        
         setState(() {
           mostrarCargandoTracking = true;
         });
@@ -457,7 +488,7 @@ class MapaRepartidorState extends State<MapaRepartidor> {
             mostrarCargandoTracking = false;
           });
         }
-        cant++;
+        cant++; 
       }
     } on Exception {}
   }
