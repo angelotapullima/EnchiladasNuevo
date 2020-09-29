@@ -205,7 +205,7 @@ class MapaRepartidorState extends State<MapaRepartidor> {
                           horizontal: responsive.wp(10),
                           vertical: responsive.hp(1.5)),
                       child: Text(
-                        'Activar ubicación',
+                        'Desactivar ubicación',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: responsive.ip(2),
@@ -228,7 +228,7 @@ class MapaRepartidorState extends State<MapaRepartidor> {
                           horizontal: responsive.wp(10),
                           vertical: responsive.hp(1.5)),
                       child: Text(
-                        'desactivar ubicación',
+                        'Activar ubicación',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: responsive.ip(2),
