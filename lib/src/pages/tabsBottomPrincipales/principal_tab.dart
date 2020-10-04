@@ -16,8 +16,8 @@ import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class PrincipalTab extends StatelessWidget {
-  final _pageController = PageController();
-  final _currentPageNotifier = ValueNotifier<int>(0);
+  final _pageController = PageController(viewportFraction: 0.9,initialPage: 1);
+  final _currentPageNotifier = ValueNotifier<int>(1);
   final _boxHeight = 150.0;
 
   @override
@@ -79,7 +79,7 @@ class PrincipalTab extends StatelessWidget {
                 bottomRight: Radius.circular(20),
               ),
               color: Colors.red),
-          height: responsive.hp(10),
+          height: responsive.hp(12),
           padding: EdgeInsets.symmetric(horizontal: responsive.hp(2)),
           child: SafeArea(
             child: Column(
@@ -157,16 +157,18 @@ class PrincipalTab extends StatelessWidget {
           controller: _pageController,
           itemBuilder: (BuildContext context, int index) {
             return Container(
-              margin: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+              margin: EdgeInsets.symmetric(horizontal: responsive.wp(1)),
+              //padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
               ),
               child: GestureDetector(
                 onTap: () {
-                  Arguments arg = new Arguments(
+                 Arguments arg = new Arguments(
                       "${promociones[index].categoriaNombre}",
                       '${promociones[index].idCategoria}');
-                  Navigator.pushNamed(context, 'combo', arguments: arg);
+                  Navigator.pushNamed(context, 'detallePromociones', arguments: arg); 
+                  //Navigator.pushNamed(context, 'detallePromociones');
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
@@ -201,7 +203,7 @@ class PrincipalTab extends StatelessWidget {
     return Positioned(
       left: 0.0,
       right: 0.0,
-      bottom: responsive.hp(2),
+      bottom: responsive.hp(3.2),
       child: CirclePageIndicator(
         selectedDotColor: Colors.black,
         dotColor: Colors.white,
@@ -218,7 +220,7 @@ class PrincipalTab extends StatelessWidget {
     categoriasBloc.obtenerCategoriasPromociones();
 
     return Container(
-      height: double.infinity,
+      
       child: StreamBuilder(
         stream: pantallasBloc.pantallasStream,
         builder: (BuildContext context,
@@ -238,11 +240,7 @@ class PrincipalTab extends StatelessWidget {
                             if (cat.hasData) {
                               if (cat.data.length > 0) {
                                 return Container(
-                                  padding: EdgeInsets.only(
-                                    bottom: responsive.hp(4),
-                                    right: responsive.wp(3),
-                                    left: responsive.wp(3),
-                                  ),
+
                                   height: responsive.hp(25),
                                   child: Stack(
                                     children: <Widget>[
@@ -313,7 +311,6 @@ class PrincipalTab extends StatelessWidget {
       altoList = 20.0;
       altoCard = 15.0;
       anchoCard = 35;
-      
 
       tipo = 'categoria';
 

@@ -300,7 +300,9 @@ class _DetallePagoState extends State<DetallePago> {
           double precioTotal = 0.0;
           for (int x = 0; x < snapshot.data.length; x++) {
             if (snapshot.data[x].precio != '') {
-              precioTotal = precioTotal + double.parse(snapshot.data[x].precio);
+              precioTotal = precioTotal +
+                  (double.parse(snapshot.data[x].precio) *
+                      double.parse(snapshot.data[x].cantidad));
             }
           }
           String precioTotalFinal = utils.format(precioTotal);
@@ -366,7 +368,8 @@ class _DetallePagoState extends State<DetallePago> {
       } else {
         nombre = "${carrito.producto}";
       }
-    }else{nombre = "${carrito.producto}";
+    } else {
+      nombre = "${carrito.producto}";
     }
 
     return Container(
@@ -395,15 +398,13 @@ class _DetallePagoState extends State<DetallePago> {
                 ),
               ],
             )
-          : Expanded(
-            child: Text(
-                '$nombre',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: responsive.ip(1.8),
-                ),
+          : Text(
+              '$nombre',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: responsive.ip(1.8),
               ),
-          ),
+            ),
     );
   }
 
@@ -440,11 +441,14 @@ class _DetallePagoState extends State<DetallePago> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Número de Teléfono',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2))),
+              Text(
+                'Número de Teléfono',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: responsive.ip(2),
+                ),
+              ),
               FlatButton(
                 child: Text(
                   '$agregar',
@@ -648,8 +652,10 @@ class _DetallePagoState extends State<DetallePago> {
   Widget _tipoPago(Responsive responsive) {
     montoPago = tipoPagoController.text;
     vuelto = 0;
+    String vuelto2 = '';
     if (montoPago != null && montoPago != "") {
       vuelto = double.parse(montoPago) - precioAPagar;
+      vuelto2 = utils.format(vuelto);
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -759,7 +765,7 @@ class _DetallePagoState extends State<DetallePago> {
                             ),
                           ),
                           Text(
-                            '$vuelto',
+                            '$vuelto2',
                             style: TextStyle(
                                 fontSize: responsive.ip(1.8),
                                 fontWeight: FontWeight.bold),
@@ -909,10 +915,12 @@ class _DetallePagoState extends State<DetallePago> {
           stream: nuevoMetodoPagoBloc.vueltoStream,
           builder: (BuildContext context, AsyncSnapshot snapshotvuelto) {
             double vuelto = 0;
+            String vuelto2 = '';
 
             if (nuevoMetodoPagoBloc.valorVuelto == null) {
             } else {
               vuelto = nuevoMetodoPagoBloc.valorVuelto;
+              vuelto2 = utils.format(vuelto);
             }
             return GestureDetector(
               onTap: () {
@@ -977,10 +985,10 @@ class _DetallePagoState extends State<DetallePago> {
                         children: <Widget>[
                           (vuelto > 0)
                               ? Text(
-                                  'Vuelto : S/ $vuelto',
+                                  'Vuelto : S/ $vuelto2',
                                   style: TextStyle(color: Colors.black),
                                 )
-                              : Text('Vuelto : S/ $vuelto',
+                              : Text('Vuelto : S/ $vuelto2',
                                   style: TextStyle(color: Colors.red))
                         ],
                       ),
@@ -1271,8 +1279,9 @@ class _DetallePagoState extends State<DetallePago> {
                 pedido.pedidoEstadoPago = "0";
                 pasoefectivo = true;
               } else {
+                String vuelto2 = utils.format(vuelto);
                 pedido.pedidoMontoPago = montoPago;
-                pedido.pedidoVueltoPago = vuelto.toString();
+                pedido.pedidoVueltoPago = vuelto2;
                 pedido.pedidoFormaPago = "4";
                 pedido.pedidoEstadoPago = "1";
                 if (vuelto < 0) {

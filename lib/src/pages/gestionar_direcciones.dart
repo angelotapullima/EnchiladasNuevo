@@ -29,7 +29,7 @@ class GestionarDirecciones extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: kToolbarHeight + responsive.hp(2)),
+            margin: EdgeInsets.only(top: kToolbarHeight + responsive.hp(4)),
             decoration: BoxDecoration(
               borderRadius: BorderRadiusDirectional.only(
                 topStart: Radius.circular(20),
@@ -43,6 +43,7 @@ class GestionarDirecciones extends StatelessWidget {
               ),
               child: Column(
                 children: <Widget>[
+                  SizedBox(height: responsive.hp(1)),
                   Text(
                     'Agrega o escoge una dirección',
                     style: TextStyle(
@@ -203,7 +204,7 @@ class GestionarDirecciones extends StatelessWidget {
 
     return GestureDetector(
       onTap: (){
-        utils.seleccionarDireccion(context, '${direccion.id_direccion}');
+        utils.seleccionarDireccion(context, '${direccion.idDireccion}');
 
       },
       child: Container(
@@ -260,7 +261,7 @@ class GestionarDirecciones extends StatelessWidget {
                     ? IconButton(
                         onPressed: () {
                           utils.deleteDireccion(
-                              context, '${direccion.id_direccion}');
+                              context, '${direccion.idDireccion}');
                         },
                         icon: Icon(Icons.delete_outline,
                             size: responsive.ip(4), color: Colors.red),

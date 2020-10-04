@@ -76,6 +76,23 @@ Future<List<PedidoServer>> obtenerPedidosPendiente() async {
   }
 
   
+ 
+  deletePedido()async{
+      final db = await dbprovider.database;
+
+    final res = await db.rawDelete('DELETE FROM Pedido');
+
+    return res;
+  }
+
+  deleteDetallePedido()async{
+      final db = await dbprovider.database;
+
+    final res = await db.rawDelete('DELETE FROM DetallePedido');
+
+    return res;
+  }
+
 
   insertarDetallePedido(ProductoServer productoDetalle) async {
     try {

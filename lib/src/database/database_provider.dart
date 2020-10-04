@@ -37,7 +37,7 @@ class DatabaseProvider {
           'email VARCHAR,'
           'foto VARCHAR,'
           'dni VARCHAR,' 
-          'id_direccion int,'
+          'id_direccion int,' 
           'id_zona VARCHAR,'
           'token VARCHAR,'
           'telefono VARCHAR,'

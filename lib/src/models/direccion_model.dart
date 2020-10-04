@@ -1,5 +1,5 @@
 class Direccion {
-  int id_direccion;
+  int idDireccion;
   String idZona;
   String titulo;
   String direccion;
@@ -17,7 +17,7 @@ class Direccion {
   String deliveryProductoPrecio;
 
   Direccion({
-    this.id_direccion,
+    this.idDireccion,
     this.idZona,
     this.titulo,
     this.direccion,
@@ -35,7 +35,7 @@ class Direccion {
   });
 
   factory Direccion.fromJson(Map<String, dynamic> json) => Direccion(
-        id_direccion: json["id_direccion"],
+        idDireccion: json["id_direccion"],
         idZona: json["id_zona"],
         titulo: json["titulo"],
         direccion: json["direccion"],
@@ -55,7 +55,7 @@ class Direccion {
       );
 
   Map<String, dynamic> toJson() => {
-        "id_direccion": id_direccion,
+        "id_direccion": idDireccion,
         "id_zona": idZona,
         "titulo": titulo,
         "direccion": direccion,

@@ -2,6 +2,8 @@
  
 
 
+import 'package:enchiladasapp/src/models/productos._model.dart';
+
 class Categorias {
     Categorias({
         this.result,
@@ -49,6 +51,7 @@ class CategoriaData {
         this.categoriaIcono,
         this.categoriaMostrarApp,
         this.categoriaBanner,
+        this.productos,
     });
 
     String idCategoria;
@@ -60,6 +63,8 @@ class CategoriaData {
     String categoriaIcono;
     String categoriaMostrarApp;
     String categoriaBanner;
+
+    List<ProductosData> productos;
 
     factory CategoriaData.fromJson(Map<String, dynamic> json) => CategoriaData(
         idCategoria: json["id_categoria"],

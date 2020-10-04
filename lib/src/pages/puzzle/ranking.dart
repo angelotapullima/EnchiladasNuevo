@@ -54,11 +54,10 @@ class RankingPage extends StatelessWidget {
 class Mayor3 extends StatelessWidget {
   final String time;
   final List<RankingPuzzle> list;
-  const Mayor3({Key key, this.time, this.list}) : super(key: key);  
+  const Mayor3({Key key, this.time, this.list}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-   
     final responsive = Responsive.of(context);
     return Scaffold(
         body: contenidoRankingMayora3(context, 'time', responsive, list));
@@ -70,7 +69,7 @@ class Mayor3 extends StatelessWidget {
     final listrestantes = List<RankingPuzzle>();
 
     for (int i = 0; i < data.length; i++) {
-      if (i >2) {
+      if (i > 2) {
         RankingPuzzle rankingPuzzle = RankingPuzzle();
         rankingPuzzle.idPuzzle = data[i].idPuzzle;
         rankingPuzzle.personName = data[i].personName;
@@ -92,7 +91,7 @@ class Mayor3 extends StatelessWidget {
       _crearAppbar(context, time, list3primeros),
       SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int i) {
-          return _cardRanking(responsive, listrestantes[i], i +4);
+          return _cardRanking(responsive, listrestantes[i], i + 4);
         }, childCount: listrestantes.length),
       )
     ]);
@@ -112,10 +111,11 @@ class Mayor3 extends StatelessWidget {
           imageUrl: '$foto',
           imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
-                image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.cover,
-            )),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
       ),

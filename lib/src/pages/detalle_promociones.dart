@@ -1,23 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
+import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 
-class CategoriasEspecialesPage extends StatefulWidget {
-  const CategoriasEspecialesPage({Key key}) : super(key: key);
+class DetallePromociones extends StatefulWidget {
+  const DetallePromociones({Key key}) : super(key: key);
 
   @override
-  _CategoriasEspecialesPage createState() => _CategoriasEspecialesPage();
+  _DetallePromocionesState createState() => _DetallePromocionesState();
 }
 
-class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
+class _DetallePromocionesState extends State<DetallePromociones> {
   @override
   Widget build(BuildContext context) {
     final Arguments arg = ModalRoute.of(context).settings.arguments;
@@ -25,76 +26,105 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
     final productosIdBloc = ProviderBloc.prod(context);
     final responsive = Responsive.of(context);
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosEnchiladasPorCategoria(arg.productId);
+    productosIdBloc.cargarCategoriaProducto(arg.productId);
 
     return Scaffold(
-        body: Stack(children: <Widget>[
-      Container(
-        height: responsive.hp(70),
-        width: double.infinity,
-        color: Colors.red,
-      ),
-      _listaEspeciales(responsive, productosIdBloc, arg.title)
-      //_favoritos(responsive, favoritosBloc),
-    ]));
-  }
+      body: StreamBuilder(
+          stream: productosIdBloc.categoriasProductos,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<CategoriaData>> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data.length > 0) {
+                var titulo = Padding(
+                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                  child: Text(
+                    '${snapshot.data[0].categoriaNombre}',
+                    style: TextStyle(
+                        fontSize: responsive.ip(3),
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold),
+                  ),
+                );
+                return Column(
+                  children: <Widget>[
+                    Container(
+                      height: responsive.hp(25),
+                      color: Colors.green,
+                      child: Stack(
+                        children: <Widget>[
+                          CachedNetworkImage(
+                            cacheManager: CustomCacheManager(),
+                            placeholder: (context, url) => Image(
+                                image: AssetImage('assets/jar-loading.gif'),
+                                fit: BoxFit.cover),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: '${snapshot.data[0].categoriaBanner}',
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          AppBar(
+                            title: Text('${snapshot.data[0].categoriaNombre}'),
+                            backgroundColor: Colors.transparent,
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.circular(20),
+                            color: Colors.white),
+                        transform: Matrix4.translationValues(
+                            0, -responsive.hp(2.5), 0),
+                        child: (snapshot.data[0].productos.length > 0)
+                            ? ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount:
+                                    snapshot.data[0].productos.length + 1,
+                                itemBuilder: (context, i) {
+                                  if (i == 0) {
+                                    return titulo;
+                                  }
 
-  Widget _listaEspeciales(
-      Responsive responsive, ProductosBloc productosIdBloc, String title) {
-    return SafeArea(
-      child: Column(
-        children: <Widget>[
-          AppBar(
-            elevation: 0,
-            title: Text(title),
-            /* actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.card_giftcard),
-                onPressed: () {},
-              )
-            ], */
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadiusDirectional.only(
-                  topStart: Radius.circular(13),
-                  topEnd: Radius.circular(13),
-                ),
-                color: Colors.grey[50],
-              ),
-              //padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
-              child: StreamBuilder(
-                stream: productosIdBloc.productosEnchiladasStream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<ProductosData>> snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data.length > 0) {
-                      return ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, i) => _itemPedido(
-                          context,
-                          snapshot.data[i],
-                        ),
-                      );
-                    } else {
-                      return Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    }
-                  } else {
-                    return Center(
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
+                                  int index = i - 1;
+                                  return _itemPedido(
+                                    context,
+                                    snapshot.data[0].productos[index],
+                                  );
+                                })
+                            : Container(
+                                padding: EdgeInsets.all(responsive.ip(3)),
+                                width: double.infinity,
+                                child: Column(
+                                  children: <Widget>[
+                                    titulo,
+                                    Expanded(
+                                      child: Center(
+                                        child: Text('f pe'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                      ),
+                    )
+                  ],
+                );
+              } else {
+                return Center(child: Text('No hay Productos disponibles'));
+              }
+            } else {
+              return Center(child: CupertinoActivityIndicator());
+            }
+          }),
     );
   }
 
@@ -124,8 +154,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                       image: AssetImage('assets/jar-loading.gif'),
                       fit: BoxFit.cover),
                   errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl:
-                      '${productosData.productoFoto}',
+                  imageUrl: '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
@@ -136,7 +165,9 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                 ),
               ),
             ),
-            SizedBox(width: responsive.wp(2),),
+            SizedBox(
+              width: responsive.wp(2),
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

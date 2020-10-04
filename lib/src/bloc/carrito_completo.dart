@@ -62,7 +62,7 @@ class CarritoCompletoBloc {
 
 
         CarritoCompleto carritoCompleto2 = CarritoCompleto();
-        carritoCompleto2.producto = 'Tu pedido no cumple con el monto mínimo,para el distrito asignado que es de  S/.${carritoCompleto.precio}';
+        carritoCompleto2.producto = 'Tu pedido no cumple con el monto mínimo,para el distrito asignado que es de  S/.${direccion[0].zonaPedidoMinimo}, puedes añadir más productos al carrito para eliminar está comisión';
         carritoCompleto2.precio = '';
         carritoCompleto2.cantidad = '';
 

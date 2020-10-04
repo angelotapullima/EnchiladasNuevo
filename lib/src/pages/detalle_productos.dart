@@ -13,7 +13,9 @@ import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -26,6 +28,13 @@ class DetalleProductitos extends StatefulWidget {
 }
 
 class _DetalleProducto extends State<DetalleProductitos> {
+
+  GlobalKey _one = GlobalKey();
+  GlobalKey _two = GlobalKey();
+  GlobalKey _three = GlobalKey();
+
+
+
   bool estadoDelivery = false;
   double _panelHeightOpen;
 
@@ -45,6 +54,8 @@ class _DetalleProducto extends State<DetalleProductitos> {
 
   @override
   void initState() {
+
+  
     super.initState();
   }
 
@@ -56,55 +67,77 @@ class _DetalleProducto extends State<DetalleProductitos> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.obtenerProductoPorId(widget.productosData.idProducto);
+    productosIdBloc.verificarDisponibilidad(widget.productosData.idCategoria);
 
-    return Material(
-      child: StreamBuilder(
-        stream: productosIdBloc.productosIdStream,
-        initialData: [],
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return SlidingUpPanel(
-                maxHeight: _panelHeightOpen,
-                minHeight: responsive.hp(7),
-                controller: panelController,
-                parallaxEnabled: true,
-                parallaxOffset: 0.1,
-                backdropEnabled: true,
-                body: Stack(children: <Widget>[
-                  _backgroundImage(context, snapshot.data[0]),
-                  _crearAppbar(responsive),
-                  TranslateAnimation(
-                    duration: const Duration(milliseconds: 400),
-                    child: _contenido(snapshot.data[0], responsive, context),
-                  ),
-                ]),
-                panelBuilder: (sc) => TranslateAnimation(
-                  duration: const Duration(milliseconds: 600),
-                  child: _carritoProductos(responsive, sc),
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                //onPanelSlide: (double pos) => setState(() {}),
-              );
-            } else {
-              return Center(
-                child: CupertinoActivityIndicator(),
-              );
-            }
-          } else {
-            return Center(
-              child: CupertinoActivityIndicator(),
-            );
-          }
-        },
-      ),
-    );
+    return ShowCaseWidget(
+      onStart: (index, key) {
+            print('onStart: $index, $key');
+          },
+          onComplete: (index, key) {
+            print('onComplete: $index, $key');
+          },
+          autoPlay: false,
+          autoPlayDelay: Duration(seconds: 7),
+          autoPlayLockEnable: true,
+      builder: Builder(builder: (context) {
+
+          WidgetsBinding.instance.addPostFrameCallback((_) =>
+        ShowCaseWidget.of(context)
+            .startShowCase([_one, _two,_three]));
+
+            
+        return Material(
+          child: StreamBuilder(
+            stream: productosIdBloc.productosIdStream,
+            initialData: [],
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data.length > 0) {
+                  return SlidingUpPanel(
+                    maxHeight: _panelHeightOpen,
+                    minHeight: responsive.hp(7),
+                    controller: panelController,
+                    parallaxEnabled: true,
+                    parallaxOffset: 0.1,
+                    backdropEnabled: true,
+                    body: Stack(children: <Widget>[
+                      _backgroundImage(context, snapshot.data[0]),
+                      _crearAppbar(responsive),
+                      TranslateAnimation(
+                        duration: const Duration(milliseconds: 400),
+                        child: _contenido(
+                            snapshot.data[0], responsive, context, productosIdBloc),
+                      ),
+                    ]),
+                    panelBuilder: (sc) => TranslateAnimation(
+                      duration: const Duration(milliseconds: 600),
+                      child: _carritoProductos(responsive, sc),
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    //onPanelSlide: (double pos) => setState(() {}),
+                  );
+                } else {
+                  return Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+                }
+              } else {
+                return Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+            },
+          ),
+        );
+      }
+    ),);
   }
 
-  Widget botonesBajos(Responsive responsive, ProductosData productosData) {
+  Widget botonesBajos(Responsive responsive, ProductosData productosData,
+      ProductosBloc productosBloc) {
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: responsive.hp(1),
@@ -113,75 +146,145 @@ class _DetalleProducto extends State<DetalleProductitos> {
       width: double.infinity,
       child: Row(
         children: <Widget>[
-          Container(
-            width: responsive.wp(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.red),
-            ),
-            child: Center(
-              child: (productosData.productoFavorito == 1)
-                  ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          print('quitar');
-                          utils.quitarFavoritos(context, productosData);
-                        });
-                      },
-                      icon: Icon(
-                        FontAwesomeIcons.solidHeart,
-                        color: Colors.red,
-                        size: responsive.ip(2.5),
+          Showcase(
+            key: _one,
+            description: 'presione para agregar añadir a favoritos',
+            child: Container(
+              width: responsive.wp(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.red),
+              ),
+              child: Center(
+                child: (productosData.productoFavorito == 1)
+                    ? IconButton(
+                        onPressed: () {
+                          setState(() {
+                            print('quitar');
+                            utils.quitarFavoritos(context, productosData);
+                          });
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.solidHeart,
+                          color: Colors.red,
+                          size: responsive.ip(2.5),
+                        ),
+                      )
+                    : IconButton(
+                        onPressed: () {
+                          setState(() {
+                            print('agregar');
+                            utils.agregarFavoritos(context, productosData);
+                          });
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.heart,
+                          color: Colors.red,
+                          size: responsive.ip(2.5),
+                        ),
                       ),
-                    )
-                  : IconButton(
-                      onPressed: () {
-                        setState(() {
-                          print('agregar');
-                          utils.agregarFavoritos(context, productosData);
-                        });
-                      },
-                      icon: Icon(
-                        FontAwesomeIcons.heart,
-                        color: Colors.red,
-                        size: responsive.ip(2.5),
-                      ),
-                    ),
+              ),
             ),
           ),
           SizedBox(
             width: responsive.wp(5),
           ),
-          GestureDetector(
-            child: Container(
-              width: responsive.wp(65),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.red,
-                border: Border.all(color: Colors.red),
-              ),
-              child: Center(
-                child: Text(
-                  'Agregar al Carrito',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: responsive.ip(2.5),
-                  ),
-                ),
-              ),
-            ),
-            onTap: () {
-              utils.agregarCarrito(productosData, context, "1");
-            },
-          )
+          StreamBuilder(
+              stream: productosBloc.categoriaTemporizador,
+              builder: (context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data) {
+                    return Showcase(
+                      key: _two,
+                      description: 'presione para agregar producto al carrito',
+                      child: GestureDetector(
+                        child: Container(
+                          width: responsive.wp(65),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.red,
+                            border: Border.all(color: Colors.red),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Agregar al Carrito',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsive.ip(2.5),
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          utils.agregarCarrito(productosData, context, "1");
+                        },
+                      ),
+                    );
+                  } else {
+                    return GestureDetector(
+                      child: Container(
+                        width: responsive.wp(65),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.grey,
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Agregar al Carrito',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: responsive.ip(2.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        utils.showToast(
+                            'En estos momentos el producto esta deshabilitado',
+                            2,
+                            ToastGravity.TOP);
+                        //utils.agregarCarrito(productosData, context, "1");
+                      },
+                    );
+                  }
+                } else {
+                  return GestureDetector(
+                    child: Container(
+                      width: responsive.wp(65),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey,
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Agregar al Carrito',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: responsive.ip(2.5),
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      utils.showToast(
+                          'En estos momentos el producto esta deshabilitado',
+                          2,
+                          ToastGravity.TOP);
+                      //utils.agregarCarrito(productosData, context, "1");
+                    },
+                  );
+                }
+              })
         ],
       ),
     );
   }
 
   Widget _contenido(ProductosData productosData, Responsive responsive,
-      BuildContext context) {
+      BuildContext context, ProductosBloc productosBloc) {
     final precioProdcuto = utils.format(
       double.parse(productosData.productoPrecio),
     );
@@ -234,7 +337,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                   SizedBox(
                     height: responsive.hp(3),
                   ),
-                  botonesBajos(responsive, productosData),
+                  botonesBajos(responsive, productosData, productosBloc),
                   //_cantidad(responsive),
                   SizedBox(
                     height: responsive.hp(3),
@@ -314,75 +417,81 @@ class _DetalleProducto extends State<DetalleProductitos> {
     );
   }
 
-  Container panelRojoMonto(
+  Widget panelRojoMonto(
       Responsive responsive, double total, String cantidadPedidos) {
     String montoFinalex = utils.format(total);
     return Container(
-      height: responsive.hp(8),
-      padding: EdgeInsets.symmetric(
-        horizontal: responsive.wp(5),
-        vertical: responsive.hp(1),
-      ),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadiusDirectional.only(
-            topEnd: Radius.circular(20),
-            topStart: Radius.circular(20),
-          ),
-          color: Colors.red),
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(
-              top: responsive.hp(.4),
+        height: responsive.hp(8),
+        padding: EdgeInsets.symmetric(
+          horizontal: responsive.wp(5),
+          vertical: responsive.hp(1),
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadiusDirectional.only(
+              topEnd: Radius.circular(20),
+              topStart: Radius.circular(20),
             ),
-            child: Container(
-              height: responsive.hp(.6),
-              width: responsive.wp(18),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
+            color: Colors.red),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(.4),
               ),
-            ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                  child: Text(
-                'Monto S/$montoFinalex',
-                style: TextStyle(color: Colors.white, fontSize: 22),
-              )),
-              Stack(children: <Widget>[
-                Icon(
-                  Icons.shopping_cart,
-                  size: responsive.ip(4),
+              child: Container(
+                height: responsive.hp(.6),
+                width: responsive.wp(18),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
                   color: Colors.white,
                 ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: BounceInDown(
-                    from: 10,
-                    child: Container(
-                      child: Text(
-                        '$cantidadPedidos',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: responsive.ip(1.5),
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(
+                  'Monto S/$montoFinalex',
+                  style:
+                      TextStyle(color: Colors.white, fontSize: responsive.ip(3)),
+                )),
+                Showcase(
+                  key: _three,
+                  description: 'eela no te ama',
+                  child: Stack(children: <Widget>[
+                    Icon(
+                      Icons.shopping_cart,
+                      size: responsive.ip(4),
+                      color: Colors.white,
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: BounceInDown(
+                        from: 10,
+                        child: Container(
+                          child: Text(
+                            '$cantidadPedidos',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: responsive.ip(1.5),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          width: responsive.ip(1.8),
+                          height: responsive.ip(1.8),
+                          decoration: BoxDecoration(
+                              color: Colors.green, shape: BoxShape.circle),
                         ),
                       ),
-                      alignment: Alignment.center,
-                      width: responsive.ip(1.8),
-                      height: responsive.ip(1.8),
-                      decoration: BoxDecoration(
-                          color: Colors.green, shape: BoxShape.circle),
-                    ),
-                  ),
+                    )
+                  ]),
                 )
-              ])
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
+          ],
+        ),
+      
     );
   }
 
@@ -781,7 +890,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'detalleProductoFoto',arguments: carrito);
+        Navigator.pushNamed(context, 'detalleProductoFoto', arguments: carrito);
       },
       child: Container(
         width: double.infinity,

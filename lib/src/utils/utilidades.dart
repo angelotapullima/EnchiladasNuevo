@@ -23,6 +23,7 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoPrecio = productosData.productoPrecio;
   productos.productoUnidad = productosData.productoUnidad;
   productos.productoEstado = productosData.productoEstado;
+  productos.productoDescripcion = productosData.productoDescripcion;
   productos.productoFavorito = 1;
 
   final res = await productoDatabase.updateProductosDb(productos);
@@ -45,6 +46,7 @@ void agregarFavoritosMarket(
   productos.productoPrecio = productosData.productoPrecio;
   productos.productoUnidad = productosData.productoUnidad;
   productos.productoEstado = productosData.productoEstado;
+  productos.productoDescripcion = productosData.productoDescripcion;
   productos.productoFavorito = 1;
 
   final res = await productoDatabase.updateProductosDb(productos);

@@ -5,10 +5,12 @@ import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/gestionar_direcciones.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
 import 'package:enchiladasapp/src/pages/market_page.dart';
+import 'package:enchiladasapp/src/pages/onboarding_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_pago_page.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
+import 'package:enchiladasapp/src/pages/detalle_promociones.dart';
 import 'package:enchiladasapp/src/pages/ticket.dart';
 import 'package:enchiladasapp/src/pages/webview.dart';
 import 'package:enchiladasapp/src/pages/zoom_foto_direccion.dart';
@@ -34,6 +36,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
+
 
 Future<void> showNotificationWithIconBadge(
     ReceivedNotification notification) async {
@@ -198,6 +201,8 @@ class _MyAppState extends State<MyApp> {
           scaffoldBackgroundColor: Colors.grey[50],
           canvasColor: Colors.transparent,
         ),
+
+    
         routes: {
           '/': (BuildContext context) => HomePage(),
           'HomePuzzle': (BuildContext context) => HomePuzzle(),
@@ -206,7 +211,6 @@ class _MyAppState extends State<MyApp> {
           'splash': (BuildContext context) => Splash(),
           'desicion': (BuildContext context) => DesicionPage(),
           'detalleP': (BuildContext context) => DetalleProductitos(),
-          //'detalleP': (BuildContext context) => DetalleProductitos(),
           'detallePago': (BuildContext context) => DetallePago(),
           'sel_Direccion': (BuildContext context) => MapsSample(),
           'combo': (BuildContext context) => CategoriasEspecialesPage(),
@@ -225,15 +229,12 @@ class _MyAppState extends State<MyApp> {
           'ticket': (BuildContext context) => Ticket(),
           'gestionarDirecciones': (BuildContext context) => GestionarDirecciones(),
           'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
+          'detallePromociones': (BuildContext context) => DetallePromociones(),
+          'onboarding': (BuildContext context) => OnboardingPage(),
 
-/* 
-
-          'r1': (BuildContext context) => RankingUno(),
-          'r2': (BuildContext context) => RankingDos(),
-          'r3': (BuildContext context) => RankingTres(),
-          '>3': (BuildContext context) => Mayor3(), */
-        },
+        }, 
       ),
     );
   }
 }
+

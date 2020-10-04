@@ -7,6 +7,8 @@ import 'package:enchiladasapp/src/utils/provider_widget.dart';
 
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
@@ -167,13 +169,14 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
 
   _listaCategorias(List<CategoriaData> categoriasBloc) {
     return Container(
-        color: Colors.transparent,
-        width: this.widget.ancho,
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: categoriasBloc.length,
-            itemBuilder: (context, i) =>
-                _listaItems(context, categoriasBloc[i])));
+      color: Colors.transparent,
+      width: this.widget.ancho,
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: categoriasBloc.length,
+        itemBuilder: (context, i) => _listaItems(context, categoriasBloc[i]),
+      ),
+    );
   }
 
   _listaItems(BuildContext context, CategoriaData categoria) {
@@ -185,12 +188,13 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
         child: Container(
           width: size.width * 0.25,
           decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-              color: (categoria.idCategoria == _currenIndex)
-                  ? Colors.red
-                  : Colors.white,
-              border: Border.all(color: Colors.grey[100]),
-              borderRadius: BorderRadius.circular(5)),
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+            color: (categoria.idCategoria == _currenIndex)
+                ? Colors.red
+                : Colors.white,
+            border: Border.all(color: Colors.grey[100]),
+            borderRadius: BorderRadius.circular(5),
+          ),
           child: Row(
             children: <Widget>[
               SizedBox(width: 4),
@@ -200,14 +204,16 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[
-                      Icon(
-                        Icons.person,
-                        size: responsive.hp(5),
+                      SvgPicture(
+                        AdvancedNetworkSvg('${categoria.categoriaIcono}',
+                            SvgPicture.svgByteDecoder,
+                            useDiskCache: true),
                       ),
+                      SizedBox(height: responsive.hp(1),),
                       Text(categoria.categoriaNombre,
                           style: TextStyle(
                               color: Colors.black,
-                              fontSize: responsive.ip(1.3)),
+                              fontSize: responsive.ip(1.5),),
                           textAlign: TextAlign.center),
                     ],
                   ),
@@ -243,7 +249,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     productosIdBloc.cargandoProductosFalse();
     productosIdBloc.obtenerProductosEnchiladasPorCategoria(_currenIndex);
 
-    return Scaffold( 
+    return Scaffold(
       body: _listaProductosId(productosIdBloc),
     );
   }
@@ -297,7 +303,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
               tag: '${productosData.idProducto}',
               child: Container(
                 width: responsive.wp(30),
-                height: responsive.hp(12),
+                height: responsive.hp(13),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(

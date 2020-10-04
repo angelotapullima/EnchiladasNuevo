@@ -1,3 +1,6 @@
+import 'package:enchiladasapp/src/database/carrito_database.dart';
+import 'package:enchiladasapp/src/database/direccion_database.dart';
+import 'package:enchiladasapp/src/database/pedido_database.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -120,8 +123,18 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 }
                 final usuarioDatabase = UsuarioDatabase();
                 await usuarioDatabase.deleteUser();
+
+                final direccionDatabase =DireccionDatabase();
+                await direccionDatabase.deleteDireccion();
+
+                final pedidoDatabase =PedidoDatabase();
+                await pedidoDatabase.deletePedido();
+                await pedidoDatabase.deleteDetallePedido();
+
+                final carritoDatase = CarritoDatabase();
+                carritoDatase.deleteCarritoDb();
               },
-              child: new Container(
+              child: new Container( 
                 //width: 100.0,
                 height: responsive.hp(6),
                 decoration: new BoxDecoration(

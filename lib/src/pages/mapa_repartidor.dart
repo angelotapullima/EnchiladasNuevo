@@ -15,8 +15,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 const double CAMERA_ZOOM = 18;
+/* 
 const double CAMERA_TILT = 90;
-const double CAMERA_BEARING = 80;
+const double CAMERA_BEARING = 80; */
 const LatLng SOURCE_LOCATION = LatLng(42.747932, -71.167889);
 const LatLng DEST_LOCATION = LatLng(37.335685, -122.0605916);
 
@@ -130,15 +131,18 @@ class MapaRepartidorState extends State<MapaRepartidor> {
 
     CameraPosition initialCameraPosition = CameraPosition(
         zoom: CAMERA_ZOOM,
+        /* 
         tilt: CAMERA_TILT,
-        bearing: CAMERA_BEARING,
+        bearing: CAMERA_BEARING, */
         target: SOURCE_LOCATION);
     if (currentLocation != null) {
       initialCameraPosition = CameraPosition(
-          target: LatLng(currentLocation.latitude, currentLocation.longitude),
-          zoom: CAMERA_ZOOM,
+        target: LatLng(currentLocation.latitude, currentLocation.longitude),
+        zoom:
+            CAMERA_ZOOM, /* 
           tilt: CAMERA_TILT,
-          bearing: CAMERA_BEARING);
+          bearing: CAMERA_BEARING */
+      );
     }
     return Scaffold(
       body: SafeArea(
@@ -199,53 +203,55 @@ class MapaRepartidorState extends State<MapaRepartidor> {
               right: 0,
               child: Column(
                 children: <Widget>[
-                  (estadoTracking == 'activado')?GestureDetector(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(10),
-                          vertical: responsive.hp(1.5)),
-                      child: Text(
-                        'Activar ubicación',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: responsive.ip(2),
+                  (estadoTracking == 'activado')
+                      ? GestureDetector(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: responsive.wp(10),
+                                vertical: responsive.hp(1.5)),
+                            child: Text(
+                              'Activar ubicación',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsive.ip(2),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                color: (estadoTracking == 'activado')
+                                    ? Colors.red
+                                    : Colors.green,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                )),
+                          ),
+                          onTap: () {
+                            activarUbicacion(data.idEntrega);
+                          },
+                        )
+                      : GestureDetector(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: responsive.wp(10),
+                                vertical: responsive.hp(1.5)),
+                            child: Text(
+                              'desactivar ubicación',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsive.ip(2),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                color: (estadoTracking == 'activado')
+                                    ? Colors.red
+                                    : Colors.green,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                )),
+                          ),
+                          onTap: () {
+                            activarUbicacion(data.idEntrega);
+                          },
                         ),
-                      ),
-                      decoration: BoxDecoration(
-                          color: (estadoTracking == 'activado')
-                              ? Colors.red
-                              : Colors.green,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          )),
-                    ),
-                    onTap: () {
-                      activarUbicacion(data.idEntrega);
-                    },
-                  ):GestureDetector(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(10),
-                          vertical: responsive.hp(1.5)),
-                      child: Text(
-                        'desactivar ubicación',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: responsive.ip(2),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                          color: (estadoTracking == 'activado')
-                              ? Colors.red
-                              : Colors.green,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          )),
-                    ),
-                    onTap: () {
-                      activarUbicacion(data.idEntrega);
-                    },
-                  ),
                   Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey[300]),
@@ -368,10 +374,9 @@ class MapaRepartidorState extends State<MapaRepartidor> {
               left: responsive.wp(3),
               child: GestureDetector(
                 child: CircleContainer(
-                  radius: responsive.ip(2.5),
-                  color: Colors.grey[200],
-                  widget: Icon(Icons.arrow_back, color: Colors.black),
-                ),
+                    radius: responsive.ip(2.5),
+                    color: Colors.grey[200],
+                    widget: BackButton()),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -488,14 +493,12 @@ class MapaRepartidorState extends State<MapaRepartidor> {
     final trackingApi = TrackingApi();
     try {
       if (!pedidoTracking) {
-         setState(() {
+        setState(() {
           mostrarCargandoTracking =
               true; //variable para mostrar la carga de la llamada de api
-              comentariosFinalizarEntrega(responsive, idEntrega);
-        }); 
-        
+          comentariosFinalizarEntrega(responsive, idEntrega);
+        });
       } else {
-        
         setState(() {
           mostrarCargandoTracking = true;
         });
@@ -512,7 +515,7 @@ class MapaRepartidorState extends State<MapaRepartidor> {
             mostrarCargandoTracking = false;
           });
         }
-        cant++; 
+        cant++;
       }
     } on Exception {}
   }
@@ -550,8 +553,8 @@ class MapaRepartidorState extends State<MapaRepartidor> {
     // follows the pin as it moves with an animation
     CameraPosition cPosition = CameraPosition(
       zoom: CAMERA_ZOOM,
-      tilt: CAMERA_TILT,
-      bearing: CAMERA_BEARING,
+      /*  tilt: CAMERA_TILT,
+      bearing: CAMERA_BEARING, */
       target: LatLng(currentLocation.latitude, currentLocation.longitude),
     );
     final GoogleMapController controller = await _controller.future;
@@ -566,10 +569,12 @@ class MapaRepartidorState extends State<MapaRepartidor> {
       // the trick is to remove the marker (by id)
       // and add it again at the updated location
       _markers.removeWhere((m) => m.markerId.value == 'sourcePin');
-      _markers.add(Marker(
-          markerId: MarkerId('sourcePin'),
-          position: pinPosition, // updated position
-          icon: sourceIcon));
+      _markers.add(
+        Marker(
+            markerId: MarkerId('sourcePin'),
+            position: pinPosition, // updated position
+            icon: sourceIcon),
+      );
     });
   }
 }

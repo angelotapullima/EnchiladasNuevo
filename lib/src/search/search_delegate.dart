@@ -164,8 +164,8 @@ class DataSearch extends SearchDelegate {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Container(
-              width: responsive.wp(35),
-              height: responsive.hp(10),
+              width: responsive.wp(32),
+              height: responsive.hp(16),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(13),
                 child: CachedNetworkImage(
@@ -186,6 +186,7 @@ class DataSearch extends SearchDelegate {
                 ),
               ),
             ),
+            SizedBox(width: responsive.wp(2),),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(
