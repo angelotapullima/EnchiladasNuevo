@@ -99,21 +99,21 @@ class _HomePageState extends State<HomePage> {
                 Icons.home,
                 size: responsive.ip(3),
               ),
-              title: Text('Principal'),
+              label: 'Principal',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 FontAwesomeIcons.solidHeart,
                 size: responsive.ip(2.7),
               ),
-              title: Text('Favoritos'),
+              label: 'Favoritos',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.near_me,
                 size: responsive.ip(3),
               ),
-              title: Text('Categorías'),
+              label:'Categorías'
             ),
             BottomNavigationBarItem(
               icon: (cantidad != 0)
@@ -146,14 +146,14 @@ class _HomePageState extends State<HomePage> {
                       Icons.shopping_cart,
                       size: responsive.ip(3),
                     ),
-              title: Text('Carrito'),
+              label:'Carrito',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.person,
                 size: responsive.ip(3),
               ),
-              title: Text('Cuenta'),
+              label:'Cuenta',
             )
           ],
           currentIndex: bottomBloc.page,

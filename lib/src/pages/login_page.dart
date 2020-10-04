@@ -1,12 +1,14 @@
+
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:apple_sign_in/apple_sign_in_button.dart' as butApple;
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/user.dart';
 import 'package:enchiladasapp/src/utils/dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -239,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: responsive.ip(1)),
             (appleSignInAvailable.isAvailable)
                 ? AppleSignInButton(
-                    style: ButtonStyle.black, // style as needed
+                    style: butApple.ButtonStyle.black, // style as needed
                     type: ButtonType.signIn, // style as needed
                     onPressed: () async {
                       final user = await Auth.instance.signInWithApple(context);

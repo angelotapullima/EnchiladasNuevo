@@ -7,7 +7,6 @@ import 'package:enchiladasapp/src/utils/provider_widget.dart';
 
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
@@ -204,11 +203,8 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[
-                      SvgPicture(
-                        AdvancedNetworkSvg('${categoria.categoriaIcono}',
-                            SvgPicture.svgByteDecoder,
-                            useDiskCache: true),
-                      ),
+                      SvgPicture.network('${categoria.categoriaIcono}',),
+                      
                       SizedBox(height: responsive.hp(1),),
                       Text(categoria.categoriaNombre,
                           style: TextStyle(
