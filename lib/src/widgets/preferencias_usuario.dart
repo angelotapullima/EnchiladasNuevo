@@ -25,13 +25,78 @@ class Preferences {
   }
 
 
-  get estadoCarga{
+
+  //sirve para verificar el estado de la primera carga
+  get estadoCargaInicial{
     return _prefs.getString('estadoCarga');
   }
 
-  set estadoCarga(String value){
+  set estadoCargaInicial(String value){
 
     _prefs.setString('estadoCarga', value);
+  }
+
+
+
+
+
+//pantalla para seleccionar si es market o enchiladas
+  get pantallaCuenta{
+    return _prefs.getString('pantallaCuenta');
+  }
+
+  set pantallaCuenta(String value){
+
+    _prefs.setString('pantallaCuenta', value);
+  }
+
+
+
+
+//pantalla para seleccionar si es market o enchiladas
+  get pantallaDPago{
+    return _prefs.getString('pantallaDPago');
+  }
+
+  set pantallaDPago(String value){
+
+    _prefs.setString('pantallaDPago', value);
+  }
+
+
+
+//pantalla para seleccionar si es market o enchiladas
+  get pantallaDProducto{
+    return _prefs.getString('pantallaDProducto');
+  }
+
+  set pantallaDProducto(String value){
+
+    _prefs.setString('pantallaDProducto', value);
+  }
+
+
+
+  //pantalla para seleccionar si es market o enchiladas
+  get pantallaCategoria{
+    return _prefs.getString('pantallaCategoria');
+  }
+
+  set pantallaCategoria(String value){
+
+    _prefs.setString('pantallaCategoria', value);
+  }
+
+
+
+  //pantalla para seleccionar si es market o enchiladas
+  get pantallaSeleccion{
+    return _prefs.getString('pantallaSeleccion');
+  }
+
+  set pantallaSeleccion(String value){
+
+    _prefs.setString('pantallaSeleccion', value);
   }
 
   get personName{
@@ -55,14 +120,7 @@ class Preferences {
   set email(String value){
     _prefs.setString('email', value);
   }
-
-  get tracking{
-    return _prefs.getString('tracking');
-  }
-
-  set tracking(String value){
-    _prefs.setString('tracking', value);
-  }
+  
 
   get token{
     return _prefs.getString('token');

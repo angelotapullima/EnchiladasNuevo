@@ -1,5 +1,6 @@
 import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/api/configuracion_api.dart';
+import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
@@ -29,26 +30,35 @@ class _SplashState extends State<Splash> with AfterLayoutMixin {
 
     final configuracionApi = ConfiguracionApi();
     final preferences = Preferences();
+    final usuarioDatabase = UsuarioDatabase();
 
-    if (preferences.estadoCarga == null || preferences.estadoCarga == '0') {
+    if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
       await categoriasApi.obtenerAmbos();
 
       await configuracionApi.configuracion();
 
-      preferences.estadoCarga = '1';
+      preferences.estadoCargaInicial = '1';
     } else {
       categoriasApi.obtenerAmbos();
 
       configuracionApi.configuracion();
     }
 
+    final user = await usuarioDatabase.obtenerUsUario();
+    if(user.length>0){
+      Navigator.pushReplacementNamed(context, 'desicion');
+    }else{
+
+        Navigator.pushReplacementNamed(context, 'login');
+    }
+/* 
     Auth.instance.user.then((FirebaseUser user) {
       if (user != null) {
         Navigator.pushReplacementNamed(context, 'desicion');
       } else {
         Navigator.pushReplacementNamed(context, 'login');
       }
-    });
+    }); */
   }
 
   @override

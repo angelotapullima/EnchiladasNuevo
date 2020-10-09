@@ -142,7 +142,9 @@ class HomePuzzle extends StatelessWidget {
                 child: new Container(
                   child: CachedNetworkImage(
                     cacheManager: CustomCacheManager(),
-                    imageUrl: puzzle[index].imagenRuta,
+                    imageUrl: puzzle[index].imagenRuta,errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                           image: DecorationImage(
@@ -208,7 +210,9 @@ class HomePuzzle extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(20)),
               child: CachedNetworkImage(
                 cacheManager: CustomCacheManager(),
-                imageUrl: imagen,
+                imageUrl: imagen,errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(

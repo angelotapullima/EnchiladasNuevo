@@ -57,8 +57,9 @@ class _DetallePromocionesState extends State<DetallePromociones> {
                             placeholder: (context, url) => Image(
                                 image: AssetImage('assets/jar-loading.gif'),
                                 fit: BoxFit.cover),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                            errorWidget: (context, url, error) =>Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                             imageUrl: '${snapshot.data[0].categoriaBanner}',
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
@@ -153,7 +154,9 @@ class _DetallePromocionesState extends State<DetallePromociones> {
                   placeholder: (context, url) => Image(
                       image: AssetImage('assets/jar-loading.gif'),
                       fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                   imageUrl: '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(

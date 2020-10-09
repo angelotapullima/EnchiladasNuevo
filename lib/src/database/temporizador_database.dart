@@ -10,10 +10,10 @@ class TemporizadorDatabase {
 
       final res = await db.rawInsert(
           "INSERT OR REPLACE INTO Temporizador (idTemporizador,temporizador_tipo,temporizador_fechainicio,temporizador_fechafin,"
-          "temporizador_horainicio,temporizador_horafin,temporizador_lunes,temporizador_martes,temporizador_miercoles,"
+          "temporizador_horainicio,temporizador_horafin,temporizador_mensaje,temporizador_lunes,temporizador_martes,temporizador_miercoles,"
           "temporizador_jueves,temporizador_viernes,temporizador_sabado,temporizador_domingo) "
           "VALUES ('${temporizadorModel.idTemporizador}','${temporizadorModel.temporizadorTipo}','${temporizadorModel.temporizadorFechainicio}'"
-          ",'${temporizadorModel.temporizadorFechafin}','${temporizadorModel.temporizadorHorainicio}','${temporizadorModel.temporizadorHorafin}',"
+          ",'${temporizadorModel.temporizadorFechafin}','${temporizadorModel.temporizadorHorainicio}','${temporizadorModel.temporizadorHorafin}','${temporizadorModel.temporizadorMensaje}',"
           "'${temporizadorModel.temporizadorLunes}','${temporizadorModel.temporizadorMartes}','${temporizadorModel.temporizadorMiercoles}',"
           "'${temporizadorModel.temporizadorJueves}','${temporizadorModel.temporizadorViernes}','${temporizadorModel.temporizadorSabado}','${temporizadorModel.temporizadorDomingo}'"
           ")");

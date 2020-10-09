@@ -54,7 +54,9 @@ class OnboardingPage extends StatelessWidget {
               placeholder: (context, url) => Image(
                   image: AssetImage('assets/jar-loading.gif'),
                   fit: BoxFit.cover),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
               imageUrl:
                   'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTZMIdLgIaSPfiyocXpPCv-NKMO67P1G9gsvg&usqp=CAU',
               imageBuilder: (context, imageProvider) => Container(

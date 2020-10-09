@@ -34,8 +34,7 @@ class PuzzleApi {
           puzzle.imagenEstado =
               decodedData['result']['data'][i]['imagen_estado'];
 
-              //var file = CustomCacheManager().downloadFile(puzzle.imagenRuta);
-          //print('file $file');
+
           await puzzleDatabase.insertarPuzzle(puzzle);
           list.add(puzzle);
         }

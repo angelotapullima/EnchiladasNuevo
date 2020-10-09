@@ -91,6 +91,8 @@ PODS:
     - FBSDKCoreKit/Swift
     - FBSDKLoginKit/Swift
     - Flutter
+  - flutter_keyboard_visibility (0.0.1):
+    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_plugin_android_lifecycle (0.0.1):
@@ -158,6 +160,10 @@ PODS:
   - GTMSessionFetcher/Core (1.4.0)
   - GTMSessionFetcher/Full (1.4.0):
     - GTMSessionFetcher/Core (= 1.4.0)
+  - image_picker (0.0.1):
+    - Flutter
+  - image_picker_for_web (0.0.1):
+    - Flutter
   - location (0.0.1):
     - Flutter
   - "location_permissions (3.0.0+1)":
@@ -175,6 +181,10 @@ PODS:
     - Flutter
   - "permission_handler (5.0.1+1)":
     - Flutter
+  - phone_number (0.6.2):
+    - Flutter
+    - PhoneNumberKit/PhoneNumberKitCore (~> 3.2.0)
+  - PhoneNumberKit/PhoneNumberKitCore (3.2.0)
   - PromisesObjC (1.2.9)
   - Protobuf (3.12.0)
   - shared_preferences (0.0.1):
@@ -188,6 +198,16 @@ PODS:
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
+  - url_launcher (0.0.1):
+    - Flutter
+  - url_launcher_linux (0.0.1):
+    - Flutter
+  - url_launcher_macos (0.0.1):
+    - Flutter
+  - url_launcher_web (0.0.1):
+    - Flutter
+  - url_launcher_windows (0.0.1):
+    - Flutter
   - webview_flutter (0.0.1):
     - Flutter
 
@@ -200,6 +220,7 @@ DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
+  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
@@ -209,17 +230,25 @@ DEPENDENCIES:
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - google_sign_in_web (from `.symlinks/plugins/google_sign_in_web/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - image_picker_for_web (from `.symlinks/plugins/image_picker_for_web/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - phone_number (from `.symlinks/plugins/phone_number/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - shared_preferences_linux (from `.symlinks/plugins/shared_preferences_linux/ios`)
   - shared_preferences_macos (from `.symlinks/plugins/shared_preferences_macos/ios`)
   - shared_preferences_web (from `.symlinks/plugins/shared_preferences_web/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - url_launcher_linux (from `.symlinks/plugins/url_launcher_linux/ios`)
+  - url_launcher_macos (from `.symlinks/plugins/url_launcher_macos/ios`)
+  - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
+  - url_launcher_windows (from `.symlinks/plugins/url_launcher_windows/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
@@ -244,6 +273,7 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - nanopb
+    - PhoneNumberKit
     - PromisesObjC
     - Protobuf
 
@@ -264,6 +294,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_facebook_auth:
     :path: ".symlinks/plugins/flutter_facebook_auth/ios"
+  flutter_keyboard_visibility:
+    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_plugin_android_lifecycle:
@@ -282,6 +314,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_sign_in/ios"
   google_sign_in_web:
     :path: ".symlinks/plugins/google_sign_in_web/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
+  image_picker_for_web:
+    :path: ".symlinks/plugins/image_picker_for_web/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   location_permissions:
@@ -294,6 +330,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_macos/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  phone_number:
+    :path: ".symlinks/plugins/phone_number/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   shared_preferences_linux:
@@ -304,6 +342,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_web/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
+  url_launcher_linux:
+    :path: ".symlinks/plugins/url_launcher_linux/ios"
+  url_launcher_macos:
+    :path: ".symlinks/plugins/url_launcher_macos/ios"
+  url_launcher_web:
+    :path: ".symlinks/plugins/url_launcher_web/ios"
+  url_launcher_windows:
+    :path: ".symlinks/plugins/url_launcher_windows/ios"
   webview_flutter:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
@@ -327,6 +375,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 942cfe05b4f53c95ab8959395ca35c200398b2f0
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_facebook_auth: a63fc41100a6494584bef37a677e0f70670d9674
+  flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
@@ -344,6 +393,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: e121a3867449ce16b0e35ddf1797ea7a389ffdf2
   GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
+  image_picker_for_web: 5f72402be509f2692e68a8b5cc231a499a239fc6
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   location_permissions: 7e0f9aa0f60deb8ff93ddf0e2a164c7e8197bc94
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
@@ -351,6 +402,8 @@ SPEC CHECKSUMS:
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
   permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
+  phone_number: b545f5b7d9711bec0f020c7df43ae5a82119f4ad
+  PhoneNumberKit: df411d46177d1492da84e10b6c093846dd861452
   PromisesObjC: b48e0338dbbac2207e611750777895f7a5811b75
   Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
@@ -358,6 +411,11 @@ SPEC CHECKSUMS:
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
+  url_launcher_linux: ac237cb7a8058736e4aae38bdbcc748a4b394cc0
+  url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
+  url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
+  url_launcher_windows: 683d7c283894db8d1914d3ab2223b20cc1ad95d5
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
 PODFILE CHECKSUM: a9e7e2e46d968ea577b79f8daf4576d7ac8cd78c

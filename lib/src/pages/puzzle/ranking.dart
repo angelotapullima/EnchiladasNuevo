@@ -106,8 +106,9 @@ class Mayor3 extends StatelessWidget {
         child: CachedNetworkImage(
           cacheManager: CustomCacheManager(),
           placeholder: (context, url) => Image(
-              image: AssetImage('assets/ladrillos.png'), fit: BoxFit.cover),
-          errorWidget: (context, url, error) => Icon(Icons.error),
+              image: AssetImage('assets/ladrillos.png'), fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
           imageUrl: '$foto',
           imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
@@ -294,8 +295,9 @@ class Mayor3 extends StatelessWidget {
                 cacheManager: CustomCacheManager(),
                 placeholder: (context, url) => Image(
                     image: AssetImage('assets/jar-loading.gif'),
-                    fit: BoxFit.cover),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                    fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                 imageUrl: '${ranking.userImage}',
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(

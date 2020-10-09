@@ -89,8 +89,9 @@ class CirculoItenRanking extends StatelessWidget {
                 cacheManager: CustomCacheManager(),
                 placeholder: (context, url) => Image(
                     image: AssetImage('assets/ladrillos.png'),
-                    fit: BoxFit.cover),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                    fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                 imageUrl: foto,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(

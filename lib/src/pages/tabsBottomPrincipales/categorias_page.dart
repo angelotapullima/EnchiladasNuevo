@@ -3,12 +3,10 @@ import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:enchiladasapp/src/utils/provider_widget.dart';
-
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -32,37 +30,50 @@ class CategoriasPage extends StatelessWidget {
     categoriasBloc.cargandoCategoriasFalse();
     categoriasBloc.obtenerCategoriasEnchiladas();
 
-    return ChangeNotifierProvider(
-        create: (_) => new PaginacionCategoria(),
-        child: Scaffold(
-          body: Stack(children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              color: Colors.red,
-            ),
-            rowDatos(context, categoriasBloc)
-          ]),
-        ));
+    return Scaffold(
+      body: Stack(children: <Widget>[
+        Container(
+          height: double.infinity,
+          width: double.infinity,
+          color: Colors.red,
+        ),
+        rowDatos(context, categoriasBloc)
+      ]),
+    );
   }
 
   Widget _conte(double anchoCategorias, double anchoProductos,
-      List<CategoriaData> categorias) {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: anchoCategorias,
-          child: CategoriasProducto(
-            ancho: anchoCategorias,
-            data: categorias,
-          ),
-        ),
-        Container(
-          width: anchoProductos,
-          child: ProductosIdPage(ancho: anchoProductos),
-        )
-      ],
-    );
+      List<CategoriaData> categorias, BuildContext context) {
+    final bottomBloc = ProviderBloc.bottom(context);
+    final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
+    enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
+
+    return StreamBuilder(
+        stream: bottomBloc.selectPageStream,
+        builder: (context, snapshot) {
+          return StreamBuilder(
+              stream: enchiladasNaviBloc.enchiladasIndexStream,
+              builder: (context, snapshot) {
+                return Row(
+                  children: <Widget>[
+                    Container(
+                      width: anchoCategorias,
+                      child: CategoriasProducto(
+                        ancho: anchoCategorias,
+                        data: categorias,
+                      ),
+                    ),
+                    Container(
+                      width: anchoProductos,
+                      child: ProductosIdPage(
+                        index: enchiladasNaviBloc.index,
+                        ancho: anchoProductos,
+                      ),
+                    )
+                  ],
+                );
+              });
+        });
   }
 
   Widget rowDatos(BuildContext context, CategoriasBloc categoriasBloc) {
@@ -93,8 +104,9 @@ class CategoriasPage extends StatelessWidget {
                   ),
                   onPressed: () {
                     showSearch(
-                        context: context,
-                        delegate: DataSearch(hintText: 'Buscar'));
+                      context: context,
+                      delegate: DataSearch(hintText: 'Buscar'),
+                    );
                   },
                 )
               ],
@@ -123,8 +135,8 @@ class CategoriasPage extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.length > 0) {
-                        return _conte(
-                            anchoCategorias, anchoProductos, snapshot.data);
+                        return _conte(anchoCategorias, anchoProductos,
+                            snapshot.data, context);
                       } else {
                         return Center(
                           child: Text('No hay datos de categorias'),
@@ -160,13 +172,14 @@ class CategoriasProducto extends StatefulWidget {
 class _CategoriasProductoState extends State<CategoriasProducto> {
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
     return Scaffold(
-      body: _listaCategorias(widget.data),
+      body: _listaCategorias(widget.data, responsive),
       /* _listaCategorias(categoriasBloc), */
     );
   }
 
-  _listaCategorias(List<CategoriaData> categoriasBloc) {
+  _listaCategorias(List<CategoriaData> categoriasBloc, Responsive responsive) {
     return Container(
       color: Colors.transparent,
       width: this.widget.ancho,
@@ -181,56 +194,67 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
   _listaItems(BuildContext context, CategoriaData categoria) {
     final size = MediaQuery.of(context).size;
     final responsive = Responsive.of(context);
-    final _currenIndex = Provider.of<PaginacionCategoria>(context).currentIndex;
+    final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
 
-    return GestureDetector(
-        child: Container(
-          width: size.width * 0.25,
-          decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-            color: (categoria.idCategoria == _currenIndex)
-                ? Colors.red
-                : Colors.white,
-            border: Border.all(color: Colors.grey[100]),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Row(
-            children: <Widget>[
-              SizedBox(width: 4),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      SvgPicture.network('${categoria.categoriaIcono}',),
-                      
-                      SizedBox(height: responsive.hp(1),),
-                      Text(categoria.categoriaNombre,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: responsive.ip(1.5),),
-                          textAlign: TextAlign.center),
-                    ],
-                  ),
+    return StreamBuilder(
+        stream: enchiladasNaviBloc.enchiladasIndexStream,
+        builder: (context, snapshot) {
+          return GestureDetector(
+              child: Container(
+                width: size.width * 0.25,
+                decoration: BoxDecoration(
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                  color: (categoria.idCategoria == snapshot.data)
+                      ? Colors.red
+                      : Colors.white,
+                  border: Border.all(color: Colors.grey[100]),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(width: 4),
+                    Expanded(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+                        color: Colors.white,
+                        child: Column(
+                          children: <Widget>[
+                            SvgPicture(
+                              AdvancedNetworkSvg('${categoria.categoriaIcono}',
+                                  SvgPicture.svgByteDecoder,
+                                  useDiskCache: true),
+                            ),
+                            SizedBox(
+                              height: responsive.hp(1),
+                            ),
+                            Text(categoria.categoriaNombre,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: responsive.ip(1.5),
+                                ),
+                                textAlign: TextAlign.center),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-        onTap: () {
-          setState(() {});
-          Provider.of<PaginacionCategoria>(context, listen: false)
-              .currentIndex = categoria.idCategoria;
-          //Navigator.pushNamed(context, 'ProductosID',arguments: categoria);
+              onTap: () {
+                enchiladasNaviBloc.changeIndexPage(categoria.idCategoria);
+                //Navigator.pushNamed(context, 'ProductosID',arguments: categoria);
+              });
         });
   }
 }
 
 class ProductosIdPage extends StatefulWidget {
   final double ancho;
+  final String index;
 
-  const ProductosIdPage({Key key, @required this.ancho}) : super(key: key);
+  const ProductosIdPage({Key key, @required this.ancho, @required this.index})
+      : super(key: key);
 
   @override
   _ProductosIdPageState createState() => _ProductosIdPageState();
@@ -239,18 +263,19 @@ class ProductosIdPage extends StatefulWidget {
 class _ProductosIdPageState extends State<ProductosIdPage> {
   @override
   Widget build(BuildContext context) {
-    final _currenIndex = Provider.of<PaginacionCategoria>(context).currentIndex;
+    final responsive = Responsive.of(context);
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosEnchiladasPorCategoria(_currenIndex);
+    productosIdBloc.obtenerProductosEnchiladasPorCategoria(widget.index);
 
     return Scaffold(
-      body: _listaProductosId(productosIdBloc),
+      body: _listaProductosId(productosIdBloc, responsive),
     );
   }
 
-  Widget _listaProductosId(ProductosBloc productosIdBloc) {
+  Widget _listaProductosId(
+      ProductosBloc productosIdBloc, Responsive responsive) {
     return Container(
       color: Colors.transparent,
       width: this.widget.ancho,
@@ -264,7 +289,10 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
               return ListView.builder(
                 itemCount: productos.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return _itemPedido(context, productos[index]);
+                  return _itemPedido(
+                    context,
+                    productos[index],
+                  );
                 },
               );
             }
@@ -307,7 +335,9 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     placeholder: (context, url) => Image(
                         image: AssetImage('assets/jar-loading.gif'),
                         fit: BoxFit.cover),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Image(
+                        image: AssetImage('assets/carga_fallida.jpg'),
+                        fit: BoxFit.cover),
                     imageUrl: '${productosData.productoFoto}',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(

@@ -10,27 +10,27 @@ class ProductoDatabase{
 
      
     final res = await db.rawInsert(
-        "INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_precio,"
-        "producto_unidad,producto_estado,producto_descripcion,producto_favorito) "
-        "VALUES ( '${productos.idProducto}' , '${productos.idCategoria}' , '${productos.productoNombre}' ,"
-        " '${productos.productoFoto}' , '${productos.productoPrecio}' , '${productos.productoUnidad}' ,"
-        " '${productos.productoEstado}','${productos.productoDescripcion}', ${productos.productoFavorito} )");
+        'INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_precio,'
+        'producto_unidad,producto_estado,producto_descripcion,producto_favorito) '
+        'VALUES ( "${productos.idProducto}" , "${productos.idCategoria}" , "${productos.productoNombre}" ,'
+        ' "${productos.productoFoto}" , "${productos.productoPrecio}" , "${productos.productoUnidad}" ,'
+        ' "${productos.productoEstado}","${productos.productoDescripcion}", ${productos.productoFavorito} )');
     return res;
   } 
 
   updateProductosDb(ProductosData productos)async{
     final db = await dbprovider.database;
 
-    final res = await db.rawUpdate("UPDATE Producto SET "
-    "id_categoria='${productos.idCategoria}', "
-    "producto_nombre='${productos.productoNombre}', "
-    "producto_foto='${productos.productoFoto}', "
-    "producto_precio='${productos.productoPrecio}', "
-    "producto_unidad='${productos.productoUnidad}', "
-    "producto_estado='${productos.productoEstado}', "
-    "producto_favorito='${productos.productoFavorito}', "
-    "producto_descripcion='${productos.productoDescripcion}' "
-    "WHERE id_producto = '${productos.idProducto}'" 
+    final res = await db.rawUpdate('UPDATE Producto SET '
+    'id_categoria="${productos.idCategoria}", '
+    'producto_nombre="${productos.productoNombre}", '
+    'producto_foto="${productos.productoFoto}", '
+    'producto_precio="${productos.productoPrecio}", '
+    'producto_unidad="${productos.productoUnidad}", '
+    'producto_estado="${productos.productoEstado}", '
+    'producto_favorito="${productos.productoFavorito}", '
+    'producto_descripcion="${productos.productoDescripcion}" '
+    'WHERE id_producto = "${productos.idProducto}"'
     );
 
     return res;

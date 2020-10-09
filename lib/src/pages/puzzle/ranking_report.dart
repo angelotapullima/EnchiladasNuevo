@@ -175,8 +175,9 @@ class _RankingReportState extends State<RankingReport> {
                   cacheManager: CustomCacheManager(),
                   placeholder: (context, url) => Image(
                       image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                      fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                   imageUrl:'${ranking.userImage}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(

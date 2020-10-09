@@ -27,7 +27,18 @@ class PantallaDatabase{
 
   Future<List<PantallaModel>> obtenerPantallas() async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Pantalla ");
+    final res = await db.rawQuery("SELECT * FROM Pantalla where pantalla_estado='1'");
+
+    List<PantallaModel> list = res.isNotEmpty
+        ? res.map((c) => PantallaModel.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+  Future<List<PantallaModel>> obtenerPantallaPorId(String id) async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery("SELECT * FROM Pantalla where id_pantalla='$id'");
 
     List<PantallaModel> list = res.isNotEmpty
         ? res.map((c) => PantallaModel.fromJson(c)).toList()

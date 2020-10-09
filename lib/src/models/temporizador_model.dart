@@ -10,6 +10,7 @@ class TemporizadorModel{
         this.temporizadorFechafin,
         this.temporizadorHorainicio,
         this.temporizadorHorafin,
+        this.temporizadorMensaje,
         this.temporizadorLunes,
         this.temporizadorMartes,
         this.temporizadorMiercoles,
@@ -25,6 +26,7 @@ class TemporizadorModel{
     String temporizadorFechafin; 
     String temporizadorHorainicio; 
     String temporizadorHorafin; 
+    String temporizadorMensaje; 
     String temporizadorLunes; 
     String temporizadorMartes; 
     String temporizadorMiercoles; 
@@ -40,6 +42,7 @@ class TemporizadorModel{
         temporizadorFechafin: json["temporizador_fechafin"], 
         temporizadorHorainicio: json["temporizador_horainicio"], 
         temporizadorHorafin: json["temporizador_horafin"], 
+        temporizadorMensaje: json["temporizador_mensaje"], 
         temporizadorLunes: json["temporizador_lunes"], 
         temporizadorMartes: json["temporizador_martes"], 
         temporizadorMiercoles: json["temporizador_miercoles"], 
@@ -56,6 +59,7 @@ class TemporizadorModel{
         "temporizador_fechafin": temporizadorFechafin, 
         "temporizador_horainicio": temporizadorHorainicio, 
         "temporizador_horafin": temporizadorHorafin, 
+        "temporizador_mensaje": temporizadorMensaje, 
         "temporizador_lunes": temporizadorLunes, 
         "temporizador_martes": temporizadorMartes, 
         "temporizador_miercoles": temporizadorMiercoles, 

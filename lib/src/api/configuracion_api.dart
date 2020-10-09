@@ -76,8 +76,7 @@ class ConfiguracionApi {
           puzzle.imagenEstado =
               decodedData['result']['data']['puzzle'][y]['imagen_estado'];
 
-              //var file = CustomCacheManager().downloadFile(puzzle.imagenRuta);
-          //print('file $file');
+
           await puzzleDatabase.insertarPuzzle(puzzle);
         }
 

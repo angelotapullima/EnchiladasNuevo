@@ -123,7 +123,9 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                   placeholder: (context, url) => Image(
                       image: AssetImage('assets/jar-loading.gif'),
                       fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                   imageUrl:
                       '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(

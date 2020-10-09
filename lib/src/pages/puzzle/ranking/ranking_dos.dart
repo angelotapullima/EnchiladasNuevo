@@ -40,9 +40,9 @@ class RankingDos extends StatelessWidget {
                             cacheManager: CustomCacheManager(),
                             placeholder: (context, url) => Image(
                                 image: AssetImage('assets/jar-loading.gif'),
-                                fit: BoxFit.cover),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                             imageUrl: '$imagen1',
                             //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
                             imageBuilder: (context, imageProvider) => Container(
@@ -81,9 +81,9 @@ class RankingDos extends StatelessWidget {
                             cacheManager: CustomCacheManager(),
                             placeholder: (context, url) => Image(
                                 image: AssetImage('assets/jar-loading.gif'),
-                                fit: BoxFit.cover),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                             //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
                             imageUrl: '$imagen2',
                             imageBuilder: (context, imageProvider) => Container(

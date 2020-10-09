@@ -5,11 +5,11 @@ class TranslateAnimation extends StatelessWidget {
   final Duration duration;
   final double offset;
   final Curve curve;
-  final Axis offsetDirection;
+  final Axis offsetDirection; 
 
   const TranslateAnimation({
     Key key,
-    this.duration = const Duration(milliseconds: 800),
+    this.duration = const Duration(milliseconds: 800), 
     this.child,
     this.offset = 140.0,
     this.curve = Curves.fastOutSlowIn,
@@ -18,7 +18,7 @@ class TranslateAnimation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
+    return TweenAnimationBuilder( 
       duration: duration,
       child: child,
       curve: curve,

@@ -5,6 +5,7 @@ import 'package:enchiladasapp/src/database/temporizador_database.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/models/temporizador_model.dart';
+import 'package:enchiladasapp/src/models/validar_producto.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ProductosBloc {
@@ -22,7 +23,14 @@ class ProductosBloc {
       new BehaviorSubject<List<CategoriaData>>();
   final _cargandoProductosController = BehaviorSubject<bool>();
 
-  final _categoriaTemporizador = new BehaviorSubject<bool>();
+  final _categoriaTemporizador = new BehaviorSubject<ValidarProducto>(); 
+
+
+
+
+
+
+
 
   Stream<List<ProductosData>> get productosEnchiladasStream =>
       _productosEnchiladasController.stream;
@@ -38,7 +46,7 @@ class ProductosBloc {
   Stream<bool> get cargandoProductosStream =>
       _cargandoProductosController.stream;
 
-  Stream<bool> get categoriaTemporizador => _categoriaTemporizador.stream;
+  Stream<ValidarProducto> get categoriaTemporizador => _categoriaTemporizador.stream; 
 
   dispose() {
     _productosEnchiladasController?.close();
@@ -47,7 +55,7 @@ class ProductosBloc {
     _cargandoProductosController?.close();
     _productosMarketController?.close();
     _categoriaProductosController?.close();
-    _categoriaTemporizador?.close();
+    _categoriaTemporizador?.close();  
   }
 
   void cargandoProductosFalse() {
@@ -152,11 +160,14 @@ class ProductosBloc {
     } else {
       //siempre disponible
 
-      _categoriaTemporizador.sink.add(true);
+       ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+      _categoriaTemporizador.sink.add(validarProducto);
     }
   }
 
-  bool _rangoFechasYHorasEspecificas(
+  ValidarProducto _rangoFechasYHorasEspecificas(
       List<TemporizadorModel> temporizadorList, DateTime date) {
     var fechaInicio = temporizadorList[0].temporizadorFechainicio;
     var fechaFin = temporizadorList[0].temporizadorFechafin;
@@ -169,10 +180,16 @@ class ProductosBloc {
       if (date.isBefore(fechaFinPromo)) {
         return _cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList);
       } else {
-        return false;
+        ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=false;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        return validarProducto;
       }
     } else {
-      return false;
+      ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=false;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+      return validarProducto;
     }
   }
 
@@ -190,70 +207,86 @@ class ProductosBloc {
 
     if (date.isAfter(fechaInicioPromo)) {
       if (date.isBefore(fechaFinPromo)) {
-        _categoriaTemporizador.sink.add(true);
+
+        ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       } else {
-        _categoriaTemporizador.sink.add(false);
+        ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=false;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else {
-      _categoriaTemporizador.sink.add(false);
+      ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=false;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+      _categoriaTemporizador.sink.add(validarProducto);
     }
   }
 
   void _enDiasYHorasEspecificosDeLaSemana(
       DateTime date, List<TemporizadorModel> temporizadorList) {
     var week = date.weekday;
+
+
+    ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=false;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+
     if (week == 1) {
       if (temporizadorList[0].temporizadorLunes == '1') {
         _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date,temporizadorList));
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 2) {
       if (temporizadorList[0].temporizadorMartes == '1') {
        
         _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date,temporizadorList));
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 3) {
       if (temporizadorList[0].temporizadorMiercoles == '1') {
        
         _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date,temporizadorList));
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 4) {
       if (temporizadorList[0].temporizadorJueves == '1') {
         
         _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date,temporizadorList));
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 5) {
       if (temporizadorList[0].temporizadorViernes == '1') {
         
         _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date,temporizadorList));
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 6) {
       if (temporizadorList[0].temporizadorSabado == '1') {
         
         _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date,temporizadorList));
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 7) {
       if (temporizadorList[0].temporizadorDomingo == '1') {
         
         _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date,temporizadorList));
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     }
   }
 
-  bool _cualquierDiaEnRangoDeHorasEspecificas(
+  ValidarProducto _cualquierDiaEnRangoDeHorasEspecificas(
       DateTime date, List<TemporizadorModel> temporizadorList) {
     var horaInicio =
         '${date.year.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} ${temporizadorList[0].temporizadorHorainicio}';
@@ -265,12 +298,23 @@ class ProductosBloc {
 
     if (date.isAfter(horaInicioDate)) {
       if (date.isBefore(horaFinDate)) {
-        return true;
+
+        ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+
+        return validarProducto;
       } else {
-        return false;
+        ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=false;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        return validarProducto;
       }
     } else {
-      return false;
+      ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=false;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+      return validarProducto;
     }
   }
 
@@ -278,48 +322,75 @@ class ProductosBloc {
       DateTime date, List<TemporizadorModel> temporizadorList) {
     var week = date.weekday;
 
+    ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=false;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+
     if (week == 1) {
       if (temporizadorList[0].temporizadorLunes == '1') {
-        _categoriaTemporizador.sink.add(true);
+         ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 2) {
       if (temporizadorList[0].temporizadorMartes == '1') {
-        _categoriaTemporizador.sink.add(true);
+         ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 3) {
       if (temporizadorList[0].temporizadorMiercoles == '1') {
-        _categoriaTemporizador.sink.add(true);
+         ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 4) {
       if (temporizadorList[0].temporizadorJueves == '1') {
-        _categoriaTemporizador.sink.add(true);
+         ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 5) {
       if (temporizadorList[0].temporizadorViernes == '1') {
-        _categoriaTemporizador.sink.add(true);
+         ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 6) {
       if (temporizadorList[0].temporizadorSabado == '1') {
-        _categoriaTemporizador.sink.add(true);
+         ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 7) {
       if (temporizadorList[0].temporizadorDomingo == '1') {
-        _categoriaTemporizador.sink.add(true);
+         ValidarProducto validarProducto = ValidarProducto();
+        validarProducto.valor=true;
+        validarProducto.mensaje=temporizadorList[0].temporizadorMensaje;
+        _categoriaTemporizador.sink.add(validarProducto);
       } else {
-        _categoriaTemporizador.sink.add(false);
+        _categoriaTemporizador.sink.add(validarProducto);
       }
     }
   }
 }
+
+ 

@@ -1,6 +1,7 @@
 
 
 import 'package:enchiladasapp/src/bloc/carrito_completo.dart';
+import 'package:enchiladasapp/src/bloc/categoria_enchiladas_navi_bloc.dart';
 import 'package:enchiladasapp/src/bloc/nuevo_metodo_pago.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_bloc.dart';
 import 'package:enchiladasapp/src/bloc/zona_bloc.dart';
@@ -60,6 +61,7 @@ class ProviderBloc extends InheritedWidget {
   final nuevoMetodoPagoBloc = NuevoMetodoPagoBloc();
   final carritoCompletoBloc = CarritoCompletoBloc();
   final pantallaBloc = PantallaBloc();
+  final enchiladasNaviBloc =EnchiladasNaviBloc();
 
   static ProviderBloc _instancia;
 
@@ -153,6 +155,11 @@ class ProviderBloc extends InheritedWidget {
   static PantallaBloc pantalla(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .pantallaBloc;
+  }
+
+  static EnchiladasNaviBloc enchiNavi(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .enchiladasNaviBloc;
   }
     
 }

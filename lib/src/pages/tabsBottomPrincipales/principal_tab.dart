@@ -102,7 +102,7 @@ class PrincipalTab extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        showSearch(context: context, delegate: DataSearch());
+                        showSearch(context: context, delegate: DataSearch(hintText: 'Buscar'));
                       },
                       child: Icon(
                         Icons.search,
@@ -176,8 +176,9 @@ class PrincipalTab extends StatelessWidget {
                     cacheManager: CustomCacheManager(),
                     placeholder: (context, url) => Image(
                         image: AssetImage('assets/jar-loading.gif'),
-                        fit: BoxFit.cover),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                        fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                     imageUrl: '${promociones[index].categoriaBanner}',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
@@ -401,6 +402,89 @@ class PrincipalTab extends StatelessWidget {
                   itemCount: pantallaModel.items.length,
                   shrinkWrap: true,
                   itemBuilder: (context, i) {
+
+                    if(i==pantallaModel.items.length-1){
+                      return GestureDetector(
+                        onTap: (){
+                           if (pantallaModel.idPantalla == '1') {
+                        final bottomBloc = ProviderBloc.bottom(context);
+                        bottomBloc.changePage(2);
+                      } else if (pantallaModel.idPantalla == '2') {
+                        Navigator.pushNamed(context, 'market');
+                      } else if (pantallaModel.idPantalla == '3') {
+                        Navigator.pushNamed(context, 'HomePuzzle');
+                      } else {
+                        Arguments arg = new Arguments(
+                            "${pantallaModel.pantallaNombre}",
+                            '${pantallaModel.pantallCategoria}');
+                        Navigator.pushNamed(context, 'combo', arguments: arg);
+                      }
+                        },
+
+                        child: Container(
+                          width: responsive.wp(anchoCard),
+                          height: responsive.hp(altoCard),
+                          padding: EdgeInsets.only(
+                            left: responsive.wp(3),
+                          ),
+                          margin: EdgeInsets.only(
+                            right: responsive.wp(1.5),
+                          ),
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                width: responsive.wp(anchoCard),
+                                height: responsive.hp(altoCard),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    cacheManager: CustomCacheManager(),
+                                    placeholder: (context, url) => Image(
+                                        image:
+                                            AssetImage('assets/jar-loading.gif'),
+                                        fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
+                                    imageUrl:
+                                        '${pantallaModel.items[i].fotoItem}',
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: boxfit,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: responsive.hp(2),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(.5),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                    'Ver más',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsive.ip(2),
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    
+                    }
                     return GestureDetector(
                       onTap: () {
                         if (tipo == 'categoria') {
@@ -431,7 +515,11 @@ class PrincipalTab extends StatelessWidget {
                               },
                             ),
                           );
-                        } else {}
+                        } else if (tipo == 'puzzle'){
+
+                        Navigator.pushNamed(context, 'HomePuzzle');
+
+                        }
                       },
                       child: Container(
                         width: responsive.wp(anchoCard),
@@ -454,9 +542,9 @@ class PrincipalTab extends StatelessWidget {
                                   placeholder: (context, url) => Image(
                                       image:
                                           AssetImage('assets/jar-loading.gif'),
-                                      fit: BoxFit.cover),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                                      fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                                   imageUrl:
                                       '${pantallaModel.items[i].fotoItem}',
                                   imageBuilder: (context, imageProvider) =>

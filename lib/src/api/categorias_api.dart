@@ -64,8 +64,8 @@ class CategoriasApi {
               temporizador[0]['temporizador_fechafin'];
           temporizadorModel.temporizadorHorainicio =
               temporizador[0]['temporizador_horainicio'];
-          temporizadorModel.temporizadorHorafin =
-              temporizador[0]['temporizador_horafin'];
+          temporizadorModel.temporizadorHorafin = temporizador[0]['temporizador_horafin'];
+          temporizadorModel.temporizadorMensaje = temporizador[0]['temporizador_mensaje'];
           temporizadorModel.temporizadorLunes =
               temporizador[0]['temporizador_dias']['Lunes'];
           temporizadorModel.temporizadorMartes =
@@ -129,7 +129,7 @@ class CategoriasApi {
     }
   }
 
-  Future<List<CategoriaData>> cargarCategorias() async {
+ /*  Future<List<CategoriaData>> cargarCategorias() async {
     try {
       final url = '$_url/api/Categoria/listar_categorias';
       final lista = List<CategoriaData>();
@@ -202,7 +202,7 @@ class CategoriasApi {
     }
   }
 
-  Future<List<ProductosData>> obtenerProductoCategoria(String id) async {
+   */Future<List<ProductosData>> obtenerProductoCategoria(String id) async {
     try {
       final lista = List<ProductosData>();
 

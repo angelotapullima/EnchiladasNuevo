@@ -19,8 +19,8 @@ class CustomCacheManager extends BaseCacheManager {
 
   CustomCacheManager._()
       : super(key,
-      maxAgeCacheObject: Duration(days:90), //duración del cache en dias
-      maxNrOfCacheObjects: 300600); //maximo de elementos en cache
+      maxAgeCacheObject: Duration(days:100), //duración del cache en dias
+      maxNrOfCacheObjects: 3006054640); //maximo de elementos en cache
 
   Future<String> getFilePath() async {
     //método para obtener el archivo del cache

@@ -1,9 +1,11 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/validar_producto.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/translate_animation.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
@@ -28,12 +30,9 @@ class DetalleProductitos extends StatefulWidget {
 }
 
 class _DetalleProducto extends State<DetalleProductitos> {
-
   GlobalKey _one = GlobalKey();
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
-
-
 
   bool estadoDelivery = false;
   double _panelHeightOpen;
@@ -54,13 +53,12 @@ class _DetalleProducto extends State<DetalleProductitos> {
 
   @override
   void initState() {
-
-  
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final preferences = Preferences();
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
     //final ProductosData productos = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
@@ -70,22 +68,20 @@ class _DetalleProducto extends State<DetalleProductitos> {
     productosIdBloc.verificarDisponibilidad(widget.productosData.idCategoria);
 
     return ShowCaseWidget(
-      onStart: (index, key) {
-            print('onStart: $index, $key');
-          },
-          onComplete: (index, key) {
-            print('onComplete: $index, $key');
-          },
-          autoPlay: false,
-          autoPlayDelay: Duration(seconds: 7),
-          autoPlayLockEnable: true,
+      onFinish: () {
+        preferences.pantallaDProducto = '1';
+      },
+      autoPlay: false,
+      autoPlayDelay: Duration(seconds: 3),
+      autoPlayLockEnable: true,
       builder: Builder(builder: (context) {
+        Future.delayed(Duration(milliseconds: 700)).then((value) {
+          if (preferences.pantallaDProducto != "1") {
+            WidgetsBinding.instance.addPostFrameCallback((_) =>
+                ShowCaseWidget.of(context).startShowCase([_one, _two, _three]));
+          }
+        });
 
-          WidgetsBinding.instance.addPostFrameCallback((_) =>
-        ShowCaseWidget.of(context)
-            .startShowCase([_one, _two,_three]));
-
-            
         return Material(
           child: StreamBuilder(
             stream: productosIdBloc.productosIdStream,
@@ -105,14 +101,23 @@ class _DetalleProducto extends State<DetalleProductitos> {
                       _crearAppbar(responsive),
                       TranslateAnimation(
                         duration: const Duration(milliseconds: 400),
-                        child: _contenido(
-                            snapshot.data[0], responsive, context, productosIdBloc),
+                        child: _contenido(snapshot.data[0], responsive, context,
+                            productosIdBloc),
                       ),
                     ]),
-                    panelBuilder: (sc) => TranslateAnimation(
-                      duration: const Duration(milliseconds: 600),
-                      child: _carritoProductos(responsive, sc),
-                    ),
+                    panelBuilder: (sc) {
+                      return Showcase(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: responsive.wp(40)),
+                        key: _three,
+                        description:
+                            'puedes presionar o deslizar hacia arriba para ver más detalles y hacer tu pedido',
+                        child: TranslateAnimation(
+                          duration: const Duration(milliseconds: 600),
+                          child: _carritoProductos(responsive, sc),
+                        ),
+                      );
+                    },
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
@@ -132,8 +137,8 @@ class _DetalleProducto extends State<DetalleProductitos> {
             },
           ),
         );
-      }
-    ),);
+      }),
+    );
   }
 
   Widget botonesBajos(Responsive responsive, ProductosData productosData,
@@ -192,9 +197,9 @@ class _DetalleProducto extends State<DetalleProductitos> {
           ),
           StreamBuilder(
               stream: productosBloc.categoriaTemporizador,
-              builder: (context, AsyncSnapshot<bool> snapshot) {
+              builder: (context, AsyncSnapshot<ValidarProducto> snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data) {
+                  if (snapshot.data.valor) {
                     return Showcase(
                       key: _two,
                       description: 'presione para agregar producto al carrito',
@@ -242,9 +247,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                       ),
                       onTap: () {
                         utils.showToast(
-                            'En estos momentos el producto esta deshabilitado',
-                            2,
-                            ToastGravity.TOP);
+                            '${snapshot.data.mensaje}', 2, ToastGravity.TOP);
                         //utils.agregarCarrito(productosData, context, "1");
                       },
                     );
@@ -421,77 +424,73 @@ class _DetalleProducto extends State<DetalleProductitos> {
       Responsive responsive, double total, String cantidadPedidos) {
     String montoFinalex = utils.format(total);
     return Container(
-        height: responsive.hp(8),
-        padding: EdgeInsets.symmetric(
-          horizontal: responsive.wp(5),
-          vertical: responsive.hp(1),
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadiusDirectional.only(
-              topEnd: Radius.circular(20),
-              topStart: Radius.circular(20),
+      height: responsive.hp(8),
+      padding: EdgeInsets.symmetric(
+        horizontal: responsive.wp(5),
+        vertical: responsive.hp(1),
+      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadiusDirectional.only(
+            topEnd: Radius.circular(20),
+            topStart: Radius.circular(20),
+          ),
+          color: Colors.red),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(
+              top: responsive.hp(.4),
             ),
-            color: Colors.red),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(
-                top: responsive.hp(.4),
+            child: Container(
+              height: responsive.hp(.6),
+              width: responsive.wp(18),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
               ),
-              child: Container(
-                height: responsive.hp(.6),
-                width: responsive.wp(18),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
+            ),
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  'Monto S/$montoFinalex',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: responsive.ip(3)),
                 ),
               ),
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                    child: Text(
-                  'Monto S/$montoFinalex',
-                  style:
-                      TextStyle(color: Colors.white, fontSize: responsive.ip(3)),
-                )),
-                Showcase(
-                  key: _three,
-                  description: 'eela no te ama',
-                  child: Stack(children: <Widget>[
-                    Icon(
-                      Icons.shopping_cart,
-                      size: responsive.ip(4),
-                      color: Colors.white,
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: BounceInDown(
-                        from: 10,
-                        child: Container(
-                          child: Text(
-                            '$cantidadPedidos',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: responsive.ip(1.5),
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          width: responsive.ip(1.8),
-                          height: responsive.ip(1.8),
-                          decoration: BoxDecoration(
-                              color: Colors.green, shape: BoxShape.circle),
+              Stack(children: <Widget>[
+                Icon(
+                  Icons.shopping_cart,
+                  size: responsive.ip(4),
+                  color: Colors.white,
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: BounceInDown(
+                    from: 10,
+                    child: Container(
+                      child: Text(
+                        '$cantidadPedidos',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: responsive.ip(1.5),
                         ),
                       ),
-                    )
-                  ]),
+                      alignment: Alignment.center,
+                      width: responsive.ip(1.8),
+                      height: responsive.ip(1.8),
+                      decoration: BoxDecoration(
+                          color: Colors.green, shape: BoxShape.circle),
+                    ),
+                  ),
                 )
-              ],
-            ),
-          ],
-        ),
-      
+              ]),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -625,8 +624,9 @@ class _DetalleProducto extends State<DetalleProductitos> {
                           placeholder: (context, url) => Image(
                               image: AssetImage('assets/jar-loading.gif'),
                               fit: BoxFit.cover),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                          errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                           imageUrl: '${carrito.productoFoto}',
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
@@ -800,6 +800,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
   }
 
   Widget _pagarCarrito(BuildContext context, Responsive responsive) {
+    final preferences = Preferences();
     return GestureDetector(
       child: Padding(
         padding: EdgeInsets.all(
@@ -812,7 +813,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
               SizedBox(
                 width: double.infinity,
                 child: RaisedButton(
-                    color: Colors.red,
+                    color: (preferences.rol == '5') ? Colors.red : Colors.grey,
                     textColor: Colors.white,
                     child: Text(
                       'Ordenar Pedido',
@@ -821,12 +822,16 @@ class _DetalleProducto extends State<DetalleProductitos> {
                       ),
                     ),
                     onPressed: () {
-                      final prefs = Preferences();
+                      if (preferences.rol == '5') {
+                        final prefs = Preferences();
 
-                      if (prefs.email != null && prefs.email != "") {
-                        Navigator.pushNamed(context, 'detallePago');
-                      } else {
-                        pedirLogueo();
+                        if (prefs.email != null && prefs.email != "") {
+                          Navigator.pushNamed(context, 'detallePago');
+                        } else {
+                          pedirLogueo();
+                        }
+                        utils.showToast(
+                            'No tiene permisos', 2, ToastGravity.TOP);
                       }
                     }),
               ),
@@ -903,7 +908,9 @@ class _DetalleProducto extends State<DetalleProductitos> {
               placeholder: (context, url) => Image(
                   image: AssetImage('assets/jar-loading.gif'),
                   fit: BoxFit.cover),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
               imageUrl: '${carrito.productoFoto}',
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(

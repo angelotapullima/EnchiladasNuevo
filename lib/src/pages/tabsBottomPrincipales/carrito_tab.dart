@@ -146,7 +146,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         subtotal = subtotal +
             (double.parse(carritoBloc[i].productoPrecio) *
                 double.parse(carritoBloc[i].productoCantidad));
-      } 
+      }
     }
 
     return SafeArea(
@@ -187,12 +187,14 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         return ListView(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          children: <Widget>[/* 
+                          children: <Widget>[
+                            /* 
                             _direccion(responsive), */
-                            SizedBox(height: responsive.hp(2),),
+                            SizedBox(
+                              height: responsive.hp(2),
+                            ),
                             _listaproductos(responsive, carritoBloc),
-                            _resumenPedidoDetalle(
-                                 responsive, subtotal),
+                            _resumenPedidoDetalle(responsive, subtotal),
                             _pagarCarrito(responsive),
                           ],
                         );
@@ -283,8 +285,9 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                             placeholder: (context, url) => Image(
                                 image: AssetImage('assets/jar-loading.gif'),
                                 fit: BoxFit.cover),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                            errorWidget: (context, url, error) => Image(
+                                image: AssetImage('assets/carga_fallida.jpg'),
+                                fit: BoxFit.cover),
                             imageUrl: '${carrito.productoFoto}',
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
@@ -458,7 +461,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     );
   }
 
- /*  Widget _direccion(Responsive responsive) {
+  /*  Widget _direccion(Responsive responsive) {
     final direcionBloc = ProviderBloc.dire(context);
     direcionBloc.obtenerDireccion();
 
@@ -714,9 +717,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     );
   } */
 
-  Widget _resumenPedidoDetalle(
-      Responsive responsive,
-      double total) {
+  Widget _resumenPedidoDetalle(Responsive responsive, double total) {
     final total2 = utils.format(total);
 
     return Padding(
@@ -775,7 +776,6 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               SizedBox(
                 height: responsive.hp(2),
               ),
-              
               Divider(),
               Row(
                 children: <Widget>[

@@ -7,6 +7,8 @@ import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
+
 class DataSearch extends SearchDelegate {
   DataSearch({
     String hintText,
@@ -172,8 +174,9 @@ class DataSearch extends SearchDelegate {
                   cacheManager: CustomCacheManager(),
                   placeholder: (context, url) => Image(
                       image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                      fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                   imageUrl: productosData.productoFoto,
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(

@@ -23,7 +23,7 @@ class _OrdenesPageState extends State<OrdenesPagoPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async{
         Navigator.popUntil(context, ModalRoute.withName('/'));
       },
       child: DefaultTabController(

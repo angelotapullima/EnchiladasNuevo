@@ -22,9 +22,9 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'enchilada.db');
+    final path = join(documentsDirectory.path, 'enchiladasApp.db');
 
-    return await openDatabase(path, version: 1, onOpen: (db) {},
+    return await openDatabase(path, version: 4, onOpen: (db) {},
         onConfigure: (Database db) async {
       await db.execute('PRAGMA foreign_keys = ON');
     }, onCreate: (Database db, int version) async {
@@ -171,6 +171,7 @@ class DatabaseProvider {
           'temporizador_fechafin VARCHAR,'
           'temporizador_horainicio VARCHAR,'
           'temporizador_horafin VARCHAR,'
+          'temporizador_mensaje VARCHAR,'
           'temporizador_lunes VARCHAR,'
           'temporizador_martes VARCHAR,'
           'temporizador_miercoles VARCHAR,'

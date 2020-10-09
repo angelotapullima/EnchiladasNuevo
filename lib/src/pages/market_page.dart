@@ -9,8 +9,10 @@ import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MarketPage extends StatelessWidget {
   final _refreshController = RefreshController(initialRefresh: false);
@@ -214,10 +216,14 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
-                            Icon(
-                              Icons.person,
-                              size: responsive.hp(5),
-                            ),
+                            SvgPicture(
+                        AdvancedNetworkSvg('${categoria.categoriaIcono}',
+                            SvgPicture.svgByteDecoder,
+                            useDiskCache: true),
+                      ),
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
                             Text(categoria.categoriaNombre,
                                 style: TextStyle(
                                     color: Colors.black,
@@ -320,7 +326,9 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                   placeholder: (context, url) => Image(
                       image: AssetImage('assets/jar-loading.gif'),
                       fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Image(
+                  image: AssetImage('assets/carga_fallida.jpg'),
+                  fit: BoxFit.cover),
                   imageUrl: '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
