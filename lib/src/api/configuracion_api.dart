@@ -6,7 +6,7 @@ import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 

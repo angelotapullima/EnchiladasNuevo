@@ -77,7 +77,9 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
             child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadiusDirectional.only(
-                  topStart: Radius.circular(13), topEnd: Radius.circular(13)),
+                topStart: Radius.circular(13),
+                topEnd: Radius.circular(13),
+              ),
               color: Colors.grey[50]),
           child: SmartRefresher(
             controller: _refreshController,
@@ -96,11 +98,12 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
                           _onRefresh(context);
                         },
                         child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, i) =>
-                                _itemPedido(context, snapshot.data[i])),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, i) =>
+                              _itemPedido(context, snapshot.data[i]),
+                        ),
                       );
                     } else {
                       return Center(
@@ -211,7 +214,9 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
                     fontSize: responsive.ip(2),
                   ),
                 ),
-                Expanded(child: Text('${data.pedidoDireccion} ')),
+                Expanded(
+                  child: Text('${data.pedidoDireccion} '),
+                ),
               ],
             ),
             SizedBox(
@@ -237,12 +242,17 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
             ),
             Row(
               children: <Widget>[
-                Text('Teléfono : ',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2))),
-                Expanded(child: Text(' ${data.pedidoTelefono}')),
+                Text(
+                  'Teléfono : ',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2),
+                  ),
+                ),
+                Expanded(
+                  child: Text(' ${data.pedidoTelefono}'),
+                ),
               ],
             ),
             SizedBox(
@@ -250,29 +260,37 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
             ),
             Row(
               children: <Widget>[
-                Text('Fecha : ',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2))),
-                Expanded(child: Text(' ${data.pedidoFecha}')),
+                Text(
+                  'Fecha : ',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2),
+                  ),
+                ),
+                Expanded(
+                  child: Text(' ${data.pedidoFecha}'),
+                ),
               ],
             ),
             SizedBox(
               height: responsive.hp(1),
             ),
-            Text('S/. ${data.pedidoTotal}',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsive.ip(3)))
+            Text(
+              'S/. ${data.pedidoTotal}',
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: responsive.ip(3),
+              ),
+            )
           ],
         ),
       ),
       onTap: () {
-        banderaTimer =false;
-        
-        Navigator.pushNamed(context, 'detallePedido', arguments: data);
+        banderaTimer = false;
+
+        Navigator.pushNamed(context, 'detallePedido', arguments: data.idPedido);
       },
     );
   }

@@ -2,7 +2,7 @@
 
 
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';

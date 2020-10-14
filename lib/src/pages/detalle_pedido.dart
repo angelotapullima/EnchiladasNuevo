@@ -36,9 +36,9 @@ class _DetallePedidoState extends State<DetallePedido> {
 
   @override 
   Widget build(BuildContext context) {
-    final PedidoServer pedido = ModalRoute.of(context).settings.arguments;
+    final String  pedido = ModalRoute.of(context).settings.arguments;
     final pedidoBloc = ProviderBloc.pedido(context);
-    pedidoBloc.obtenerPedidoPorId(pedido.idPedido);
+    pedidoBloc.obtenerPedidoPorId(pedido);
     final responsive = Responsive.of(context);
 
 
@@ -46,7 +46,7 @@ class _DetallePedidoState extends State<DetallePedido> {
     timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
       if (banderaTimer) {
         print('detalle pedido true ');
-        pedidoBloc.obtenerPedidoPorId(pedido.idPedido);
+        pedidoBloc.obtenerPedidoPorId(pedido);
       } else {
         print('detalle pedido false ');
         timer.cancel();
@@ -67,7 +67,13 @@ class _DetallePedidoState extends State<DetallePedido> {
               builder: (BuildContext context,
                   AsyncSnapshot<List<PedidoServer>> snapshot) {
                 if (snapshot.hasData) {
-                  return _contenido(context, pedido.idPedido, snapshot.data);
+                  if(snapshot.data.length>0){
+
+                  return _contenido(context, pedido, snapshot.data);
+                  }else{
+
+                    return Center(child: CupertinoActivityIndicator());
+                  }
                 } else {
                   return Center(child: CupertinoActivityIndicator());
                 }

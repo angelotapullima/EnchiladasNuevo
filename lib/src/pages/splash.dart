@@ -3,7 +3,7 @@ import 'package:enchiladasapp/src/api/configuracion_api.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

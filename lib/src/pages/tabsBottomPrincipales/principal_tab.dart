@@ -8,7 +8,7 @@ import 'package:enchiladasapp/src/models/productos._model.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -360,7 +360,11 @@ class PrincipalTab extends StatelessWidget {
                         Arguments arg = new Arguments(
                             "${pantallaModel.pantallaNombre}",
                             '${pantallaModel.pantallCategoria}');
+
+
                         Navigator.pushNamed(context, 'combo', arguments: arg);
+
+                        
                       }
                     },
                     child: Container(

@@ -221,9 +221,10 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                         child: Column(
                           children: <Widget>[
                             SvgPicture(
-                              AdvancedNetworkSvg('${categoria.categoriaIcono}',
-                                  SvgPicture.svgByteDecoder,
-                                  useDiskCache: true),
+                                AdvancedNetworkSvg('${categoria.categoriaIcono}',
+                                    SvgPicture.svgByteDecoder,
+                                    useDiskCache: true),
+                              
                             ),
                             SizedBox(
                               height: responsive.hp(1),

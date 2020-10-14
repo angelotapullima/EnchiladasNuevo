@@ -42,12 +42,10 @@ class PedidosRepartidor extends StatelessWidget {
         AppBar(
           title: Text('Pedidos Asignados'),
           elevation: 0,
-          actions: <Widget>[
-            
-          ],
+          actions: <Widget>[],
         ),
         Expanded(
-            child: Container( 
+            child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadiusDirectional.only(
                 topStart: Radius.circular(13),
@@ -219,7 +217,9 @@ class PedidosRepartidor extends StatelessWidget {
                     fontSize: responsive.ip(2),
                   ),
                 ),
-                Expanded(child: Text(' ${data.pedidoFecha}')),
+                Expanded(
+                  child: Text(' ${data.pedidoFecha}'),
+                ),
               ],
             ),
             SizedBox(
@@ -229,8 +229,9 @@ class PedidosRepartidor extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 GestureDetector(
-                  onTap: (){
-                    Navigator.pushNamed(context, 'detallePedido', arguments: data);
+                  onTap: () {
+                    Navigator.pushNamed(context, 'detallePedido',
+                        arguments: data.idPedido);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -251,11 +252,14 @@ class PedidosRepartidor extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text('S/. ${data.pedidoTotal}',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(3))),
+                Text(
+                  'S/. ${data.pedidoTotal}',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(3),
+                  ),
+                ),
               ],
             )
           ],

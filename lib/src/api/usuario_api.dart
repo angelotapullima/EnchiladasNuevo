@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/models/ruc_model.dart';
 import 'package:enchiladasapp/src/models/user.dart';
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:fluttertoast/fluttertoast.dart'; 
 import 'package:http/http.dart' as http;
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;

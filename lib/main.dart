@@ -22,7 +22,7 @@ import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_pago.dart';
 import 'package:enchiladasapp/src/pages/detalle_pedido.dart';
 import 'package:enchiladasapp/src/pages/select_direction.dart';
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/pages/login_page.dart';
 import 'package:enchiladasapp/src/pages/splash.dart';

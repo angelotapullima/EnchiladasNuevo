@@ -19,7 +19,8 @@ class CategoriasEspecialesPage extends StatefulWidget {
 
 class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+    
     final Arguments arg = ModalRoute.of(context).settings.arguments;
 
     final productosIdBloc = ProviderBloc.prod(context);

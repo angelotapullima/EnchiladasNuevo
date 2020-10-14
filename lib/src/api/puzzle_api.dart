@@ -1,7 +1,7 @@
 import 'package:enchiladasapp/src/database/puzzle_database.dart';
 import 'package:enchiladasapp/src/database/ranking_database.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:async';

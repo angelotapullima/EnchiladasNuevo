@@ -15,7 +15,7 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   final favoritosBloc = ProviderBloc.fav(context);
   ProductosData productos = new ProductosData();
   final productoDatabase = ProductoDatabase();
-
+ 
   productos.idProducto = productosData.idProducto;
   productos.idCategoria = productosData.idCategoria;
   productos.productoNombre = productosData.productoNombre;
@@ -31,6 +31,28 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
 
   favoritosBloc.obtenerProductosFavoritos();
   //_mostrarAlert(context);
+}
+
+void quitarFavoritos(BuildContext context, ProductosData productosData) async {
+  ProductosData productos = new ProductosData();
+  final productoDatabase = ProductoDatabase();
+  final favoritosBloc = ProviderBloc.fav(context);
+
+  productos.idProducto = productosData.idProducto;
+  productos.idCategoria = productosData.idCategoria;
+  productos.productoNombre = productosData.productoNombre;
+  productos.productoFoto = productosData.productoFoto;
+  productos.productoPrecio = productosData.productoPrecio;
+  productos.productoUnidad = productosData.productoUnidad;
+  productos.productoEstado = productosData.productoEstado;
+  productos.productoDescripcion = productosData.productoDescripcion;
+  productos.productoFavorito = 0;
+
+  final res = await productoDatabase.updateProductosDb(productos);
+  print('Database response : $res');
+
+  //_mostrarAlert(context);
+  favoritosBloc.obtenerProductosFavoritos();
 }
 
 void agregarFavoritosMarket(
@@ -146,26 +168,7 @@ String format(double n) {
   return n.toStringAsFixed(n.truncateToDouble() == n ? 2 : 2);
 }
 
-void quitarFavoritos(BuildContext context, ProductosData productosData) async {
-  ProductosData productos = new ProductosData();
-  final productoDatabase = ProductoDatabase();
-  final favoritosBloc = ProviderBloc.fav(context);
 
-  productos.idProducto = productosData.idProducto;
-  productos.idCategoria = productosData.idCategoria;
-  productos.productoNombre = productosData.productoNombre;
-  productos.productoFoto = productosData.productoFoto;
-  productos.productoPrecio = productosData.productoPrecio;
-  productos.productoUnidad = productosData.productoUnidad;
-  productos.productoEstado = productosData.productoEstado;
-  productos.productoFavorito = 0;
-
-  final res = await productoDatabase.updateProductosDb(productos);
-  print('Database response : $res');
-
-  //_mostrarAlert(context);
-  favoritosBloc.obtenerProductosFavoritos();
-}
 
 void quitarFavoritosMarket(
     BuildContext context, ProductosData productosData, String categotia) async {

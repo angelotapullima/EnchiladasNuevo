@@ -10,7 +10,7 @@ import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/translate_animation.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -171,7 +171,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                           });
                         },
                         icon: Icon(
-                          FontAwesomeIcons.solidHeart,
+                          FontAwesomeIcons.solidHeart, 
                           color: Colors.red,
                           size: responsive.ip(2.5),
                         ),

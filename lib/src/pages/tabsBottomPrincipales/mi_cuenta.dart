@@ -6,7 +6,7 @@ import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -45,7 +45,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
       body: SafeArea(
           child: SingleChildScrollView(
         child: _datos(responsive, preferences, bottomBloc),
-      )),
+      ),),
     );
   }
 

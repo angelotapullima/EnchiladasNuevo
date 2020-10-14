@@ -5,7 +5,7 @@ import 'package:enchiladasapp/src/models/pedidos_asignados_model.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:enchiladasapp/src/widgets/preferencias_usuario.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -234,11 +234,7 @@ class MapaRepartidorState extends State<MapaRepartidor> {
                                 horizontal: responsive.wp(10),
                                 vertical: responsive.hp(1.5)),
                             child: Text(
-<<<<<<< HEAD
                               'activar ubicación',
-=======
-                              'Activar ubicación',
->>>>>>> 6d4518912d714fca50bd364fd78421c0bb01bf1a
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: responsive.ip(2),
