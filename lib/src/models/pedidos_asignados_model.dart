@@ -86,7 +86,7 @@ class PedidoAsignados {
     String pedidoEstadoPago;
     String pedidoEstado;
     String pedidoCodigo;
-    List<ProductoAsignado> productos;
+    List<DetallePedidoAsignados> productos;
 
     factory PedidoAsignados.fromJson(Map<String, dynamic> json) => PedidoAsignados(
         idPedido: json["id_pedido"],
@@ -107,7 +107,7 @@ class PedidoAsignados {
         pedidoEstadoPago: json["pedido_estado_pago"],
         pedidoEstado: json["pedido_estado"],
         pedidoCodigo: json["pedido_codigo"],
-        productos: List<ProductoAsignado>.from(json["productos"].map((x) => ProductoAsignado.fromJson(x))),
+        //productos: List<DetallePedidoAsignados>.from(json["productos"].map((x) => DetallePedidoAsignados.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -129,12 +129,12 @@ class PedidoAsignados {
         "pedido_estado_pago": pedidoEstadoPago,
         "pedido_estado": pedidoEstado,
         "pedido_codigo": pedidoCodigo,
-        "productos": List<dynamic>.from(productos.map((x) => x.toJson())),
+        //"productos": List<dynamic>.from(productos.map((x) => x.toJson())),
     };
 }
 
-class ProductoAsignado {
-    ProductoAsignado({
+class DetallePedidoAsignados {
+    DetallePedidoAsignados({
         this.idDetallePedido,
         this.idPedido,
         this.idProducto,
@@ -154,7 +154,7 @@ class ProductoAsignado {
     String detallePrecioTotal;
     String detalleObservacion;
 
-    factory ProductoAsignado.fromJson(Map<String, dynamic> json) => ProductoAsignado(
+    factory DetallePedidoAsignados.fromJson(Map<String, dynamic> json) => DetallePedidoAsignados(
         idDetallePedido: json["id_detalle_pedido"],
         idPedido: json["id_pedido"],
         idProducto: json["id_producto"],

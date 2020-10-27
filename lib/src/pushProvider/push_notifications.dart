@@ -11,7 +11,7 @@ class PushNotificationProvider {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final _mensajesStreamController = StreamController<String>.broadcast();
   final tokenApi = TokenApi();
-  Stream<String> get mensajes => _mensajesStreamController.stream;
+  Stream<String> get mensajesPush => _mensajesStreamController.stream;
 
   initNotification() {
     _firebaseMessaging.requestNotificationPermissions();

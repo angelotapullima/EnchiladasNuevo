@@ -477,6 +477,7 @@ var pinPosition;
             actions: <Widget>[
               FlatButton(
                   onPressed: () async {
+                    Navigator.pop(context,true);
                     Navigator.pop(context);
                   },
                   child: Text('Continuar')),

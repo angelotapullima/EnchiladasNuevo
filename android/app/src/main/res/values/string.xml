@@ -12,9 +12,11 @@
     <string name="title_notificacion">Ubicación Compartida activada</string>
 
 
-    <string name="facebook_app_id">694814964640748</string>
-    <string name="fb_login_protocol_scheme">fb694814964640748</string>
+    <!--<string name="facebook_app_id">694814964640748</string>
+    <string name="fb_login_protocol_scheme">fb694814964640748</string>-->
 
+    <string name="facebook_app_id">356352828910720</string> 
+    <string name="fb_login_protocol_scheme">fb356352828910720</string>
 
 
 </resources>

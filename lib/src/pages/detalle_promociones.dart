@@ -85,31 +85,34 @@ class _DetallePromocionesState extends State<DetallePromociones> {
                         transform: Matrix4.translationValues(
                             0, -responsive.hp(2.5), 0),
                         child: (snapshot.data[0].productos.length > 0)
-                            ? ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount:
-                                    snapshot.data[0].productos.length + 1,
-                                itemBuilder: (context, i) {
-                                  if (i == 0) {
-                                    return titulo;
-                                  }
+                            ? Container(
+                              margin: EdgeInsets.only(top:responsive.hp(1)),
+                              child: ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      snapshot.data[0].productos.length + 1,
+                                  itemBuilder: (context, i) {
+                                    if (i == 0) {
+                                      return titulo;
+                                    }
 
-                                  int index = i - 1;
-                                  return _itemPedido(
-                                    context,
-                                    snapshot.data[0].productos[index],
-                                  );
-                                })
+                                    int index = i - 1;
+                                    return _itemPedido(
+                                      context,
+                                      snapshot.data[0].productos[index],
+                                    );
+                                  }),
+                            )
                             : Container(
-                                padding: EdgeInsets.all(responsive.ip(3)),
+                                padding: EdgeInsets.symmetric(horizontal:responsive.ip(3)),
                                 width: double.infinity,
                                 child: Column(
                                   children: <Widget>[
                                     titulo,
                                     Expanded(
                                       child: Center(
-                                        child: Text('f pe'),
+                                        child: Text('No hay Productos disponibles'),
                                       ),
                                     ),
                                   ],

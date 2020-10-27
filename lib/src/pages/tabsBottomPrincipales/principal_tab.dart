@@ -231,6 +231,7 @@ class PrincipalTab extends StatelessWidget {
             if (snapshot.data.length > 0) {
               return ListView.builder(
                   shrinkWrap: true,
+                  padding: EdgeInsets.symmetric(vertical: 0.0),
                   itemCount: snapshot.data.length + 1,
                   itemBuilder: (context, i) {
                     if (i == 0) {
@@ -241,7 +242,7 @@ class PrincipalTab extends StatelessWidget {
                             if (cat.hasData) {
                               if (cat.data.length > 0) {
                                 return Container(
-
+                                  margin: EdgeInsets.only(top:responsive.hp(1)),
                                   height: responsive.hp(25),
                                   child: Stack(
                                     children: <Widget>[

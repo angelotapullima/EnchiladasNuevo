@@ -25,13 +25,14 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>fb356352828910720</string>
 				<string>com.googleusercontent.apps.446658527649-58t4nc46ifk53deeo1oh9gj66gejc5ca</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb694814964640748</string>
+				<string>fb356352828910720</string>
 			</array>
 		</dict>
 	</array>
@@ -40,7 +41,7 @@
 	<key>EnableBackgroundLocationUpdates</key>
 	<true/>
 	<key>FacebookAppID</key>
-	<string>694814964640748</string>
+	<string>356352828910720</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

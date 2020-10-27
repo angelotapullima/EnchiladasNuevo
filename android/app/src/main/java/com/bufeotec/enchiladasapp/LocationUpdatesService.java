@@ -317,6 +317,7 @@ public class LocationUpdatesService extends Service {
 
         String lat = String.valueOf(location.getLatitude());
         String lon = String.valueOf(location.getLongitude());
+        String accuracy = String.valueOf(location.getAccuracy());
         if(location!=null){
             sendInfo(lat,lon);
             //Toast.makeText(this, "funciona creo " + lat+" - " +lon, Toast.LENGTH_SHORT).show();

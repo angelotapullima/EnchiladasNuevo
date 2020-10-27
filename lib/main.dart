@@ -1,5 +1,6 @@
 
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
+import 'package:enchiladasapp/src/pages/detalle_pedido_repartidor.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto_foto.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/gestionar_direcciones.dart';
@@ -121,7 +122,7 @@ class _MyAppState extends State<MyApp> {
     final pushNotificationProvider = PushNotificationProvider();
     pushNotificationProvider.initNotification();
 
-    pushNotificationProvider.mensajes.listen((event) {
+    pushNotificationProvider.mensajesPush.listen((event) {
       navigatorkey.currentState.pushNamed('timeline', arguments: event);
     });
 
@@ -231,6 +232,7 @@ class _MyAppState extends State<MyApp> {
           'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
           'detallePromociones': (BuildContext context) => DetallePromociones(),
           'onboarding': (BuildContext context) => OnboardingPage(),
+          'detallePedidoRepartidor': (BuildContext context) => DetallePedidoRepartidor(),
 
         }, 
       ),

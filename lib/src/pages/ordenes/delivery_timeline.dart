@@ -388,7 +388,7 @@ class _Header extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    precio,
+                    'S/. $precio',
                     style: GoogleFonts.yantramanav(
                       color: const Color(0xFF636564),
                       fontSize: 16,

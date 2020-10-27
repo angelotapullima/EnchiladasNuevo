@@ -113,6 +113,39 @@ class DatabaseProvider {
           'pedido_hora VARCHAR'
           ')');
 
+      await db.execute('CREATE TABLE PedidoAsignado ('
+          'id_pedido VARCHAR  PRIMARY KEY,'
+          'id_entrega VARCHAR ,'
+          'pedido_tipo_comprobante VARCHAR,'
+          'pedido_cod_persona VARCHAR,'
+          'pedido_fecha VARCHAR,'
+          'pedido_hora VARCHAR,'
+          'pedido_total VARCHAR,'
+          'pedido_telefono VARCHAR,'
+          'pedido_dni VARCHAR,'
+          'pedido_nombre VARCHAR,'
+          'pedido_direccion VARCHAR,'
+          'pedido_referencia VARCHAR,'
+          'pedido_forma_pago VARCHAR,'
+          'pedido_monto_pago VARCHAR,'
+          'pedido_vuelto_pago VARCHAR,'
+          'pedido_estado_pago VARCHAR,'
+          'pedido_estado VARCHAR,'
+          'pedido_codigo VARCHAR'
+          ')'); 
+
+
+      await db.execute('CREATE TABLE DetallePedidoAsignado ('
+          'id_detalle_pedido VARCHAR  PRIMARY KEY,'
+          'id_pedido VARCHAR,'
+          'id_producto VARCHAR,'
+          'detalle_cantidad VARCHAR,'
+          'detalle_precio_unit VARCHAR,'
+          'detalle_precio_total VARCHAR,'
+          'detalle_observacion VARCHAR,' 
+          'producto_nombre VARCHAR' 
+          ')');
+
       
 
       await db.execute('CREATE TABLE DeliveryRapido ('

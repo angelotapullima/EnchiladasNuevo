@@ -832,6 +832,9 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         }
                         utils.showToast(
                             'No tiene permisos', 2, ToastGravity.TOP);
+                      }else{
+                        utils.showToast(
+                            'Debe iniciar sesión para poder ordenar un pedido', 2, ToastGravity.TOP);
                       }
                     }),
               ),
@@ -883,12 +886,14 @@ class _DetalleProducto extends State<DetalleProductitos> {
 
   Widget _crearAppbar(Responsive responsive) {
     return Container(
-      height: kToolbarHeight,
+      height: kToolbarHeight+30,
       child: AppBar(
+        leading: BackButton(color: Colors.white,),
         backgroundColor: Colors.transparent,
       ),
     );
   }
+  //flutter build apk -- release gliutter buils apk -- releadse
 
   Widget _backgroundImage(BuildContext context, ProductosData carrito) {
     final size = MediaQuery.of(context).size;

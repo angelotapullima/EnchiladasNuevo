@@ -13,7 +13,7 @@ class PedidosRepartidor extends StatelessWidget {
     final pedidosAsignados = ProviderBloc.asignados(context);
     pedidosAsignados.obteberPedidosAsignados();
     // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    _refreshController.refreshCompleted(); 
   }
 
   @override
@@ -123,7 +123,7 @@ class PedidosRepartidor extends StatelessWidget {
       }
     }
 
-    return GestureDetector(
+    return InkWell(
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey[300]),
@@ -159,9 +159,13 @@ class PedidosRepartidor extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                       horizontal: responsive.wp(1.5),
                       vertical: responsive.hp(0.5)),
-                  child: Text('$estadoItem',
-                      style: TextStyle(
-                          color: Colors.white, fontSize: responsive.ip(1.5))),
+                  child: Text(
+                    '$estadoItem',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(1.5),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -170,12 +174,17 @@ class PedidosRepartidor extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Text('Dirección : ',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2))),
-                Expanded(child: Text('${data.pedidoDireccion} ')),
+                Text(
+                  'Dirección : ',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2),
+                  ),
+                ),
+                Expanded(
+                  child: Text('${data.pedidoDireccion} '),
+                ),
               ],
             ),
             SizedBox(
@@ -183,12 +192,17 @@ class PedidosRepartidor extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Text('Referencia : ',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2))),
-                Expanded(child: Text('${data.pedidoReferencia} ')),
+                Text(
+                  'Referencia : ',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2),
+                  ),
+                ),
+                Expanded(
+                  child: Text('${data.pedidoReferencia} '),
+                ),
               ],
             ),
             SizedBox(
@@ -196,12 +210,17 @@ class PedidosRepartidor extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Text('Teléfono : ',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2))),
-                Expanded(child: Text(' ${data.pedidoTelefono}')),
+                Text(
+                  'Teléfono : ',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2),
+                  ),
+                ),
+                Expanded(
+                  child: Text(' ${data.pedidoTelefono}'),
+                ),
               ],
             ),
             SizedBox(
@@ -222,15 +241,15 @@ class PedidosRepartidor extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            SizedBox( 
               height: responsive.hp(1),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                GestureDetector(
+                InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, 'detallePedido',
+                    Navigator.pushNamed(context, 'detallePedidoRepartidor',
                         arguments: data.idPedido);
                   },
                   child: Container(

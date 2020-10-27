@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:enchiladasapp/src/database/pedido_asignado_database.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/models/pedidos_asignados_model.dart';
 import 'package:enchiladasapp/src/models/user.dart';
@@ -10,6 +11,7 @@ import 'package:http/http.dart' as http;
 class PedidosAsignadosApi {
   final String _url = 'https://delivery.lacasadelasenchiladas.pe';
   final userDatabase = UsuarioDatabase();
+  final pedidoAsignadoDatabase=PedidoAsignadoDatabase();
 
   Future<List<PedidoAsignados>> obtenerPedidosAsignados() async {
     try {
@@ -18,7 +20,7 @@ class PedidosAsignadosApi {
       final List<User> user = await userDatabase.obtenerUsUario();
 
       final pedidosAsignados = List<PedidoAsignados>();
-      final productosAsignadosList = List<ProductoAsignado>();
+      final productosAsignadosList = List<DetallePedidoAsignados>();
 
       final response = await http.post(url, body: {
         'app': 'true',
@@ -40,8 +42,7 @@ class PedidosAsignadosApi {
 
           pediditos.idPedido = tipoAtencion[i]['id_pedido'];
           pediditos.idEntrega = tipoAtencion[i]['id_entrega'];
-          pediditos.pedidoTipoComprobante =
-              tipoAtencion[i]['pedido_tipo_comprobante'];
+          pediditos.pedidoTipoComprobante =tipoAtencion[i]['pedido_tipo_comprobante'];
           pediditos.pedidoCodPersona = tipoAtencion[i]['pedido_cod_persona'];
           pediditos.pedidoFecha = tipoAtencion[i]['pedido_fecha'];
           pediditos.pedidoHora = tipoAtencion[i]['pedido_hora'];
@@ -57,26 +58,22 @@ class PedidosAsignadosApi {
           pediditos.pedidoEstadoPago = tipoAtencion[i]['pedido_estado_pago'];
           pediditos.pedidoEstado = tipoAtencion[i]['pedido_estado'];
           pediditos.pedidoCodigo = tipoAtencion[i]['pedido_codigo'];
+          
+          await pedidoAsignadoDatabase.insertarPedido(pediditos);
 
           for (int x = 0; x < tipoAtencion[i]['productos'].length; x++) {
-            ProductoAsignado productAsignado = new ProductoAsignado();
+            DetallePedidoAsignados productAsignado = new DetallePedidoAsignados();
 
-            productAsignado.idDetallePedido =
-                tipoAtencion[i]['productos'][x]['id_detalle_pedido'];
-            productAsignado.idDetallePedido =
-                tipoAtencion[i]['productos'][x]['id_pedido'];
-            productAsignado.idDetallePedido =
-                tipoAtencion[i]['productos'][x]['id_producto'];
-            productAsignado.idDetallePedido =
-                tipoAtencion[i]['productos'][x]['producto_nombre'];
-            productAsignado.idDetallePedido =
-                tipoAtencion[i]['productos'][x]['detalle_cantidad'];
-            productAsignado.idDetallePedido =
-                tipoAtencion[i]['productos'][x]['detalle_precio_unit'];
-            productAsignado.idDetallePedido =
-                tipoAtencion[i]['productos'][x]['detalle_precio_total'];
-            productAsignado.idDetallePedido =
-                tipoAtencion[i]['productos'][x]['detalle_observacion'];
+            productAsignado.idDetallePedido =tipoAtencion[i]['productos'][x]['id_detalle_pedido'];
+            productAsignado.idPedido =tipoAtencion[i]['productos'][x]['id_pedido'];
+            productAsignado.idProducto =tipoAtencion[i]['productos'][x]['id_producto'];
+            productAsignado.productoNombre =tipoAtencion[i]['productos'][x]['producto_nombre'];
+            productAsignado.detalleCantidad =tipoAtencion[i]['productos'][x]['detalle_cantidad'];
+            productAsignado.detallePrecioUnit = tipoAtencion[i]['productos'][x]['detalle_precio_unit'];
+            productAsignado.detallePrecioTotal =tipoAtencion[i]['productos'][x]['detalle_precio_total'];
+            productAsignado.detalleObservacion =tipoAtencion[i]['productos'][x]['detalle_observacion'];
+
+            await pedidoAsignadoDatabase.insertarDetallePedido(productAsignado);
             productosAsignadosList.add(productAsignado);
           }
           pediditos.productos = productosAsignadosList;
