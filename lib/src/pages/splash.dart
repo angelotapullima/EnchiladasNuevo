@@ -1,10 +1,8 @@
 import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/api/configuracion_api.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
-import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
@@ -18,7 +16,7 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> with AfterLayoutMixin {
   Future<void> _request() async {
     final PermissionStatus status =
-        await Permission.locationWhenInUse.request();
+        await Permission.locationAlways.request();
 
     print('permisos $status');
   }

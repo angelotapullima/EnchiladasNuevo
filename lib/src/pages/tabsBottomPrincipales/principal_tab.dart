@@ -207,7 +207,7 @@ class PrincipalTab extends StatelessWidget {
       bottom: responsive.hp(3.2),
       child: CirclePageIndicator(
         selectedDotColor: Colors.black,
-        dotColor: Colors.white,
+        dotColor: Colors.grey[400],
         itemCount: promociones.length,
         currentPageNotifier: _currentPageNotifier,
       ),

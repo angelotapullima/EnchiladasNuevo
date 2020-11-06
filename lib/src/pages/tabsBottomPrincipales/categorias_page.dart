@@ -230,6 +230,7 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                               height: responsive.hp(1),
                             ),
                             Text(categoria.categoriaNombre,
+                            
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: responsive.ip(1.5),

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -169,14 +170,29 @@ public class MainActivity extends FlutterActivity implements
      * Returns the current state of the permissions needed.
      */
     private boolean checkPermissions() {
-        return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        }else{
+            return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
     }
 
     private void requestPermissions() {
-        boolean shouldProvideRationale =
-                ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION);
+        boolean shouldProvideRationale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+             shouldProvideRationale =
+                    ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        }else{
+             shouldProvideRationale =
+                    ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
 
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
@@ -200,9 +216,17 @@ public class MainActivity extends FlutterActivity implements
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                        REQUEST_PERMISSIONS_REQUEST_CODE);
+            }else{
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_PERMISSIONS_REQUEST_CODE);
+            }
+
         }
     }
 
