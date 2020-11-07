@@ -263,9 +263,9 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                   onTap: () async {
                     final Uri _emailLaunchUri = Uri(
                         scheme: 'mailto',
-                        path: 'angelo.anked@gmail.com',
+                        path: 'bufeotec@gmail.com',
                         queryParameters: {
-                          'subject': 'Example Subject & Symbols are allowed!'
+                          'subject': 'Contacto Equipo De Soporte'
                         });
 
                     // mailto:smith@example.com?subject=Example+Subject+%26+Symbols+are+allowed%21
@@ -303,6 +303,10 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 ),
                 Divider(),
                 InkWell(
+                   onTap: () {
+                      _launchInBrowser('http://play.google.com/store/apps/details?id=com.bufeotec.enchiladasapp');
+                    },
+                    
                   child: Padding(
                     padding: EdgeInsets.all(responsive.ip(1)),
                     child: Row(
@@ -470,7 +474,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 children: <Widget>[
                   InkWell(
                     onTap: () {
-                      _launchInBrowser('https://www.bufeotec.com');
+                      _launchInBrowser('https://politicas.lacasadelasenchiladas.pe/politicas-privacidad.html');
                     },
                     child: Padding(
                       padding: EdgeInsets.all(
@@ -497,7 +501,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                   Divider(),
                   InkWell(
                     onTap: () {
-                      _launchInBrowser('https://www.bufeotec.com');
+                      _launchInBrowser('https://politicas.lacasadelasenchiladas.pe/terminos-y-condiciones.html');
                     },
                     child: Padding(
                       padding: EdgeInsets.all(responsive.ip(1)),

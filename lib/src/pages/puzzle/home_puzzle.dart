@@ -83,48 +83,11 @@ class HomePuzzle extends StatelessWidget {
       children: <Widget>[
         _backgroundImage(puzzle, responsive),
         _carousel(context, puzzle, responsive),
-        
       ],
     );
   }
 
-  /* Widget _button(
-      BuildContext context, List<PuzzleDatum> puzzle, Responsive responsive) { 
-    final size = MediaQuery.of(context).size;
-    return Positioned(
-      bottom: responsive.hp(2),
-      left: responsive.wp(10),
-      right: responsive.wp(10),
-      child: ButtonTheme(
-        height: responsive.hp(6),
-        minWidth: responsive.wp(10),
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          color: Colors.red,
-          textColor: Colors.white,
-          onPressed: () {
-            print('${_scrollController.offset / size.width}');
-            RankingPuzzle rankingPuzzle = RankingPuzzle();
-            rankingPuzzle.idImagen =
-                puzzle[(_scrollController.offset ~/ size.width)].idImagen;
-            rankingPuzzle.path =
-                puzzle[(_scrollController.offset ~/ size.width)].imagenRuta;
-            Navigator.pushNamed(context, 'puzzle', arguments: rankingPuzzle);
-          },
-          child: Text(
-            "Empezar ahora!".toUpperCase(),
-            style: TextStyle(
-              fontSize: responsive.ip(1.8),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  */ Widget _backgroundImage(List<PuzzleDatum> puzzle, Responsive responsive) {
+  Widget _backgroundImage(List<PuzzleDatum> puzzle, Responsive responsive) {
     //print("${pelicula[0].getPosterImg()}");
     return Container(
       width: double.infinity,
@@ -135,27 +98,30 @@ class HomePuzzle extends StatelessWidget {
           itemCount: puzzle.length,
           itemBuilder: (BuildContext context, int index) {
             return new Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: new BoxDecoration(
-                  color: Colors.black12,
-                ),
-                child: new Container(
-                  child: CachedNetworkImage(
-                    cacheManager: CustomCacheManager(),
-                    imageUrl: puzzle[index].imagenRuta,errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      )),
-                    ),
+              width: MediaQuery.of(context).size.width,
+              decoration: new BoxDecoration(
+                color: Colors.black12,
+              ),
+              child: new Container(
+                child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager(),
+                  imageUrl: puzzle[index].imagenRuta,
+                  errorWidget: (context, url, error) => Image(
+                      image: AssetImage('assets/carga_fallida.jpg'),
+                      fit: BoxFit.cover),
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    )),
                   ),
-                  decoration:
-                      new BoxDecoration(color: Colors.black.withOpacity(0.6)),
-                ));
+                ),
+                decoration: new BoxDecoration(
+                  color: Colors.black.withOpacity(0.6),
+                ),
+              ),
+            );
           }),
     );
   }
@@ -167,7 +133,8 @@ class HomePuzzle extends StatelessWidget {
           (item) => Container(
             child: DowloadImagen(
                 idImagen: item.idImagen,
-                devolucion: cardSlider(context,puzzle, item.imagenRuta, responsive),
+                devolucion:
+                    cardSlider(context, puzzle, item.imagenRuta, responsive),
                 foto: item.imagenRuta),
           ),
         )
@@ -198,7 +165,8 @@ class HomePuzzle extends StatelessWidget {
     );
   }
 
-  Widget cardSlider(BuildContext context,  List<PuzzleDatum> puzzle,String imagen, Responsive responsive) {
+  Widget cardSlider(BuildContext context, List<PuzzleDatum> puzzle,
+      String imagen, Responsive responsive) {
     return Column(
       children: <Widget>[
         SizedBox(
@@ -210,9 +178,10 @@ class HomePuzzle extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(20)),
               child: CachedNetworkImage(
                 cacheManager: CustomCacheManager(),
-                imageUrl: imagen,errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                imageUrl: imagen,
+                errorWidget: (context, url, error) => Image(
+                    image: AssetImage('assets/carga_fallida.jpg'),
+                    fit: BoxFit.cover),
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
@@ -221,10 +190,11 @@ class HomePuzzle extends StatelessWidget {
                   )),
                 ),
               ),
-            )),SizedBox(
+            )),
+        SizedBox(
           height: responsive.hp(20),
         ),
-            /*  
+        /*  
             _button(context, puzzle, responsive), */
       ],
     );

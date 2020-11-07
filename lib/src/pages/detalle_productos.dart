@@ -833,8 +833,8 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         /* utils.showToast(
                             'No tiene permisos', 2, ToastGravity.TOP); */
                       }else{
-                        utils.showToast(
-                            'Debe iniciar sesión para poder ordenar un pedido', 2, ToastGravity.TOP);
+                       utils.showToast(
+                            'No tiene permisos', 2, ToastGravity.TOP);
                       }
                     }),
               ),

@@ -158,14 +158,14 @@ class FileInfoWidget extends StatelessWidget {
             Navigator.pushNamed(context, 'puzzle', arguments: puzzle);
           },
         ),
-        
-        _button(context, responsive)
+        _button(context, responsive, path, idImagen)
       ],
     );
     //Text(title)
   }
 
-  Widget _button(BuildContext context, Responsive responsive) {
+  Widget _button(
+      BuildContext context, Responsive responsive, String path2, String idImg) {
     return Positioned(
         bottom: responsive.hp(2),
         left: responsive.wp(3),
@@ -179,7 +179,13 @@ class FileInfoWidget extends StatelessWidget {
             ),
             color: Colors.red,
             textColor: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              RankingPuzzle puzzle = RankingPuzzle();
+              puzzle.path = path2;
+              puzzle.idImagen = idImg;
+
+              Navigator.pushNamed(context, 'puzzle', arguments: puzzle);
+            },
             child: Text(
               "Empezar ahora!".toUpperCase(),
               style: TextStyle(

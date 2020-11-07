@@ -14,11 +14,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PrincipalTab extends StatelessWidget {
-  final _pageController = PageController(viewportFraction: 0.9,initialPage: 1);
+  final _refreshController = RefreshController(initialRefresh: false);
+  final _pageController = PageController(viewportFraction: 0.9, initialPage: 1);
   final _currentPageNotifier = ValueNotifier<int>(1);
   final _boxHeight = 150.0;
+
+  void _onRefresh(BuildContext context) async {
+    print('_onRefresh pantalla');
+    final pantallasBloc = ProviderBloc.pantalla(context);
+    final categoriasBloc = ProviderBloc.cat(context);
+    pantallasBloc.obtenerPantallas();
+    categoriasBloc.obtenerCategoriasPromociones();
+    _refreshController.refreshCompleted();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +38,7 @@ class PrincipalTab extends StatelessWidget {
     usuarioBloc.obtenerUsuario();
 
     return Scaffold(
-      body: _inicio(context, responsive),
+      body: _inicio(context, responsive, _refreshController),
     );
   }
 
@@ -46,7 +57,8 @@ class PrincipalTab extends StatelessWidget {
         child: Text(alias, style: TextStyle(fontSize: responsive.ip(7))));
   }
 
-  Widget _inicio(BuildContext context, Responsive responsive) {
+  Widget _inicio(BuildContext context, Responsive responsive,
+      RefreshController refreshController) {
     final prefs = new Preferences();
     var nombre, alias;
 
@@ -102,7 +114,9 @@ class PrincipalTab extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        showSearch(context: context, delegate: DataSearch(hintText: 'Buscar'));
+                        showSearch(
+                            context: context,
+                            delegate: DataSearch(hintText: 'Buscar'));
                       },
                       child: Icon(
                         Icons.search,
@@ -115,18 +129,34 @@ class PrincipalTab extends StatelessWidget {
                     ),
                     (prefs.email != "" && prefs.email != null)
                         ? (prefs.foto != null)
-                            ? CircleAvatar(
-                                radius: responsive.ip(2),
-                                child: ClipOval(
-                                  child: Image.network(
-                                    prefs.foto,
-                                    width: responsive.ip(4),
-                                    height: responsive.ip(4),
-                                    fit: BoxFit.contain,
+                            ? InkWell(
+                                onTap: () {
+                                  final bottomBloc =
+                                      ProviderBloc.bottom(context);
+
+                                  bottomBloc.changePage(4);
+                                },
+                                child: CircleAvatar(
+                                  radius: responsive.ip(2),
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      prefs.foto,
+                                      width: responsive.ip(4),
+                                      height: responsive.ip(4),
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
                               )
-                            : getAlias(nombre, responsive)
+                            : InkWell(
+                                onTap: () {
+                                  final bottomBloc =
+                                      ProviderBloc.bottom(context);
+
+                                  bottomBloc.changePage(4);
+                                },
+                                child: getAlias(nombre, responsive),
+                              )
                         : CircleContainer(
                             radius: responsive.ip(2.3),
                             color: Colors.red[800],
@@ -138,7 +168,7 @@ class PrincipalTab extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(child: _contenido(context, responsive))
+        Expanded(child: _contenido(context, responsive, refreshController))
       ],
     );
   }
@@ -164,10 +194,11 @@ class PrincipalTab extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () {
-                 Arguments arg = new Arguments(
+                  Arguments arg = new Arguments(
                       "${promociones[index].categoriaNombre}",
                       '${promociones[index].idCategoria}');
-                  Navigator.pushNamed(context, 'detallePromociones', arguments: arg); 
+                  Navigator.pushNamed(context, 'detallePromociones',
+                      arguments: arg);
                   //Navigator.pushNamed(context, 'detallePromociones');
                 },
                 child: ClipRRect(
@@ -176,9 +207,10 @@ class PrincipalTab extends StatelessWidget {
                     cacheManager: CustomCacheManager(),
                     placeholder: (context, url) => Image(
                         image: AssetImage('assets/jar-loading.gif'),
-                        fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                        fit: BoxFit.cover),
+                    errorWidget: (context, url, error) => Image(
+                        image: AssetImage('assets/carga_fallida.jpg'),
+                        fit: BoxFit.cover),
                     imageUrl: '${promociones[index].categoriaBanner}',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
@@ -214,14 +246,14 @@ class PrincipalTab extends StatelessWidget {
     );
   }
 
-  Widget _contenido(BuildContext context, Responsive responsive) {
+  Widget _contenido(BuildContext context, Responsive responsive,
+      RefreshController refreshController) {
     final pantallasBloc = ProviderBloc.pantalla(context);
     final categoriasBloc = ProviderBloc.cat(context);
     pantallasBloc.obtenerPantallas();
     categoriasBloc.obtenerCategoriasPromociones();
 
     return Container(
-      
       child: StreamBuilder(
         stream: pantallasBloc.pantallasStream,
         builder: (BuildContext context,
@@ -229,40 +261,53 @@ class PrincipalTab extends StatelessWidget {
           final configuracionApi = ConfiguracionApi();
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
-              return ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.symmetric(vertical: 0.0),
-                  itemCount: snapshot.data.length + 1,
-                  itemBuilder: (context, i) {
-                    if (i == 0) {
-                      return StreamBuilder(
-                          stream: categoriasBloc.categoriasPromociionesStream,
-                          builder: (context,
-                              AsyncSnapshot<List<CategoriaData>> cat) {
-                            if (cat.hasData) {
-                              if (cat.data.length > 0) {
-                                return Container(
-                                  margin: EdgeInsets.only(top:responsive.hp(1)),
-                                  height: responsive.hp(25),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      _buildPageView(responsive, cat.data),
-                                      _buildCircleIndicator(
-                                          responsive, cat.data),
-                                    ],
-                                  ),
-                                );
+              return SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: true,
+                header: WaterDropHeader(
+                    refresh: CircularProgressIndicator(),
+                    complete: Text('Completado'),
+                    waterDropColor: Colors.red),
+                controller: refreshController,
+                onRefresh: () {
+                  _onRefresh(context);
+                },
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(vertical: 0.0),
+                    itemCount: snapshot.data.length + 1,
+                    itemBuilder: (context, i) {
+                      if (i == 0) {
+                        return StreamBuilder(
+                            stream: categoriasBloc.categoriasPromociionesStream,
+                            builder: (context,
+                                AsyncSnapshot<List<CategoriaData>> cat) {
+                              if (cat.hasData) {
+                                if (cat.data.length > 0) {
+                                  return Container(
+                                    margin:
+                                        EdgeInsets.only(top: responsive.hp(1)),
+                                    height: responsive.hp(25),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        _buildPageView(responsive, cat.data),
+                                        _buildCircleIndicator(
+                                            responsive, cat.data),
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  return Container();
+                                }
                               } else {
                                 return Container();
                               }
-                            } else {
-                              return Container();
-                            }
-                          });
-                    }
-                    int index = i - 1;
-                    return _cart(context, responsive, snapshot.data[index]);
-                  });
+                            });
+                      }
+                      int index = i - 1;
+                      return _cart(context, responsive, snapshot.data[index]);
+                    }),
+              );
             } else {
               configuracionApi.configuracion();
               return Center(child: CupertinoActivityIndicator());
@@ -362,10 +407,7 @@ class PrincipalTab extends StatelessWidget {
                             "${pantallaModel.pantallaNombre}",
                             '${pantallaModel.pantallCategoria}');
 
-
                         Navigator.pushNamed(context, 'combo', arguments: arg);
-
-                        
                       }
                     },
                     child: Container(
@@ -407,25 +449,24 @@ class PrincipalTab extends StatelessWidget {
                   itemCount: pantallaModel.items.length,
                   shrinkWrap: true,
                   itemBuilder: (context, i) {
-
-                    if(i==pantallaModel.items.length-1){
+                    if (i == pantallaModel.items.length - 1) {
                       return GestureDetector(
-                        onTap: (){
-                           if (pantallaModel.idPantalla == '1') {
-                        final bottomBloc = ProviderBloc.bottom(context);
-                        bottomBloc.changePage(2);
-                      } else if (pantallaModel.idPantalla == '2') {
-                        Navigator.pushNamed(context, 'market');
-                      } else if (pantallaModel.idPantalla == '3') {
-                        Navigator.pushNamed(context, 'HomePuzzle');
-                      } else {
-                        Arguments arg = new Arguments(
-                            "${pantallaModel.pantallaNombre}",
-                            '${pantallaModel.pantallCategoria}');
-                        Navigator.pushNamed(context, 'combo', arguments: arg);
-                      }
+                        onTap: () {
+                          if (pantallaModel.idPantalla == '1') {
+                            final bottomBloc = ProviderBloc.bottom(context);
+                            bottomBloc.changePage(2);
+                          } else if (pantallaModel.idPantalla == '2') {
+                            Navigator.pushNamed(context, 'market');
+                          } else if (pantallaModel.idPantalla == '3') {
+                            Navigator.pushNamed(context, 'HomePuzzle');
+                          } else {
+                            Arguments arg = new Arguments(
+                                "${pantallaModel.pantallaNombre}",
+                                '${pantallaModel.pantallCategoria}');
+                            Navigator.pushNamed(context, 'combo',
+                                arguments: arg);
+                          }
                         },
-
                         child: Container(
                           width: responsive.wp(anchoCard),
                           height: responsive.hp(altoCard),
@@ -445,11 +486,13 @@ class PrincipalTab extends StatelessWidget {
                                   child: CachedNetworkImage(
                                     cacheManager: CustomCacheManager(),
                                     placeholder: (context, url) => Image(
-                                        image:
-                                            AssetImage('assets/jar-loading.gif'),
-                                        fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                                        image: AssetImage(
+                                            'assets/jar-loading.gif'),
+                                        fit: BoxFit.cover),
+                                    errorWidget: (context, url, error) => Image(
+                                        image: AssetImage(
+                                            'assets/carga_fallida.jpg'),
+                                        fit: BoxFit.cover),
                                     imageUrl:
                                         '${pantallaModel.items[i].fotoItem}',
                                     imageBuilder: (context, imageProvider) =>
@@ -465,30 +508,28 @@ class PrincipalTab extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: responsive.hp(2),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(.5),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: responsive.hp(2),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(.5),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
                                     'Ver más',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: responsive.ip(2),
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: responsive.ip(2),
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
                                   ),
-                                
+                                ),
                               )
                             ],
                           ),
                         ),
                       );
-                    
                     }
                     return GestureDetector(
                       onTap: () {
@@ -520,10 +561,8 @@ class PrincipalTab extends StatelessWidget {
                               },
                             ),
                           );
-                        } else if (tipo == 'puzzle'){
-
-                        Navigator.pushNamed(context, 'HomePuzzle');
-
+                        } else if (tipo == 'puzzle') {
+                          Navigator.pushNamed(context, 'HomePuzzle');
                         }
                       },
                       child: Container(
@@ -547,9 +586,11 @@ class PrincipalTab extends StatelessWidget {
                                   placeholder: (context, url) => Image(
                                       image:
                                           AssetImage('assets/jar-loading.gif'),
-                                      fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                                      fit: BoxFit.cover),
+                                  errorWidget: (context, url, error) => Image(
+                                      image: AssetImage(
+                                          'assets/carga_fallida.jpg'),
+                                      fit: BoxFit.cover),
                                   imageUrl:
                                       '${pantallaModel.items[i].fotoItem}',
                                   imageBuilder: (context, imageProvider) =>
@@ -564,28 +605,30 @@ class PrincipalTab extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Positioned(
-                              right: 0,
-                              left: 0,
-                              bottom: 0,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: responsive.hp(2),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(.5),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  '${pantallaModel.items[i].nombreItem}',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: responsive.ip(2),
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            )
+                            (tipo != 'puzzle')
+                                ? Positioned(
+                                    right: 0,
+                                    left: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: responsive.hp(2),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(.5),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        '${pantallaModel.items[i].nombreItem}',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: responsive.ip(2),
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),

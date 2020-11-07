@@ -17,7 +17,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class CategoriasPage extends StatelessWidget {
   final _refreshController = RefreshController(initialRefresh: false);
   void _onRefresh(BuildContext context) async {
-    print('_onRefresh');
+    print('_onRefresh bb');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
     //categoriasBloc.obtenerCategoriasEnchiladas();
@@ -54,23 +54,33 @@ class CategoriasPage extends StatelessWidget {
           return StreamBuilder(
               stream: enchiladasNaviBloc.enchiladasIndexStream,
               builder: (context, snapshot) {
-                return Row(
-                  children: <Widget>[
-                    Container(
-                      width: anchoCategorias,
-                      child: CategoriasProducto(
-                        ancho: anchoCategorias,
-                        data: categorias,
+                return SmartRefresher(
+                  controller: _refreshController,
+                  onRefresh: () {
+                    _onRefresh(context);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        width: anchoCategorias,
+                        child: CategoriasProducto(
+                          refresh: _onRefresh,
+                          refreshController: _refreshController,
+                          ancho: anchoCategorias,
+                          data: categorias,
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: anchoProductos,
-                      child: ProductosIdPage(
-                        index: enchiladasNaviBloc.index,
-                        ancho: anchoProductos,
-                      ),
-                    )
-                  ],
+                      Container(
+                        width: anchoProductos,
+                        child: ProductosIdPage(
+                          refresh: _onRefresh,
+                          refreshController: _refreshController,
+                          index: enchiladasNaviBloc.index,
+                          ancho: anchoProductos,
+                        ),
+                      )
+                    ],
+                  ),
                 );
               });
         });
@@ -161,8 +171,15 @@ class CategoriasPage extends StatelessWidget {
 class CategoriasProducto extends StatefulWidget {
   final double ancho;
   final List<CategoriaData> data;
+  final Function refresh;
+  final RefreshController refreshController;
 
-  const CategoriasProducto({Key key, @required this.ancho, @required this.data})
+  const CategoriasProducto(
+      {Key key,
+      @required this.ancho,
+      @required this.data,
+      @required this.refresh,
+      @required this.refreshController})
       : super(key: key);
 
   @override
@@ -174,19 +191,34 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
     return Scaffold(
-      body: _listaCategorias(widget.data, responsive),
+      body: _listaCategorias(
+          widget.data, responsive, widget.refresh, widget.refreshController),
       /* _listaCategorias(categoriasBloc), */
     );
   }
 
-  _listaCategorias(List<CategoriaData> categoriasBloc, Responsive responsive) {
+  _listaCategorias(List<CategoriaData> categoriasBloc, Responsive responsive,
+      Function refresh, RefreshController refreshController) {
     return Container(
       color: Colors.transparent,
       width: this.widget.ancho,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: categoriasBloc.length,
-        itemBuilder: (context, i) => _listaItems(context, categoriasBloc[i]),
+      child: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        header: WaterDropHeader(
+          refresh: CircularProgressIndicator(),
+          complete: Text('Completado'),
+          waterDropColor:Colors.red
+        ),
+       controller: refreshController,
+        onRefresh: () {
+          refresh;
+        },
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: categoriasBloc.length,
+          itemBuilder: (context, i) => _listaItems(context, categoriasBloc[i]),
+        ),
       ),
     );
   }
@@ -221,16 +253,14 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                         child: Column(
                           children: <Widget>[
                             SvgPicture(
-                                AdvancedNetworkSvg('${categoria.categoriaIcono}',
-                                    SvgPicture.svgByteDecoder,
-                                    useDiskCache: true),
-                              
+                              AdvancedNetworkSvg('${categoria.categoriaIcono}',
+                                  SvgPicture.svgByteDecoder,
+                                  useDiskCache: true),
                             ),
                             SizedBox(
                               height: responsive.hp(1),
                             ),
                             Text(categoria.categoriaNombre,
-                            
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: responsive.ip(1.5),
@@ -254,8 +284,15 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
 class ProductosIdPage extends StatefulWidget {
   final double ancho;
   final String index;
+  final Function refresh;
+  final RefreshController refreshController;
 
-  const ProductosIdPage({Key key, @required this.ancho, @required this.index})
+  const ProductosIdPage(
+      {Key key,
+      @required this.ancho,
+      @required this.index,
+      @required this.refresh,
+      @required this.refreshController})
       : super(key: key);
 
   @override
@@ -272,12 +309,13 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     productosIdBloc.obtenerProductosEnchiladasPorCategoria(widget.index);
 
     return Scaffold(
-      body: _listaProductosId(productosIdBloc, responsive),
+      body: _listaProductosId(productosIdBloc, responsive,
+          widget.refreshController, widget.refresh),
     );
   }
 
-  Widget _listaProductosId(
-      ProductosBloc productosIdBloc, Responsive responsive) {
+  Widget _listaProductosId(ProductosBloc productosIdBloc, Responsive responsive,
+      RefreshController refreshController, Function refresh) {
     return Container(
       color: Colors.transparent,
       width: this.widget.ancho,
@@ -288,14 +326,47 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
             if (snapshot.data.length > 0) {
               final productos = snapshot.data;
 
-              return ListView.builder(
-                itemCount: productos.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _itemPedido(
-                    context,
-                    productos[index],
-                  );
+              return SmartRefresher(
+                enablePullDown: true,
+        enablePullUp: true,
+        header: WaterDropHeader(
+          refresh: CircularProgressIndicator(),
+          complete: Text('Completado'),
+          waterDropColor:Colors.red
+        ),
+        /* footer: CustomFooter(
+          builder: (BuildContext context, LoadStatus mode) {
+            Widget body;
+            if (mode == LoadStatus.idle) {
+              body = Text("pull up load");
+            } else if (mode == LoadStatus.loading) {
+              body = CupertinoActivityIndicator();
+            } else if (mode == LoadStatus.failed) {
+              body = Text("Load Failed!Click retry!");
+            } else if (mode == LoadStatus.canLoading) {
+              body = Text("release to load more");
+            } else {
+              body = Text("No more Data");
+            }
+            return Container(
+              height: 55.0,
+              child: Center(child: body),
+            );
+          },
+        ), */
+                controller: refreshController,
+                onRefresh: () {
+                  refresh;
                 },
+                child: ListView.builder(
+                  itemCount: productos.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _itemPedido(
+                      context,
+                      productos[index],
+                    );
+                  },
+                ),
               );
             }
             return Center(
