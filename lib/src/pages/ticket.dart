@@ -28,6 +28,8 @@ class _HomeScreenState extends State<Ticket> {
           context,
           ModalRoute.withName('/'),
         );
+
+        return null;
       },
       child: Scaffold(
         //backgroundColor: Colors.black,

@@ -265,6 +265,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                 FlatButton(
                                   onPressed: () {
                                     banderaTimer = false;
+                                    timer?.cancel();
                                     Navigator.pushNamed(context, 'timeline',
                                         arguments: '${pedido[0].idPedido}');
                                     //Navigator.pushNamed(context, 'mapaCliente',arguments: '${pedido[0].idPedido}');

@@ -1,12 +1,15 @@
 import 'package:enchiladasapp/src/database/carrito_database.dart';
 import 'package:enchiladasapp/src/database/direccion_database.dart';
+import 'package:enchiladasapp/src/database/producto_database.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:rxdart/subjects.dart';
 
 class CarritoCompletoBloc {
   final direccionDatabase = DireccionDatabase();
   final carritoDatabase = CarritoDatabase();
-
+  final prefs = Preferences();
+  final productoDatabase = ProductoDatabase();
   final carritoCompleto = new BehaviorSubject<List<CarritoCompleto>>();
 
   Stream<List<CarritoCompleto>> get carritoCompletoStream =>
@@ -37,6 +40,21 @@ class CarritoCompletoBloc {
 
       listCarritoCompleto.add(carritoCompleto);
     }
+
+    final listBolsa = await productoDatabase.consultarPorId(prefs.idBolsa);
+      int cantidadDeBolsas = (carrito.length/3).ceil();
+      //int dato= ceil(cantidadDeBolsas);
+      /* if(dato<1){
+        dato =1;
+      } */
+      
+      CarritoCompleto carritoCompletof = CarritoCompleto();
+      carritoCompletof.producto = listBolsa[0].productoNombre;
+      carritoCompletof.precio = listBolsa[0].productoPrecio;
+      carritoCompletof.cantidad = cantidadDeBolsas.toString();
+
+      listCarritoCompleto.add(carritoCompletof);
+
     
 
     if (direccion.length > 0) {

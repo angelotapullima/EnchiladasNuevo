@@ -9,6 +9,7 @@ class PantallaModel{
         this.pantallaFoto,
         this.pantallaEstado,
         this.pantallCategoria,
+        this.pantallaTipo,
         this.altoList,
         this.altoCard,
         this.anchoCard,
@@ -21,6 +22,7 @@ class PantallaModel{
     String pantallaFoto; 
     String pantallaEstado; 
     String pantallCategoria; 
+    String pantallaTipo; 
     List<ItemPantalla> items;
 
 
@@ -35,6 +37,7 @@ class PantallaModel{
         pantallaFoto: json["pantalla_foto"], 
         pantallaEstado: json["pantalla_estado"], 
         pantallCategoria: json["pantalla_categorias"],
+        pantallaTipo: json["pantallaTipo"],
         altoList: json["altoList"],
         altoCard: json["altoCard"],
         anchoCard: json["anchoCard"],

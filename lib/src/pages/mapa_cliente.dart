@@ -83,7 +83,7 @@ class _MapaClienteState extends State<MapaCliente> {
   Widget build(BuildContext context) {
     final String idPedido = ModalRoute.of(context).settings.arguments;
     idPedidoTrack = idPedido;
-    print('id pedido $idPedido');
+
     final responsive = Responsive.of(context);
 
     /*  */
@@ -344,7 +344,7 @@ var pinPosition;
     // every time the location changes, so the camera
     // follows the pin as it moves with an animation
     CameraPosition cPosition = CameraPosition(
-      zoom: 16,
+      zoom: 18,
       //tilt: CAMERA_TILT,
       //bearing: CAMERA_BEARING,
       target: LatLng(latitud, longitud),
@@ -353,7 +353,7 @@ var pinPosition;
     controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
     // do this inside the setState() so Flutter gets notified
     // that a widget update is due
-    setState(() {
+    //setState(() {
       // updated position
        pinPosition = LatLng(latitud, longitud);
 
@@ -377,17 +377,16 @@ var pinPosition;
 
 
 
-    });
+   // });
   }
 
   LatLng destino, repartidor;
   void trackingRepartidor(String idPedido) async {
-    print('empezamos el timer $idPedido');
+
     final trackingApi = TrackingApi();
     final list = await trackingApi.trackingRepartidor(idPedido);
     if (list.length > 0) {
-      print('resp aceptada');
-      print(list[0].pedidoEstado);
+
       if (list[0].pedidoEstado == '3') {
         if (count == 1) {
           nombreRepartidor = list[0].personName;
@@ -422,7 +421,7 @@ var pinPosition;
           direccionEntrega = list[0].pedidoDireccion;
           idRepartidor = list[0].idRepartidor;
           imagenRepartidor = list[0].userImage;
-          print("latitud ${list[0].trackingX} , longitud ${list[0].trackingY}");
+
           repartidor = LatLng(
               double.parse(list[0].trackingX), double.parse(list[0].trackingY));
 
@@ -435,7 +434,7 @@ var pinPosition;
               repartidor.longitude,
               destino.latitude,
               destino.longitude);
-          print('distance $distance');
+
           distancia = distance.toString();
           distancia = utils.format(distance);
 
@@ -444,6 +443,7 @@ var pinPosition;
       } else {
         //mostrar funcion de que el pedido ya fue
         banderaTimer = false;
+        timer?.cancel();
         _pedidoYaFue(context);
       }
     } else {

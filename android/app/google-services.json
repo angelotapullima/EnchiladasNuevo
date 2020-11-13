@@ -15,7 +15,23 @@
       },
       "oauth_client": [
         {
-          "client_id": "446658527649-0ece6jugck1ih3tqcao5b0aqq5sondku.apps.googleusercontent.com",
+          "client_id": "446658527649-v5emjo37t7ejic32c8147or62c38k589.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bufeotec.enchiladasapp",
+            "certificate_hash": "a03d27d3a9fba31e9dc545438d45aec1a5ad8c1f"
+          }
+        },
+        {
+          "client_id": "446658527649-qn0sg5pd3gol46d7u6p9ljsrb0agjcle.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bufeotec.enchiladasapp",
+            "certificate_hash": "caed0e49939125f2ee807c2cc4cf57d037b3801c"
+          }
+        },
+        {
+          "client_id": "446658527649-irm6at4n2f40v3ns8de6aqfjth934en2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.bufeotec.enchiladasapp",
@@ -38,6 +54,13 @@
             {
               "client_id": "446658527649-r9pbv73kai0fectickamesqddp8jicgn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "446658527649-58t4nc46ifk53deeo1oh9gj66gejc5ca.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bufeotec.enchiladasapp"
+              }
             }
           ]
         }

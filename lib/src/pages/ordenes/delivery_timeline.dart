@@ -89,10 +89,12 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
 
   Widget _botonTracking(BuildContext context, String id) {
 
-    print('esto va del timeline a mapa tracking $id');
+    //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
     return FlatButton(
       onPressed: () {
+
+        timer?.cancel();
         Navigator.pushNamed(context, 'mapaCliente', arguments: id);
         //Navigator.pushNamed(context, 'mapaCliente',arguments: '${pedido[0].idPedido}');
       },

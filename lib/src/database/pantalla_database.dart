@@ -10,14 +10,14 @@ class PantallaDatabase{
   final dbprovider = DatabaseProvider.db;
 
   insertarPantalla(PantallaModel pantalla) async {
-    try { 
+    try {
       final db = await dbprovider.database;
 
       final res = await db.rawInsert(
           "INSERT OR REPLACE INTO Pantalla (id_pantalla,pantalla_nombre,pantalla_orden,"
-          "pantalla_foto,pantalla_estado,pantalla_categorias,altoList,altoCard,anchoCard) "
+          "pantalla_foto,pantalla_estado,pantalla_categorias) "
           "VALUES ('${pantalla.idPantalla}','${pantalla.pantallaNombre}','${pantalla.pantallaOrden}',"
-          "'${pantalla.pantallaFoto}','${pantalla.pantallaEstado}','${pantalla.pantallCategoria}','${pantalla.altoList}','${pantalla.altoCard}','${pantalla.anchoCard}'"
+          "'${pantalla.pantallaFoto}','${pantalla.pantallaEstado}','${pantalla.pantallCategoria}'"
           ")");
       return res;
     } catch (exception) {

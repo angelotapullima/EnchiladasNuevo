@@ -20,7 +20,6 @@ class PrincipalTab extends StatelessWidget {
   final _refreshController = RefreshController(initialRefresh: false);
   final _pageController = PageController(viewportFraction: 0.9, initialPage: 1);
   final _currentPageNotifier = ValueNotifier<int>(1);
-  final _boxHeight = 150.0;
 
   void _onRefresh(BuildContext context) async {
     print('_onRefresh pantalla');
@@ -36,7 +35,7 @@ class PrincipalTab extends StatelessWidget {
     final Responsive responsive = new Responsive.of(context);
     final usuarioBloc = ProviderBloc.user(context);
     usuarioBloc.obtenerUsuario();
-
+ 
     return Scaffold(
       body: _inicio(context, responsive, _refreshController),
     );
@@ -54,7 +53,13 @@ class PrincipalTab extends StatelessWidget {
     }
 
     return Center(
-        child: Text(alias, style: TextStyle(fontSize: responsive.ip(7))));
+      child: Text(
+        alias,
+        style: TextStyle(
+          fontSize: responsive.ip(7),
+        ),
+      ),
+    );
   }
 
   Widget _inicio(BuildContext context, Responsive responsive,
@@ -81,95 +86,97 @@ class PrincipalTab extends StatelessWidget {
         Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
       },
     );
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-              color: Colors.red),
-          height: responsive.hp(12),
-          padding: EdgeInsets.symmetric(horizontal: responsive.hp(2)),
-          child: SafeArea(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: responsive.hp(1),
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        '$alias',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: responsive.ip(3),
-                            fontWeight: FontWeight.bold),
+                color: Colors.red),
+            height: responsive.hp(12),
+            padding: EdgeInsets.symmetric(horizontal: responsive.hp(2)),
+            child: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          '$alias',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: responsive.ip(3),
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showSearch(
-                            context: context,
-                            delegate: DataSearch(hintText: 'Buscar'));
-                      },
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.white,
-                        size: responsive.ip(4),
+                      GestureDetector(
+                        onTap: () {
+                          showSearch(
+                              context: context,
+                              delegate: DataSearch(hintText: 'Buscar'));
+                        },
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                          size: responsive.ip(4),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: responsive.wp(2),
-                    ),
-                    (prefs.email != "" && prefs.email != null)
-                        ? (prefs.foto != null)
-                            ? InkWell(
-                                onTap: () {
-                                  final bottomBloc =
-                                      ProviderBloc.bottom(context);
+                      SizedBox(
+                        width: responsive.wp(2),
+                      ),
+                      (prefs.email != "" && prefs.email != null)
+                          ? (prefs.foto != null)
+                              ? InkWell(
+                                  onTap: () {
+                                    final bottomBloc =
+                                        ProviderBloc.bottom(context);
 
-                                  bottomBloc.changePage(4);
-                                },
-                                child: CircleAvatar(
-                                  radius: responsive.ip(2),
-                                  child: ClipOval(
-                                    child: Image.network(
-                                      prefs.foto,
-                                      width: responsive.ip(4),
-                                      height: responsive.ip(4),
-                                      fit: BoxFit.contain,
+                                    bottomBloc.changePage(4);
+                                  },
+                                  child: CircleAvatar(
+                                    radius: responsive.ip(2),
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        prefs.foto,
+                                        width: responsive.ip(4),
+                                        height: responsive.ip(4),
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            : InkWell(
-                                onTap: () {
-                                  final bottomBloc =
-                                      ProviderBloc.bottom(context);
+                                )
+                              : InkWell(
+                                  onTap: () {
+                                    final bottomBloc =
+                                        ProviderBloc.bottom(context);
 
-                                  bottomBloc.changePage(4);
-                                },
-                                child: getAlias(nombre, responsive),
-                              )
-                        : CircleContainer(
-                            radius: responsive.ip(2.3),
-                            color: Colors.red[800],
-                            widget: noLogin,
-                          )
-                  ],
-                ),
-              ],
+                                    bottomBloc.changePage(4);
+                                  },
+                                  child: getAlias(nombre, responsive),
+                                )
+                          : CircleContainer(
+                              radius: responsive.ip(2.3),
+                              color: Colors.red[800],
+                              widget: noLogin,
+                            )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Expanded(child: _contenido(context, responsive, refreshController))
-      ],
+          Expanded(child: _contenido(context, responsive, refreshController))
+        ],
+      ),
     );
   }
 
@@ -181,7 +188,7 @@ class PrincipalTab extends StatelessWidget {
         ),
         color: Colors.transparent,
       ),
-      height: _boxHeight,
+      height: responsive.hp(19),
       child: PageView.builder(
           itemCount: promociones.length,
           controller: _pageController,
@@ -263,7 +270,7 @@ class PrincipalTab extends StatelessWidget {
             if (snapshot.data.length > 0) {
               return SmartRefresher(
                 enablePullDown: true,
-                enablePullUp: true,
+                footer: null,
                 header: WaterDropHeader(
                     refresh: CircularProgressIndicator(),
                     complete: Text('Completado'),
@@ -323,28 +330,12 @@ class PrincipalTab extends StatelessWidget {
 
   Widget _cart(BuildContext context, Responsive responsive,
       PantallaModel pantallaModel) {
-    double altoList = 18.0;
-    double altoCard = 13.0;
-    double anchoCard = 25.0;
+    double altoList = 35.0;
+    double altoCard = 30.0;
+    double anchoCard = 70.0;
     BoxFit boxfit;
     String tipo;
-    if (pantallaModel.idPantalla == '5') {
-      //combos
-      altoList = 40.0;
-      altoCard = 35.0;
-      anchoCard = 85;
-      boxfit = BoxFit.fill;
-      tipo = 'producto';
-    } else if (pantallaModel.idPantalla == '4') {
-      //especiales
-      altoList = 35.0;
-      altoCard = 30.0;
-      anchoCard = 60;
-
-      tipo = 'producto';
-
-      boxfit = BoxFit.fill;
-    } else if (pantallaModel.idPantalla == '2') {
+    if (pantallaModel.idPantalla == '2') {
       //market
       altoList = 28.0;
       altoCard = 23.0;
@@ -371,198 +362,103 @@ class PrincipalTab extends StatelessWidget {
       boxfit = BoxFit.fill;
 
       tipo = 'puzzle';
+    } else {
+      boxfit = BoxFit.fill;
+      tipo = 'producto';
     }
 
-    return GestureDetector(
-      child: Container(
-        margin: EdgeInsets.only(bottom: responsive.hp(1)),
-        width: double.infinity,
-        height: responsive.hp(altoList),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
-              child: Row(
-                children: <Widget>[
-                  Text(
+    return Container(
+      margin: EdgeInsets.only(bottom: responsive.hp(1)),
+      width: double.infinity,
+      height: responsive.hp(altoList),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
                     '${pantallaModel.pantallaNombre}',
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: responsive.ip(2.5),
                         color: Colors.red,
                         fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      if (pantallaModel.idPantalla == '1') {
-                        final bottomBloc = ProviderBloc.bottom(context);
-                        bottomBloc.changePage(2);
-                      } else if (pantallaModel.idPantalla == '2') {
-                        Navigator.pushNamed(context, 'market');
-                      } else if (pantallaModel.idPantalla == '3') {
-                        Navigator.pushNamed(context, 'HomePuzzle');
-                      } else {
-                        Arguments arg = new Arguments(
-                            "${pantallaModel.pantallaNombre}",
-                            '${pantallaModel.pantallCategoria}');
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (pantallaModel.idPantalla == '1') {
+                      final bottomBloc = ProviderBloc.bottom(context);
+                      bottomBloc.changePage(2);
+                    } else if (pantallaModel.idPantalla == '2') {
+                      Navigator.pushNamed(context, 'market');
+                    } else if (pantallaModel.idPantalla == '3') {
+                      Navigator.pushNamed(context, 'HomePuzzle');
+                    } else {
+                      Arguments arg = new Arguments(
+                          "${pantallaModel.pantallaNombre}",
+                          '${pantallaModel.pantallCategoria}');
 
-                        Navigator.pushNamed(context, 'combo', arguments: arg);
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: responsive.hp(1.5),
-                        vertical: responsive.hp(.5),
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            'Ver más',
-                            style: TextStyle(
-                                fontSize: responsive.ip(1.7),
-                                color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.white,
-                            size: responsive.ip(2.2),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: responsive.hp(1),
-            ),
-            Container(
-              height: responsive.hp(altoCard),
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: pantallaModel.items.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, i) {
-                    if (i == pantallaModel.items.length - 1) {
-                      return GestureDetector(
-                        onTap: () {
-                          if (pantallaModel.idPantalla == '1') {
-                            final bottomBloc = ProviderBloc.bottom(context);
-                            bottomBloc.changePage(2);
-                          } else if (pantallaModel.idPantalla == '2') {
-                            Navigator.pushNamed(context, 'market');
-                          } else if (pantallaModel.idPantalla == '3') {
-                            Navigator.pushNamed(context, 'HomePuzzle');
-                          } else {
-                            Arguments arg = new Arguments(
-                                "${pantallaModel.pantallaNombre}",
-                                '${pantallaModel.pantallCategoria}');
-                            Navigator.pushNamed(context, 'combo',
-                                arguments: arg);
-                          }
-                        },
-                        child: Container(
-                          width: responsive.wp(anchoCard),
-                          height: responsive.hp(altoCard),
-                          padding: EdgeInsets.only(
-                            left: responsive.wp(3),
-                          ),
-                          margin: EdgeInsets.only(
-                            right: responsive.wp(1.5),
-                          ),
-                          child: Stack(
-                            children: <Widget>[
-                              Container(
-                                width: responsive.wp(anchoCard),
-                                height: responsive.hp(altoCard),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
-                                    cacheManager: CustomCacheManager(),
-                                    placeholder: (context, url) => Image(
-                                        image: AssetImage(
-                                            'assets/jar-loading.gif'),
-                                        fit: BoxFit.cover),
-                                    errorWidget: (context, url, error) => Image(
-                                        image: AssetImage(
-                                            'assets/carga_fallida.jpg'),
-                                        fit: BoxFit.cover),
-                                    imageUrl:
-                                        '${pantallaModel.items[i].fotoItem}',
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: boxfit,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: responsive.hp(2),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(.5),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Ver más',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: responsive.ip(2),
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
+                      Navigator.pushNamed(context, 'combo', arguments: arg);
                     }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: responsive.hp(1.5),
+                      vertical: responsive.hp(.5),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          'Ver más',
+                          style: TextStyle(
+                              fontSize: responsive.ip(1.7),
+                              color: Colors.white),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.white,
+                          size: responsive.ip(2.2),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: responsive.hp(1),
+          ),
+          Container(
+            height: responsive.hp(altoCard),
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: pantallaModel.items.length,
+                shrinkWrap: true,
+                itemBuilder: (context, i) {
+                  if (i == pantallaModel.items.length - 1) {
                     return GestureDetector(
                       onTap: () {
-                        if (tipo == 'categoria') {
-                          Arguments arg = new Arguments(
-                              "${pantallaModel.items[i].nombreItem}",
-                              '${pantallaModel.items[i].id}');
-                          Navigator.pushNamed(context, 'combo', arguments: arg);
-                        } else if (tipo == 'producto') {
-                          ProductosData productosData = ProductosData();
-                          productosData.idProducto = pantallaModel.items[i].id;
-
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration:
-                                  const Duration(milliseconds: 100),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return DetalleProductitos(
-                                    productosData: productosData);
-                              },
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        } else if (tipo == 'puzzle') {
+                        if (pantallaModel.idPantalla == '1') {
+                          final bottomBloc = ProviderBloc.bottom(context);
+                          bottomBloc.changePage(2);
+                        } else if (pantallaModel.idPantalla == '2') {
+                          Navigator.pushNamed(context, 'market');
+                        } else if (pantallaModel.idPantalla == '3') {
                           Navigator.pushNamed(context, 'HomePuzzle');
+                        } else {
+                          Arguments arg = new Arguments(
+                              "${pantallaModel.pantallaNombre}",
+                              '${pantallaModel.pantallCategoria}');
+                          Navigator.pushNamed(context, 'combo', arguments: arg);
                         }
                       },
                       child: Container(
@@ -605,44 +501,141 @@ class PrincipalTab extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            (tipo != 'puzzle')
-                                ? Positioned(
-                                    right: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: responsive.hp(2),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(.5),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Text(
-                                        '${pantallaModel.items[i].nombreItem}',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: responsive.ip(2),
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: responsive.hp(2),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(.5),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Ver más',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: responsive.ip(2),
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
                     );
-                  }),
-            )
-          ],
-        ),
+                  }
+                  return GestureDetector(
+                    onTap: () {
+                      if (tipo == 'categoria') {
+                        Arguments arg = new Arguments(
+                            "${pantallaModel.items[i].nombreItem}",
+                            '${pantallaModel.items[i].id}');
+                        Navigator.pushNamed(context, 'combo', arguments: arg);
+                      } else if (tipo == 'producto') {
+                        ProductosData productosData = ProductosData();
+                        productosData.idProducto = pantallaModel.items[i].id;
+
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 100),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return DetalleProductitos(
+                                  productosData: productosData);
+                            },
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
+                      } else if (tipo == 'puzzle') {
+                        Navigator.pushNamed(context, 'HomePuzzle');
+                      }
+                    },
+                    child: Container(
+                      width: responsive.wp(anchoCard),
+                      height: responsive.hp(altoCard),
+                      padding: EdgeInsets.only(
+                        left: responsive.wp(3),
+                      ),
+                      margin: EdgeInsets.only(
+                        right: responsive.wp(1.5),
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            width: responsive.wp(anchoCard),
+                            height: responsive.hp(altoCard),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                cacheManager: CustomCacheManager(),
+                                placeholder: (context, url) => Image(
+                                    image: AssetImage('assets/jar-loading.gif'),
+                                    fit: BoxFit.cover),
+                                errorWidget: (context, url, error) => Image(
+                                    image:
+                                        AssetImage('assets/carga_fallida.jpg'),
+                                    fit: BoxFit.cover),
+                                imageUrl: '${pantallaModel.items[i].fotoItem}',
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: boxfit,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          (tipo != 'puzzle')
+                              ? Positioned(
+                                  right: 0,
+                                  left: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: responsive.hp(2),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(.5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      '${pantallaModel.items[i].nombreItem}',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsive.ip(2),
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+          )
+        ],
       ),
+    ) /* ,
       onTap: () {
         Arguments arg = new Arguments("Combos Delivery", '54');
         //Navigator.pushNamed(context, 'timeline', arguments: arg);
         Navigator.pushNamed(context, 'combo', arguments: arg);
       },
-    );
+    ) */
+        ;
   }
 }

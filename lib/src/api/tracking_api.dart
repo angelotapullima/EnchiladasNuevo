@@ -28,6 +28,7 @@ class TrackingApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
+
       utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
       return 0;
     }
@@ -68,7 +69,7 @@ class TrackingApi {
       final decodedData = json.decode(resp.body);
       final code = decodedData['result']['code'];
 
-      print(resp.body);
+      //print(resp.body);
       if (code == 1) { 
         var data = decodedData['result']['data'][0];
 

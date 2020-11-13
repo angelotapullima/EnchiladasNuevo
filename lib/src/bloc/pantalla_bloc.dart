@@ -38,6 +38,7 @@ class PantallaBloc {
       pantalla.pantallaFoto = listPantallas[i].pantallaFoto;
       pantalla.pantallaEstado = listPantallas[i].pantallaEstado;
       pantalla.pantallCategoria = listPantallas[i].pantallCategoria;
+     
 
       if (pantalla.idPantalla == '1') {
         //Categorias

@@ -289,6 +289,7 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
       ),
       onTap: () {
         banderaTimer = false;
+        timer.cancel();
 
         Navigator.pushNamed(context, 'detallePedido', arguments: data.idPedido);
       },

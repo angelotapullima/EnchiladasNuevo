@@ -25,6 +25,15 @@ class Preferences {
   }
 
 
+//sirve para obtener el id producto de la bolsa
+  get idBolsa{
+    return _prefs.getString('idBolsa');
+  }
+
+  set idBolsa(String value){
+
+    _prefs.setString('idBolsa', value);
+  }
 
   //sirve para verificar el estado de la primera carga
   get estadoCargaInicial{

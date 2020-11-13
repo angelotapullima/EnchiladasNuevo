@@ -9,9 +9,9 @@ import 'dart:io';
 import 'PuzzlePiece.dart';
 
 class PuzzlePage extends StatefulWidget {
-  final String title = "Puzzle BufeoTec";
-  final int rows = 7;
-  final int cols = 7;
+  final String title = "Puzzle Enchiladas";
+  final int rows = 2;
+  final int cols = 2;
 
   @override
   _PuzzlePageState createState() => _PuzzlePageState();
@@ -30,9 +30,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
   @override
   void dispose() {
     if (_stopWatch.isRunning) {
-        _stopWatch.stop();
-      
-      }
+      _stopWatch.stop();
+    }
     super.dispose();
   }
 
@@ -140,10 +139,13 @@ class _PuzzlePageState extends State<PuzzlePage> {
     final res = await puzzleApi.subirTiempo(_stopwatchText, idImagenLlegada);
 
     if (res) {
+      print(res);
       String hora = _stopwatchText;
 
       _image = null;
       _resetButtonPressed();
+
+      Navigator.pop(context);
       Navigator.of(context).pushNamedAndRemoveUntil(
           'ranking', ModalRoute.withName('HomePuzzle'),
           arguments: hora);
@@ -232,6 +234,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   Navigator.of(context).pop();
                 },
                 child: Text('Terminar')),
+            FlatButton(
+                onPressed: () async {
+                  haceralgonoseque();
+                },
+                child: Text('reintentar')),
           ],
         );
       },

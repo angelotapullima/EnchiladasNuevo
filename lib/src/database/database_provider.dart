@@ -221,10 +221,7 @@ class DatabaseProvider {
           'pantalla_orden VARCHAR,'
           'pantalla_foto VARCHAR,'
           'pantalla_estado VARCHAR,'
-          'pantalla_categorias VARCHAR,'
-          'altoList VARCHAR,'
-          'altoCard VARCHAR,'
-          'anchoCard VARCHAR'
+          'pantalla_categorias VARCHAR'
           ')'); 
     });
   }

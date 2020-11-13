@@ -353,6 +353,17 @@ class _DetalleProducto extends State<DetalleProductitos> {
                       fontSize: responsive.ip(2),
                     ),
                   ),
+                  SizedBox(
+                    height: responsive.hp(1.5),
+                  ),
+                  Text(
+                    'Imagen Referencial',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(2),
+                    ),
+                  ),
 
                   SizedBox(
                     height: responsive.hp(3),
@@ -689,6 +700,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                     )
                   ],
                 ),
+                SizedBox(height: responsive.hp(1),),
                 GestureDetector(
                   child: Row(
                     children: <Widget>[
@@ -696,7 +708,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         Icons.mode_edit,
                         color: Colors.red,
                       ),
-                      Expanded(child: Text('$observacionProducto'))
+                      Expanded(child: Text('$observacionProducto',style: TextStyle(fontSize: responsive.ip(2)),))
                     ],
                   ),
                   onTap: () {
@@ -812,7 +824,9 @@ class _DetalleProducto extends State<DetalleProductitos> {
             children: <Widget>[
               SizedBox(
                 width: double.infinity,
+                height: responsive.hp(5),
                 child: RaisedButton(
+                  
                     color: (preferences.rol == '5') ? Colors.red : Colors.grey,
                     textColor: Colors.white,
                     child: Text(
