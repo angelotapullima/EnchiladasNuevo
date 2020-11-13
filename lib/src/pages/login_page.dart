@@ -1,5 +1,4 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:apple_sign_in/apple_sign_in_button.dart' as butApple;
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/user.dart';
 import 'package:enchiladasapp/src/utils/dialogs.dart';
@@ -221,6 +220,8 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: responsive.ip(1),
             ),
+            
+            
             InkWell(
               child: Container(
                 padding: EdgeInsets.all(
