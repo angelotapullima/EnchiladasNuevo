@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "446658527649-4k8j5ok8n60ke6mvnh6u617r3kqgh9ld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bufeotec.enchiladasapp",
+            "certificate_hash": "db9b7bad75b23b37cec5e0644c9fac08b3c88c62"
+          }
+        },
+        {
           "client_id": "446658527649-v5emjo37t7ejic32c8147or62c38k589.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
