@@ -25,6 +25,7 @@ class _OrdenesPageState extends State<OrdenesPagoPage> {
     return WillPopScope(
       onWillPop: () async{
         Navigator.popUntil(context, ModalRoute.withName('/'));
+        return null;
       },
       child: DefaultTabController(
         length: pageList.length,

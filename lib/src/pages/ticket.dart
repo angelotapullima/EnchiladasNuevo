@@ -355,13 +355,32 @@ class _HomeScreenState extends State<Ticket> {
         ),
         Center(
           child: Text(
-            'El págo Fue rechazado',
+            'El pago fue rechazado',
             style: TextStyle(
               color: Colors.white,
               fontSize: responsive.ip(2),
             ),
           ),
-        )
+        ),Positioned(
+        top: responsive.hp(8),
+        left: responsive.wp(4),
+        child: GestureDetector(
+          child: CircleContainer(
+            radius: responsive.ip(2.5),
+            color: Colors.grey[100],
+            widget: Icon(Icons.arrow_back, color: Colors.black),
+          ),
+          onTap: () {
+
+            Navigator.pushNamed(context, 'ordenesPago');
+
+            /* Navigator.popUntil(
+              context,
+              ModalRoute.withName('/'),
+            );  */
+          },
+        ),
+      ),
       ],
     );
   }
@@ -381,13 +400,32 @@ class _HomeScreenState extends State<Ticket> {
         ),
         Center(
           child: Text(
-            'Ocurrio un error con el págo',
+            'Ocurrio un error con el pago',
             style: TextStyle(
               color: Colors.white,
               fontSize: responsive.ip(2),
             ),
           ),
-        )
+        ),Positioned(
+        top: responsive.hp(8),
+        left: responsive.wp(4),
+        child: GestureDetector(
+          child: CircleContainer(
+            radius: responsive.ip(2.5),
+            color: Colors.grey[100],
+            widget: Icon(Icons.arrow_back, color: Colors.black),
+          ),
+          onTap: () {
+
+            Navigator.pushNamed(context, 'ordenesPago');
+
+            /* Navigator.popUntil(
+              context,
+              ModalRoute.withName('/'),
+            );  */
+          },
+        ),
+      ),
       ],
     );
   }
@@ -407,13 +445,32 @@ class _HomeScreenState extends State<Ticket> {
         ),
         Center(
           child: Text(
-            'El págo Fue Cancelado',
+            'El pago fue cancelado',
             style: TextStyle(
               color: Colors.white,
               fontSize: responsive.ip(2),
             ),
           ),
-        )
+        ),Positioned(
+        top: responsive.hp(8),
+        left: responsive.wp(4),
+        child: GestureDetector(
+          child: CircleContainer(
+            radius: responsive.ip(2.5),
+            color: Colors.grey[100],
+            widget: Icon(Icons.arrow_back, color: Colors.black),
+          ),
+          onTap: () {
+
+            Navigator.pushNamed(context, 'ordenesPago');
+
+            /* Navigator.popUntil(
+              context,
+              ModalRoute.withName('/'),
+            );  */
+          },
+        ),
+      ),
       ],
     );
   }

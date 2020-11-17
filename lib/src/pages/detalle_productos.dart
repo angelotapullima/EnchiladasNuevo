@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+
 import 'dart:ui';
 
 import 'package:animate_do/animate_do.dart';
@@ -65,7 +65,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.obtenerProductoPorId(widget.productosData.idProducto);
-    productosIdBloc.verificarDisponibilidad(widget.productosData.idCategoria);
+    productosIdBloc.verificarDisponibilidad(widget.productosData.idProducto);
 
     return ShowCaseWidget(
       onFinish: () {

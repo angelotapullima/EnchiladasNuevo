@@ -24,7 +24,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-
 class DetallePago extends StatefulWidget {
   const DetallePago({Key key}) : super(key: key);
 
@@ -33,13 +32,9 @@ class DetallePago extends StatefulWidget {
 }
 
 class _DetallePagoState extends State<DetallePago> {
-
-
-
   int _comprobanteValue = 3;
   int _tipoPagoValue = 3;
   String ruc = "";
-  String razonSocial = "";
   String montoPago = "";
   double vuelto = 0;
   String errorRuc = "";
@@ -325,13 +320,13 @@ class _DetallePagoState extends State<DetallePago> {
     final carritoCompletoBloc = ProviderBloc.carritoCompleto(context);
     carritoCompletoBloc.obtenerCarritoCpmpleto();
 
-    return StreamBuilder(
+    return StreamBuilder( 
       stream: carritoCompletoBloc.carritoCompletoStream,
       builder: (BuildContext context,
           AsyncSnapshot<List<CarritoCompleto>> snapshot) {
         if (snapshot.hasData) {
           double precioTotal = 0.0;
-          for (int x = 0; x < snapshot.data.length; x++) { 
+          for (int x = 0; x < snapshot.data.length; x++) {
             if (snapshot.data[x].precio != '') {
               precioTotal = precioTotal +
                   (double.parse(snapshot.data[x].precio) *
@@ -357,7 +352,9 @@ class _DetallePagoState extends State<DetallePago> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(width: responsive.wp(10),),
+                SizedBox(
+                  width: responsive.wp(10),
+                ),
                 Text(
                   'S/.$precioTotalFinal',
                   style: TextStyle(
@@ -422,7 +419,10 @@ class _DetallePagoState extends State<DetallePago> {
                       fontSize: responsive.ip(1.5),
                     ),
                   ),
-                ),SizedBox(width: responsive.wp(10),),
+                ),
+                SizedBox(
+                  width: responsive.wp(10),
+                ),
                 Text(
                   'S/.$precioFinal',
                   style: TextStyle(
@@ -650,23 +650,7 @@ class _DetallePagoState extends State<DetallePago> {
         (ruc != "")
             ? Column(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        'Razon Social : ',
-                        style: TextStyle(
-                          fontSize: responsive.ip(1.8),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text('$razonSocial',
-                            style: TextStyle(
-                                fontSize: responsive.ip(1.8),
-                                fontWeight: FontWeight.bold)),
-                      )
-                    ],
-                  ),
-                  Row(
+                 Row(
                     children: <Widget>[
                       Text(
                         'Ruc : ',
@@ -735,7 +719,7 @@ class _DetallePagoState extends State<DetallePago> {
                         },
                       ),
                       Text(
-                        'Tarjeta',
+                        'Tarjeta Física/POS',
                         style: TextStyle(fontSize: responsive.ip(1.8)),
                       ),
                     ],
@@ -1122,7 +1106,6 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-
   void modaltelefono(Responsive responsive) {
     showModalBottomSheet(
       context: context,
@@ -1194,7 +1177,9 @@ class _DetallePagoState extends State<DetallePago> {
                           ? Container()
                           : Text(
                               'El número debe tener más de 9 dígitos',
-                              style: TextStyle(color: Colors.red,fontSize: responsive.ip(1.8)),
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: responsive.ip(1.8)),
                             ),
                       SizedBox(
                         height: responsive.hp(3),
@@ -1236,7 +1221,6 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   void modalRuc() {
-    final usuarioApi = UsuarioApi();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1273,6 +1257,7 @@ class _DetallePagoState extends State<DetallePago> {
                   TextField(
                     controller: comprobanteController,
                     keyboardType: TextInputType.number,
+                    maxLength: 11,
                   ),
                   SizedBox(
                     height: responsive.hp(3),
@@ -1281,28 +1266,13 @@ class _DetallePagoState extends State<DetallePago> {
                     onPressed: () async {
                       if (comprobanteController.text.length > 0) {
                         //Navigator.pop(context);
-                        showProcessingDialog();
-                        final List<Ruc> dato = await usuarioApi
-                            .consultarRuc(comprobanteController.text);
-
-                        if (dato.length > 0) {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          ruc = dato[0].ruc;
-                          razonSocial = dato[0].razonSocial;
-                          mostrarErrorRuc = false;
-                          pasoFactura = true;
-                          setState(() {});
-                        } else {
+                       
                           Navigator.pop(context);
                           //Navigator.pop(context);
-                          print('fue pe');
-                          pasoFactura = true;
-                          _comprobanteRadioValue(context, 0);
-                          errorRuc = 'Ingrese un RUC válido';
-                          mostrarErrorRuc = true;
-                          Navigator.pop(context);
-                        }
+                          ruc = comprobanteController.text;
+                          
+                          setState(() {});
+                       
                       } else {
                         utils.showToast('el campo no debe estar vacio', 2,
                             ToastGravity.TOP);
@@ -1352,7 +1322,9 @@ class _DetallePagoState extends State<DetallePago> {
       if (direccion.length > 0) {
         if (user[0].telefono != "" && user[0].telefono != null) {
           if (_comprobanteValue == 1 || _comprobanteValue == 0) {
-            if (_tipoPagoValue == 1 || _tipoPagoValue == 0 || _tipoPagoValue == 2) {
+            if (_tipoPagoValue == 1 ||
+                _tipoPagoValue == 0 ||
+                _tipoPagoValue == 2) {
               PedidoServer pedido = new PedidoServer();
               if (_comprobanteValue == 0) {
                 //selecciona Boleta
@@ -1371,7 +1343,7 @@ class _DetallePagoState extends State<DetallePago> {
                 pedido.pedidoFormaPago = "3";
                 pedido.pedidoEstadoPago = "0";
                 pasoefectivo = true;
-              } else if (_tipoPagoValue == 1){
+              } else if (_tipoPagoValue == 1) {
                 String vuelto2 = utils.format(vuelto);
                 pedido.pedidoMontoPago = montoPago;
                 pedido.pedidoVueltoPago = vuelto2;
@@ -1382,15 +1354,13 @@ class _DetallePagoState extends State<DetallePago> {
                 } else {
                   pasoefectivo = true;
                 }
-              }else{
-
+              } else {
                 pedido.pedidoMontoPago = '0';
                 pedido.pedidoVueltoPago = "0";
                 pedido.pedidoFormaPago = "1";
                 pedido.pedidoEstadoPago = "0";
                 pasoefectivo = true;
                 pasoFactura = true;
-
               }
 
               if (pasoefectivo) {
@@ -1564,7 +1534,7 @@ class _DetallePagoState extends State<DetallePago> {
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: responsive.ip(2)),
+              fontSize: responsive.ip(2),),
         ),
         SizedBox(
           height: responsive.hp(1),
@@ -1572,9 +1542,10 @@ class _DetallePagoState extends State<DetallePago> {
         Text(
           'El monto de su pedido debe ser mayor a ${zonas[0].zonaPedidoMinimo}, sino se le agregará una comisión de ${zonas[0].deliveryProductoNombre} soles.',
           style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: responsive.ip(1.3)),
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: responsive.ip(1.3),
+          ),
         ),
       ],
     );

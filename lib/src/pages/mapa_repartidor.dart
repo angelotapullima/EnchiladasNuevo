@@ -56,7 +56,7 @@ class MapaRepartidorState extends State<MapaRepartidor> {
     // subscribe to changes in the user's location
     // by "listening" to the location's onLocationChanged event
     locationSubscription =
-        location.onLocationChanged().listen((LocationData cLoc) {
+        location.onLocationChanged.listen((LocationData cLoc) {
       // cLoc contains the lat and long of the
       // current user's position in real time,
       // so we're holding on to it

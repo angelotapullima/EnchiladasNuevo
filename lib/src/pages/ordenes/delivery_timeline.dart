@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:enchiladasapp/src/bloc/provider.dart';
+import 'package:enchiladasapp/src/models/argumentsWebview.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,6 +69,8 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
                             ? _botonTracking(
                                 context, snapshot.data[0].idPedido)
                             : Container(),
+                            (snapshot.data[0].pedidoEstado=='4')?  _botonBoleta(
+                                context, snapshot.data[0].idPedido):Container(),
                         _TimelineDelivery(
                           id: int.parse(
                             snapshot.data[0].pedidoEstado,
@@ -104,6 +107,33 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50), color: Colors.red),
         child: Text('Ver ubicacion del repartidor',
+            style: TextStyle(color: Colors.white)),
+      ),
+    );
+  }
+
+  Widget _botonBoleta(BuildContext context, String id) {
+
+    //print('esto va del timeline a mapa tracking $id');
+    final responsive = Responsive.of(context);
+    return FlatButton(
+      onPressed: () {
+
+        timer?.cancel();
+       ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                      argumentsWebview.idPedido = id;
+                      argumentsWebview.codigo = '1';
+
+                      Navigator.pushNamed(context, 'ticket',
+                          arguments: argumentsWebview);
+        //Navigator.pushNamed(context, 'mapaCliente',arguments: '${pedido[0].idPedido}');
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: responsive.ip(5), vertical: responsive.ip(1)),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50), color: Colors.red),
+        child: Text('Ver Ticket',
             style: TextStyle(color: Colors.white)),
       ),
     );

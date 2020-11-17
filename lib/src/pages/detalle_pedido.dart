@@ -218,57 +218,198 @@ class _DetallePedidoState extends State<DetallePedido> {
                             fontWeight: FontWeight.bold),
                       ),
                       Divider(),
-                      (!completarPago)
-                          ? Column(
-                              children: <Widget>[
-                                (pedido[0].pedidoEstadoPago == '0')
-                                    ? (pedido[0].pedidoFormaPago == '3')
-                                        ? FlatButton(
-                                            onPressed: () async {
-                                              showProcessingDialog(context);
-                                              final ordenesApi = OrdenesApi();
-                                              final res = await ordenesApi
-                                                  .cancelarPedido(
-                                                      '${pedido[0].idPedido}');
-                                              if (res == 1) {
-                                                Navigator.pop(context);
-                                                Navigator.pop(context);
+                      pedido[0].pedidoEstado == '5'
+                          ? Container(
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                vertical: responsive.hp(1),
+                              ),
+                              child: Text(
+                                'El pedido está cancelado',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: responsive.ip(2)),
+                              ))
+                          : (!completarPago)
+                              ? Column(
+                                  children: <Widget>[
+                                    (pedido[0].pedidoEstadoPago == '0')
+                                        ? (pedido[0].pedidoFormaPago == '3')
+                                            ? FlatButton(
+                                                onPressed: () async {
+                                                  showProcessingDialog(context);
+                                                  final ordenesApi =
+                                                      OrdenesApi();
+                                                  final res = await ordenesApi
+                                                      .cancelarPedido(
+                                                          '${pedido[0].idPedido}');
+                                                  if (res == 1) {
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
 
-                                                final pedidoBloc =
-                                                    ProviderBloc.pedido(
-                                                        context);
-                                                pedidoBloc
-                                                    .obtenerPedidosPendientes(
-                                                        context);
-                                              } else {
-                                                Navigator.pop(context);
-                                              }
-                                            },
-                                            child: Container(
-                                              width: responsive.wp(70),
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: responsive.ip(5),
-                                                vertical: responsive.ip(1),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  color: Colors.red),
-                                              child: Text('Cancelar pedido',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                            ),
-                                          )
+                                                    final pedidoBloc =
+                                                        ProviderBloc.pedido(
+                                                            context);
+                                                    pedidoBloc
+                                                        .obtenerPedidosPendientes(
+                                                            context);
+                                                  } else {
+                                                    Navigator.pop(context);
+                                                  }
+                                                },
+                                                child: Container(
+                                                  width: responsive.wp(70),
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        responsive.ip(5),
+                                                    vertical: responsive.ip(1),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                      color: Colors.red),
+                                                  child: Text('Cancelar pedido',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.white)),
+                                                ),
+                                              )
+                                            : Container()
+                                        : Container(),
+                                    FlatButton(
+                                      onPressed: () {
+                                        banderaTimer = false;
+                                        timer?.cancel();
+                                        Navigator.pushNamed(context, 'timeline',
+                                            arguments: '${pedido[0].idPedido}');
+                                        //Navigator.pushNamed(context, 'mapaCliente',arguments: '${pedido[0].idPedido}');
+                                      },
+                                      child: Container(
+                                        width: responsive.wp(70),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: responsive.ip(5),
+                                          vertical: responsive.ip(1),
+                                        ),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            color: Colors.red),
+                                        child: Text(
+                                          'Ver estado de pedido',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    (pedido[0].pedidoEstadoPago == '0')
+                                        ? (pedido[0].pedidoFormaPago == '3')
+                                            ? FlatButton(
+                                                onPressed: () {
+                                                  _modalCambiarMetodoPago(
+                                                      context,
+                                                      responsive,
+                                                      '${pedido[0].pedidoTotal}',
+                                                      '${pedido[0].idPedido}');
+                                                },
+                                                child: Container(
+                                                  width: responsive.wp(70),
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        responsive.ip(5),
+                                                    vertical: responsive.ip(1),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                      color: Colors.red),
+                                                  child: Text(
+                                                    'Cambiar método de pago',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container()
+                                        : Container(),
+                                    (pedido[0].pedidoEstadoPago == '0')
+                                        ? (pedido[0].pedidoFormaPago == '3')
+                                            ? FlatButton(
+                                                onPressed: () async {
+                                                  showProcessingDialog(context);
+                                                  final ordenesApi =
+                                                      OrdenesApi();
+                                                  final res = await ordenesApi
+                                                      .reintentarPedido(
+                                                          '${pedido[0].idPedido}');
+                                                  if (res.resp == 1) {
+                                                    print(res.link);
+
+                                                    if (res.link != "") {
+                                                      Navigator.pop(context);
+                                                      ArgumentsDetallePago
+                                                          argumentsDetallePago =
+                                                          ArgumentsDetallePago();
+                                                      argumentsDetallePago
+                                                          .link = res.link;
+                                                      argumentsDetallePago
+                                                              .idPedido =
+                                                          res.idPedido;
+                                                      Navigator.pushNamed(
+                                                          context, 'webView',
+                                                          arguments:
+                                                              argumentsDetallePago);
+                                                    } else {
+                                                      Navigator.pop(context);
+                                                      //pedidoCorrecto();
+                                                    }
+                                                  } else {
+                                                    Navigator.pop(context);
+                                                  }
+                                                },
+                                                child: Container(
+                                                  width: responsive.wp(70),
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        responsive.ip(5),
+                                                    vertical: responsive.ip(1),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                      color: Colors.red),
+                                                  child: Text(
+                                                    'Reintentar pago',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container()
                                         : Container()
-                                    : Container(),
-                                FlatButton(
+                                  ],
+                                )
+                              : FlatButton(
                                   onPressed: () {
-                                    banderaTimer = false;
-                                    timer?.cancel();
-                                    Navigator.pushNamed(context, 'timeline',
-                                        arguments: '${pedido[0].idPedido}');
-                                    //Navigator.pushNamed(context, 'mapaCliente',arguments: '${pedido[0].idPedido}');
+                                    ArgumentsDetallePago argumentsDetallePago =
+                                        ArgumentsDetallePago();
+                                    argumentsDetallePago.link =
+                                        pedido[0].pedidoLink;
+                                    argumentsDetallePago.idPedido =
+                                        pedido[0].idPedido;
+                                    Navigator.pushNamed(context, 'webView',
+                                        arguments: argumentsDetallePago);
                                   },
                                   child: Container(
                                     width: responsive.wp(70),
@@ -280,124 +421,12 @@ class _DetallePedidoState extends State<DetallePedido> {
                                         borderRadius: BorderRadius.circular(50),
                                         color: Colors.red),
                                     child: Text(
-                                      'Ver estado de pedido',
+                                      'Completar el pago de pedido',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ),
-                                (pedido[0].pedidoEstadoPago == '0')
-                                    ? (pedido[0].pedidoFormaPago == '3')
-                                        ? FlatButton(
-                                            onPressed: () {
-                                              _modalCambiarMetodoPago(
-                                                  context,
-                                                  responsive,
-                                                  '${pedido[0].pedidoTotal}',
-                                                  '${pedido[0].idPedido}');
-                                            },
-                                            child: Container(
-                                              width: responsive.wp(70),
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: responsive.ip(5),
-                                                vertical: responsive.ip(1),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  color: Colors.red),
-                                              child: Text(
-                                                'Cambiar método de pago',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          )
-                                        : Container()
-                                    : Container(),
-                                (pedido[0].pedidoEstadoPago == '0')
-                                    ? (pedido[0].pedidoFormaPago == '3')
-                                        ? FlatButton(
-                                            onPressed: () async {
-                                              showProcessingDialog(context);
-                                              final ordenesApi = OrdenesApi();
-                                              final res = await ordenesApi
-                                                  .reintentarPedido(
-                                                      '${pedido[0].idPedido}');
-                                              if (res.resp == 1) {
-                                                print(res.link);
-
-                                                if (res.link != "") {
-                                                  Navigator.pop(context);
-                                                  ArgumentsDetallePago
-                                                      argumentsDetallePago =
-                                                      ArgumentsDetallePago();
-                                                  argumentsDetallePago.link =
-                                                      res.link;
-                                                  argumentsDetallePago
-                                                      .idPedido = res.idPedido;
-                                                  Navigator.pushNamed(
-                                                      context, 'webView',
-                                                      arguments:
-                                                          argumentsDetallePago);
-                                                } else {
-                                                  Navigator.pop(context);
-                                                  //pedidoCorrecto();
-                                                }
-                                              } else {
-                                                Navigator.pop(context);
-                                              }
-                                            },
-                                            child: Container(
-                                              width: responsive.wp(70),
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: responsive.ip(5),
-                                                vertical: responsive.ip(1),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  color: Colors.red),
-                                              child: Text(
-                                                'Reintentar pago',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          )
-                                        : Container()
-                                    : Container()
-                              ],
-                            )
-                          : FlatButton(
-                              onPressed: () {
-                                ArgumentsDetallePago argumentsDetallePago =
-                                    ArgumentsDetallePago();
-                                argumentsDetallePago.link =
-                                    pedido[0].pedidoLink;
-                                argumentsDetallePago.idPedido =
-                                    pedido[0].idPedido;
-                                Navigator.pushNamed(context, 'webView',
-                                    arguments: argumentsDetallePago);
-                              },
-                              child: Container(
-                                width: responsive.wp(70),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: responsive.ip(5),
-                                  vertical: responsive.ip(1),
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: Colors.red),
-                                child: Text(
-                                  'Completar el pago de pedido',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
                     ],
                   ),
                 ),

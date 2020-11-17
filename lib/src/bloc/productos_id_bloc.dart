@@ -132,10 +132,12 @@ class ProductosBloc {
     _categoriaProductosController.sink.add(listFinal);
   }
 
-  void verificarDisponibilidad(String idCategoria) async {
+  void verificarDisponibilidad(String idProducto) async {
     var date = DateTime.now();
+
+    final producto = await productoDatabase.consultarPorId(idProducto);
     final temporizadorList = await temporizadorDatabase
-        .obtenerTemporizadorPorIdCategoria(idCategoria);
+        .obtenerTemporizadorPorIdCategoria(producto[0].idCategoria);
 
     if (temporizadorList[0].temporizadorTipo == '1') {
       //1 cualquier día, en un rango de horas específicas

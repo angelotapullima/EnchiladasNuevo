@@ -43,9 +43,10 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
 
     return Scaffold(
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: _datos(responsive, preferences, bottomBloc),
-      ),),
+        child: SingleChildScrollView(
+          child: _datos(responsive, preferences, bottomBloc),
+        ),
+      ),
     );
   }
 
@@ -170,15 +171,14 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                           onTap: () async {
                             final pref = Preferences();
                             if (pref.email != "" && pref.email != null) {
-                              //pref.clearPreferences(); 
+                              //pref.clearPreferences();
 
-
-                              pref.personName='';
-                              pref.foto='';
-                              pref.email='';
-                              pref.token='';
-                              pref.idUser='';
-                              pref.rol='';
+                              pref.personName = '';
+                              pref.foto = '';
+                              pref.email = '';
+                              pref.token = '';
+                              pref.idUser = '';
+                              pref.rol = '';
                               Auth.instance.logOut(context);
                             } else {
                               Navigator.pushNamedAndRemoveUntil(
@@ -303,10 +303,10 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 ),
                 Divider(),
                 InkWell(
-                   onTap: () {
-                      _launchInBrowser('http://play.google.com/store/apps/details?id=com.bufeotec.enchiladasapp');
-                    },
-                    
+                  onTap: () {
+                    _launchInBrowser(
+                        'http://play.google.com/store/apps/details?id=com.bufeotec.enchiladasapp');
+                  },
                   child: Padding(
                     padding: EdgeInsets.all(responsive.ip(1)),
                     child: Row(
@@ -373,7 +373,8 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 child: Padding(
                   padding: EdgeInsets.all(responsive.ip(1.3)),
                   child: Row(children: <Widget>[
-                    Icon(FontAwesomeIcons.archive,
+                    Icon(
+                      FontAwesomeIcons.archive,
                       color: Colors.red,
                     ),
                     SizedBox(
@@ -420,12 +421,15 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
             },
             child: Container(
               decoration: BoxDecoration(
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.grey[300])),
+                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.grey[300]),
+              ),
               child: Padding(
-                padding: EdgeInsets.all(responsive.ip(1.3)),
+                padding: EdgeInsets.all(
+                  responsive.ip(1.3),
+                ),
                 child: Row(children: <Widget>[
                   Icon(
                     FontAwesomeIcons.archive,
@@ -437,8 +441,9 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                   Text(
                     'Pedidos Asignados',
                     style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: responsive.ip(1.8)),
+                      fontWeight: FontWeight.w800,
+                      fontSize: responsive.ip(1.8),
+                    ),
                   )
                 ]),
               ),
@@ -451,7 +456,9 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
 
   Widget _aplicacion(Responsive responsive) {
     return Padding(
-      padding: EdgeInsets.all(responsive.wp(3)),
+      padding: EdgeInsets.all(
+        responsive.wp(3),
+      ),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -474,7 +481,8 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 children: <Widget>[
                   InkWell(
                     onTap: () {
-                      _launchInBrowser('https://politicas.lacasadelasenchiladas.pe/politicas-privacidad.html');
+                      _launchInBrowser(
+                          'https://politicas.lacasadelasenchiladas.pe/politicas-privacidad.html');
                     },
                     child: Padding(
                       padding: EdgeInsets.all(
@@ -501,7 +509,8 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                   Divider(),
                   InkWell(
                     onTap: () {
-                      _launchInBrowser('https://politicas.lacasadelasenchiladas.pe/terminos-y-condiciones.html');
+                      _launchInBrowser(
+                          'https://politicas.lacasadelasenchiladas.pe/terminos-y-condiciones.html');
                     },
                     child: Padding(
                       padding: EdgeInsets.all(responsive.ip(1)),
@@ -524,43 +533,117 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                     ),
                   ),
                   Divider(),
-                  Padding(
-                    padding: EdgeInsets.all(
-                      responsive.ip(1),
+                  InkWell(
+                    onTap: () {
+                      modalVersion();
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(
+                        responsive.ip(1),
+                      ),
+                      child: Row(children: <Widget>[
+                        Icon(
+                          Icons.phone_android,
+                          color: Colors.red,
+                        ),
+                        SizedBox(
+                          width: responsive.ip(1.5),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Versión de la App',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: responsive.ip(1.8),
+                              ),
+                            ),
+                          ],
+                        )
+                      ]),
                     ),
-                    child: Row(children: <Widget>[
-                      Icon(
-                        Icons.phone_android,
-                        color: Colors.red,
-                      ),
-                      SizedBox(
-                        width: responsive.ip(1.5),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'App Versión',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: responsive.ip(1.8),
-                            ),
-                          ),
-                          Text(
-                            '1.0',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: responsive.ip(1.8),
-                            ),
-                          ),
-                        ],
-                      )
-                    ]),
                   ),
                 ],
               ),
             )
           ]),
+    );
+  }
+
+  void modalVersion() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final responsive = Responsive.of(context);
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            padding: MediaQuery.of(context).viewInsets,
+            margin: EdgeInsets.only(top: responsive.hp(10)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(20),
+                  topStart: Radius.circular(20),
+                ),
+                color: Colors.white),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(2),
+                left: responsive.wp(5),
+                right: responsive.wp(5),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Versión de la App',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '1.0.0',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  Text(
+                    'Desarrollado por',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: responsive.ip(1.8),
+                    ),
+                  ), SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(left: responsive.wp(1.5)),
+                    height: responsive.hp(12),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image(
+                          image: AssetImage('assets/logo_bufeotec.png'),
+                          fit: BoxFit.contain,
+                        )),
+                  ),
+                  SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

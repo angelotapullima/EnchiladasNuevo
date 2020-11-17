@@ -10,8 +10,8 @@ import 'PuzzlePiece.dart';
 
 class PuzzlePage extends StatefulWidget {
   final String title = "Puzzle Enchiladas";
-  final int rows = 2;
-  final int cols = 2;
+  final int rows = 6;
+  final int cols = 6;
 
   @override
   _PuzzlePageState createState() => _PuzzlePageState();

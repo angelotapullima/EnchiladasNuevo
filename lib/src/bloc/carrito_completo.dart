@@ -27,64 +27,62 @@ class CarritoCompletoBloc {
     final direccion = await direccionDatabase.obtenerDireccionesConZonas();
     final deliveryRapido = await carritoDatabase.obtenerDeliveryRapido();
 
+    int cantidadDeProductos = 0;
     for (int i = 0; i < carrito.length; i++) {
+      cantidadDeProductos =
+          cantidadDeProductos + int.parse(carrito[i].productoCantidad);
       monto = double.parse(carrito[i].productoPrecio) *
           double.parse(carrito[i].productoCantidad);
 
-          subtotal = subtotal +monto;
+      subtotal = subtotal + monto;
 
-      CarritoCompleto carritoCompleto = CarritoCompleto();
-      carritoCompleto.producto = carrito[i].productoNombre;
-      carritoCompleto.precio = carrito[i].productoPrecio;
-      carritoCompleto.cantidad = carrito[i].productoCantidad;
+      CarritoCompleto carritoCompleto1 = CarritoCompleto();
+      carritoCompleto1.producto = carrito[i].productoNombre;
+      carritoCompleto1.precio = carrito[i].productoPrecio;
+      carritoCompleto1.cantidad = carrito[i].productoCantidad;
 
-      listCarritoCompleto.add(carritoCompleto);
+      listCarritoCompleto.add(carritoCompleto1);
     }
 
     final listBolsa = await productoDatabase.consultarPorId(prefs.idBolsa);
-      int cantidadDeBolsas = (carrito.length/3).ceil();
-      //int dato= ceil(cantidadDeBolsas);
-      /* if(dato<1){
-        dato =1;
-      } */
-      
-      CarritoCompleto carritoCompletof = CarritoCompleto();
-      carritoCompletof.producto = listBolsa[0].productoNombre;
-      carritoCompletof.precio = listBolsa[0].productoPrecio;
-      carritoCompletof.cantidad = cantidadDeBolsas.toString();
+    int cantidadDeBolsas = (cantidadDeProductos / 3).ceil();
+   
+   
+    CarritoCompleto carritoCompleto2 = CarritoCompleto();
+    carritoCompleto2.producto = listBolsa[0].productoNombre;
+    carritoCompleto2.precio = listBolsa[0].productoPrecio;
+    carritoCompleto2.cantidad = cantidadDeBolsas.toString();
 
-      listCarritoCompleto.add(carritoCompletof);
-
-    
+    listCarritoCompleto.add(carritoCompleto2);
 
     if (direccion.length > 0) {
       var pedidoMinimo = double.parse(direccion[0].zonaPedidoMinimo);
 
       if (deliveryRapido.length > 0) {
-        CarritoCompleto carritoCompleto = CarritoCompleto();
-        carritoCompleto.producto = direccion[0].deliveryProductoNombre;
-        carritoCompleto.precio = direccion[0].deliveryProductoPrecio;
-        carritoCompleto.cantidad = '1';
+        CarritoCompleto carritoCompleto3 = CarritoCompleto();
+        carritoCompleto3.producto = direccion[0].deliveryProductoNombre;
+        carritoCompleto3.precio = direccion[0].deliveryProductoPrecio;
+        carritoCompleto3.cantidad = '1';
 
-        listCarritoCompleto.add(carritoCompleto);
+        listCarritoCompleto.add(carritoCompleto3);
       }
 
       if (subtotal < pedidoMinimo) {
         //no se agrega
-        CarritoCompleto carritoCompleto = CarritoCompleto();
-        carritoCompleto.producto = direccion[0].recargoProductoNombre;
-        carritoCompleto.precio = direccion[0].recargoProductoPrecio;
-        carritoCompleto.cantidad = '1';
+        CarritoCompleto carritoCompleto4 = CarritoCompleto();
+        carritoCompleto4.producto = direccion[0].recargoProductoNombre;
+        carritoCompleto4.precio = direccion[0].recargoProductoPrecio;
+        carritoCompleto4.cantidad = '1';
 
-        listCarritoCompleto.add(carritoCompleto);
+        listCarritoCompleto.add(carritoCompleto4);
 
+        CarritoCompleto carritoCompleto5 = CarritoCompleto();
+        carritoCompleto5.producto =
+            'Tu pedido no cumple con el monto mínimo,para el distrito asignado que es de  S/.${direccion[0].zonaPedidoMinimo}, puedes añadir más productos al carrito para eliminar está comisión';
+        carritoCompleto5.precio = '';
+        carritoCompleto5.cantidad = '';
 
-        CarritoCompleto carritoCompleto2 = CarritoCompleto();
-        carritoCompleto2.producto = 'Tu pedido no cumple con el monto mínimo,para el distrito asignado que es de  S/.${direccion[0].zonaPedidoMinimo}, puedes añadir más productos al carrito para eliminar está comisión';
-        carritoCompleto2.precio = '';
-        carritoCompleto2.cantidad = '';
-
-        listCarritoCompleto.add(carritoCompleto2);
+        listCarritoCompleto.add(carritoCompleto5);
       }
 
       carritoCompleto.sink.add(listCarritoCompleto);
@@ -92,9 +90,6 @@ class CarritoCompletoBloc {
       carritoCompleto.sink.add(listCarritoCompleto);
     }
   }
-
-
-
 }
 
 class CarritoCompleto {

@@ -28,18 +28,18 @@ class PedidoBloc {
 
   void obtenerPedidosPendientes(BuildContext context) async {
     _pedidosPendientesController.sink.add(await pedidosDatabase.obtenerTodosLosPedidosPendientes());
-    _pedidosPendientesController.sink.add(await pedidoApi.obtenerhistorialDePedidos());
+    await pedidoApi.obtenerhistorialDePedidos();
     _pedidosPendientesController.sink.add(await pedidosDatabase.obtenerTodosLosPedidosPendientes());
   }
   void obtenerPedidosPasados(BuildContext context) async {
     _pedidosPasadosController.sink.add(await pedidosDatabase.obtenerTodosLosPedidosPasados());
-    _pedidosPasadosController.sink.add(await pedidoApi.obtenerhistorialDePedidos());
+    await pedidoApi.obtenerhistorialDePedidos();
     _pedidosPasadosController.sink.add(await pedidosDatabase.obtenerTodosLosPedidosPasados());
   }
   void obtenerPedidoPorId(String id)async{ 
     
     _pedidoIdController.sink.add(await pedidosDatabase.obtenerPedidoPorId(id));
-    _pedidoIdController.sink.add(await pedidoApi.obtenerPedidoPorId(id));
+    await pedidoApi.obtenerPedidoPorId(id);
     _pedidoIdController.sink.add(await pedidosDatabase.obtenerPedidoPorId(id));
   }
 

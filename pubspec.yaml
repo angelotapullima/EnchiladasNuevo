@@ -48,7 +48,7 @@ dependencies:
   sliding_up_panel: ^1.0.2
   google_maps_flutter: ^1.0.3
   geolocator: ^5.3.2+2
-  location: ^2.5.4
+  location: ^3.1.0
   pull_to_refresh: ^1.6.2
   horizontal_calendar_widget: ^1.0.2
   photo_view: ^0.9.2

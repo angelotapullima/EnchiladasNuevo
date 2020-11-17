@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:enchiladasapp/src/database/carrito_database.dart';
 import 'package:enchiladasapp/src/database/direccion_database.dart';
+import 'package:enchiladasapp/src/database/producto_database.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/database/pedido_database.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/user.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
@@ -18,6 +20,8 @@ class OrdenesApi {
   final pedidoDatabase = PedidoDatabase();
   final userDatabase = UsuarioDatabase();
   final direccionDatabase = DireccionDatabase();
+  final prefs = Preferences();
+  final pDatabase = ProductoDatabase();
 
   Future<Link> enviarpedido(PedidoServer pedido) async {
     try {
@@ -39,17 +43,32 @@ class OrdenesApi {
       final productsList = List<Carrito>();
 
       String productitos = "";
+      int cantidadDeProductos = 0;
       for (int i = 0; i < productos.length; i++) {
         Carrito carri = Carrito();
         carri.idProducto = productos[i].idProducto;
         carri.productoCantidad = productos[i].productoCantidad;
         carri.productoNombre = productos[i].productoNombre;
         carri.productoFoto = productos[i].productoFoto;
-        carri.productoPrecio = productos[i].productoPrecio;
+        carri.productoPrecio = productos[i].productoPrecio; 
         carri.productoTipo = productos[i].productoTipo;
         carri.productoObservacion = productos[i].productoObservacion;
         productsList.add(carri);
+
+        cantidadDeProductos =
+          cantidadDeProductos + int.parse(productos[i].productoCantidad);
       }
+
+      final listBolsa = await pDatabase.consultarPorId(prefs.idBolsa);
+      int cantidadDeBolsas = (cantidadDeProductos / 3).ceil();
+
+      Carrito carrito3 =  Carrito ();
+      carrito3.idProducto = int.parse(listBolsa[0].idProducto);
+      carrito3.productoCantidad = cantidadDeBolsas.toString();
+      carrito3.productoObservacion = '';
+        productsList.add(carrito3);
+
+
 
       for (int x = 0; x < productsList.length; x++) {
         productitos +=
@@ -60,7 +79,7 @@ class OrdenesApi {
         }
       }
 
-      print(" 'app': 'true',"
+    /*  print(" 'app': 'true',"
           "'tn': '${user[0].token}',"
           "'id_user': '${user[0].cU}',"
           "'pedido_tipo_comprobante': '${pedido.pedidoTipoComprobante}',"
@@ -79,9 +98,9 @@ class OrdenesApi {
           "'pedido_monto_pago': '${pedido.pedidoMontoPago}',"
           "'pedido_vuelto_pago': '${pedido.pedidoVueltoPago}',"
           "'productos': '$productitos',"
-          "'pedido_estado_pago': '${pedido.pedidoEstadoPago.toString()}'");
+          "'pedido_estado_pago': '${pedido.pedidoEstadoPago.toString()}'");*/
 
-      print('productitos $productitos');
+      //print('productitos $productitos');
       final response = await http.post(url, body: {
         'app': 'true',
         'tn': user[0].token,
