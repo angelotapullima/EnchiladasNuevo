@@ -192,7 +192,7 @@ class _MapsSampleState extends State<MapsSample> {
               }
 
               return Padding(
-                padding: EdgeInsets.only(top: responsive.hp(60)),
+                padding: EdgeInsets.only(top: responsive.hp(55)),
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
                   width: double.infinity,

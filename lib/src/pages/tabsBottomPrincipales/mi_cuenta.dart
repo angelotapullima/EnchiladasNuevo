@@ -272,7 +272,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                     if (await canLaunch("mailto:$_emailLaunchUri.toString()")) {
                       await launch(_emailLaunchUri.toString());
                     } else {
-                      throw 'Could not launch';
+                      throw 'Could not launch tmr';
                     }
 
                     //

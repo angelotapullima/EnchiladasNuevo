@@ -33,9 +33,9 @@ public class MainActivity extends FlutterActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Utils.requestingLocationUpdates(this)) {
-            if (!checkPermissions()) {
+            /*if (!checkPermissions()) {
                 requestPermissions();
-            }
+            }*/
         }
 
     }
@@ -52,6 +52,10 @@ public class MainActivity extends FlutterActivity implements
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
                 .setMethodCallHandler((call, result) -> {
                     Log.e("TAG", "configureFlutterEngine: " + call.arguments() );
+                      if (!checkPermissions()) {
+                requestPermissions();
+            }
+
                     String separador,estadoTracking,token,idUser,idEntrega,argumentos,myMessage;
                     String[] resultado;
 
@@ -118,12 +122,12 @@ public class MainActivity extends FlutterActivity implements
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
 
-        if (!checkPermissions()) {
+       /*  if (!checkPermissions()) {
             requestPermissions();
 
         } else {
             //mService.requestLocationUpdates();
-        }
+        } */
 
 
         // Restore the state of the buttons when the activity (re)launches.

@@ -180,15 +180,14 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          SizedBox(
-                            width: responsive.wp(5),
-                          ),
+                        
                           Padding(
                             padding: const EdgeInsets.only(
                                 bottom: 1, left: 6, right: 2),
                             child: SizedBox(
-                              height: responsive.ip(3.4),
+                              height: responsive.ip(2.5),
                               child: AspectRatio(
                                 aspectRatio: 25 / 31,
                                 child: CustomPaint(
@@ -203,16 +202,17 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Text(
                             'Acceder con Apple',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: responsive.ip(2.1)),
+                                fontSize: responsive.ip(2)),
                           ),
                         ],
                       ),
                     ),
                     onTap: () async {
                       final user =
-                          await Auth.instance.signInWithGoogle(context);
+                          await Auth.instance.signInWithApple(context);
                       goto(context, user, loginBloc);
                     },
                   )
@@ -232,21 +232,22 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Row(
+
+                        mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                      width: responsive.wp(5),
-                    ),
+                   
                     Image.asset(
                       'assets/google.png',
-                      width: responsive.ip(3.4),
+                      width: responsive.ip(3),
                     ),
                     SizedBox(
                       width: responsive.ip(1.2),
                     ),
                     Text(
                       'Acceder con Google',
+                            textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Roboto',fontSize: responsive.ip(2.1),
+                        fontFamily: 'Roboto',fontSize: responsive.ip(2),
                         color: Color.fromRGBO(68, 68, 76, .8),
                       ),
                     ),
@@ -276,20 +277,20 @@ class _LoginPageState extends State<LoginPage> {
                   responsive.ip(1),
                 ),
                 child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                      width: responsive.wp(5),
-                    ),
+                    
                     Icon(
                       FontAwesomeIcons.facebook,
                       color: Colors.white,
-                      size: responsive.ip(3.4),
+                      size: responsive.ip(2.5),
                     ),
                     SizedBox(
                       width: responsive.ip(1.2),
                     ),
                     Text(
                       'Acceder con Facebook',
+                            textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: responsive.ip(2),

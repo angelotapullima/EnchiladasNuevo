@@ -15,10 +15,9 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> with AfterLayoutMixin {
   Future<void> _request() async {
-    final PermissionStatus status =
-        await Permission.locationAlways.request();
+    //final PermissionStatus status =await Permission.locationAlways.request();
 
-    print('permisos $status');
+    //print('permisos $status');
   }
 
   @override
