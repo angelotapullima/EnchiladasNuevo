@@ -916,6 +916,15 @@ class _DetalleProducto extends State<DetalleProductitos> {
       onTap: () {
         Navigator.pushNamed(context, 'detalleProductoFoto', arguments: carrito);
       },
+       onVerticalDragUpdate: (algo){
+
+                      print(algo.primaryDelta);
+
+                      if(algo.primaryDelta > 7){
+                        print('atras');
+                        Navigator.pop(context);
+                      }
+                    },
       child: Container(
         width: double.infinity,
         height: size.height * 0.50,

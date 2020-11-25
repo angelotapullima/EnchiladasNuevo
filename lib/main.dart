@@ -1,6 +1,5 @@
 
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
-import 'package:enchiladasapp/src/pages/detalle_pedido_repartidor.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto_foto.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/gestionar_direcciones.dart';
@@ -18,7 +17,6 @@ import 'package:enchiladasapp/src/pages/zoom_foto_direccion.dart';
 import 'package:enchiladasapp/src/pushProvider/push_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:enchiladasapp/src/pages/mapa_repartidor.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_pago.dart';
 import 'package:enchiladasapp/src/pages/detalle_pedido.dart';
@@ -30,7 +28,6 @@ import 'package:enchiladasapp/src/pages/splash.dart';
 import 'package:enchiladasapp/src/pages/home_page.dart';
 import 'package:enchiladasapp/src/pages/desicion_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_page.dart';
-import 'package:enchiladasapp/src/pages/pedidos_repartidor_page.dart';
 import 'package:enchiladasapp/src/pages/puzzle/home_puzzle.dart';
 import 'package:enchiladasapp/src/pages/puzzle/puzzle.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -218,8 +215,8 @@ class _MyAppState extends State<MyApp> {
           'ordenes': (BuildContext context) => OrdenesPage(),
           'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
           'detallePedido': (BuildContext context) => DetallePedido(),
-          'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
-          'mapaRepartidor': (BuildContext context) => MapaRepartidor(),
+          /* 'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
+          'mapaRepartidor': (BuildContext context) => MapaRepartidor(), */
           'mapaCliente': (BuildContext context) => MapaCliente(),
           'ranking': (BuildContext context) => RankingPage(),
           'rankingReport': (BuildContext context) => RankingReport(),
@@ -232,7 +229,7 @@ class _MyAppState extends State<MyApp> {
           'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
           'detallePromociones': (BuildContext context) => DetallePromociones(),
           'onboarding': (BuildContext context) => OnboardingPage(),
-          'detallePedidoRepartidor': (BuildContext context) => DetallePedidoRepartidor(),
+          //'detallePedidoRepartidor': (BuildContext context) => DetallePedidoRepartidor(),
 
         }, 
       ),

@@ -260,12 +260,5 @@ class _DesicionPageState extends State<DesicionPage> {
       ),
     );
   }
-/* 
-  @override
-  void afterFirstLayout(BuildContext context) {
-    print('desicionPage');
-    PushNotificationProvider pushNotificationProvider =
-        PushNotificationProvider();
-    pushNotificationProvider.initNotification();
-  } */
+  
 }

@@ -10,7 +10,7 @@ class EnchiladasNaviBloc{
   Function(String) get changeIndexPage    => _enchiladasPageController.sink.add;
 
 
-  // Obtener el último valor ingresado a los streams
+  // Obtener el último valor ingresado a los streams 
   String get index   => _enchiladasPageController.value;
 
   dispose() {

@@ -139,7 +139,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     final res = await puzzleApi.subirTiempo(_stopwatchText, idImagenLlegada);
 
     if (res) {
-      print(res);
+      
       String hora = _stopwatchText;
 
       _image = null;

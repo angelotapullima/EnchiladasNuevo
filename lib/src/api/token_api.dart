@@ -16,7 +16,7 @@ class TokenApi {
 
       final decodedData = json.decode(resp.body);
 
-      print('token $decodedData');
+
       if (decodedData['result']['code'] == 1) {
         return true;
       } else {

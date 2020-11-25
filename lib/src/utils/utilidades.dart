@@ -26,8 +26,8 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoDescripcion = productosData.productoDescripcion; 
   productos.productoFavorito = 1;
 
-  final res = await productoDatabase.updateProductosDb(productos);
-  print('Database response : $res');
+  await productoDatabase.updateProductosDb(productos);
+  
 
   favoritosBloc.obtenerProductosFavoritos();
   //_mostrarAlert(context);
@@ -48,8 +48,8 @@ void quitarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoDescripcion = productosData.productoDescripcion;
   productos.productoFavorito = 0;
 
-  final res = await productoDatabase.updateProductosDb(productos);
-  print('Database response : $res');
+  await productoDatabase.updateProductosDb(productos);
+  
 
   //_mostrarAlert(context);
   favoritosBloc.obtenerProductosFavoritos();
@@ -71,8 +71,8 @@ void agregarFavoritosMarket(
   productos.productoDescripcion = productosData.productoDescripcion;
   productos.productoFavorito = 1;
 
-  final res = await productoDatabase.updateProductosDb(productos);
-  print('Database response : $res');
+   await productoDatabase.updateProductosDb(productos);
+
 
   productosIdBloc.obtenerProductosMarketPorCategoria(categoria);
   //_mostrarAlert(context);
@@ -108,7 +108,7 @@ Future<bool> agregarZona(BuildContext context, String idZona) async {
   final usuarioDatabase = UsuarioDatabase();
 
   final res = await usuarioDatabase.updateZonaUsuario(idZona);
-  print(res);
+  
   /* 
   zonaBloc.obtenerUsuarioZona(); */
   if (res > 0) {
@@ -135,9 +135,8 @@ void agregarCarrito(
 
   final carritoBloc = ProviderBloc.carrito(context);
   if (cantidad == "0") {
-    final delete = await carritoDatabase
+    await carritoDatabase
         .deteleProductoCarrito(int.parse(productosData.idProducto));
-    print('Database response : $delete');
   } else {
     final dato =
         await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
@@ -151,11 +150,11 @@ void agregarCarrito(
     carrito.productoCantidad = cantidad;
 
     if (dato.length > 0) {
-      final resActualizar = await carritoDatabase.updateCarritoDb(carrito);
-      print('Database response : $resActualizar');
+       await carritoDatabase.updateCarritoDb(carrito);
+      
     } else {
-      final resInsertar = await carritoDatabase.insertarCarritoDb(carrito);
-      print('Database response : $resInsertar');
+      await carritoDatabase.insertarCarritoDb(carrito);
+      
     }
   }
   //showToast('Producto agregado correctamente', 1);
@@ -185,8 +184,8 @@ void quitarFavoritosMarket(
   productos.productoEstado = productosData.productoEstado;
   productos.productoFavorito = 0;
 
-  final res = await productoDatabase.updateProductosDb(productos);
-  print('Database response : $res');
+   await productoDatabase.updateProductosDb(productos);
+  
 
   //_mostrarAlert(context);
   productosIdBloc.obtenerProductosMarketPorCategoria(categotia);
@@ -234,8 +233,8 @@ void agregarTelefono(BuildContext context, String telefono) async {
   final usuarioDatabase = UsuarioDatabase();
   final usuarioBloc = ProviderBloc.user(context);
 
-  final res = await usuarioDatabase.updateTelefonoUsuario(telefono);
-  print(res);
+  await usuarioDatabase.updateTelefonoUsuario(telefono);
+  
   usuarioBloc.obtenerUsuario();
 }
 
@@ -244,8 +243,8 @@ void actualizarObservacion(
   final carritoBloc = ProviderBloc.carrito(context);
   final carritoDatabase = CarritoDatabase();
 
-  final res = await carritoDatabase.updateObservacion(observacion, id);
-  print(res);
+  await carritoDatabase.updateObservacion(observacion, id);
+  
   carritoBloc.obtenerCarrito();
 }
 

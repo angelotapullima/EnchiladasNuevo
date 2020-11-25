@@ -26,7 +26,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
 
     setState(() {
       favoritosBloc.obtenerProductosFavoritos();
-      print('favoritos');
+      
     });
     return Scaffold(
       body: Stack(

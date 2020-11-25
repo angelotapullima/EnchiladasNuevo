@@ -1,6 +1,5 @@
 import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/api/ordenes_api.dart';
-import 'package:enchiladasapp/src/api/usuario_api.dart';
 import 'package:enchiladasapp/src/bloc/carrito_completo.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/database/carrito_database.dart';
@@ -11,7 +10,6 @@ import 'package:enchiladasapp/src/models/argumentDetallePedido.dart';
 import 'package:enchiladasapp/src/models/argumentsWebview.dart';
 import 'package:enchiladasapp/src/models/direccion_model.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
-import 'package:enchiladasapp/src/models/ruc_model.dart';
 import 'package:enchiladasapp/src/models/user.dart';
 import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -84,11 +82,11 @@ class _DetallePagoState extends State<DetallePago> {
       switch (_tipoPagoValue) {
         case 0:
           //tipoPagoController.text="";
-          print('0');
+          
           //_result = ...
           break;
         case 1:
-          print('1');
+        
           _modalCambiarMetodoPago(context, responsive, precio);
           break;
       }
@@ -1367,9 +1365,9 @@ class _DetallePagoState extends State<DetallePago> {
                 if (pasoFactura) {
                   showProcessingDialog();
                   final res = await pedidoApi.enviarpedido(pedido);
-                  print('respuesta de la ptmr $res');
+                  
                   if (res.resp == 1) {
-                    print(res.link);
+                    
 
                     if (res.link != "") {
                       Navigator.pop(context);

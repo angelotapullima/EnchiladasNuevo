@@ -2,7 +2,7 @@
 
 import 'package:rxdart/rxdart.dart';
 
-class BottomNaviBloc {
+class BottomNaviBloc { 
 
   final _selectPageController = BehaviorSubject<int>();
 

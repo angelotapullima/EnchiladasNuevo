@@ -202,10 +202,10 @@ class ProductosBloc {
 
     DateTime fechaInicioPromo = DateTime.parse(fechaInicio);
     DateTime fechaFinPromo = DateTime.parse(fechaFin);
-    print(fechaFinPromo.toString());
+    
 
     fechaFinPromo =fechaFinPromo.add(new Duration(days: 1));
-    print(fechaFinPromo.toString());
+    
 
     if (date.isAfter(fechaInicioPromo)) {
       if (date.isBefore(fechaFinPromo)) {

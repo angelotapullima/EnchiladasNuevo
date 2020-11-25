@@ -156,10 +156,8 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       SizedBox(
                         height: responsive.hp(2),
                       ),
-                      (prefs.rol == '6') ? _pedidos(responsive) : Container(),
-                      SizedBox(
-                        height: responsive.hp(2),
-                      ),
+                      
+                      
                       _asistencia(responsive),
                       SizedBox(
                         height: responsive.hp(2),
@@ -388,66 +386,6 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                     )
                   ]),
                 )),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _pedidos(Responsive responsive) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Pedidos',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: responsive.ip(3),
-                  color: Colors.red)),
-          SizedBox(
-            height: responsive.hp(1.5),
-          ),
-          InkWell(
-            onTap: () {
-              final prefs = new Preferences();
-
-              if (prefs.email != "" && prefs.email != null) {
-                Navigator.pushNamed(context, 'pedidosRepartidor');
-              } else {
-                utils.showToast('Debe estar registrado para ver esta opción', 2,
-                    ToastGravity.TOP);
-              }
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: Colors.grey[300]),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(
-                  responsive.ip(1.3),
-                ),
-                child: Row(children: <Widget>[
-                  Icon(
-                    FontAwesomeIcons.archive,
-                    color: Colors.red,
-                  ),
-                  SizedBox(
-                    width: responsive.wp(1.5),
-                  ),
-                  Text(
-                    'Pedidos Asignados',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: responsive.ip(1.8),
-                    ),
-                  )
-                ]),
-              ),
-            ),
           )
         ],
       ),

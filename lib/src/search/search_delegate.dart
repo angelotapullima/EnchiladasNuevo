@@ -59,7 +59,7 @@ class DataSearch extends SearchDelegate {
     final productosBloc = ProviderBloc.prod(context);
     productosBloc.obtenerProductoPorQuery('$query');
     final responsive = Responsive.of(context);
-    print('query $query');
+    
     return StreamBuilder(
         stream: productosBloc.productosQueryStream,
         builder: (BuildContext context,
@@ -110,7 +110,7 @@ class DataSearch extends SearchDelegate {
     final productosBloc = ProviderBloc.prod(context);
     productosBloc.obtenerProductoPorQuery('$query');
     final responsive = Responsive.of(context);
-    print('query $query');
+    
     return StreamBuilder(
         stream: productosBloc.productosQueryStream,
         builder: (BuildContext context,

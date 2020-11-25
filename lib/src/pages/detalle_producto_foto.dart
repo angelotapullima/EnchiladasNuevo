@@ -42,14 +42,25 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
              child: Stack(
               children: <Widget>[
                 Center(
-                  child: Container(
-                    width: double.infinity,
-                    child: Hero(
-                      tag: '${productosData.idProducto}',
-                      child: PhotoView(
-                        imageProvider: CachedNetworkImageProvider(
-                          '${productosData.productoFoto}',
-                          cacheManager: CustomCacheManager(),
+                  child: GestureDetector(
+                    onVerticalDragUpdate: (algo){
+
+                      print(algo.primaryDelta);
+
+                      if(algo.primaryDelta > 7){
+                        print('atras');
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      child: Hero(
+                        tag: '${productosData.idProducto}',
+                        child: PhotoView(
+                          imageProvider: CachedNetworkImageProvider(
+                            '${productosData.productoFoto}',
+                            cacheManager: CustomCacheManager(),
+                          ),
                         ),
                       ),
                     ),
@@ -69,14 +80,25 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
              child: Stack(
               children: <Widget>[
                 Center(
-                  child: Container(
-                    width: double.infinity,
-                    child: Hero(
-                      tag: '${productosData.idProducto}',
-                      child: PhotoView(
-                        imageProvider: CachedNetworkImageProvider(
-                          '${productosData.productoFoto}',
-                          cacheManager: CustomCacheManager(),
+                  child: GestureDetector(
+                     onVerticalDragUpdate: (algo){
+
+                      print(algo.primaryDelta);
+
+                      if(algo.primaryDelta > 7){
+                        print('atras');
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      child: Hero(
+                        tag: '${productosData.idProducto}',
+                        child: PhotoView(
+                          imageProvider: CachedNetworkImageProvider(
+                            '${productosData.productoFoto}',
+                            cacheManager: CustomCacheManager(),
+                          ),
                         ),
                       ),
                     ),

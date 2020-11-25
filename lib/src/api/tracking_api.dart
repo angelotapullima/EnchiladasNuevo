@@ -2,14 +2,12 @@ import 'dart:convert';
 
 import 'package:enchiladasapp/src/models/tracking_model.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
-import 'package:fluttertoast/fluttertoast.dart'; 
 import 'package:http/http.dart' as http;
-import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 
 class TrackingApi {
   final String _url = 'https://delivery.lacasadelasenchiladas.pe';
   final prefs = new Preferences();
-  Future<int> iniciarEntrega(String idEntrega) async {
+  /* Future<int> iniciarEntrega(String idEntrega) async {
     try {
       final url = '$_url/api/entrega/iniciar_entrega';
 
@@ -59,7 +57,7 @@ class TrackingApi {
     }
   }
 
-  Future<List<TrackingData>> trackingRepartidor( String idPedido) async {
+   */Future<List<TrackingData>> trackingRepartidor( String idPedido) async {
     try {
       final url = '$_url/api/pedido/tracking_pedido';
       final list = List<TrackingData>();

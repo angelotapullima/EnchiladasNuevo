@@ -89,7 +89,7 @@ class _MapsSampleState extends State<MapsSample> {
                 _timer?.cancel();
                 _timer = null;
                 _timer = new Timer(Duration(seconds: 1), () async {
-                  print('grg ${position.target}');
+                  
 
                   //agregarMarket(position.target);
                   _cargarGeocoding(context, position.target.latitude,

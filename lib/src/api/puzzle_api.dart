@@ -60,7 +60,7 @@ class PuzzleApi {
 
       final decodedData = json.decode(resp.body);
 
-      print('listar dia $decodedData');
+
       if (decodedData['result']['code'] == 1) {
         if (decodedData['result']['data'].length > 0) {
           for (int i = 0; i < decodedData['result']['data'].length; i++) {

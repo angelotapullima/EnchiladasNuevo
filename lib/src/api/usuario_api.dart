@@ -79,7 +79,7 @@ class UsuarioApi {
       final decodedData = json.decode(resp.body);
       final code = decodedData['result']['code'];
 
-      print('peticion usuario: ${decodedData['data']}');
+
       if (code == 1) {
         final usuarioDatabase = UsuarioDatabase();
 

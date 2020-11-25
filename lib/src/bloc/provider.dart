@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/bloc/market_navigation_bloc.dart';
 export 'package:enchiladasapp/src/bloc/market_navigation_bloc.dart';
 
-import 'package:enchiladasapp/src/bloc/pedidos_asignados_bloc.dart';
-export 'package:enchiladasapp/src/bloc/pedidos_asignados_bloc.dart';
 
 import 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
 export 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
@@ -55,7 +53,7 @@ class ProviderBloc extends InheritedWidget {
   final bottomNaviBloc = BottomNaviBloc();
   final marketNaviBloc = MarketNaviBloc();
   final pedidosBloc = PedidoBloc();
-  final pedidosAsignadosBloc = PedidosAsignadosBloc();
+  //final pedidosAsignadosBloc = PedidosAsignadosBloc();
   final puzzleBloc = PuzzleBloc();
   final zonaBloc = ZonaBloc();
   final nuevoMetodoPagoBloc = NuevoMetodoPagoBloc();
@@ -125,10 +123,10 @@ class ProviderBloc extends InheritedWidget {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .pedidosBloc;
   }
-  static PedidosAsignadosBloc asignados(BuildContext context) {
+  /* static PedidosAsignadosBloc asignados(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .pedidosAsignadosBloc;
-  }
+  } */
   static PuzzleBloc puzzle(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .puzzleBloc;

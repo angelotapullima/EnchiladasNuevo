@@ -6,7 +6,7 @@ import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 
 class Splash extends StatefulWidget {
   @override
@@ -14,15 +14,11 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> with AfterLayoutMixin {
-  Future<void> _request() async {
-    //final PermissionStatus status =await Permission.locationAlways.request();
-
-    //print('permisos $status');
-  }
+ 
 
   @override
   void afterFirstLayout(BuildContext context) async {
-    _request();
+    
     final categoriasApi = CategoriasApi();
 
     final configuracionApi = ConfiguracionApi();
@@ -48,14 +44,8 @@ class _SplashState extends State<Splash> with AfterLayoutMixin {
 
         Navigator.pushReplacementNamed(context, 'login');
     }
-/* 
-    Auth.instance.user.then((FirebaseUser user) {
-      if (user != null) {
-        Navigator.pushReplacementNamed(context, 'desicion');
-      } else {
-        Navigator.pushReplacementNamed(context, 'login');
-      }
-    }); */
+
+
   }
 
   @override
