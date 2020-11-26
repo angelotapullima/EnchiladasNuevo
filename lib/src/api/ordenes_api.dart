@@ -124,10 +124,10 @@ class OrdenesApi {
         'pedido_estado_pago': pedido.pedidoEstadoPago.toString()
       });
 
-      print('Response status: $response');
+      //print('Response status: $response');
       final decodedData = json.decode(response.body);
 
-      print(decodedData['result']['code']);
+      //print(decodedData['result']['code']);
       if (decodedData['result']['code'] == 1) {
         PedidoServer pedidosServer =
             PedidoServer.fromJson2(decodedData['result']['pedido']);
@@ -204,7 +204,7 @@ class OrdenesApi {
         return linkcito;
       }
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);
       String link = "";
@@ -222,8 +222,8 @@ class OrdenesApi {
 
       final url = '$_url/api/pedido/consultar_pedido';
       final List<User> user = await userDatabase.obtenerUsUario();
-      print('token ${user[0].token}');
-      print('CU ${user[0].cU}');
+      /* print('token ${user[0].token}');
+      print('CU ${user[0].cU}'); */
 
       final response = await http.post(url, body: {
         'app': 'true',
@@ -264,9 +264,8 @@ class OrdenesApi {
           pedidos.pedidoLink =
               cantidadPedidos[x]['informacion_pago'][0]['link_pago'];
 
-          final pedidoInsertado = await pedidoDatabase.insertarPedido(pedidos);
+          await pedidoDatabase.insertarPedido(pedidos);
 
-          print(pedidoInsertado);
 
           for (int i = 0; i < cantidadPedidos[x]['productos'].length; i++) {
             ProductoServer productoServer = new ProductoServer();
@@ -298,7 +297,7 @@ class OrdenesApi {
         return [];
       }
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       /*utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);*/
       return [];
@@ -310,9 +309,9 @@ class OrdenesApi {
       final list = List<PedidoServer>();
 
       final url = '$_url/api/pedido/historial_pedidos';
-      final List<User> user = await userDatabase.obtenerUsUario();
+      final List<User> user = await userDatabase.obtenerUsUario();/* 
       print('token ${user[0].token}');
-      print('CU ${user[0].cU}');
+      print('CU ${user[0].cU}'); */
 
       final response = await http.post(url, body: {
         'app': 'true',
@@ -326,7 +325,6 @@ class OrdenesApi {
       if (decodedData['result']['code'] == 1) {
         var cantidadPedidos = List<dynamic>();
         cantidadPedidos = decodedData['result']['data'];
-        print('cantidad de ordenes ${cantidadPedidos.length}');
 
         for (int x = 0; x < cantidadPedidos.length; x++) {
           //obtener el pedido si existe para actualizarlo o crear uno nuevo
@@ -361,9 +359,8 @@ class OrdenesApi {
           }
           
 
-          final pedidoInsertado = await pedidoDatabase.insertarPedido(pedidos);
+         await pedidoDatabase.insertarPedido(pedidos);
 
-          print(pedidoInsertado);
 
           for (int i = 0; i < cantidadPedidos[x]['productos'].length; i++) {
             ProductoServer productoServer = new ProductoServer();
@@ -395,7 +392,7 @@ class OrdenesApi {
         return [];
       }
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       /*utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);*/
       return [];
@@ -414,7 +411,6 @@ class OrdenesApi {
         'id_pedido': idPedido,
       });
 
-      print('Response status: ${response.body}');
       final decodedData = json.decode(response.body);
 
       if (decodedData['result']['code'] == 1) {
@@ -466,7 +462,7 @@ class OrdenesApi {
         return linkcito;
       }
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);
       String link = "";
@@ -498,7 +494,7 @@ class OrdenesApi {
         return 2;
       }
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return 2;
@@ -521,7 +517,7 @@ class OrdenesApi {
         'pedido_vuelto_pago': vuelto,
       });
 
-      print('Response status: ${response.body}');
+
       final decodedData = json.decode(response.body);
 
       if (decodedData['success'] == 1) {
@@ -530,7 +526,7 @@ class OrdenesApi {
         return 2;
       }
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);
 

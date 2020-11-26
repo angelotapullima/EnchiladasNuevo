@@ -34,7 +34,7 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
   @override
   Widget build(BuildContext context) {
     final id = ModalRoute.of(context).settings.arguments;
-    print('id pedido timeline $id');
+    
     final pedidoBloc = ProviderBloc.pedido(context);
     pedidoBloc.obtenerPedidoPorId(id);
 
@@ -42,10 +42,10 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
 
     timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
       if (banderaTimer) {
-        print('timeline true ');
+        
         pedidoBloc.obtenerPedidoPorId(id);
       } else {
-        print('timeline false ');
+        
         timer.cancel();
       }
     });

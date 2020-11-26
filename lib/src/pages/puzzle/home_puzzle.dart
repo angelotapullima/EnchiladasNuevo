@@ -158,7 +158,7 @@ class HomePuzzle extends StatelessWidget {
             curve: Curves.ease,
             duration: const Duration(milliseconds: 100),
           );
-          print(_scrollController.toString());
+          
         },
       ),
       items: imageSliders,

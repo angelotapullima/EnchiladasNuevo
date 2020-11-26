@@ -78,6 +78,7 @@ class DatabaseProvider {
           'producto_unidad VARCHAR,'
           'producto_estado VARCHAR,'
           'producto_descripcion VARCHAR,'
+          'producto_comentario VARCHAR,'
           'producto_favorito int'
           ')');
 

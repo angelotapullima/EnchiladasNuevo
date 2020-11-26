@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:animate_do/animate_do.dart';
@@ -111,7 +110,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                             EdgeInsets.symmetric(horizontal: responsive.wp(40)),
                         key: _three,
                         description:
-                            'puedes presionar o deslizar hacia arriba para ver más detalles y hacer tu pedido',
+                            'Puedes presionar o deslizar hacia arriba para ver más detalles y hacer tu pedido',
                         child: TranslateAnimation(
                           duration: const Duration(milliseconds: 600),
                           child: _carritoProductos(responsive, sc),
@@ -153,7 +152,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
         children: <Widget>[
           Showcase(
             key: _one,
-            description: 'presione para agregar añadir a favoritos',
+            description: 'Presione para agregar añadir a favoritos',
             child: Container(
               width: responsive.wp(20),
               decoration: BoxDecoration(
@@ -171,7 +170,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                           });
                         },
                         icon: Icon(
-                          FontAwesomeIcons.solidHeart, 
+                          FontAwesomeIcons.solidHeart,
                           color: Colors.red,
                           size: responsive.ip(2.5),
                         ),
@@ -202,7 +201,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                   if (snapshot.data.valor) {
                     return Showcase(
                       key: _two,
-                      description: 'presione para agregar producto al carrito',
+                      description: 'Presione para agregar producto al carrito',
                       child: GestureDetector(
                         child: Container(
                           width: responsive.wp(65),
@@ -353,6 +352,16 @@ class _DetalleProducto extends State<DetalleProductitos> {
                       fontSize: responsive.ip(2),
                     ),
                   ),
+                  SizedBox(
+                    height: responsive.hp(1.5),
+                  ), 
+                  ('${productosData.productoComentario}' != 'null')?Text(
+                    '${productosData.productoComentario}',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: responsive.ip(2),
+                    ),
+                  ):Container(),
                   SizedBox(
                     height: responsive.hp(1.5),
                   ),
@@ -636,8 +645,8 @@ class _DetalleProducto extends State<DetalleProductitos> {
                               image: AssetImage('assets/jar-loading.gif'),
                               fit: BoxFit.cover),
                           errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                              image: AssetImage('assets/carga_fallida.jpg'),
+                              fit: BoxFit.cover),
                           imageUrl: '${carrito.productoFoto}',
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
@@ -700,7 +709,9 @@ class _DetalleProducto extends State<DetalleProductitos> {
                     )
                   ],
                 ),
-                SizedBox(height: responsive.hp(1),),
+                SizedBox(
+                  height: responsive.hp(1),
+                ),
                 GestureDetector(
                   child: Row(
                     children: <Widget>[
@@ -708,7 +719,11 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         Icons.mode_edit,
                         color: Colors.red,
                       ),
-                      Expanded(child: Text('$observacionProducto',style: TextStyle(fontSize: responsive.ip(2)),))
+                      Expanded(
+                          child: Text(
+                        '$observacionProducto',
+                        style: TextStyle(fontSize: responsive.ip(2)),
+                      ))
                     ],
                   ),
                   onTap: () {
@@ -826,7 +841,6 @@ class _DetalleProducto extends State<DetalleProductitos> {
                 width: double.infinity,
                 height: responsive.hp(5),
                 child: RaisedButton(
-                  
                     color: (preferences.rol == '5') ? Colors.red : Colors.grey,
                     textColor: Colors.white,
                     child: Text(
@@ -846,8 +860,8 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         }
                         /* utils.showToast(
                             'No tiene permisos', 2, ToastGravity.TOP); */
-                      }else{
-                       utils.showToast(
+                      } else {
+                        utils.showToast(
                             'No tiene permisos', 2, ToastGravity.TOP);
                       }
                     }),
@@ -900,9 +914,11 @@ class _DetalleProducto extends State<DetalleProductitos> {
 
   Widget _crearAppbar(Responsive responsive) {
     return Container(
-      height: kToolbarHeight+30,
+      height: kToolbarHeight + 30,
       child: AppBar(
-        leading: BackButton(color: Colors.white,),
+        leading: BackButton(
+          color: Colors.white,
+        ),
         backgroundColor: Colors.transparent,
       ),
     );
@@ -916,15 +932,14 @@ class _DetalleProducto extends State<DetalleProductitos> {
       onTap: () {
         Navigator.pushNamed(context, 'detalleProductoFoto', arguments: carrito);
       },
-       onVerticalDragUpdate: (algo){
+      onVerticalDragUpdate: (algo) {
+        print(algo.primaryDelta);
 
-                      print(algo.primaryDelta);
-
-                      if(algo.primaryDelta > 7){
-                        print('atras');
-                        Navigator.pop(context);
-                      }
-                    },
+        if (algo.primaryDelta > 7) {
+          print('atras');
+          Navigator.pop(context);
+        }
+      },
       child: Container(
         width: double.infinity,
         height: size.height * 0.50,

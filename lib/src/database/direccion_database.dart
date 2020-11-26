@@ -34,7 +34,7 @@ class DireccionDatabase{
   deleteDireccionPorId(String id)async{
       final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM Direccion where id_direccion = '$id");
+    final res = await db.rawDelete("DELETE FROM Direccion where id_direccion = '$id'");
 
     return res;
   }
@@ -68,7 +68,7 @@ class DireccionDatabase{
   }
 
 
-
+ 
   Future<List<Direccion>> obtenerDireccionesConZonas() async {
     final db = await dbprovider.database;
     final res = await db.rawQuery("SELECT * FROM Direccion d inner join Zona z on d.id_zona=z.id_zona where seleccionado = 1");

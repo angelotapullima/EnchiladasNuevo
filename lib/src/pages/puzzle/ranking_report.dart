@@ -51,7 +51,7 @@ class _RankingReportState extends State<RankingReport> {
 
     var horafotmat = fechaBusqueda.toString().split(' ');
     var horaformat1 = horafotmat[0];
-    print('este es  : $horaformat1');
+    
     puzzleBloc.obtenerTiempos(horaformat1);
 
     Future.delayed(Duration(milliseconds: 1), () {
@@ -109,7 +109,7 @@ class _RankingReportState extends State<RankingReport> {
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(8)),
             onDateSelected: (date) {
-              print(date.weekday);
+              
 
               setState(() {
                 fechaBusqueda = date.toString();

@@ -82,11 +82,10 @@ class _DetallePagoState extends State<DetallePago> {
       switch (_tipoPagoValue) {
         case 0:
           //tipoPagoController.text="";
-          
+
           //_result = ...
           break;
         case 1:
-        
           _modalCambiarMetodoPago(context, responsive, precio);
           break;
       }
@@ -318,7 +317,7 @@ class _DetallePagoState extends State<DetallePago> {
     final carritoCompletoBloc = ProviderBloc.carritoCompleto(context);
     carritoCompletoBloc.obtenerCarritoCpmpleto();
 
-    return StreamBuilder( 
+    return StreamBuilder(
       stream: carritoCompletoBloc.carritoCompletoStream,
       builder: (BuildContext context,
           AsyncSnapshot<List<CarritoCompleto>> snapshot) {
@@ -648,7 +647,7 @@ class _DetallePagoState extends State<DetallePago> {
         (ruc != "")
             ? Column(
                 children: <Widget>[
-                 Row(
+                  Row(
                     children: <Widget>[
                       Text(
                         'Ruc : ',
@@ -1161,7 +1160,9 @@ class _DetallePagoState extends State<DetallePago> {
                           Container(
                               width: responsive.wp(75),
                               child: TextField(
-                                style: TextStyle(fontSize: responsive.ip(2)),
+                                style: TextStyle(
+                                  fontSize: responsive.ip(2),
+                                ),
                                 controller: telefonoController,
                                 maxLength: 9,
                                 keyboardType: TextInputType.number,
@@ -1264,13 +1265,12 @@ class _DetallePagoState extends State<DetallePago> {
                     onPressed: () async {
                       if (comprobanteController.text.length > 0) {
                         //Navigator.pop(context);
-                       
-                          Navigator.pop(context);
-                          //Navigator.pop(context);
-                          ruc = comprobanteController.text;
-                          
-                          setState(() {});
-                       
+
+                        Navigator.pop(context);
+                        //Navigator.pop(context);
+                        ruc = comprobanteController.text;
+
+                        setState(() {});
                       } else {
                         utils.showToast('el campo no debe estar vacio', 2,
                             ToastGravity.TOP);
@@ -1341,6 +1341,7 @@ class _DetallePagoState extends State<DetallePago> {
                 pedido.pedidoFormaPago = "3";
                 pedido.pedidoEstadoPago = "0";
                 pasoefectivo = true;
+                pasoFactura = true;
               } else if (_tipoPagoValue == 1) {
                 String vuelto2 = utils.format(vuelto);
                 pedido.pedidoMontoPago = montoPago;
@@ -1352,6 +1353,8 @@ class _DetallePagoState extends State<DetallePago> {
                 } else {
                   pasoefectivo = true;
                 }
+
+                pasoFactura = true;
               } else {
                 pedido.pedidoMontoPago = '0';
                 pedido.pedidoVueltoPago = "0";
@@ -1365,10 +1368,8 @@ class _DetallePagoState extends State<DetallePago> {
                 if (pasoFactura) {
                   showProcessingDialog();
                   final res = await pedidoApi.enviarpedido(pedido);
-                  
-                  if (res.resp == 1) {
-                    
 
+                  if (res.resp == 1) {
                     if (res.link != "") {
                       Navigator.pop(context);
                       ArgumentsDetallePago argumentsDetallePago =
@@ -1530,9 +1531,10 @@ class _DetallePagoState extends State<DetallePago> {
         Text(
           '$zonacitos',
           style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: responsive.ip(2),),
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: responsive.ip(2),
+          ),
         ),
         SizedBox(
           height: responsive.hp(1),

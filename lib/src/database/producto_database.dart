@@ -11,10 +11,10 @@ class ProductoDatabase{
      
     final res = await db.rawInsert(
         'INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_precio,'
-        'producto_unidad,producto_estado,producto_descripcion,producto_favorito) '
+        'producto_unidad,producto_estado,producto_descripcion,producto_comentario,producto_favorito) '
         'VALUES ( "${productos.idProducto}" , "${productos.idCategoria}" , "${productos.productoNombre}" ,'
         ' "${productos.productoFoto}" , "${productos.productoPrecio}" , "${productos.productoUnidad}" ,'
-        ' "${productos.productoEstado}","${productos.productoDescripcion}", ${productos.productoFavorito} )');
+        ' "${productos.productoEstado}","${productos.productoDescripcion}", "${productos.productoComentario}",${productos.productoFavorito} )');
     return res;
   } 
 
@@ -29,7 +29,8 @@ class ProductoDatabase{
     'producto_unidad="${productos.productoUnidad}", '
     'producto_estado="${productos.productoEstado}", '
     'producto_favorito="${productos.productoFavorito}", '
-    'producto_descripcion="${productos.productoDescripcion}" '
+    'producto_descripcion="${productos.productoDescripcion}", '
+    'producto_comentario="${productos.productoComentario}" '
     'WHERE id_producto = "${productos.idProducto}"'
     );
 
@@ -52,7 +53,8 @@ class ProductoDatabase{
     Future<List<ProductosData>> consultarPorQuery(String query) async {
       final db = await dbprovider.database;
       final res =
-          await db.rawQuery("SELECT * FROM Producto WHERE producto_nombre LIKE '$query%' and producto_estado='1' ");
+          await db.rawQuery("SELECT * FROM Producto p inner join Categorias c on c.id_categoria=p.id_categoria "
+          "WHERE p.producto_nombre LIKE '%$query%' and p.producto_estado='1' and c.categoria_mostrar_app='1'");
 
       List<ProductosData> list = res.isNotEmpty
           ? res.map((c) => ProductosData.fromJson(c)).toList()

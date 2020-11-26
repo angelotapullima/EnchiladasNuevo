@@ -92,7 +92,6 @@ class _DetallePedidoState extends State<DetallePedido> {
         estadoPago == '0' &&
         pedido[0].pedidoLink != '' &&
         pedido[0].pedidoLink != null) {
-      print('link de : ${pedido[0].pedidoLink}');
       completarPago = true;
     }
 
@@ -352,7 +351,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                                       .reintentarPedido(
                                                           '${pedido[0].idPedido}');
                                                   if (res.resp == 1) {
-                                                    print(res.link);
+                                                    
 
                                                     if (res.link != "") {
                                                       Navigator.pop(context);
@@ -736,7 +735,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                       } else {
                                         //PAgo con tarketa Pos
                                       }
-                                      print(controllerMonto.text);
+                                      
                                     },
                                     child: Container(
                                       padding: EdgeInsets.symmetric(

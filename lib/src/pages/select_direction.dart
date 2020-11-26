@@ -152,7 +152,7 @@ class _MapsSampleState extends State<MapsSample> {
     direccion = "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare}";
 
     direccionController.text = direccion;
-    print(direccion);
+    
     latitude = latGeo;
     longitude = lonGeo;
     setState(() {});
@@ -395,7 +395,7 @@ class _MapsSampleState extends State<MapsSample> {
                               utils.showToast('Por favor ingrese una dirección',
                                   2, ToastGravity.TOP);
                             } else {
-                              print( 'direcciones ${direccionController.text}' );
+                              
                               if (referenciaController.text == '') {
                                 utils.showToast(
                                     'Por favor ingrese una referencia',
@@ -441,7 +441,7 @@ class _MapsSampleState extends State<MapsSample> {
                                 utils.showToast('Por favor ingrese una dirección',
                                     2, ToastGravity.TOP);
                               } else {
-                                print( 'direcciones ${direccionController.text}' );
+                                
                                 if (referenciaController.text == '') {
                                   utils.showToast(
                                       'Por favor ingrese una referencia',
@@ -491,7 +491,7 @@ class _MapsSampleState extends State<MapsSample> {
         idDistrito = list[i].idZona;
       }
     }
-    print(idDistrito);
+    
   }
 
   void modalIngresarReferencia() {

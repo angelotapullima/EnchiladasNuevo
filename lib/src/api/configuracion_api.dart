@@ -38,6 +38,8 @@ class ConfiguracionApi {
             productosData.productoUnidad = decodedData['result']['data']['bolsa'][z]['producto_unidad'];
             productosData.productoEstado = decodedData['result']['data']['bolsa'][z]['producto_estado'];
             productosData.productoFavorito = 0;
+            productosData.productoComentario = '';
+
 
             productoDatabase.insertarProductosDb(productosData);
 
@@ -123,7 +125,7 @@ class ConfiguracionApi {
         return false;
       }
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return false;

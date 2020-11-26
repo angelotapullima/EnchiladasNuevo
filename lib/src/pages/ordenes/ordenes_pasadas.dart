@@ -112,7 +112,7 @@ class OrdenesPasadas extends StatelessWidget {
       estadoItem = 'Entregado';
     } else if (data.pedidoEstado == '5') {
       colores = Colors.red;
-      estadoItem = 'cancelado';
+      estadoItem = 'Cancelado';
     } else if (data.pedidoEstado == '0') {
       if (data.pedidoEstadoPago == '1') {
         colores = Colors.green;

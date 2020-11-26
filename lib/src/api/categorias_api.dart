@@ -101,11 +101,13 @@ class CategoriasApi {
             productosData.productoPrecio = productos[x]['producto_precio'];
             productosData.productoUnidad = productos[x]['producto_unidad'];
             productosData.productoEstado = productos[x]['producto_estado'];
-            productosData.productoDescripcion =
-                productos[x]['producto_detalle'];
+            productosData.productoDescripcion = productos[x]['producto_detalle'];
+            productosData.productoComentario = decodedData['result']['data'][i]['categoria_comentario'];
+
 
             if (datoproducto.length > 0) {
               productosData.productoFavorito = datoproducto[0].productoFavorito;
+              productosData.productoComentario = datoproducto[0].productoComentario;
               productoDatabase.updateProductosDb(productosData);
               //print('actualizado producto ${productosData.idProducto}  ');
             } else {
@@ -121,7 +123,7 @@ class CategoriasApi {
 
       return true;
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
 
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);

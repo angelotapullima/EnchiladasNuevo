@@ -24,6 +24,7 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoUnidad = productosData.productoUnidad;
   productos.productoEstado = productosData.productoEstado;
   productos.productoDescripcion = productosData.productoDescripcion; 
+  productos.productoComentario = productosData.productoComentario; 
   productos.productoFavorito = 1;
 
   await productoDatabase.updateProductosDb(productos);
@@ -227,6 +228,7 @@ void deleteDireccion(BuildContext context, idDireccion) async {
 
   await direccionDatabase.deleteDireccionPorId(idDireccion);
   direccionBloc.obtenerDireccionesConZonas();
+  direccionBloc.obtenerDirecciones();
 }
 
 void agregarTelefono(BuildContext context, String telefono) async {

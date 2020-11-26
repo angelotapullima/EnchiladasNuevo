@@ -54,6 +54,7 @@ class ProductosData {
         this.productoUnidad,
         this.productoEstado,
         this.productoDescripcion,
+        this.productoComentario,
         this.productoFavorito,
     });
 
@@ -65,6 +66,7 @@ class ProductosData {
     String productoUnidad;
     String productoEstado;
     String productoDescripcion;
+    String productoComentario;
     int productoFavorito; 
 
     factory ProductosData.fromJson(Map<String, dynamic> json) => ProductosData(
@@ -76,6 +78,7 @@ class ProductosData {
         productoUnidad: json["producto_unidad"],
         productoEstado: json["producto_estado"],
         productoDescripcion: json["producto_descripcion"],
+        productoComentario: json["producto_comentario"],
         productoFavorito: json["producto_favorito"],
     );
 

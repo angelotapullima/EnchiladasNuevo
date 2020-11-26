@@ -45,10 +45,10 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                   child: GestureDetector(
                     onVerticalDragUpdate: (algo){
 
-                      print(algo.primaryDelta);
+
 
                       if(algo.primaryDelta > 7){
-                        print('atras');
+                        
                         Navigator.pop(context);
                       }
                     },

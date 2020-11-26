@@ -205,11 +205,11 @@ class _DesicionPageState extends State<DesicionPage> {
                 vertical: responsive.hp(2),
               ),
               description:
-                  'Aquí podrás ver toda la información  de La Casa de las Enchiladas',
+                  'Aquí podrás ver toda la información de La Casa de las Enchiladas',
               child: GestureDetector(
                 child: Container(
                   width: double.infinity,
-                  margin: EdgeInsets.only(left: responsive.wp(1.5)),
+                  margin: EdgeInsets.only(left: responsive.wp(1.5),),
                   height: responsive.hp(23),
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
