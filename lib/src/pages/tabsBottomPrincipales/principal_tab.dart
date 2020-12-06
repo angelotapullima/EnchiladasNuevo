@@ -332,32 +332,32 @@ class PrincipalTab extends StatelessWidget {
       PantallaModel pantallaModel) {
     double altoList = 35.0;
     double altoCard = 30.0;
-    double anchoCard = 70.0;
+    double anchoCard = 35.0;
     BoxFit boxfit;
     String tipo;
     if (pantallaModel.idPantalla == '2') {
       //market
       altoList = 28.0;
       altoCard = 23.0;
-      anchoCard = 45;
+      anchoCard = 25;
 
-      boxfit = BoxFit.fill;
+      boxfit = BoxFit.cover;
 
       tipo = 'categoria';
     } else if (pantallaModel.idPantalla == '1') {
       //carta Principal
       altoList = 20.0;
       altoCard = 15.0;
-      anchoCard = 35;
+      anchoCard = 18;
 
       tipo = 'categoria';
 
       boxfit = BoxFit.fill;
     } else if (pantallaModel.idPantalla == '3') {
       //puzzle
-      altoList = 28.0;
-      altoCard = 23.0;
-      anchoCard = 40;
+      altoList = 31.0;
+      altoCard = 26.0;
+      anchoCard = 20;
 
       boxfit = BoxFit.fill;
 
@@ -370,7 +370,7 @@ class PrincipalTab extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: responsive.hp(1)),
       width: double.infinity,
-      height: responsive.hp(altoList),
+      height: responsive.ip(altoList),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -438,7 +438,7 @@ class PrincipalTab extends StatelessWidget {
             height: responsive.hp(1),
           ),
           Container(
-            height: responsive.hp(altoCard),
+            height: responsive.ip(altoCard),
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: pantallaModel.items.length,
@@ -462,8 +462,8 @@ class PrincipalTab extends StatelessWidget {
                         }
                       },
                       child: Container(
-                        width: responsive.wp(anchoCard),
-                        height: responsive.hp(altoCard),
+                        width: responsive.ip(anchoCard),
+                        height: responsive.ip(altoCard),
                         padding: EdgeInsets.only(
                           left: responsive.wp(3),
                         ),
@@ -473,8 +473,8 @@ class PrincipalTab extends StatelessWidget {
                         child: Stack(
                           children: <Widget>[
                             Container(
-                              width: responsive.wp(anchoCard),
-                              height: responsive.hp(altoCard),
+                              width: responsive.ip(anchoCard),
+                              height: responsive.ip(altoCard),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: CachedNetworkImage(
@@ -560,8 +560,8 @@ class PrincipalTab extends StatelessWidget {
                       }
                     },
                     child: Container(
-                      width: responsive.wp(anchoCard),
-                      height: responsive.hp(altoCard),
+                      width: responsive.ip(anchoCard),
+                      height: responsive.ip(altoCard),
                       padding: EdgeInsets.only(
                         left: responsive.wp(3),
                       ),
@@ -571,8 +571,8 @@ class PrincipalTab extends StatelessWidget {
                       child: Stack(
                         children: <Widget>[
                           Container(
-                            width: responsive.wp(anchoCard),
-                            height: responsive.hp(altoCard),
+                            width: responsive.ip(anchoCard),
+                            height: responsive.ip(altoCard),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(

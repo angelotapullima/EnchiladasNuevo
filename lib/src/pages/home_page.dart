@@ -130,11 +130,11 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               cantidad.toString(),
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 8),
+                                  TextStyle(color: Colors.white, fontSize: responsive.ip(1)),
                             ),
                             alignment: Alignment.center,
-                            width: 13,
-                            height: 13,
+                            width: responsive.ip(1.6),
+                            height: responsive.ip(1.6),
                             decoration: BoxDecoration(
                                 color: Colors.green, shape: BoxShape.circle),
                           ),

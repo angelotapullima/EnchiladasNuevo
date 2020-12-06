@@ -19,6 +19,7 @@ class _RankingReportState extends State<RankingReport> {
   DateTime firstDate;
   DateTime lastDate;
   String fechaBusqueda;
+  int cant = 0;
   //String diaDeLaSemana;
   String dateFormat = 'dd';
   String monthFormat = 'MMM';
@@ -55,11 +56,15 @@ class _RankingReportState extends State<RankingReport> {
     puzzleBloc.obtenerTiempos(horaformat1);
 
     Future.delayed(Duration(milliseconds: 1), () {
-      _scrollController.animateTo(
+
+      if(cant==0){
+ _scrollController.animateTo(
         responsive.wp(13.5) * 15,
         curve: Curves.ease,
         duration: const Duration(milliseconds: 100),
       );
+      }
+     
     });
 
     return Scaffold(
@@ -113,6 +118,7 @@ class _RankingReportState extends State<RankingReport> {
 
               setState(() {
                 fechaBusqueda = date.toString();
+                cant++;
                 //diaDeLaSemana = date.weekday.toString();
                 //canchasBloc.obtenerReservasPorIDCancha(canchas.canchaId,canchas.idEmpresa,fechaBusqueda);
               });

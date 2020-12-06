@@ -276,8 +276,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                   Row(
                     children: <Widget>[
                       Container(
-                        width: responsive.wp(35),
-                        height: responsive.hp(12),
+                        width: responsive.ip(20),
+                        height: responsive.ip(15),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: CachedNetworkImage(
@@ -341,6 +341,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                                     context, carrito.idProducto);
                               },
                             ),
+                            SizedBox(height: responsive.hp(2),),
                             Container(
                               child: CantidadTab(
                                   carrito: carrito, llamada: this.llamado),
@@ -362,6 +363,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         Icon(
                           Icons.mode_edit,
                           color: Colors.red,
+                          size: responsive.ip(3),
                         ),
                         Expanded(
                           child: Text(
@@ -814,6 +816,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       child: Container(
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
         width: double.infinity,
+        height: responsive.hp(5),
         child: RaisedButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),

@@ -85,7 +85,10 @@ class CategoriasPage extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+            padding: EdgeInsets.symmetric(
+              horizontal: responsive.wp(2),
+              vertical: responsive.hp(1),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -220,11 +223,15 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
-                            SvgPicture(
-                                AdvancedNetworkSvg('${categoria.categoriaIcono}',
-                                    SvgPicture.svgByteDecoder,
-                                    useDiskCache: true),
-                              
+                            Container(
+                              height: responsive.ip(6),
+                              width: responsive.ip(6),
+                              child: SvgPicture(
+                                  AdvancedNetworkSvg(
+                                      '${categoria.categoriaIcono}',
+                                      SvgPicture.svgByteDecoder,
+                                      useDiskCache: true),
+                                  fit: BoxFit.cover),
                             ),
                             SizedBox(
                               height: responsive.hp(1),
@@ -327,27 +334,77 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
             Hero(
               tag: '${productosData.idProducto}',
               child: Container(
-                width: responsive.wp(30),
-                height: responsive.hp(13),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    cacheManager: CustomCacheManager(),
-                    placeholder: (context, url) => Image(
-                        image: AssetImage('assets/jar-loading.gif'),
-                        fit: BoxFit.cover),
-                    errorWidget: (context, url, error) => Image(
-                        image: AssetImage('assets/carga_fallida.jpg'),
-                        fit: BoxFit.cover),
-                    imageUrl: '${productosData.productoFoto}',
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.fill,
-                      )),
+                width: responsive.ip(15),
+                height: responsive.ip(12),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        cacheManager: CustomCacheManager(),
+                        placeholder: (context, url) => Image(
+                            image: AssetImage('assets/jar-loading.gif'),
+                            fit: BoxFit.cover),
+                        errorWidget: (context, url, error) => Image(
+                            image: AssetImage('assets/carga_fallida.jpg'),
+                            fit: BoxFit.cover),
+                        imageUrl: '${productosData.productoFoto}',
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.fill,
+                          )),
+                        ),
+                      ),
                     ),
-                  ),
+                    Positioned(
+                        right: responsive.wp(1),
+                        top: responsive.hp(.5),
+                        child: (productosData.productoFavorito == 1)
+                            ? Container(
+                                height: responsive.ip(4),
+                                width: responsive.ip(4),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.red.withOpacity(.3),
+                                ),
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        utils.quitarFavoritos(
+                                            context, productosData);
+                                      });
+                                    },
+                                    child: Icon(FontAwesomeIcons.solidHeart,
+                                        color: Colors.red,
+                                        size: responsive.ip(3)),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: responsive.ip(4),
+                                width: responsive.ip(4),
+                                 decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.red.withOpacity(.3),
+                                ),
+                                child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        utils.agregarFavoritos(
+                                            context, productosData);
+                                      });
+                                    },
+                                    child: Icon(FontAwesomeIcons.heart,
+                                        color: Colors.white,
+                                        size: responsive.ip(3)),
+                                  ),
+                                ),
+                              )),
+                  ],
                 ),
               ),
             ),
@@ -378,33 +435,6 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                   ),
                 ],
               ),
-            ),
-            Column(
-              children: <Widget>[
-                (productosData.productoFavorito == 1)
-                    ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            utils.quitarFavoritos(context, productosData);
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.solidHeart,
-                          color: Colors.red,
-                        ),
-                      )
-                    : IconButton(
-                        onPressed: () {
-                          setState(() {
-                            utils.agregarFavoritos(context, productosData);
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.heart,
-                          color: Colors.red,
-                        ),
-                      )
-              ],
             ),
           ],
         ),

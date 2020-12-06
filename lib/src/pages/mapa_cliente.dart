@@ -59,7 +59,7 @@ class _MapaClienteState extends State<MapaCliente> {
   String idRepartidor = '--';
   String imagenRepartidor;
   @override
-  void initState() { 
+  void initState() {
     setSourceAndDestinationIcons();
     _obtenerUbicacion();
     currentPosition = CameraPosition(
@@ -77,7 +77,7 @@ class _MapaClienteState extends State<MapaCliente> {
       }
     });
     super.initState();
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -246,19 +246,18 @@ class _MapaClienteState extends State<MapaCliente> {
             ),
           ),
           Positioned(
-              top: responsive.hp(2),
-              left: responsive.wp(3),
-              child: GestureDetector(
-                child: CircleContainer(
-                  radius: responsive.ip(2.5),
-                  color: Colors.grey[200],
-                  widget: Icon(Icons.arrow_back, color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+            top: responsive.hp(2),
+            left: responsive.wp(3),
+            child: GestureDetector(
+              child: CircleContainer(
+                radius: responsive.ip(2.5),
+                color: Colors.grey[200],
+                widget: Icon(Icons.arrow_back, color: Colors.black),
               ),
-            
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ],
       ),
@@ -296,33 +295,29 @@ class _MapaClienteState extends State<MapaCliente> {
     }
   }
 
-  void showPinsOnMap(LatLng repartidor,String dato) {
+  void showPinsOnMap(LatLng repartidor, String dato) {
     // get a LatLng for the source location
     // from the LocationData currentLocation object
-      var pinPosition = LatLng(repartidor.latitude, repartidor.longitude);
-      // get a LatLng out of the LocationData object
-      //var destPosition = LatLng(destino.latitude, destino.longitude);
+    var pinPosition = LatLng(repartidor.latitude, repartidor.longitude);
+    // get a LatLng out of the LocationData object
+    //var destPosition = LatLng(destino.latitude, destino.longitude);
 
-      var icon;
+    var icon;
 
-      if(dato=='repartidor'){
-        icon = sourceIcon;
-      }else{
-        icon=destinationIcon;
-      }
+    if (dato == 'repartidor') {
+      icon = sourceIcon;
+    } else {
+      icon = destinationIcon;
+    }
     final MarkerId markerId = MarkerId(dato);
-      // add the initial source location pin
-      final Marker mark = Marker(
-          markerId: markerId,
-          position: pinPosition,
-          icon: icon);
-          setState(() {
-            
+    // add the initial source location pin
+    final Marker mark =
+        Marker(markerId: markerId, position: pinPosition, icon: icon);
+    setState(() {
       _markers[markerId] = mark;
-          });
+    });
 
-
-      /* _markers.add(Marker(
+    /* _markers.add(Marker(
           markerId: MarkerId('sourcePin'),
           position: pinPosition,
           icon: sourceIcon));
@@ -331,15 +326,14 @@ class _MapaClienteState extends State<MapaCliente> {
           markerId: MarkerId('destPin'),
           position: destPosition,
           icon: destinationIcon)); */
-    
 
     // set the route lines on the map from source to destination
     // for more info follow this tutorial
     //setPolylines();
   }
 
-var pinPosition;
-  void updatePinOnMap(double latitud, double longitud,double rotation) async {
+  var pinPosition;
+  void updatePinOnMap(double latitud, double longitud, double rotation) async {
     // create a new CameraPosition instance
     // every time the location changes, so the camera
     // follows the pin as it moves with an animation
@@ -354,39 +348,25 @@ var pinPosition;
     // do this inside the setState() so Flutter gets notified
     // that a widget update is due
     //setState(() {
-      // updated position
-       pinPosition = LatLng(latitud, longitud);
+    // updated position
+    pinPosition = LatLng(latitud, longitud);
 
+    // the trick is to remove the marker (by id)
+    // and add it again at the updated location
+    final MarkerId markerId = MarkerId('repartidor');
+    final Marker markcito = _markers[markerId];
 
+    _markers[markerId] =
+        markcito.copyWith(positionParam: pinPosition, rotationParam: rotation);
 
-
-      // the trick is to remove the marker (by id)
-      // and add it again at the updated location
-     final MarkerId markerId = MarkerId('repartidor');
-      final Marker markcito = _markers[markerId];
-
-
-      
-
-      _markers[markerId]=markcito.copyWith(
-        positionParam: pinPosition,rotationParam: rotation
-      );
-
-
-      
-
-
-
-   // });
+    // });
   }
 
   LatLng destino, repartidor;
   void trackingRepartidor(String idPedido) async {
-
     final trackingApi = TrackingApi();
     final list = await trackingApi.trackingRepartidor(idPedido);
     if (list.length > 0) {
-
       if (list[0].pedidoEstado == '3') {
         if (count == 1) {
           nombreRepartidor = list[0].personName;
@@ -401,15 +381,12 @@ var pinPosition;
               double.parse(list[0].pedidoX), double.parse(list[0].pedidoY));
 
           pinPosition = repartidor;
-          for(int i = 0;i<2;i++){
-            if(i==0){
-
-          showPinsOnMap(repartidor,'repartidor');
-            }else{
-
-          showPinsOnMap( destino,'destino');
+          for (int i = 0; i < 2; i++) {
+            if (i == 0) {
+              showPinsOnMap(repartidor, 'repartidor');
+            } else {
+              showPinsOnMap(destino, 'destino');
             }
-
           }
           count++;
           setState(() {});
@@ -425,10 +402,9 @@ var pinPosition;
           repartidor = LatLng(
               double.parse(list[0].trackingX), double.parse(list[0].trackingY));
 
-
           final rota = _getMyBearing(pinPosition, repartidor);
-          updatePinOnMap(
-              double.parse(list[0].trackingX), double.parse(list[0].trackingY),rota);
+          updatePinOnMap(double.parse(list[0].trackingX),
+              double.parse(list[0].trackingY), rota);
           var distance = GeoUtils.distanceInKmBetweenEarthCoordinates(
               repartidor.latitude,
               repartidor.longitude,
@@ -458,13 +434,15 @@ var pinPosition;
     }
   }
 
-  double _getMyBearing(LatLng lastPosition , LatLng currentPosition){
-    final dx =math.cos(math.pi/180 * lastPosition.latitude)*(currentPosition.longitude - lastPosition.longitude);
+  double _getMyBearing(LatLng lastPosition, LatLng currentPosition) {
+    final dx = math.cos(math.pi / 180 * lastPosition.latitude) *
+        (currentPosition.longitude - lastPosition.longitude);
     final dy = currentPosition.latitude - lastPosition.latitude;
 
-    final angle = math.atan2(dy,dx);
-    return 90-angle*180/math.pi;
+    final angle = math.atan2(dy, dx);
+    return 90 - angle * 180 / math.pi;
   }
+
   void _pedidoYaFue(BuildContext context) {
     showDialog(
         context: context,
@@ -472,15 +450,17 @@ var pinPosition;
         builder: (contextd) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
+              borderRadius: BorderRadius.circular(20.0),
+            ),
             title: Text('El repartidor ya llego a su destino'),
             actions: <Widget>[
               FlatButton(
-                  onPressed: () async {
-                    Navigator.pop(context,true);
-                    Navigator.pop(context);
-                  },
-                  child: Text('Continuar')),
+                onPressed: () async {
+                  Navigator.pop(context, true);
+                  Navigator.pop(context);
+                },
+                child: Text('Continuar'),
+              ),
             ],
           );
         });

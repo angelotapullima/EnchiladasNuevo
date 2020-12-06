@@ -117,19 +117,19 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         ),
                       );
                     },
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20),
                     ),
                     //onPanelSlide: (double pos) => setState(() {}),
                   );
                 } else {
-                  return Center(
+                  return const Center(
                     child: CupertinoActivityIndicator(),
                   );
                 }
               } else {
-                return Center(
+                return const Center(
                   child: CupertinoActivityIndicator(),
                 );
               }
@@ -354,14 +354,16 @@ class _DetalleProducto extends State<DetalleProductitos> {
                   ),
                   SizedBox(
                     height: responsive.hp(1.5),
-                  ), 
-                  ('${productosData.productoComentario}' != 'null')?Text(
-                    '${productosData.productoComentario}',
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: responsive.ip(2),
-                    ),
-                  ):Container(),
+                  ),
+                  ('${productosData.productoComentario}' != 'null')
+                      ? Text(
+                          '${productosData.productoComentario}',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontSize: responsive.ip(2),
+                          ),
+                        )
+                      : Container(),
                   SizedBox(
                     height: responsive.hp(1.5),
                   ),
@@ -449,7 +451,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
         horizontal: responsive.wp(5),
         vertical: responsive.hp(1),
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius: BorderRadiusDirectional.only(
             topEnd: Radius.circular(20),
             topStart: Radius.circular(20),
@@ -586,7 +588,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        physics: ScrollPhysics(),
+        physics: const ScrollPhysics(),
         itemCount: carrito.length + 1,
         itemBuilder: (context, i) {
           if (i == 0) {
@@ -715,15 +717,25 @@ class _DetalleProducto extends State<DetalleProductitos> {
                 GestureDetector(
                   child: Row(
                     children: <Widget>[
+                      SizedBox(
+                        width: responsive.wp(1),
+                      ),
                       Icon(
                         Icons.mode_edit,
                         color: Colors.red,
+                        size: responsive.ip(2),
+                      ),
+                      SizedBox(
+                        width: responsive.wp(1),
                       ),
                       Expanded(
-                          child: Text(
-                        '$observacionProducto',
-                        style: TextStyle(fontSize: responsive.ip(2)),
-                      ))
+                        child: Text(
+                          '$observacionProducto',
+                          style: TextStyle(
+                            fontSize: responsive.ip(2),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                   onTap: () {
@@ -949,7 +961,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
             child: CachedNetworkImage(
               cacheManager: CustomCacheManager(),
               placeholder: (context, url) => Image(
-                  image: AssetImage('assets/jar-loading.gif'),
+                  image: const AssetImage('assets/jar-loading.gif'),
                   fit: BoxFit.cover),
               errorWidget: (context, url, error) => Image(
                   image: AssetImage('assets/carga_fallida.jpg'),

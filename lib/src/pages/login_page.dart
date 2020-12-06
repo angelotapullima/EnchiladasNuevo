@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: responsive.ip(1.2),
                           ),
                           Text(
-                            'Acceder con Apple',
+                            'Continuar con Apple',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.black,

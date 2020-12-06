@@ -13,10 +13,7 @@ class DetalleProductoFoto extends StatefulWidget {
 }
 
 class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
-
-
   final _toque = ValueNotifier<bool>(false);
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,133 +28,93 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
         backgroundColor: Colors.transparent,
       ),
       body: ValueListenableBuilder(
-            valueListenable: _toque,
-       builder: (BuildContext context, bool data, Widget child) {
-
-         if(data){
-           return InkWell(
-             onTap: (){
-                 _toque.value = false;
-             },
-             child: Stack(
-              children: <Widget>[
-                Center(
-                  child: GestureDetector(
-                    onVerticalDragUpdate: (algo){
-
-
-
-                      if(algo.primaryDelta > 7){
-                        
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      child: Hero(
-                        tag: '${productosData.idProducto}',
-                        child: PhotoView(
-                          imageProvider: CachedNetworkImageProvider(
-                            '${productosData.productoFoto}',
-                            cacheManager: CustomCacheManager(),
+          valueListenable: _toque,
+          builder: (BuildContext context, bool data, Widget child) {
+            return InkWell(
+              onTap: () {
+                if (data) {
+                  _toque.value = false;
+                } else {
+                  _toque.value = true;
+                }
+              },
+              child: Stack(
+                children: <Widget>[
+                  Center(
+                    child: GestureDetector(
+                      onVerticalDragUpdate: (algo) {
+                        if (algo.primaryDelta > 7) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        child: Hero(
+                          tag: '${productosData.idProducto}',
+                          child: PhotoView(
+                            imageProvider: CachedNetworkImageProvider(
+                              '${productosData.productoFoto}',
+                              cacheManager: CustomCacheManager(),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                ],
-          ),
-           );
-        
-
-         }else{
-           return InkWell(
-             onTap: (){
-               
-                      _toque.value = true;
-             },
-             child: Stack(
-              children: <Widget>[
-                Center(
-                  child: GestureDetector(
-                     onVerticalDragUpdate: (algo){
-
-                      print(algo.primaryDelta);
-
-                      if(algo.primaryDelta > 7){
-                        print('atras');
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      child: Hero(
-                        tag: '${productosData.idProducto}',
-                        child: PhotoView(
-                          imageProvider: CachedNetworkImageProvider(
-                            '${productosData.productoFoto}',
-                            cacheManager: CustomCacheManager(),
+                  (!data)
+                      ? Positioned(
+                          bottom: 0,
+                          right: 0,
+                          left: 0,
+                          child: Container(
+                            color: Colors.black.withOpacity(.6),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: responsive.wp(5)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Text(
+                                        '${productosData.productoNombre}',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: responsive.ip(3),
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: responsive.wp(4),
+                                    ),
+                                    Text(
+                                      'S/. ${productosData.productoPrecio}',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: responsive.ip(3),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: responsive.hp(2),
+                                ),
+                                Text(
+                                  '${productosData.productoDescripcion} ',
+                                  style: TextStyle(color: Colors.white ,fontSize: responsive.ip(1.8),),
+                                ),
+                                SizedBox(
+                                  height: responsive.hp(5),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
-                  child: Container(
-                    color: Colors.black.withOpacity(.6),
-                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                '${productosData.productoNombre}',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: responsive.ip(3),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(
-                              width: responsive.wp(4),
-                            ),
-                            Text(
-                              'S/. ${productosData.productoPrecio}',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: responsive.ip(3),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: responsive.hp(2),
-                        ),
-                        Text(
-                          '${productosData.productoDescripcion} ',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        SizedBox(
-                          height: responsive.hp(5),
                         )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-          ),
-           );
-        
-         }
-          }
-      ),
+                      : Container(),
+                ],
+              ),
+            );
+          }),
     );
   }
 }

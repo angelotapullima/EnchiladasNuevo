@@ -50,7 +50,7 @@ class PushNotificationProvider {
     }, onLaunch: (info) async {
       print('===== onLaunch========');
       String argumento;
-      if (Platform.isAndroid) {
+      if (Platform.isAndroid) { 
         argumento = info['data']['id_pedido'];
       } else {
         argumento = info['id_pedido'];

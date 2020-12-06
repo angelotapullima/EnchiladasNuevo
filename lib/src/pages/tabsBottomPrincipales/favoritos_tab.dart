@@ -8,6 +8,7 @@ import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FavoritosTab extends StatefulWidget {
   const FavoritosTab({Key key}) : super(key: key);
@@ -26,7 +27,6 @@ class _FavoritosTabState extends State<FavoritosTab> {
 
     setState(() {
       favoritosBloc.obtenerProductosFavoritos();
-      
     });
     return Scaffold(
       body: Stack(
@@ -50,7 +50,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
         final sinDatos = SafeArea(
             child: Column(
           children: <Widget>[
-            Padding( 
+            Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: responsive.wp(2),
                 vertical: responsive.hp(2),
@@ -89,8 +89,9 @@ class _FavoritosTabState extends State<FavoritosTab> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                            height: responsive.hp(20),
-                            child: SvgPicture.asset('assets/carrito.svg')),
+                          height: responsive.hp(20),
+                          child: SvgPicture.asset('assets/carrito.svg'),
+                        ),
                         SizedBox(
                           height: responsive.hp(3),
                         ),
@@ -101,8 +102,9 @@ class _FavoritosTabState extends State<FavoritosTab> {
                             'No hay Productos en la sección Favoritos',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: responsive.ip(2.5)),
+                              color: Colors.black,
+                              fontSize: responsive.ip(2.5),
+                            ),
                           ),
                         )
                       ],
@@ -132,7 +134,9 @@ class _FavoritosTabState extends State<FavoritosTab> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: responsive.wp(2), vertical: responsive.hp(2)),
+              horizontal: responsive.wp(2),
+              vertical: responsive.hp(2),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -201,11 +205,11 @@ class _FavoritosTabState extends State<FavoritosTab> {
                   cacheManager: CustomCacheManager(),
                   placeholder: (context, url) => Image(
                       image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
-                  imageUrl:
-                      '${productosData.productoFoto}',
+                      fit: BoxFit.cover),
+                  errorWidget: (context, url, error) => Image(
+                      image: AssetImage('assets/carga_fallida.jpg'),
+                      fit: BoxFit.cover),
+                  imageUrl: '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
@@ -225,7 +229,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
                   children: <Widget>[
                     Text(
                       productosData.productoNombre,
-                    textAlign: TextAlign.center,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -233,7 +237,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
                     ),
                     Text(
                       'S/ ${productosData.productoPrecio}',
-                    textAlign: TextAlign.center,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
@@ -257,6 +261,9 @@ class _FavoritosTabState extends State<FavoritosTab> {
                         utils.quitarFavoritos(context, productosData);
                         setState(() {});
                       }),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
                   GestureDetector(
                     child: Container(
                       padding: EdgeInsets.all(5),
@@ -266,10 +273,14 @@ class _FavoritosTabState extends State<FavoritosTab> {
                       child: Text(
                         'Agregar',
                         style: TextStyle(
-                            color: Colors.white, fontSize: responsive.ip(1.8)),
+                          color: Colors.white,
+                          fontSize: responsive.ip(1.8),
+                        ),
                       ),
                     ),
                     onTap: () {
+                      utils.showToast(
+                          'Producto agregado al carrito', 2, ToastGravity.TOP);
                       utils.agregarCarrito(productosData, context, "1");
                     },
                   )

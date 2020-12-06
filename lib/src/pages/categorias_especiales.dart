@@ -46,8 +46,9 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
       child: Column(
         children: <Widget>[
           AppBar(
+            toolbarHeight: responsive.hp(8),
             elevation: 0,
-            title: Text(title),
+            title: Text(title,style: TextStyle(fontSize: responsive.ip(2.4)),),
             /* actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.card_giftcard),
@@ -115,8 +116,8 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
         child: Row(
           children: <Widget>[
             Container(
-              width: responsive.wp(32),
-              height: responsive.hp(16),
+              width: responsive.ip(20),
+              height: responsive.ip(16),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
