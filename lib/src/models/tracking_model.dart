@@ -86,6 +86,7 @@ class TrackingData {
          this.userEmail,
          this.userImage,
          this.personName,
+         this.distancia,
     });
 
     String idPedido;
@@ -128,6 +129,7 @@ class TrackingData {
     String userEmail;
     String userImage;
     String personName;
+    String distancia;
 
 
    

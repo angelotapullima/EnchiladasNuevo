@@ -1,5 +1,6 @@
 
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
+import 'package:enchiladasapp/src/pages/blocMapa/mi_ubicacion/mi_ubicacion_bloc.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto_foto.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/gestionar_direcciones.dart';
@@ -30,10 +31,13 @@ import 'package:enchiladasapp/src/pages/desicion_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_page.dart';
 import 'package:enchiladasapp/src/pages/puzzle/home_puzzle.dart';
 import 'package:enchiladasapp/src/pages/puzzle/puzzle.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'src/pages/blocMapa/mapa/mapa_bloc.dart';
 
 
 Future<void> showNotificationWithIconBadge(
@@ -189,49 +193,57 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderBloc(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        navigatorKey: navigatorkey,
-        initialRoute: 'splash',
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-          scaffoldBackgroundColor: Colors.grey[50],
-          canvasColor: Colors.transparent,
+    return MultiBlocProvider(
+
+      providers: [
+        BlocProvider(create: ( _ ) => MiUbicacionBloc() ),
+        BlocProvider(create: ( _ ) => MapaBloc() ),
+        //BlocProvider(create: ( _ ) => BusquedaBloc() ),
+      ],
+      child: ProviderBloc(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          navigatorKey: navigatorkey,
+          initialRoute: 'splash',
+          theme: ThemeData(
+            primarySwatch: Colors.red,
+            scaffoldBackgroundColor: Colors.grey[50],
+            canvasColor: Colors.transparent,
+          ),
+
+      
+          routes: {
+            '/': (BuildContext context) => HomePage(),
+            'HomePuzzle': (BuildContext context) => HomePuzzle(),
+            'puzzle': (BuildContext context) => PuzzlePage(),
+            'login': (BuildContext context) => LoginPage(),
+            'splash': (BuildContext context) => Splash(),
+            'desicion': (BuildContext context) => DesicionPage(),
+            'detalleP': (BuildContext context) => DetalleProductitos(),
+            'detallePago': (BuildContext context) => DetallePago(),
+            'sel_Direccion': (BuildContext context) => MapsSample(),
+            'combo': (BuildContext context) => CategoriasEspecialesPage(),
+            'ordenes': (BuildContext context) => OrdenesPage(),
+            'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
+            'detallePedido': (BuildContext context) => DetallePedido(),
+            /* 'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
+            'mapaRepartidor': (BuildContext context) => MapaRepartidor(), */
+            'mapaCliente': (BuildContext context) => MapaCliente(),
+            'ranking': (BuildContext context) => RankingPage(),
+            'rankingReport': (BuildContext context) => RankingReport(),
+            'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
+            'market': (BuildContext context) => MarketPage(),
+            'timeline': (BuildContext context) => DeliveryTimeline(),
+            'webView': (BuildContext context) => WebViewExample(),
+            'ticket': (BuildContext context) => Ticket(),
+            'gestionarDirecciones': (BuildContext context) => GestionarDirecciones(),
+            'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
+            'detallePromociones': (BuildContext context) => DetallePromociones(),
+            'onboarding': (BuildContext context) => OnboardingPage(),
+            //'detallePedidoRepartidor': (BuildContext context) => DetallePedidoRepartidor(),
+
+          }, 
         ),
-
-    
-        routes: {
-          '/': (BuildContext context) => HomePage(),
-          'HomePuzzle': (BuildContext context) => HomePuzzle(),
-          'puzzle': (BuildContext context) => PuzzlePage(),
-          'login': (BuildContext context) => LoginPage(),
-          'splash': (BuildContext context) => Splash(),
-          'desicion': (BuildContext context) => DesicionPage(),
-          'detalleP': (BuildContext context) => DetalleProductitos(),
-          'detallePago': (BuildContext context) => DetallePago(),
-          'sel_Direccion': (BuildContext context) => MapsSample(),
-          'combo': (BuildContext context) => CategoriasEspecialesPage(),
-          'ordenes': (BuildContext context) => OrdenesPage(),
-          'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
-          'detallePedido': (BuildContext context) => DetallePedido(),
-          /* 'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
-          'mapaRepartidor': (BuildContext context) => MapaRepartidor(), */
-          'mapaCliente': (BuildContext context) => MapaCliente(),
-          'ranking': (BuildContext context) => RankingPage(),
-          'rankingReport': (BuildContext context) => RankingReport(),
-          'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
-          'market': (BuildContext context) => MarketPage(),
-          'timeline': (BuildContext context) => DeliveryTimeline(),
-          'webView': (BuildContext context) => WebViewExample(),
-          'ticket': (BuildContext context) => Ticket(),
-          'gestionarDirecciones': (BuildContext context) => GestionarDirecciones(),
-          'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
-          'detallePromociones': (BuildContext context) => DetallePromociones(),
-          'onboarding': (BuildContext context) => OnboardingPage(),
-          //'detallePedidoRepartidor': (BuildContext context) => DetallePedidoRepartidor(),
-
-        }, 
       ),
     );
   }

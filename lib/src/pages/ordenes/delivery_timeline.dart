@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/argumentsWebview.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
+import 'package:enchiladasapp/src/pages/blocMapa/mapa_page.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,11 +95,28 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
 
     //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
-    return FlatButton(
+    return FlatButton( 
       onPressed: () {
 
         timer?.cancel();
-        Navigator.pushNamed(context, 'mapaCliente', arguments: id);
+
+         Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 100),
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return MapaPage(idRepartidor: id,);
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+          ),
+        );
+        //Navigator.pushNamed(context, 'mapaCliente', arguments: id);
         //Navigator.pushNamed(context, 'mapaCliente',arguments: '${pedido[0].idPedido}');
       },
       child: Container(
