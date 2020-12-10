@@ -604,7 +604,7 @@ class PrincipalTab extends StatelessWidget {
                                   bottom: 0,
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
-                                      vertical: responsive.hp(2),
+                                      vertical: responsive.hp(2), 
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.black.withOpacity(.5),

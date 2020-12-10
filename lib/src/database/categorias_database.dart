@@ -14,10 +14,10 @@ class CategoriasDatabase{
     final db = await dbprovider.database;
 
     final res = await db.rawInsert(
-        'INSERT OR REPLACE INTO Categorias (id_categoria,categoria_nombre,categoria_estado,categoria_tipo,'
+        'INSERT OR REPLACE INTO Categorias (id_categoria,categoria_nombre,categoria_estado,categoria_tipo,categoria_orden,'
         'categoria_promocion,categoria_foto,categoria_icono,categoria_banner,categoria_mostrar_app) '
         'VALUES ("${categoriaData.idCategoria}","${categoriaData.categoriaNombre}","${categoriaData.categoriaEstado}",'
-        '"${categoriaData.categoriaTipo}", "${categoriaData.categoriaPromocion}","${categoriaData.categoriaFoto}",'
+        '"${categoriaData.categoriaTipo}","${categoriaData.categoriaOrden}", "${categoriaData.categoriaPromocion}","${categoriaData.categoriaFoto}",'
         '"${categoriaData.categoriaIcono}","${categoriaData.categoriaBanner}","${categoriaData.categoriaMostrarApp}")');
     return res;
   }
@@ -38,7 +38,7 @@ class CategoriasDatabase{
 
   Future<List<CategoriaData>> obtenerCategoriasEnchiladas() async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Categorias where categoria_tipo = '1' and categoria_mostrar_app='1' order by CAST(id_categoria AS INT) ASC");
+    final res = await db.rawQuery("SELECT * FROM Categorias where categoria_tipo = '1' and categoria_mostrar_app='1' order by CAST(categoria_orden AS INT) ASC");
 
     List<CategoriaData> list = res.isNotEmpty
         ? res.map((c) => CategoriaData.fromJson(c)).toList()

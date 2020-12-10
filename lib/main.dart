@@ -1,5 +1,7 @@
 
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
+import 'package:enchiladasapp/src/pages/AplicacionLocal/home_local.dart';
+import 'package:enchiladasapp/src/pages/AplicacionLocal/productos_categoria.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/mi_ubicacion/mi_ubicacion_bloc.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto_foto.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
@@ -214,6 +216,7 @@ class _MyAppState extends State<MyApp> {
       
           routes: {
             '/': (BuildContext context) => HomePage(),
+            'homeLocal': (BuildContext context) => HomeLocal(),
             'HomePuzzle': (BuildContext context) => HomePuzzle(),
             'puzzle': (BuildContext context) => PuzzlePage(),
             'login': (BuildContext context) => LoginPage(),
@@ -240,6 +243,7 @@ class _MyAppState extends State<MyApp> {
             'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
             'detallePromociones': (BuildContext context) => DetallePromociones(),
             'onboarding': (BuildContext context) => OnboardingPage(),
+            'productosCategoria': (BuildContext context) => ProductosCategoria(),
             //'detallePedidoRepartidor': (BuildContext context) => DetallePedidoRepartidor(),
 
           }, 

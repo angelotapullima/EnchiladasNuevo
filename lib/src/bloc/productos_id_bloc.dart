@@ -64,12 +64,30 @@ class ProductosBloc {
 
   void obtenerProductosEnchiladasPorCategoria(String categoria) async {
     _cargandoProductosController.sink.add(true);
-    _productosEnchiladasController.sink
-        .add(await productoDatabase.obtenerProductosPorCategoria('$categoria'));
 
-    /* _productosEnchiladasController.sink.add(await categoriasApi.obtenerProductoCategoria('$categoria'));
-    _productosEnchiladasController.sink.add(await productoDatabase.obtenerProductosPorCategoria('$categoria')); */
-    _cargandoProductosController.sink.add(false);
+    final listGeneral =List<ProductosData>();
+    final listProductos = await productoDatabase.obtenerProductosPorCategoria('$categoria');
+
+    for (var x = 0; x < listProductos.length; x++) {
+
+       ProductosData productosData = ProductosData();
+        productosData.idProducto = listProductos[x].idProducto;
+        productosData.idCategoria = listProductos[x].idCategoria;
+        productosData.productoNombre = listProductos[x].productoNombre;
+        productosData.productoFoto = listProductos[x].productoFoto;
+        productosData.productoPrecio = listProductos[x].productoPrecio;
+        productosData.productoUnidad = listProductos[x].productoUnidad;
+        productosData.productoEstado = listProductos[x].productoEstado;
+        productosData.numeroitem = x.toString();
+        productosData.productoDescripcion = listProductos[x].productoDescripcion;
+        productosData.productoComentario = listProductos[x].productoComentario;
+        listGeneral.add(productosData);
+      
+    }
+    _productosEnchiladasController.sink
+        .add(listGeneral);
+
+  _cargandoProductosController.sink.add(false);
   }
 
   void obtenerProductosMarketPorCategoria(String categoria) async {

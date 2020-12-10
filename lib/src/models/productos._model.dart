@@ -50,6 +50,7 @@ class ProductosData {
         this.idCategoria,
         this.productoNombre,
         this.productoFoto,
+        this.productoOrden,
         this.productoPrecio,
         this.productoUnidad,
         this.productoEstado,
@@ -62,9 +63,11 @@ class ProductosData {
     String idCategoria;
     String productoNombre;
     String productoFoto;
+    String productoOrden;
     String productoPrecio;
     String productoUnidad;
     String productoEstado;
+    String numeroitem;
     String productoDescripcion;
     String productoComentario;
     int productoFavorito; 
@@ -74,6 +77,7 @@ class ProductosData {
         idCategoria: json["id_categoria"],
         productoNombre: json["producto_nombre"],
         productoFoto: json["producto_foto"],
+        productoOrden: json["producto_orden"],
         productoPrecio: json["producto_precio"],
         productoUnidad: json["producto_unidad"],
         productoEstado: json["producto_estado"],

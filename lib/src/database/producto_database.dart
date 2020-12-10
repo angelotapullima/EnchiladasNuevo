@@ -10,10 +10,10 @@ class ProductoDatabase{
 
      
     final res = await db.rawInsert(
-        'INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_precio,'
+        'INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_orden,producto_precio,'
         'producto_unidad,producto_estado,producto_descripcion,producto_comentario,producto_favorito) '
         'VALUES ( "${productos.idProducto}" , "${productos.idCategoria}" , "${productos.productoNombre}" ,'
-        ' "${productos.productoFoto}" , "${productos.productoPrecio}" , "${productos.productoUnidad}" ,'
+        ' "${productos.productoFoto}" ,"${productos.productoOrden}" , "${productos.productoPrecio}" , "${productos.productoUnidad}" ,'
         ' "${productos.productoEstado}","${productos.productoDescripcion}", "${productos.productoComentario}",${productos.productoFavorito} )');
     return res;
   } 
@@ -25,6 +25,7 @@ class ProductoDatabase{
     'id_categoria="${productos.idCategoria}", '
     'producto_nombre="${productos.productoNombre}", '
     'producto_foto="${productos.productoFoto}", '
+    'producto_orden="${productos.productoOrden}", '
     'producto_precio="${productos.productoPrecio}", '
     'producto_unidad="${productos.productoUnidad}", '
     'producto_estado="${productos.productoEstado}", '
@@ -66,7 +67,7 @@ class ProductoDatabase{
   Future<List<ProductosData>> obtenerProductosPorCategoria(String id) async {
     final db = await dbprovider.database;
     final res =
-        await db.rawQuery("SELECT * FROM Producto WHERE id_categoria='$id' and producto_estado='1' ");
+        await db.rawQuery("SELECT * FROM Producto WHERE id_categoria='$id' and producto_estado='1' order by CAST(producto_orden AS INT) ASC");
 
     List<ProductosData> list = res.isNotEmpty
         ? res.map((c) => ProductosData.fromJson(c)).toList()

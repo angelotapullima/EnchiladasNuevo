@@ -1,9 +1,12 @@
 
 
+import 'package:enchiladasapp/src/bloc/bottom_local.dart';
 import 'package:enchiladasapp/src/bloc/carrito_completo.dart';
 import 'package:enchiladasapp/src/bloc/categoria_enchiladas_navi_bloc.dart';
+import 'package:enchiladasapp/src/bloc/contador_productos_foto.dart';
 import 'package:enchiladasapp/src/bloc/nuevo_metodo_pago.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_bloc.dart';
+import 'package:enchiladasapp/src/bloc/pantalla_local_bloc.dart';
 import 'package:enchiladasapp/src/bloc/zona_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -60,6 +63,9 @@ class ProviderBloc extends InheritedWidget {
   final carritoCompletoBloc = CarritoCompletoBloc();
   final pantallaBloc = PantallaBloc();
   final enchiladasNaviBloc =EnchiladasNaviBloc();
+  final bottomLocalBloc = BottomLocalBloc();
+  final pantallaLocalBloc=PantallaLocalBloc();
+  final contadorProductosFotoLocal=ContadorProductosFotoLocal();
 
   static ProviderBloc _instancia;
 
@@ -158,6 +164,19 @@ class ProviderBloc extends InheritedWidget {
   static EnchiladasNaviBloc enchiNavi(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .enchiladasNaviBloc;
+  }
+
+  static BottomLocalBloc bottomLocal(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .bottomLocalBloc;
+  }
+  static PantallaLocalBloc pantallaLocal(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .pantallaLocalBloc;
+  }
+  static ContadorProductosFotoLocal contadorLocal(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .contadorProductosFotoLocal;
   }
     
 }
