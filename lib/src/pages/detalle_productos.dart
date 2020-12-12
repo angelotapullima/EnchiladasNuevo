@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:animate_do/animate_do.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/validar_producto.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/translate_animation.dart';

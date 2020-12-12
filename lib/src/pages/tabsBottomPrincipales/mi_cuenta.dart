@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/database/carrito_database.dart';
 import 'package:enchiladasapp/src/database/direccion_database.dart';
@@ -302,8 +304,17 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 Divider(),
                 InkWell(
                   onTap: () {
-                    _launchInBrowser(
+
+                     if (Platform.isAndroid) {
+                       _launchInBrowser(
                         'http://play.google.com/store/apps/details?id=com.bufeotec.enchiladasapp');
+                     }else{
+
+                        _launchInBrowser(
+                        'https://apps.apple.com/us/app/la-casa-de-las-enchiladas/id1539023978');
+                       
+                     }
+                    
                   },
                   child: Padding(
                     padding: EdgeInsets.all(responsive.ip(1)),

@@ -3,6 +3,7 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
+import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
@@ -11,14 +12,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class DetallePromociones extends StatefulWidget {
-  const DetallePromociones({Key key}) : super(key: key);
+class DetallePromocionesLocal extends StatefulWidget {
+  const DetallePromocionesLocal({Key key}) : super(key: key);
 
   @override
-  _DetallePromocionesState createState() => _DetallePromocionesState();
+  _DetallePromocionesLocalState createState() =>
+      _DetallePromocionesLocalState();
 }
 
-class _DetallePromocionesState extends State<DetallePromociones> {
+class _DetallePromocionesLocalState extends State<DetallePromocionesLocal> {
   @override
   Widget build(BuildContext context) {
     final Arguments arg = ModalRoute.of(context).settings.arguments;
@@ -57,9 +59,9 @@ class _DetallePromocionesState extends State<DetallePromociones> {
                             placeholder: (context, url) => Image(
                                 image: AssetImage('assets/jar-loading.gif'),
                                 fit: BoxFit.cover),
-                            errorWidget: (context, url, error) =>Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                            errorWidget: (context, url, error) => Image(
+                                image: AssetImage('assets/carga_fallida.jpg'),
+                                fit: BoxFit.cover),
                             imageUrl: '${snapshot.data[0].categoriaBanner}',
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
@@ -86,33 +88,53 @@ class _DetallePromocionesState extends State<DetallePromociones> {
                             0, -responsive.hp(2.5), 0),
                         child: (snapshot.data[0].productos.length > 0)
                             ? Container(
-                              margin: EdgeInsets.only(top:responsive.hp(1)),
-                              child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount:
-                                      snapshot.data[0].productos.length + 1,
-                                  itemBuilder: (context, i) {
-                                    if (i == 0) {
-                                      return titulo;
-                                    }
+                                margin: EdgeInsets.only(top: responsive.hp(1)),
+                                child: GridView.builder(
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2),
+                                    itemCount:
+                                        snapshot.data[0].productos.length,
+                                    itemBuilder: (context, i) {
+                                      if (i == 0) {
+                                        return Center(child: titulo);
+                                      }
 
-                                    int index = i - 1;
-                                    return _itemPedido(
-                                      context,
-                                      snapshot.data[0].productos[index],
-                                    );
-                                  }),
-                            )
+                                      int index = i - 1;
+                                      return _itemPedido(
+                                        context,
+                                        snapshot.data[0].productos[index],
+                                      );
+                                    }),
+
+                                /*  ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        snapshot.data[0].productos.length + 1,
+                                    itemBuilder: (context, i) {
+                                      if (i == 0) {
+                                        return titulo;
+                                      }
+
+                                      int index = i - 1;
+                                      return _itemPedido(
+                                        context,
+                                        snapshot.data[0].productos[index],
+                                      );
+                                    }), */
+                              )
                             : Container(
-                                padding: EdgeInsets.symmetric(horizontal:responsive.ip(3)),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: responsive.ip(3)),
                                 width: double.infinity,
                                 child: Column(
                                   children: <Widget>[
                                     titulo,
                                     Expanded(
                                       child: Center(
-                                        child: Text('No hay Productos disponibles'),
+                                        child: Text(
+                                            'No hay Productos disponibles'),
                                       ),
                                     ),
                                   ],
@@ -137,6 +159,8 @@ class _DetallePromocionesState extends State<DetallePromociones> {
 
     return GestureDetector(
       child: Container(
+        width: responsive.ip(20),
+        height: responsive.ip(16),
         decoration: BoxDecoration(
             boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
             color: Colors.white,
@@ -145,84 +169,50 @@ class _DetallePromocionesState extends State<DetallePromociones> {
         margin: EdgeInsets.symmetric(
             vertical: responsive.hp(0.5), horizontal: responsive.wp(2.5)),
         //height: responsive.hp(13),
-        child: Row(
-          children: <Widget>[
-            Container(
-              width: responsive.wp(32),
-              height: responsive.hp(16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
-                  placeholder: (context, url) => Image(
-                      image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
-                  imageUrl: '${productosData.productoFoto}',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.fill,
-                    )),
-                  ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                cacheManager: CustomCacheManager(),
+                placeholder: (context, url) => Image(
+                    image: AssetImage('assets/jar-loading.gif'),
+                    fit: BoxFit.cover),
+                errorWidget: (context, url, error) => Image(
+                    image: AssetImage('assets/carga_fallida.jpg'),
+                    fit: BoxFit.cover),
+                imageUrl: '${productosData.productoFoto}',
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  )),
                 ),
               ),
             ),
-            SizedBox(
-              width: responsive.wp(2),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    productosData.productoNombre,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: responsive.ip(1.8),
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'S/ ${productosData.productoPrecio}',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2)),
-                  ),
-                ],
+            Positioned(
+              right: 0,
+              left: 0,
+              bottom: 0,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: responsive.hp(2),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(.5),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '${productosData.productoNombre}',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(2),
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-            Column(
-              children: <Widget>[
-                (productosData.productoFavorito == 1)
-                    ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            utils.quitarFavoritos(context, productosData);
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.solidHeart,
-                          color: Colors.red,
-                        ),
-                      )
-                    : IconButton(
-                        onPressed: () {
-                          setState(() {
-                            utils.agregarFavoritos(context, productosData);
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.heart,
-                          color: Colors.red,
-                        ))
-              ],
-            ),
+            )
           ],
         ),
       ),
@@ -232,7 +222,11 @@ class _DetallePromocionesState extends State<DetallePromociones> {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitos(productosData: productosData);
+                return DetalleProductoFotoLocal(
+                  
+                  productosData: productosData,
+                  mostrarback: true,
+                );
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

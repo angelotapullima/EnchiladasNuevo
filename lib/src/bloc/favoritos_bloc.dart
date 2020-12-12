@@ -1,6 +1,6 @@
  
 import 'package:enchiladasapp/src/database/producto_database.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FavoritosBloc { 

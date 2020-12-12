@@ -2,7 +2,7 @@ import 'package:enchiladasapp/src/database/categorias_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
 import 'package:enchiladasapp/src/database/temporizador_database.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/temporizador_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -38,8 +38,8 @@ class CategoriasApi {
               decodedData['result']['data'][i]['categoria_foto'];
           categoriaData.categoriaBanner =
               decodedData['result']['data'][i]['categoria_banner'];
-          categoriaData.categoriaPromocion =
-              decodedData['result']['data'][i]['categoria_promocion'];
+          categoriaData.categoriaPromocion =decodedData['result']['data'][i]['categoria_promocion'];
+          categoriaData.categoriaSonido =decodedData['result']['data'][i]['categoria_sonido'];
           categoriaData.categoriaEstado =
               decodedData['result']['data'][i]['categoria_estado'];
           categoriaData.categoriaMostrarApp =
@@ -103,6 +103,7 @@ class CategoriasApi {
             productosData.productoEstado = productos[x]['producto_estado'];
             productosData.productoDescripcion = productos[x]['producto_detalle'];
             productosData.productoComentario = decodedData['result']['data'][i]['categoria_comentario'];
+            productosData.sonido = decodedData['result']['data'][i]['categoria_sonido'];
 
 
             if (datoproducto.length > 0) {
@@ -236,6 +237,7 @@ class CategoriasApi {
 
           if (dato.length > 0) {
             productosData.productoFavorito = dato[0].productoFavorito;
+            productosData.sonido = dato[0].sonido;
             productoDatabase.updateProductosDb(productosData);
           } else {
             productosData.productoFavorito = 0;

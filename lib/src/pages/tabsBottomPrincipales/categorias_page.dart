@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -20,7 +20,7 @@ class CategoriasPage extends StatelessWidget {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    //categoriasBloc.obtenerCategoriasEnchiladas();
+    categoriasBloc.obtenerCategoriasEnchiladas();
     _refreshController.refreshCompleted();
   }
 

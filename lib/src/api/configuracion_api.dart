@@ -4,7 +4,7 @@ import 'package:enchiladasapp/src/database/producto_database.dart';
 import 'package:enchiladasapp/src/database/puzzle_database.dart';
 import 'package:enchiladasapp/src/database/zona_database.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;

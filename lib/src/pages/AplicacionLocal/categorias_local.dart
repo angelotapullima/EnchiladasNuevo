@@ -1,16 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
-import 'package:enchiladasapp/src/search/search_delegate.dart';
+import 'package:enchiladasapp/src/search/search_local.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -20,7 +18,7 @@ class CategoriasLocal extends StatelessWidget {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    //categoriasBloc.obtenerCategoriasEnchiladas();
+    categoriasBloc.obtenerCategoriasEnchiladas();
     _refreshController.refreshCompleted();
   }
 
@@ -108,7 +106,7 @@ class CategoriasLocal extends StatelessWidget {
                   onPressed: () {
                     showSearch(
                       context: context,
-                      delegate: DataSearch(hintText: 'Buscar'),
+                      delegate: SearchLocal(hintText: 'Buscar'),
                     );
                   },
                 )

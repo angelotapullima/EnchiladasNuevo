@@ -40,7 +40,7 @@ class _DetallePagoState extends State<DetallePago> {
   bool pasoFactura = false;
   bool pasoefectivo = false;
   TextEditingController comprobanteController = TextEditingController();
-  TextEditingController tipoPagoController = TextEditingController();
+  TextEditingController montoPagoController = TextEditingController();
   TextEditingController telefonoController = TextEditingController();
 
   bool estadoDelivery = false;
@@ -53,7 +53,7 @@ class _DetallePagoState extends State<DetallePago> {
   void dispose() {
     // Limpia el controlador cuando el Widget se descarte
     comprobanteController.dispose();
-    tipoPagoController.dispose();
+    montoPagoController.dispose();
     telefonoController.dispose();
     super.dispose();
   }
@@ -72,6 +72,10 @@ class _DetallePagoState extends State<DetallePago> {
           break;
       }
     });
+  }
+
+  void reset() {
+    setState(() {});
   }
 
   void _tipoPagoRadioValue(
@@ -675,7 +679,7 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   Widget _tipoPago(Responsive responsive) {
-    montoPago = tipoPagoController.text;
+    montoPago = montoPagoController.text;
     vuelto = 0;
     String vuelto2 = '';
     if (montoPago != null && montoPago != "") {
@@ -954,7 +958,7 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   String validateMobile(String value) {
-    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    String patttern = r'/^(\s*|\d+)$/';
     RegExp regExp = new RegExp(patttern);
     if (value.length == 0) {
       return 'Please enter mobile number';
@@ -967,6 +971,7 @@ class _DetallePagoState extends State<DetallePago> {
   void _modalCambiarMetodoPago(context, Responsive responsive, double precio) {
     showModalBottomSheet(
       context: context,
+      isDismissible: false,
       isScrollControlled: true,
       builder: (BuildContext context2) {
         final nuevoMetodoPagoBloc = ProviderBloc.npago(context2);
@@ -984,7 +989,13 @@ class _DetallePagoState extends State<DetallePago> {
             }
             return GestureDetector(
               onTap: () {
-                FocusScope.of(context).unfocus();
+                /*   if (montoPagoController.text.length == 0) {
+
+                  print('unfocus');
+                  setState(() {});
+                  _tipoPagoValue = 0;
+                }
+                FocusScope.of(context).unfocus(); */
               },
               child: Container(
                 padding: MediaQuery.of(context).viewInsets,
@@ -1014,33 +1025,43 @@ class _DetallePagoState extends State<DetallePago> {
                       SizedBox(
                         height: responsive.hp(2),
                       ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            width: responsive.wp(5),
-                            child: Text(
-                              'S/ ',
-                              style: TextStyle(fontSize: responsive.ip(2)),
+                      Container(
+                        height: responsive.hp(7),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: responsive.wp(9),
+                              child: Text(
+                                'S/ ',
+                                style: TextStyle(fontSize: responsive.ip(2)),
+                              ),
                             ),
-                          ),
-                          Container(
-                            width: responsive.wp(60),
-                            child: TextFormField(
-                              style: TextStyle(fontSize: responsive.ip(2)),
-                              controller: tipoPagoController,
-                              validator: validateMobile,
-                              keyboardType: TextInputType.number,
-                              onChanged: (val) {
-                                if (val.length > 0) {
-                                  nuevoMetodoPagoBloc.validarPago2(
-                                      val, '$precio');
-                                } else {
-                                  nuevoMetodoPagoBloc.validarPago2('0', '0');
-                                }
-                              },
+                            Container(
+                              padding: EdgeInsets.only(top: responsive.hp(.5)),
+                              width: responsive.wp(60),
+                              child: TextFormField(
+                                style: TextStyle(
+                                  fontSize: responsive.ip(2),
+                                ),
+                                controller: montoPagoController,
+                                validator: validateMobile,
+                                keyboardType: TextInputType.number,
+                                onChanged: (val) {
+                                  if (val.length > 0) {
+                                    nuevoMetodoPagoBloc.validarPago2(
+                                        val, '$precio');
+                                  } else {
+                                    reset();
+
+                                    _tipoPagoValue = 0;
+
+                                    nuevoMetodoPagoBloc.validarPago2('0', '0');
+                                  }
+                                },
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: responsive.hp(2),
@@ -1065,29 +1086,63 @@ class _DetallePagoState extends State<DetallePago> {
                       SizedBox(
                         height: responsive.hp(2),
                       ),
-                      Center(
-                        child: FlatButton(
-                          onPressed: () async {
-                            setState(() {});
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: responsive.ip(5),
-                              vertical: responsive.ip(1),
-                            ),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.red),
-                            child: Text(
-                              'Confirmar',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: responsive.ip(2)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FlatButton(
+                            onPressed: () async {
+                              if (double.parse(montoPagoController.text) >
+                                  double.parse('$precio')) {
+                                Navigator.pop(context);
+                              } else {
+                                utils.showToast(
+                                    'El monto de pago debe ser mayor al costo del pedido',
+                                    2,
+                                    ToastGravity.TOP);
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: responsive.ip(3),
+                                vertical: responsive.ip(1),
+                              ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.red),
+                              child: Text(
+                                'Confirmar',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: responsive.ip(2)),
+                              ),
                             ),
                           ),
-                        ),
+                          FlatButton(
+                            onPressed: () async {
+                              print('unfocus');
+                              _tipoPagoValue = 0;
+                              setState(() {});
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: responsive.ip(3),
+                                vertical: responsive.ip(1),
+                              ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.red),
+                              child: Text(
+                                'Cancelar',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: responsive.ip(2)),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 30,
@@ -1146,31 +1201,41 @@ class _DetallePagoState extends State<DetallePago> {
                             fontSize: responsive.ip(2.5),
                             fontWeight: FontWeight.bold),
                       ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            width: responsive.wp(12),
-                            child: Text(
-                              '+51',
-                              style: TextStyle(
-                                  fontSize: responsive.ip(2.5),
-                                  fontWeight: FontWeight.bold),
+                      Container(
+                        height: responsive.hp(10),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: responsive.wp(12),
+                              child: Center(
+                                child: Text(
+                                  '+51',
+                                  style: TextStyle(
+                                      fontSize: responsive.ip(2.5),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ),
-                          ),
-                          Container(
+                            SizedBox(
+                              width: responsive.wp(1),
+                            ),
+                            Container(
                               width: responsive.wp(75),
+                              padding: EdgeInsets.only(top: responsive.hp(2.5)),
                               child: TextField(
                                 style: TextStyle(
-                                  fontSize: responsive.ip(2),
-                                ),
+                                    fontSize: responsive.ip(2.5),
+                                    fontWeight: FontWeight.bold),
                                 controller: telefonoController,
                                 maxLength: 9,
                                 keyboardType: TextInputType.number,
                                 onChanged: (valor) {
                                   nuevoMetodoPagoBloc.validarTelefono(valor);
                                 },
-                              ))
-                        ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                       (validacion)
                           ? Container()
@@ -1185,10 +1250,17 @@ class _DetallePagoState extends State<DetallePago> {
                       ),
                       FlatButton(
                         onPressed: () async {
-                          utils.agregarTelefono(
-                              context, telefonoController.text);
+                          if (telefonoController.text.length > 6) {
+                            utils.agregarTelefono(
+                                context, telefonoController.text);
 
-                          Navigator.pop(context);
+                            Navigator.pop(context);
+                          } else {
+                            utils.showToast(
+                                'el campo Teléfono debe tener 6 dígitos por lo menos',
+                                2,
+                                ToastGravity.TOP);
+                          }
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -1222,6 +1294,7 @@ class _DetallePagoState extends State<DetallePago> {
   void modalRuc() {
     showModalBottomSheet(
       context: context,
+      isDismissible: false,
       isScrollControlled: true,
       builder: (BuildContext context) {
         final responsive = Responsive.of(context);
@@ -1261,35 +1334,67 @@ class _DetallePagoState extends State<DetallePago> {
                   SizedBox(
                     height: responsive.hp(3),
                   ),
-                  FlatButton(
-                    onPressed: () async {
-                      if (comprobanteController.text.length > 0) {
-                        //Navigator.pop(context);
+                  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FlatButton(
+                        onPressed: () async {
+                          if (comprobanteController.text.length > 0) {
+                            if (comprobanteController.text.length ==11) {
+                              Navigator.pop(context);
+                              //Navigator.pop(context);
+                              ruc = comprobanteController.text;
 
-                        Navigator.pop(context);
-                        //Navigator.pop(context);
-                        ruc = comprobanteController.text;
+                              setState(() {});
+                            } else {
+                              utils.showToast('El número de ruc debe contar con 11 dígitos', 2,
+                                  ToastGravity.TOP);
+                            }
+                            //Navigator.pop(context);
 
-                        setState(() {});
-                      } else {
-                        utils.showToast('el campo no debe estar vacio', 2,
-                            ToastGravity.TOP);
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: responsive.ip(5),
-                        vertical: responsive.ip(1),
+                          } else {
+                            utils.showToast('el campo no debe estar vacio', 2,
+                                ToastGravity.TOP);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.ip(3),
+                            vertical: responsive.ip(1),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.red),
+                          child: Text(
+                            'Confirmar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
+                          ),
+                        ),
+                      ),FlatButton(
+                        onPressed: () async {
+                          setState(() {
+                              _comprobanteValue=0;
+                          });
+                        
+                         Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.ip(3),
+                            vertical: responsive.ip(1),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.red),
+                          child: Text(
+                            'Cancelar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
+                          ),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.red),
-                      child: Text(
-                        'Confirmar',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+                    ],
                   ),
                   SizedBox(
                     height: 30,

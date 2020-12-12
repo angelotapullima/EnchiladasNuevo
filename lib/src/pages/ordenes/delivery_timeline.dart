@@ -77,6 +77,8 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
                             snapshot.data[0].pedidoEstado,
                           ),
                         ),
+
+                        SizedBox(height: 500,)
                       ],
                     ),
                   ),

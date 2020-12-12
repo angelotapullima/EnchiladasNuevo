@@ -34,9 +34,10 @@ class CategoriasBloc{
   void obtenerCategoriasEnchiladas()async{
     _cargandoCategoriasController.sink.add(true);
     _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas());
-     
-   /*  _categoriasEnchiladasController.sink.add(await categoriasApi.cargarCategorias());
+    await categoriasApi.obtenerAmbos();
 
+     
+   /*  
     _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas()); */
     _cargandoCategoriasController.sink.add(false);
   }

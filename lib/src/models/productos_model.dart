@@ -57,6 +57,7 @@ class ProductosData {
         this.productoDescripcion,
         this.productoComentario,
         this.productoFavorito,
+        this.sonido,
     });
 
     String idProducto;
@@ -71,6 +72,7 @@ class ProductosData {
     String productoDescripcion;
     String productoComentario;
     int productoFavorito; 
+    String  sonido; 
 
     factory ProductosData.fromJson(Map<String, dynamic> json) => ProductosData(
         idProducto: json["id_producto"],
@@ -84,6 +86,7 @@ class ProductosData {
         productoDescripcion: json["producto_descripcion"],
         productoComentario: json["producto_comentario"],
         productoFavorito: json["producto_favorito"],
+        sonido: json["producto_sonido"],
     );
 
     Map<String, dynamic> toJson() => {

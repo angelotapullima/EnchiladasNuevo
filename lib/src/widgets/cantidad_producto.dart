@@ -1,7 +1,7 @@
  
 
 import 'package:enchiladasapp/src/models/carrito_model.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:flutter/material.dart';

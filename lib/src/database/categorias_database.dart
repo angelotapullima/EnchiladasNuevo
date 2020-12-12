@@ -15,9 +15,10 @@ class CategoriasDatabase{
 
     final res = await db.rawInsert(
         'INSERT OR REPLACE INTO Categorias (id_categoria,categoria_nombre,categoria_estado,categoria_tipo,categoria_orden,'
-        'categoria_promocion,categoria_foto,categoria_icono,categoria_banner,categoria_mostrar_app) '
+        'categoria_promocion,categoria_sonido,categoria_foto,categoria_icono,categoria_banner,categoria_mostrar_app) '
         'VALUES ("${categoriaData.idCategoria}","${categoriaData.categoriaNombre}","${categoriaData.categoriaEstado}",'
-        '"${categoriaData.categoriaTipo}","${categoriaData.categoriaOrden}", "${categoriaData.categoriaPromocion}","${categoriaData.categoriaFoto}",'
+        '"${categoriaData.categoriaTipo}","${categoriaData.categoriaOrden}", "${categoriaData.categoriaPromocion}",'
+        '"${categoriaData.categoriaSonido}","${categoriaData.categoriaFoto}",'
         '"${categoriaData.categoriaIcono}","${categoriaData.categoriaBanner}","${categoriaData.categoriaMostrarApp}")');
     return res;
   }

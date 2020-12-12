@@ -5,7 +5,7 @@ import 'package:enchiladasapp/src/database/direccion_database.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/delivery_rapido_model.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/direccion_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

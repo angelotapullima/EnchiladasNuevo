@@ -1,7 +1,8 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
@@ -141,8 +142,26 @@ class DetalleProductoFotoLocal extends StatefulWidget {
 class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
   final _toque = ValueNotifier<bool>(false);
 
+  final assetsAudioPlayer = AssetsAudioPlayer();
+  @override
+  void initState() {
+   
+    super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    print('dispose');
+    assetsAudioPlayer.stop();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
+
+     assetsAudioPlayer.open(
+      Audio("assets/audio/${widget.productosData.sonido}.mp3"),
+    );
     final responsive = Responsive.of(context);
 
     return Scaffold(

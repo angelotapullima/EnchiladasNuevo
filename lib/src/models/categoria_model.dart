@@ -2,7 +2,7 @@
  
 
 
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 
 class Categorias {
     Categorias({
@@ -48,6 +48,7 @@ class CategoriaData {
         this.categoriaTipo,
         this.categoriaOrden,
         this.categoriaPromocion,
+        this.categoriaSonido,
         this.categoriaFoto,
         this.categoriaIcono,
         this.categoriaMostrarApp,
@@ -61,6 +62,7 @@ class CategoriaData {
     String categoriaTipo;
     String categoriaOrden;
     String categoriaPromocion;
+    String categoriaSonido;
     String categoriaFoto;
     String categoriaIcono;
     String categoriaMostrarApp;
@@ -75,6 +77,7 @@ class CategoriaData {
         categoriaTipo: json["categoria_tipo"],
         categoriaOrden: json["categoria_orden"],
         categoriaPromocion: json["categoria_promocion"],
+        categoriaSonido: json["categoria_sonido"],
         categoriaFoto: json["categoria_foto"],
         categoriaIcono: json["categoria_icono"],
         categoriaMostrarApp: json["categoria_mostrar_app"],

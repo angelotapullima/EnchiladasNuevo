@@ -1,13 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-
 
 class SearchLocal extends SearchDelegate {
   SearchLocal({
@@ -59,7 +57,7 @@ class SearchLocal extends SearchDelegate {
     final productosBloc = ProviderBloc.prod(context);
     productosBloc.obtenerProductoPorQuery('$query');
     final responsive = Responsive.of(context);
-    
+
     return StreamBuilder(
         stream: productosBloc.productosQueryStream,
         builder: (BuildContext context,
@@ -67,12 +65,12 @@ class SearchLocal extends SearchDelegate {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, i) => _itemPedido(context,
-                            snapshot.data[i], snapshot.data.length.toString()),
-                      );
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, i) => _itemPedido(
+                    context, snapshot.data[i], snapshot.data.length.toString()),
+              );
               /* return ListView.builder(
                 scrollDirection: Axis.vertical, 
                 shrinkWrap: true,
@@ -85,7 +83,7 @@ class SearchLocal extends SearchDelegate {
             } else {
               return Center(
                   child: Text(
-                'No existen productos con ese nombre',
+                'No existen productos con ese nombre buildResults',
                 style: TextStyle(
                   fontSize: responsive.ip(1.9),
                 ),
@@ -94,7 +92,7 @@ class SearchLocal extends SearchDelegate {
           } else {
             return Center(
               child: Text(
-                'Hubo un error',
+                'Hubo un error buildResults',
                 style: TextStyle(
                   fontSize: responsive.ip(1.9),
                 ),
@@ -106,31 +104,37 @@ class SearchLocal extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (query.isEmpty) {
+
+      if (query.isEmpty) {
       return Container(
         child: Center(
           child: Text('Búsqueda de productos'),
         ),
       );
     }
-
-    final productosBloc = ProviderBloc.prod(context);
+      final productosBloc = ProviderBloc.prod(context);
     productosBloc.obtenerProductoPorQuery('$query');
     final responsive = Responsive.of(context);
-    
+
+
+  
+
+  
+
     return StreamBuilder(
         stream: productosBloc.productosQueryStream,
         builder: (BuildContext context,
             AsyncSnapshot<List<ProductosData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
-             return GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, i) => _itemPedido(context,
-                            snapshot.data[i], snapshot.data.length.toString()),
-                      );
+              return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, i) {
+                    return _itemPedido(context, snapshot.data[i],
+                        snapshot.data.length.toString());
+                  });
             } else {
               return Center(
                 child: Text(
@@ -153,8 +157,6 @@ class SearchLocal extends SearchDelegate {
           }
         });
   }
-
- 
 
   Widget _itemPedido(
       BuildContext context, ProductosData productosData, String cantidad) {
@@ -225,8 +227,11 @@ class SearchLocal extends SearchDelegate {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                
-              return DetalleProductoFotoLocal(productosData: productosData,mostrarback: true,);
+                return DetalleProductoFotoLocal(
+                  
+                  productosData: productosData,
+                  mostrarback: true,
+                );
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
-import 'package:enchiladasapp/src/models/productos._model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
 import 'package:enchiladasapp/src/search/search_local.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -119,10 +119,10 @@ class PrincipalLocal extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () {
-                  Arguments arg = new Arguments(
+                  Arguments arg = new Arguments( 
                       "${promociones[index].categoriaNombre}",
                       '${promociones[index].idCategoria}');
-                  Navigator.pushNamed(context, 'detallePromociones',
+                  Navigator.pushNamed(context, 'detallePromocionesLocal',
                       arguments: arg);
                   //Navigator.pushNamed(context, 'detallePromociones');
                 },
@@ -294,12 +294,13 @@ class PrincipalLocal extends StatelessWidget {
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
-                                      onTap: (){
-
-                                         Arguments arg = new Arguments(
-                        "${snapshot.data[index].categoriaNombre}",
-                        '${snapshot.data[index].idCategoria}');
-                    Navigator.pushNamed(context, 'productosCategoria', arguments: arg);
+                                      onTap: () {
+                                        Arguments arg = new Arguments(
+                                            "${snapshot.data[index].categoriaNombre}",
+                                            '${snapshot.data[index].idCategoria}');
+                                        Navigator.pushNamed(
+                                            context, 'productosCategoria',
+                                            arguments: arg);
                                       },
                                       child: Container(
                                         width: responsive.ip(18),
@@ -334,9 +335,9 @@ class PrincipalLocal extends StatelessWidget {
                                                           fit: BoxFit.cover),
                                                   imageUrl:
                                                       '${snapshot.data[index].categoriaFoto}',
-                                                  imageBuilder:
-                                                      (context, imageProvider) =>
-                                                          Container(
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
                                                     decoration: BoxDecoration(
                                                       image: DecorationImage(
                                                         image: imageProvider,
@@ -365,7 +366,8 @@ class PrincipalLocal extends StatelessWidget {
                                                   '${snapshot.data[index].categoriaNombre}',
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: responsive.ip(2),
+                                                      fontSize:
+                                                          responsive.ip(2),
                                                       fontWeight:
                                                           FontWeight.bold),
                                                   textAlign: TextAlign.center,
@@ -428,7 +430,8 @@ class PrincipalLocal extends StatelessWidget {
                     Arguments arg = new Arguments(
                         "${categoriaData.categoriaNombre}",
                         '${categoriaData.idCategoria}');
-                    Navigator.pushNamed(context, 'productosCategoria', arguments: arg);
+                    Navigator.pushNamed(context, 'productosCategoria',
+                        arguments: arg);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(
