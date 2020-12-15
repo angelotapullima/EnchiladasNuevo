@@ -46,7 +46,7 @@ class PantallaLocalBloc {
           listaCategorias[i].categoriaMostrarApp;
 
       final productos = await productosDatabase
-          .obtenerProductosPorCategoria(listaCategorias[i].idCategoria);
+          .obtenerProductosPorCategoriaLocal(listaCategorias[i].idCategoria);
 
       final productitos = List<ProductosData>();
 

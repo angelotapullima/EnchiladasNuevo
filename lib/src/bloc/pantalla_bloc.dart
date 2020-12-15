@@ -123,7 +123,7 @@ class PantallaBloc {
         //resto
 
         final listaProductos = await productosDatabase
-            .obtenerProductosPorCategoria(pantalla.pantallCategoria);
+            .obtenerProductosPorCategoriaDelivery(pantalla.pantallCategoria);
 
         if (listaProductos.length > 10) {
           for (int x = 0; x < 10; x++) {

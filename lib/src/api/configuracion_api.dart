@@ -124,7 +124,7 @@ class ConfiguracionApi {
       } else {
         return false;
       }
-    } catch (error, stacktrace) {
+    } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);

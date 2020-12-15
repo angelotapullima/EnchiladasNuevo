@@ -32,7 +32,7 @@ class _ProductoFotoLocalState extends State<ProductoFotoLocal> {
 
     final productoBloc = ProviderBloc.prod(context);
     final contadorProductosFotoLocal = ProviderBloc.contadorLocal(context);
-    productoBloc.obtenerProductosEnchiladasPorCategoria(widget.idCategoria);
+    productoBloc.obtenerProductosLocalEnchiladasPorCategoria(widget.idCategoria);
     contadorProductosFotoLocal.changeContador(int.parse(widget.numeroItem));
 
     final responsive = Responsive.of(context);

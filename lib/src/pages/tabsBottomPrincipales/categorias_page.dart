@@ -275,7 +275,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosEnchiladasPorCategoria(widget.index);
+    productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
 
     return Scaffold(
       body: _listaProductosId(productosIdBloc, responsive),

@@ -68,7 +68,9 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: responsive.wp(2), vertical: responsive.hp(2)),
+              horizontal: responsive.wp(2),
+              vertical: responsive.hp(2),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -133,7 +135,9 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               return sinDatos;
             }
           } else {
-            return Center(child: CupertinoActivityIndicator());
+            return Center(
+              child: CupertinoActivityIndicator(),
+            );
           }
         });
   }
@@ -202,7 +206,9 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         return Center(child: Text('no hay usuario'));
                       }
                     } else {
-                      return Center(child: CupertinoActivityIndicator());
+                      return Center(
+                        child: CupertinoActivityIndicator(),
+                      );
                     }
                   },
                 )),
@@ -270,116 +276,121 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     }
 
     return Container(
-        child: (carrito.productoTipo != '1')
-            ? Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: responsive.ip(20),
-                        height: responsive.ip(15),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            cacheManager: CustomCacheManager(),
-                            placeholder: (context, url) => Image(
-                                image: AssetImage('assets/jar-loading.gif'),
-                                fit: BoxFit.cover),
-                            errorWidget: (context, url, error) => Image(
-                                image: AssetImage('assets/carga_fallida.jpg'),
-                                fit: BoxFit.cover),
-                            imageUrl: '${carrito.productoFoto}',
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.fill,
-                                ),
+      child: (carrito.productoTipo != '1')
+          ? Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: responsive.ip(20),
+                      height: responsive.ip(15),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          cacheManager: CustomCacheManager(),
+                          placeholder: (context, url) => Image(
+                              image: AssetImage('assets/jar-loading.gif'),
+                              fit: BoxFit.cover),
+                          errorWidget: (context, url, error) => Image(
+                              image: AssetImage('assets/carga_fallida.jpg'),
+                              fit: BoxFit.cover),
+                          imageUrl: '${carrito.productoFoto}',
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: responsive.wp(2),
+                    ),
+                    SizedBox(
+                      width: responsive.wp(2),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            carrito.productoNombre,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(1.8),
+                            ),
+                          ),
+                          Text(
+                            'S/. $preciofinal',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(2),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        //crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete_outline,
+                              size: responsive.ip(4),
+                            ),
+                            onPressed: () {
+                              utils.deleteProductoCarrito(
+                                  context, carrito.idProducto);
+                            },
+                          ),
+                          SizedBox(
+                            height: responsive.hp(2),
+                          ),
+                          Container(
+                            child: CantidadTab(
+                                carrito: carrito, llamada: this.llamado),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: responsive.hp(.6),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    modaldialogoObservacionProducto('${carrito.idProducto}');
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.mode_edit,
+                        color: Colors.red,
+                        size: responsive.ip(3),
                       ),
                       Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              carrito.productoNombre,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsive.ip(1.8),
-                              ),
-                            ),
-                            Text(
-                              'S/. $preciofinal',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsive.ip(2),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Column(
-                          //crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(
-                                Icons.delete_outline,
-                                size: responsive.ip(4),
-                              ),
-                              onPressed: () {
-                                utils.deleteProductoCarrito(
-                                    context, carrito.idProducto);
-                              },
-                            ),
-                            SizedBox(height: responsive.hp(2),),
-                            Container(
-                              child: CantidadTab(
-                                  carrito: carrito, llamada: this.llamado),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: responsive.hp(.6),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      modaldialogoObservacionProducto('${carrito.idProducto}');
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.mode_edit,
-                          color: Colors.red,
-                          size: responsive.ip(3),
-                        ),
-                        Expanded(
-                          child: Text(
-                            '$observacionProducto',
-                            style: TextStyle(fontSize: responsive.ip(2)),
+                        child: Text(
+                          '$observacionProducto',
+                          style: TextStyle(
+                            fontSize: responsive.ip(2),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: responsive.hp(1),
-                  ),
-                ],
-              )
-            : Container());
+                ),
+                SizedBox(
+                  height: responsive.hp(1),
+                ),
+              ],
+            )
+          : Container(),
+    );
   }
 
   void modaldialogoObservacionProducto(String id) {
@@ -463,262 +474,6 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     );
   }
 
-  /*  Widget _direccion(Responsive responsive) {
-    final direcionBloc = ProviderBloc.dire(context);
-    direcionBloc.obtenerDireccion();
-
-    return StreamBuilder(
-      stream: direcionBloc.direccionStream,
-      builder: (BuildContext context, AsyncSnapshot<List<Direccion>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return _cardDireccion(responsive, context, snapshot.data);
-          } else {
-            return Container(
-              margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
-              height: responsive.hp(10),
-              color: Colors.transparent,
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    width: responsive.wp(85),
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          return _tarjetasDireccion(responsive,
-                              'agregar Dirección', '', '0', '0', '0');
-                        }),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Center(
-                      child: FloatingActionButton(
-                        mini: true,
-                        onPressed: () {
-                          Navigator.pushNamed(context, 'sel_Direccion');
-                        },
-                        backgroundColor: Colors.red,
-                        child: Icon(Icons.add),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            );
-            //return direction("", "");
-          }
-        } else {
-          return Container();
-        }
-      },
-    );
-  }
-
-  Widget _cardDireccion(Responsive responsive, BuildContext context,
-      List<Direccion> direcciones) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(
-          height: responsive.hp(1),
-        ),
-        Row(
-          children: <Widget>[
-            Spacer(),
-            GestureDetector(
-              onTap: (){
-                Navigator.pushNamed(context, 'gestionarDirecciones');
-              },
-              child: Text(
-                'Gestionar Direcciones',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: responsive.ip(2),
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            GestureDetector(onTap: (){
-                Navigator.pushNamed(context, 'gestionarDirecciones');
-              },
-              child: Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.red,
-              ),
-            ),
-            SizedBox(
-              width: responsive.wp(3),
-            )
-          ],
-        ),
-        Container(
-          margin:
-              EdgeInsets.only(top: responsive.hp(1), bottom: responsive.hp(1)),
-          height: responsive.hp(10),
-          color: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                width: responsive.wp(99),
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: direcciones.length + 1,
-                    itemBuilder: (context, i) {
-                      if (i == direcciones.length) {
-                        return Container(
-                          width: responsive.wp(13),
-                          color: Colors.transparent,
-                        );
-                      }
-                      int index = i;
-                      return _tarjetasDireccion(
-                          responsive,
-                          direcciones[index].direccion,
-                          direcciones[index].referencia,
-                          direcciones[index].seleccionado,
-                          '1',
-                          direcciones[index].id_direccion.toString());
-                    }),
-              ),
-              Positioned(
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: Center(
-                    child: FloatingActionButton(
-                      mini: true,
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'sel_Direccion');
-                      },
-                      backgroundColor: Colors.red,
-                      child: Icon(Icons.add),
-                    ),
-                  ))
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _tarjetasDireccion(Responsive responsive, String direccion,
-      String referencia, String seleccionado, String tap, String idDireccion) {
-    var refe;
-    if (referencia.isEmpty) {
-      refe = ' Referencia';
-    } else {
-      refe = referencia;
-    }
-    return GestureDetector(
-      onTap: () {
-        if (tap == '0') {
-          Navigator.pushNamed(context, 'sel_Direccion');
-        } else {
-          utils.seleccionarDireccion(context, idDireccion);
-        }
-      },
-      child: Container(
-        width: responsive.wp(35),
-        padding: EdgeInsets.symmetric(
-          horizontal: responsive.wp(1.5),
-        ),
-        margin: EdgeInsets.symmetric(
-          horizontal: responsive.wp(1.5),
-          vertical: responsive.hp(.5),
-        ),
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.red),
-            borderRadius: BorderRadius.circular(10),
-            color: (seleccionado == '0') ? Colors.white : Colors.red),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Icon(
-              FontAwesomeIcons.houseUser,
-              size: responsive.ip(3),
-              color: (seleccionado == '0') ? Colors.red : Colors.white,
-            ),
-            SizedBox(
-              width: responsive.wp(2),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '$direccion',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: (seleccionado == '0') ? Colors.red : Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(1.5),
-                    ),
-                  ),
-                  SizedBox(
-                    height: responsive.hp(2),
-                  ),
-                  Text(
-                    '$refe',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: (seleccionado == '0') ? Colors.red : Colors.white,
-                      fontSize: responsive.ip(1.5),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-   */
-  /* Widget _resumenPedido(BuildContext context, Responsive responsive,
-      double subtotal) {
-    var total, deliveryComision = 0.0;
-
-    /* 
-    zonaBloc.obtenerUsuarioZona(); */
-
-    return StreamBuilder(
-      stream: zonaBloc.zonaUsuarioStream,
-      builder: (BuildContext context, AsyncSnapshot<List<Zona>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            if (subtotal > double.parse(snapshot.data[0].zonaPedidoMinimo)) {
-              deliveryComision = 0;
-            } else {
-              deliveryComision = double.parse(snapshot.data[0].zonaPrecio);
-            }
-            total = subtotal + precioDelivery + deliveryComision;
-
-            return _resumenPedidoDetalle(
-                responsive,
-                deliveryComision,
-                precioDelivery,
-                total,
-                double.parse(snapshot.data[0].zonaPrecio),
-                subtotal);
-          } else {
-            total = subtotal + precioDelivery + deliveryComision;
-            return _resumenPedidoDetalle(responsive, deliveryComision,
-                precioDelivery, total, 0, subtotal);
-          }
-        } else {
-          total = subtotal + precioDelivery + deliveryComision;
-          return _resumenPedidoDetalle(
-              responsive, deliveryComision, precioDelivery, total, 0, subtotal);
-        }
-      },
-    );
-  } */
-
   Widget _resumenPedidoDetalle(Responsive responsive, double total) {
     final total2 = utils.format(total);
 
@@ -726,14 +481,17 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       padding: EdgeInsets.all(responsive.wp(2)),
       child: Container(
         decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(color: Colors.black26, blurRadius: 3),
-            ],
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(5)),
+          boxShadow: [
+            BoxShadow(color: Colors.black26, blurRadius: 3),
+          ],
+          color: Colors.white,
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(5),
+        ),
         child: Padding(
-          padding: EdgeInsets.all(responsive.wp(2)),
+          padding: EdgeInsets.all(
+            responsive.wp(2),
+          ),
           child: Column(
             children: [
               Row(
@@ -814,13 +572,16 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         responsive.wp(2),
       ),
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+        ),
         width: double.infinity,
         height: responsive.hp(5),
         child: RaisedButton(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-              side: BorderSide(color: Colors.red)),
+            borderRadius: BorderRadius.circular(5),
+            side: BorderSide(color: Colors.red),
+          ),
           color: Colors.red,
           textColor: Colors.white,
           child: Text(

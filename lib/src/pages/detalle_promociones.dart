@@ -26,7 +26,7 @@ class _DetallePromocionesState extends State<DetallePromociones> {
     final productosIdBloc = ProviderBloc.prod(context);
     final responsive = Responsive.of(context);
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.cargarCategoriaProducto(arg.productId);
+    productosIdBloc.cargarCategoriaProductoDelivery(arg.productId);
 
     return Scaffold(
       body: StreamBuilder(

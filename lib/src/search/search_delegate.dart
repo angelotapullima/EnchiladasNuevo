@@ -57,7 +57,7 @@ class DataSearch extends SearchDelegate {
     }
 
     final productosBloc = ProviderBloc.prod(context);
-    productosBloc.obtenerProductoPorQuery('$query');
+    productosBloc.obtenerProductoPorQueryDelivery('$query');
     final responsive = Responsive.of(context);
     
     return StreamBuilder(
@@ -85,13 +85,8 @@ class DataSearch extends SearchDelegate {
               ));
             }
           } else {
-            return Center(
-              child: Text(
-                'Hubo un error',
-                style: TextStyle(
-                  fontSize: responsive.ip(1.9),
-                ),
-              ),
+           return Center(
+              child: CupertinoActivityIndicator()
             );
           }
         });
@@ -108,7 +103,7 @@ class DataSearch extends SearchDelegate {
     }
 
     final productosBloc = ProviderBloc.prod(context);
-    productosBloc.obtenerProductoPorQuery('$query');
+    productosBloc.obtenerProductoPorQueryDelivery('$query');
     final responsive = Responsive.of(context);
     
     return StreamBuilder(
@@ -135,12 +130,7 @@ class DataSearch extends SearchDelegate {
             }
           } else {
             return Center(
-              child: Text(
-                'Hubo un error',
-                style: TextStyle(
-                  fontSize: responsive.ip(1.9),
-                ),
-              ),
+              child: CupertinoActivityIndicator()
             );
           }
         });

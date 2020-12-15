@@ -21,7 +21,7 @@ class _MapaPageState extends State<MapaPage> {
   
   @override
   void initState() {
-    context.bloc<MiUbicacionBloc>().iniciarSeguimiento(widget.idRepartidor);
+    context.watch()<MiUbicacionBloc>().iniciarSeguimiento(widget.idRepartidor);
 
     super.initState();
   }
@@ -29,7 +29,7 @@ class _MapaPageState extends State<MapaPage> {
   @override
   void dispose() {
     print('ctm');
-    context.bloc<MiUbicacionBloc>().cancelarSeguimiento();
+    context.watch<MiUbicacionBloc>().cancelarSeguimiento();
     super.dispose();
   }
 

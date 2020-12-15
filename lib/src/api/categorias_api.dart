@@ -104,11 +104,12 @@ class CategoriasApi {
             productosData.productoDescripcion = productos[x]['producto_detalle'];
             productosData.productoComentario = decodedData['result']['data'][i]['categoria_comentario'];
             productosData.sonido = decodedData['result']['data'][i]['categoria_sonido'];
+            productosData.productoCarta = productos[x]['producto_carta'];
+            productosData.productoDelivery = productos[x]['producto_delivery'];
 
 
             if (datoproducto.length > 0) {
               productosData.productoFavorito = datoproducto[0].productoFavorito;
-              productosData.productoComentario = datoproducto[0].productoComentario;
               productoDatabase.updateProductosDb(productosData);
               //print('actualizado producto ${productosData.idProducto}  ');
             } else {
@@ -123,7 +124,7 @@ class CategoriasApi {
       }
 
       return true;
-    } catch (error, stacktrace) {
+    } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
 
       utils.showToast(
@@ -205,7 +206,9 @@ class CategoriasApi {
     }
   }
 
-   */Future<List<ProductosData>> obtenerProductoCategoria(String id) async {
+   */
+  
+  /* Future<List<ProductosData>> obtenerProductoCategoria(String id) async {
     try {
       final lista = List<ProductosData>();
 
@@ -260,4 +263,4 @@ class CategoriasApi {
       return [];
     }
   }
-}
+ */}

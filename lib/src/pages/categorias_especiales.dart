@@ -26,7 +26,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
     final productosIdBloc = ProviderBloc.prod(context);
     final responsive = Responsive.of(context);
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosEnchiladasPorCategoria(arg.productId);
+    productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(arg.productId);
 
     return Scaffold(
         body: Stack(children: <Widget>[

@@ -22,9 +22,9 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'enchiladasBufeoTec.db');
+    final path = join(documentsDirectory.path, 'enchiladasBufeov2.db');
 
-    return await openDatabase(path, version: 4, onOpen: (db) {},
+    return await openDatabase(path, version: 1, onOpen: (db) {},
         onConfigure: (Database db) async {
       await db.execute('PRAGMA foreign_keys = ON');
     }, onCreate: (Database db, int version) async {
@@ -78,6 +78,8 @@ class DatabaseProvider {
           'producto_foto VARCHAR,'
           'producto_orden VARCHAR,'
           'producto_precio VARCHAR,'
+          'producto_carta VARCHAR,'
+          'producto_delivery VARCHAR,'
           'producto_sonido VARCHAR,'
           'producto_unidad VARCHAR,'
           'producto_estado VARCHAR,'

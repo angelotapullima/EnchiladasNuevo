@@ -55,7 +55,7 @@ class SearchLocal extends SearchDelegate {
     }
 
     final productosBloc = ProviderBloc.prod(context);
-    productosBloc.obtenerProductoPorQuery('$query');
+    productosBloc.obtenerProductoPorQueryLocal('$query');
     final responsive = Responsive.of(context);
 
     return StreamBuilder(
@@ -91,12 +91,7 @@ class SearchLocal extends SearchDelegate {
             }
           } else {
             return Center(
-              child: Text(
-                'Hubo un error buildResults',
-                style: TextStyle(
-                  fontSize: responsive.ip(1.9),
-                ),
-              ),
+              child: CupertinoActivityIndicator()
             );
           }
         });
@@ -113,7 +108,7 @@ class SearchLocal extends SearchDelegate {
       );
     }
       final productosBloc = ProviderBloc.prod(context);
-    productosBloc.obtenerProductoPorQuery('$query');
+    productosBloc.obtenerProductoPorQueryLocal('$query');
     final responsive = Responsive.of(context);
 
 
@@ -147,12 +142,7 @@ class SearchLocal extends SearchDelegate {
             }
           } else {
             return Center(
-              child: Text(
-                'Hubo un error',
-                style: TextStyle(
-                  fontSize: responsive.ip(1.9),
-                ),
-              ),
+              child: CupertinoActivityIndicator()
             );
           }
         });

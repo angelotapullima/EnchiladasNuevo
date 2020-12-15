@@ -205,7 +205,7 @@ class OrdenesApi {
         linkcito.link = link;
         return linkcito;
       }
-    } catch (error, stacktrace) {
+    } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);
@@ -298,7 +298,7 @@ class OrdenesApi {
       } else {
         return [];
       }
-    } catch (error, stacktrace) {
+    } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
       /*utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);*/
@@ -393,7 +393,7 @@ class OrdenesApi {
       } else {
         return [];
       }
-    } catch (error, stacktrace) {
+    } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
       /*utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);*/
@@ -463,7 +463,7 @@ class OrdenesApi {
         linkcito.link = link;
         return linkcito;
       }
-    } catch (error, stacktrace) {
+    } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);
@@ -495,7 +495,7 @@ class OrdenesApi {
       } else {
         return 2;
       }
-    } catch (error, stacktrace) {
+    } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);
@@ -527,7 +527,7 @@ class OrdenesApi {
       } else {
         return 2;
       }
-    } catch (error, stacktrace) {
+    } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(
           "Problemas con la conexión a internet", 2, ToastGravity.TOP);

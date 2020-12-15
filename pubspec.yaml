@@ -65,7 +65,7 @@ dependencies:
   url_launcher: ^5.7.10
   flutter_form_builder: ^3.14.0
   showcaseview: ^0.1.6
-  flutter_bloc: ^6.0.1
+  flutter_bloc: ^6.1.0
   assets_audio_player: ^2.0.13+1
   flutter_advanced_networkimage:
     git: https://github.com/mchome/flutter_advanced_networkimage

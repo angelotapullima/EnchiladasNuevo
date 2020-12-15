@@ -40,40 +40,6 @@ class CategoriasLocal extends StatelessWidget {
     );
   }
 
-  Widget _conte(double anchoCategorias, double anchoProductos,
-      List<CategoriaData> categorias, BuildContext context) {
-    final bottomBloc = ProviderBloc.bottom(context);
-    final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
-    enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
-
-    return StreamBuilder(
-        stream: bottomBloc.selectPageStream,
-        builder: (context, snapshot) {
-          return StreamBuilder(
-              stream: enchiladasNaviBloc.enchiladasIndexStream,
-              builder: (context, snapshot) {
-                return Row(
-                  children: <Widget>[
-                    Container(
-                      width: anchoCategorias,
-                      child: CategoriasProducto(
-                        ancho: anchoCategorias,
-                        data: categorias,
-                      ),
-                    ),
-                    Container(
-                      width: anchoProductos,
-                      child: ProductosIdPage(
-                        index: enchiladasNaviBloc.index,
-                        ancho: anchoProductos,
-                      ),
-                    )
-                  ],
-                );
-              });
-        });
-  }
-
   Widget rowDatos(BuildContext context, CategoriasBloc categoriasBloc) {
     final responsive = Responsive.of(context);
     final anchoCategorias = responsive.wp(24);
@@ -156,6 +122,40 @@ class CategoriasLocal extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _conte(double anchoCategorias, double anchoProductos,
+      List<CategoriaData> categorias, BuildContext context) {
+    final bottomBloc = ProviderBloc.bottom(context);
+    final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
+    enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
+
+    return StreamBuilder(
+        stream: bottomBloc.selectPageStream,
+        builder: (context, snapshot) {
+          return StreamBuilder(
+              stream: enchiladasNaviBloc.enchiladasIndexStream,
+              builder: (context, snapshot) {
+                return Row(
+                  children: <Widget>[
+                    Container(
+                      width: anchoCategorias,
+                      child: CategoriasProducto(
+                        ancho: anchoCategorias,
+                        data: categorias,
+                      ),
+                    ),
+                    Container(
+                      width: anchoProductos,
+                      child: ProductosIdPage(
+                        index: enchiladasNaviBloc.index,
+                        ancho: anchoProductos,
+                      ),
+                    )
+                  ],
+                );
+              });
+        });
   }
 }
 
@@ -273,7 +273,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosEnchiladasPorCategoria(widget.index);
+    productosIdBloc.obtenerProductosLocalEnchiladasPorCategoria(widget.index);
 
     return Scaffold(
       body: _listaProductosId(productosIdBloc, responsive),
@@ -296,9 +296,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                 itemCount: productos.length,
                 itemBuilder: (BuildContext context, int index) {
                   return _itemPedido(
-                    context,
-                    productos[index],
-                  );
+                      context, productos[index], productos.length.toString());
                 },
               );
             }
@@ -315,17 +313,21 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 
-  Widget _itemPedido(BuildContext context, ProductosData productosData) {
+  Widget _itemPedido(
+      BuildContext context, ProductosData productosData, String cantidad) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(8)),
-        margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5)),
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
+          color: Colors.white,
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        margin: EdgeInsets.symmetric(
+          vertical: responsive.hp(0.5),
+        ),
         //height: responsive.hp(13),
         child: Hero(
           tag: '${productosData.idProducto}',
@@ -347,10 +349,11 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     imageUrl: '${productosData.productoFoto}',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
-                          image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      )),
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -387,7 +390,13 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
-              return DetalleProductoFotoLocal(productosData: productosData,mostrarback: true,);
+              return ProductoFotoLocal(
+                  cantidadItems: cantidad,
+                  idCategoria: productosData.idCategoria,
+                  numeroItem: productosData.numeroitem);
+              /*  return DetalleProductoFotoLocal(
+                productosData: productosData,
+                mostrarback: true, */
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {

@@ -4,13 +4,10 @@ import 'package:enchiladasapp/src/models/arguments.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
-import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetallePromocionesLocal extends StatefulWidget {
   const DetallePromocionesLocal({Key key}) : super(key: key);
@@ -28,7 +25,7 @@ class _DetallePromocionesLocalState extends State<DetallePromocionesLocal> {
     final productosIdBloc = ProviderBloc.prod(context);
     final responsive = Responsive.of(context);
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.cargarCategoriaProducto(arg.productId);
+    productosIdBloc.cargarCategoriaProductoLocal(arg.productId);
 
     return Scaffold(
       body: StreamBuilder(
