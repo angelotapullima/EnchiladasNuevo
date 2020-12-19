@@ -1,10 +1,14 @@
 
 
+import 'package:enchiladasapp/src/bloc/adicionales_bloc.dart';
 import 'package:enchiladasapp/src/bloc/bottom_local.dart';
 import 'package:enchiladasapp/src/bloc/carrito_completo.dart';
 import 'package:enchiladasapp/src/bloc/categoria_enchiladas_navi_bloc.dart';
 import 'package:enchiladasapp/src/bloc/contador_productos_foto.dart';
+import 'package:enchiladasapp/src/bloc/item_observacion_bloc.dart';
 import 'package:enchiladasapp/src/bloc/nuevo_metodo_pago.dart';
+import 'package:enchiladasapp/src/bloc/observaciones_chip_bloc.dart';
+import 'package:enchiladasapp/src/bloc/observaciones_productos_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_local_bloc.dart';
 import 'package:enchiladasapp/src/bloc/zona_bloc.dart';
@@ -66,6 +70,10 @@ class ProviderBloc extends InheritedWidget {
   final bottomLocalBloc = BottomLocalBloc();
   final pantallaLocalBloc=PantallaLocalBloc();
   final contadorProductosFotoLocal=ContadorProductosFotoLocal();
+  final observacionesProductoBloc=ObservacionesProductoBloc();
+  final observacionesChipBloc=ObservacionesChipBloc();
+  final adicionalesBloc=AdicionalesBloc();
+  final itemObservacionBloc=ItemObservacionBloc();
 
   static ProviderBloc _instancia;
 
@@ -177,6 +185,26 @@ class ProviderBloc extends InheritedWidget {
   static ContadorProductosFotoLocal contadorLocal(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .contadorProductosFotoLocal;
+  }
+  
+  static ObservacionesProductoBloc observaciones(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .observacionesProductoBloc;
+  }
+  
+  static ObservacionesChipBloc chip(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .observacionesChipBloc;
+  }
+  
+  static AdicionalesBloc adicionales(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .adicionalesBloc;
+  }
+  
+  static ItemObservacionBloc itemOb(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .itemObservacionBloc;
   }
     
 }

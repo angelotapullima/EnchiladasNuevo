@@ -12,7 +12,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Enchiladas"
-        
+        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyBWpm2vutLpBiSiyJM6PJ5-GNgna3bizBQ"/>

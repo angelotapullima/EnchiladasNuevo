@@ -189,8 +189,8 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                 children: <Widget>[
                   Center(
                     child: GestureDetector(
-                      onVerticalDragUpdate: (algo) {
-                        if (algo.primaryDelta > 7) {
+                      onVerticalDragUpdate: (drag) {
+                        if (drag.primaryDelta > 7) {
                           Navigator.pop(context);
                         }
                       },

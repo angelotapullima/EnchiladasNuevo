@@ -22,7 +22,7 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'enchiladasBufeov2.db');
+    final path = join(documentsDirectory.path, 'enchiladasApp2.db');
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onConfigure: (Database db) async {
@@ -86,6 +86,20 @@ class DatabaseProvider {
           'producto_descripcion VARCHAR,'
           'producto_comentario VARCHAR,'
           'producto_favorito int'
+          ')');
+
+
+          await db.execute('CREATE TABLE Adicionales ('
+          'id_producto VARCHAR  PRIMARY KEY,'
+          'id_categoria VARCHAR,' 
+          'producto_nombre VARCHAR,'
+          'producto_foto VARCHAR,'
+          'producto_precio VARCHAR,'
+          'producto_carta VARCHAR,'
+          'producto_delivery VARCHAR,'
+          'producto_seleccionado VARCHAR,'
+          'producto_estado VARCHAR,'
+          'producto_descripcion VARCHAR'
           ')');
 
       await db.execute('CREATE TABLE DetallePedido ('
@@ -230,6 +244,70 @@ class DatabaseProvider {
           'pantalla_estado VARCHAR,'
           'pantalla_categorias VARCHAR'
           ')'); 
+
+
+
+           await db.execute('CREATE TABLE ObservacionesFijas ('
+          'idObservacionesFijas INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'mostrar VARCHAR'
+          ')'); 
+
+          await db.execute('CREATE TABLE ProductosFijos ('
+          'idProductosFijos INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'nombreProducto VARCHAR,' 
+          'idRelacionado VARCHAR'
+          ')');
+
+
+          await db.execute('CREATE TABLE Sabores ('
+          'idTextosFijos INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'maximo VARCHAR,' 
+          'tituloTextos VARCHAR'
+          ')'); 
+
+           await db.execute('CREATE TABLE OpcionesSabores ('
+          'idOpcionesTextosFijos INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'tituloTextos VARCHAR,'
+          'nombreTexto VARCHAR'
+          ')'); 
+
+
+          
+           await db.execute('CREATE TABLE Acompanhamientos ('
+          'idTextosFijos INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'tituloTextos VARCHAR'
+          ')'); 
+
+           await db.execute('CREATE TABLE OpcionesAcompanhamientos ('
+          'idOpcionesTextosFijos INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'tituloTextos VARCHAR,'
+          'nombreTexto VARCHAR'
+          ')'); 
+
+
+
+          await db.execute('CREATE TABLE ObservacionesVariables ('
+          'idObservacionesVariables INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'nombreVariable VARCHAR'
+          ')'); 
+
+
+          await db.execute('CREATE TABLE ItemObservacion ('
+          'id_producto VARCHAR PRIMARY KEY,'
+          'id_categoria VARCHAR,' 
+          'producto_nombre VARCHAR,'
+          'producto_foto VARCHAR,'
+          'producto_precio VARCHAR,'
+          'producto_observacion VARCHAR'
+          ')');
+
     });
   }
 

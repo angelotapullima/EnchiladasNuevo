@@ -2,12 +2,16 @@ import 'dart:ui';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
+import 'package:enchiladasapp/src/database/adicionales_database.dart';
+import 'package:enchiladasapp/src/database/item_observacion_database.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/validar_producto.dart';
+import 'package:enchiladasapp/src/pages/detalle_observaciones.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/translate_animation.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
+import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
@@ -33,16 +37,18 @@ class _DetalleProducto extends State<DetalleProductitos> {
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
 
+  bool mostrar = false;
+
   bool estadoDelivery = false;
   double _panelHeightOpen;
 
-  TextEditingController observacionProducto = TextEditingController();
+  TextEditingController observacionProductoController = TextEditingController();
   PanelController panelController = new PanelController();
 
   @override
   void dispose() {
     // Limpia el controlador cuando el Widget se descarte
-    observacionProducto.dispose();
+    observacionProductoController.dispose();
     super.dispose();
   }
 
@@ -220,8 +226,26 @@ class _DetalleProducto extends State<DetalleProductitos> {
                             ),
                           ),
                         ),
-                        onTap: () {
-                          utils.agregarCarrito(productosData, context, "1");
+                        onTap: () async {
+                          final adicionalesDatabase = AdicionalesDatabase();
+
+                          await adicionalesDatabase
+                              .updateAdicionalesEnFalseDb();
+
+                          final itemObservacionDatabase =
+                              ItemObservacionDatabase();
+                          itemObservacionDatabase.deleteItemObservacion();
+
+                          agregarItemObservacion(
+                              context, productosData.idProducto,true);
+
+                          Navigator.of(context)
+                              .push(_createRoute(productosData.idProducto));
+                          /* setState(() {
+                            mostrar =true;
+                            
+                          }); */
+                          //utils.agregarCarrito(productosData, context, "1");
                         },
                       ),
                     );
@@ -282,6 +306,30 @@ class _DetalleProducto extends State<DetalleProductitos> {
               })
         ],
       ),
+    );
+  }
+
+  Route _createRoute(String idProducto) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return DetalleObservaciones(
+          idProductoArgument: idProducto,
+        );
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(
+          CurveTween(curve: curve),
+        );
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 
@@ -618,7 +666,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
   }
 
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
-    print('detalle ${carrito.productoFoto}');
+    
     final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
         double.parse(carrito.productoCantidad));
     var observacionProducto = 'Toca para agregar una observación';
@@ -739,6 +787,8 @@ class _DetalleProducto extends State<DetalleProductitos> {
                     ],
                   ),
                   onTap: () {
+                    observacionProductoController.text =
+                        '${carrito.productoObservacion}';
                     dialogoObservacionProducto('${carrito.idProducto}');
                   },
                 )
@@ -758,83 +808,84 @@ class _DetalleProducto extends State<DetalleProductitos> {
         horizontal: responsive.wp(2),
       ),
       child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(5),
+        decoration: BoxDecoration(
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
+          color: Colors.white,
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(
+            responsive.wp(2),
           ),
-          child: Padding(
-            padding: EdgeInsets.all(
-              responsive.wp(2),
+          child: Column(children: [
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    'Sub Total ',
+                    style: TextStyle(
+                      fontSize: responsive.ip(2),
+                    ),
+                  ),
+                ),
+                Text(
+                  'S/ $subtotal2',
+                  style: TextStyle(
+                    fontSize: responsive.ip(2),
+                  ),
+                ),
+              ],
             ),
-            child: Column(children: [
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      'Sub Total ',
-                      style: TextStyle(
-                        fontSize: responsive.ip(2),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'S/ $subtotal2',
+            SizedBox(
+              height: responsive.hp(2),
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    'Entrega rápida',
                     style: TextStyle(
                       fontSize: responsive.ip(2),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: responsive.hp(2),
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      'Entrega rápida',
-                      style: TextStyle(
-                        fontSize: responsive.ip(2),
-                      ),
-                    ),
+                ),
+                Text(
+                  'S/ $valorDelivery2',
+                  style: TextStyle(
+                    fontSize: responsive.ip(2),
                   ),
-                  Text(
-                    'S/ $valorDelivery2',
-                    style: TextStyle(
-                      fontSize: responsive.ip(2),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: responsive.hp(2),
-              ),
-              Divider(),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Text(
-                    'Total a pagar',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2.2),
-                    ),
-                  )),
-                  Text(
-                    'S/ $totalex',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2.2),
-                    ),
-                  )
-                ],
-              ),
-            ]),
-          )),
+                )
+              ],
+            ),
+            SizedBox(
+              height: responsive.hp(2),
+            ),
+            Divider(),
+            Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(
+                  'Total a pagar',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2.2),
+                  ),
+                )),
+                Text(
+                  'S/ $totalex',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsive.ip(2.2),
+                  ),
+                )
+              ],
+            ),
+          ]),
+        ),
+      ),
     );
   }
 
@@ -944,11 +995,11 @@ class _DetalleProducto extends State<DetalleProductitos> {
       onTap: () {
         Navigator.pushNamed(context, 'detalleProductoFoto', arguments: carrito);
       },
-      onVerticalDragUpdate: (algo) {
-        print(algo.primaryDelta);
+      onVerticalDragUpdate: (drag) {
+        
 
-        if (algo.primaryDelta > 7) {
-          print('atras');
+        if (drag.primaryDelta > 7) {
+          
           Navigator.pop(context);
         }
       },
@@ -989,13 +1040,15 @@ class _DetalleProducto extends State<DetalleProductitos> {
         builder: (contextd) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
+              borderRadius: BorderRadius.circular(20.0),
+            ),
             title: Text('Ingrese la observación del producto'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextField(
-                  controller: observacionProducto,
+                  maxLines: 3,
+                  controller: observacionProductoController,
                 ),
                 //Text('Producto agregado al carrito correctamente'),
                 SizedBox(
@@ -1010,15 +1063,16 @@ class _DetalleProducto extends State<DetalleProductitos> {
                   },
                   child: Text('Cancelar')),
               FlatButton(
-                  onPressed: () async {
-                    utils.actualizarObservacion(
-                        context, observacionProducto.text, id);
+                onPressed: () async {
+                  utils.actualizarObservacion(
+                      context, observacionProductoController.text, id);
 
-                    observacionProducto.text = '';
+                  observacionProductoController.text = '';
 
-                    Navigator.pop(context);
-                  },
-                  child: Text('Aceptar')),
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
             ],
           );
         });

@@ -275,7 +275,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
+    productosIdBloc
+        .obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
 
     return Scaffold(
       body: _listaProductosId(productosIdBloc, responsive),
@@ -359,51 +360,54 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                       ),
                     ),
                     Positioned(
-                        right: responsive.wp(1),
-                        top: responsive.hp(.5),
-                        child: (productosData.productoFavorito == 1)
-                            ? Container(
-                                height: responsive.ip(4),
-                                width: responsive.ip(4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.red.withOpacity(.3),
+                      right: responsive.wp(1),
+                      top: responsive.hp(.5),
+                      child: (productosData.productoFavorito == 1)
+                          ? Container(
+                              height: responsive.ip(4),
+                              width: responsive.ip(4),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.red.withOpacity(.3),
+                              ),
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      utils.quitarFavoritos(
+                                          context, productosData);
+                                    });
+                                  },
+                                  child: Icon(FontAwesomeIcons.solidHeart,
+                                      color: Colors.red,
+                                      size: responsive.ip(3)),
                                 ),
-                                child: Center(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        utils.quitarFavoritos(
-                                            context, productosData);
-                                      });
-                                    },
-                                    child: Icon(FontAwesomeIcons.solidHeart,
-                                        color: Colors.red,
-                                        size: responsive.ip(3)),
+                              ),
+                            )
+                          : Container(
+                              height: responsive.ip(4),
+                              width: responsive.ip(4),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.red.withOpacity(.3),
+                              ),
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      utils.agregarFavoritos(
+                                          context, productosData);
+                                    });
+                                  },
+                                  child: Icon(
+                                    FontAwesomeIcons.heart,
+                                    color: Colors.white,
+                                    size: responsive.ip(3),
                                   ),
                                 ),
-                              )
-                            : Container(
-                                height: responsive.ip(4),
-                                width: responsive.ip(4),
-                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.red.withOpacity(.3),
-                                ),
-                                child: Center(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        utils.agregarFavoritos(
-                                            context, productosData);
-                                      });
-                                    },
-                                    child: Icon(FontAwesomeIcons.heart,
-                                        color: Colors.white,
-                                        size: responsive.ip(3)),
-                                  ),
-                                ),
-                              )),
+                              ),
+                            ),
+                    ),
                   ],
                 ),
               ),

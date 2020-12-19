@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:enchiladasapp/src/database/adicionales_database.dart';
 import 'package:enchiladasapp/src/database/pantalla_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
 import 'package:enchiladasapp/src/database/puzzle_database.dart';
@@ -20,6 +21,8 @@ class ConfiguracionApi {
   final pantallaDatabase = PantallaDatabase();
   final puzzleDatabase = PuzzleDatabase();
   final productoDatabase = ProductoDatabase();
+
+  final adicionalesDatabase=AdicionalesDatabase();
 
   Future<bool> configuracion() async {
     try { 
@@ -118,6 +121,23 @@ class ConfiguracionApi {
               decodedData['result']['data']['puzzle'][y]['imagen_estado'];
 
           await puzzleDatabase.insertarPuzzle(puzzle);
+        }
+
+        for (int t = 0;t < decodedData['result']['data']['adicionales'].length;t++) {
+           ProductosData productosData = ProductosData();
+            productosData.idProducto = decodedData['result']['data']['adicionales'][t]['id_producto'];
+            productosData.idCategoria = '16';
+            productosData.productoNombre = decodedData['result']['data']['adicionales'][t]['producto_nombre'];
+            productosData.productoFoto = decodedData['result']['data']['adicionales'][t]['producto_foto'];
+            productosData.productoPrecio = decodedData['result']['data']['adicionales'][t]['producto_precio'];
+            productosData.productoCarta = decodedData['result']['data']['adicionales'][t]['producto_carta'];
+            productosData.productoDelivery = decodedData['result']['data']['adicionales'][t]['productoDelivery'];
+            productosData.productoSeleccionado = '0';
+            productosData.productoEstado = decodedData['result']['data']['adicionales'][t]['producto_estado'];
+            productosData.productoDescripcion = decodedData['result']['data']['adicionales'][t]['producto_detalle'];
+            
+
+          await adicionalesDatabase.insertarProductosDb(productosData);
         }
 
         return true;

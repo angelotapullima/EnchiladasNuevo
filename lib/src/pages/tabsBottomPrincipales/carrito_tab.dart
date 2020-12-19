@@ -24,13 +24,11 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
 
   bool estadoDelivery = false;
 
-  TextEditingController observacionProducto = TextEditingController();
-  TextEditingController telefonoController = TextEditingController();
+  TextEditingController observacionProductoController = TextEditingController();
   @override
   void dispose() {
     // Limpia el controlador cuando el Widget se descarte
-    telefonoController.dispose();
-    observacionProducto.dispose();
+    observacionProductoController.dispose();
     super.dispose();
   }
 
@@ -364,6 +362,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 ),
                 GestureDetector(
                   onTap: () {
+
+                    observacionProductoController.text = '${carrito.productoObservacion}';
                     modaldialogoObservacionProducto('${carrito.idProducto}');
                   },
                   child: Row(
@@ -428,18 +428,19 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         fontWeight: FontWeight.bold),
                   ),
                   TextField(
-                    controller: observacionProducto,
+                    maxLines: 3,
+                    controller: observacionProductoController,
                   ),
                   SizedBox(
                     height: responsive.hp(3),
                   ),
                   FlatButton(
                     onPressed: () async {
-                      if (observacionProducto.text.length > 0) {
+                      if (observacionProductoController.text.length > 0) {
                         utils.actualizarObservacion(
-                            context, observacionProducto.text, id);
+                            context, observacionProductoController.text, id);
 
-                        observacionProducto.text = '';
+                        observacionProductoController.text = '';
 
                         Navigator.pop(context);
                       } else {

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/api/configuracion_api.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
@@ -24,8 +25,11 @@ class PrincipalTab extends StatelessWidget {
   void _onRefresh(BuildContext context) async {
     print('_onRefresh pantalla');
     final pantallasBloc = ProviderBloc.pantalla(context);
-    final categoriasBloc = ProviderBloc.cat(context);
+    final categoriasBloc = ProviderBloc.cat(context); 
     pantallasBloc.obtenerPantallas();
+
+    final categoriasApi = CategoriasApi();
+    await categoriasApi.obtenerAmbos();
     categoriasBloc.obtenerCategoriasPromociones();
     _refreshController.refreshCompleted();
   }

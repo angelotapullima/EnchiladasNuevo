@@ -14,8 +14,7 @@ class ProductosBloc {
   final categoriaDatabase = CategoriasDatabase();
   final temporizadorDatabase = TemporizadorDatabase();
 
-  final _productosEnchiladasController =
-      new BehaviorSubject<List<ProductosData>>();
+  final _productosEnchiladasController =new BehaviorSubject<List<ProductosData>>();
   final _productosMarketController = new BehaviorSubject<List<ProductosData>>();
   final _productosIDController = new BehaviorSubject<List<ProductosData>>();
   final _productosQueryController = new BehaviorSubject<List<ProductosData>>();
@@ -108,6 +107,9 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
       productosData.productoPrecio = listProductos[x].productoPrecio;
       productosData.productoUnidad = listProductos[x].productoUnidad;
       productosData.productoEstado = listProductos[x].productoEstado;
+      productosData.productoCarta = listProductos[x].productoCarta;
+      productosData.productoDelivery = listProductos[x].productoDelivery;
+      productosData.productoFavorito = listProductos[x].productoFavorito;
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;

@@ -51,6 +51,8 @@ class _CantidadTabState extends State<CantidadTab> {
 
     return _cantidad(responsive,productosData);
   }
+
+  
   Widget _cantidad(Responsive responsive,ProductosData producto,) {
     final pad = responsive.hp(1);
     return Padding(
