@@ -57,6 +57,7 @@ class _DetallePedidoState extends State<DetallePedido> {
             width: double.infinity,
             color: Colors.red,
           ),
+          
           StreamBuilder(
               stream: pedidoBloc.pedidoIdStream,
               builder: (BuildContext context,

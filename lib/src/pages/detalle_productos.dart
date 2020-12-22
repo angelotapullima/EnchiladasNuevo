@@ -656,6 +656,40 @@ class _DetalleProducto extends State<DetalleProductitos> {
             );
           }
           final index = i - 1;
+
+          if (carrito[index].idCategoria == '97') {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+              child: Row(
+                children: [
+                  Text(
+                    '${carrito[index].productoNombre}',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Text(
+                    'S/.${carrito[index].productoPrecio}',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete_outline,
+                      size: responsive.ip(4),
+                    ),
+                    onPressed: () {
+                      utils.deleteProductoCarrito(
+                          context, carrito[index].idProducto);
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
           return _itemPedido(
             responsive,
             carrito[index],
@@ -917,6 +951,8 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         final prefs = Preferences();
 
                         if (prefs.email != null && prefs.email != "") {
+
+                          prefs.propinaRepartidor = '0';
                           Navigator.pushNamed(context, 'detallePago');
                         } else {
                           pedirLogueo();
@@ -937,6 +973,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
         final prefs = Preferences();
 
         if (prefs.email != null && prefs.email != "") {
+                          prefs.propinaRepartidor = '0';
           Navigator.pushNamed(context, 'detallePago');
         } else {
           pedirLogueo();

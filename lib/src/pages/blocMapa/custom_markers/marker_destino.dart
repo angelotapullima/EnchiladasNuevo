@@ -1,3 +1,8 @@
+
+
+
+
+ 
 part of 'custom_markers.dart';
 
 class MarkerDetinoPainter extends CustomPainter {
@@ -10,8 +15,8 @@ class MarkerDetinoPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
       
-    final double circuloNegroR  = 20;
-    final double circuloBlancoR = 7;
+    final double circuloNegroR  = 30;
+    final double circuloBlancoR = 9;
 
     Paint paint = new Paint()
       ..color = Colors.red;
@@ -19,7 +24,7 @@ class MarkerDetinoPainter extends CustomPainter {
     // Dibujar circulo negro
     canvas.drawCircle(
       Offset( circuloNegroR , size.height - circuloNegroR),
-      20, 
+      30, 
       paint
     );
 
@@ -35,7 +40,7 @@ class MarkerDetinoPainter extends CustomPainter {
     // Sombra
     final Path path = new Path();
 
-    path.moveTo( 0, 20 );
+    path.moveTo( 40, 20 );
     path.lineTo( size.width - 10, 20 );
     path.lineTo( size.width - 10, 100 );
     path.lineTo( 0, 100 );
@@ -43,12 +48,12 @@ class MarkerDetinoPainter extends CustomPainter {
     canvas.drawShadow(path, Colors.black87, 10, false);
 
     // Caja Blanca
-    final cajaBlanca = Rect.fromLTWH( 0, 20, size.width - 10, 80);
+    final cajaBlanca = Rect.fromLTWH( 40, 20, size.width + 80, 150);
     canvas.drawRect( cajaBlanca, paint);
 
     // Caja Negra
     paint.color = Colors.red;
-    final cajaNegra = Rect.fromLTWH( 0, 20, 70, 80);
+    final cajaNegra = Rect.fromLTWH( 40, 20, 180, 150);
     canvas.drawRect( cajaNegra, paint);
 
     // Dibujar textos
@@ -57,7 +62,7 @@ class MarkerDetinoPainter extends CustomPainter {
     kilometros = kilometros / 100;
 
     TextSpan textSpan = new TextSpan(
-      style: TextStyle( color: Colors.white, fontSize: 22, fontWeight: FontWeight.w400 ),
+      style: TextStyle( color: Colors.white, fontSize: 40, fontWeight: FontWeight.w400 ),
       text: '${this.metros}'
     );
 
@@ -66,15 +71,15 @@ class MarkerDetinoPainter extends CustomPainter {
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center
     )..layout(
-      maxWidth: 70,
-      minWidth: 70
+      maxWidth: 160,
+      minWidth: 160
     );
 
-    textPainter.paint(canvas, Offset( 0, 35));
+    textPainter.paint(canvas, Offset( 50, 50));
 
     // Minutos
     textSpan = new TextSpan(
-      style: TextStyle( color: Colors.white, fontSize: 20, fontWeight: FontWeight.w400 ),
+      style: TextStyle( color: Colors.white, fontSize: 40, fontWeight: FontWeight.w400 ),
       text: 'Km'
     );
 
@@ -83,14 +88,14 @@ class MarkerDetinoPainter extends CustomPainter {
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center
     )..layout(
-      maxWidth: 70
+      maxWidth: 120,minWidth:120
     );
 
-    textPainter.paint(canvas, Offset( 20, 67 ));
+    textPainter.paint(canvas, Offset( 50, 90));
 
     // Mi ubicación
     textSpan = new TextSpan(
-      style: TextStyle( color: Colors.black, fontSize: 22, fontWeight: FontWeight.w400 ),
+      style: TextStyle( color: Colors.black, fontSize: 40, fontWeight: FontWeight.w400 ),
       text: this.descripcion
     );
 
@@ -98,13 +103,13 @@ class MarkerDetinoPainter extends CustomPainter {
       text: textSpan,
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.left,
-      maxLines: 2,
+      maxLines: 3,
       ellipsis: '...'
     )..layout(
-      maxWidth: size.width - 100,
+      maxWidth: size.width- 100,
     );
 
-    textPainter.paint(canvas, Offset( 90, 35 ));
+    textPainter.paint(canvas, Offset( 230, 60 ));
 
 
 

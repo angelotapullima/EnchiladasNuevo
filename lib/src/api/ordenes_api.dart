@@ -50,25 +50,23 @@ class OrdenesApi {
         carri.productoCantidad = productos[i].productoCantidad;
         carri.productoNombre = productos[i].productoNombre;
         carri.productoFoto = productos[i].productoFoto;
-        carri.productoPrecio = productos[i].productoPrecio; 
+        carri.productoPrecio = productos[i].productoPrecio;
         carri.productoTipo = productos[i].productoTipo;
         carri.productoObservacion = productos[i].productoObservacion;
         productsList.add(carri);
 
         cantidadDeProductos =
-          cantidadDeProductos + int.parse(productos[i].productoCantidad);
+            cantidadDeProductos + int.parse(productos[i].productoCantidad);
       }
 
       final listBolsa = await pDatabase.consultarPorId(prefs.idBolsa);
       int cantidadDeBolsas = (cantidadDeProductos / 3).ceil();
 
-      Carrito carrito3 =  Carrito ();
+      Carrito carrito3 = Carrito();
       carrito3.idProducto = int.parse(listBolsa[0].idProducto);
       carrito3.productoCantidad = cantidadDeBolsas.toString();
       carrito3.productoObservacion = '';
-        productsList.add(carrito3);
-
-
+      productsList.add(carrito3);
 
       for (int x = 0; x < productsList.length; x++) {
         productitos +=
@@ -79,7 +77,7 @@ class OrdenesApi {
         }
       }
 
-    /*  print(" 'app': 'true',"
+      /*  print(" 'app': 'true',"
           "'tn': '${user[0].token}',"
           "'id_user': '${user[0].cU}',"
           "'pedido_tipo_comprobante': '${pedido.pedidoTipoComprobante}',"
@@ -268,7 +266,6 @@ class OrdenesApi {
 
           await pedidoDatabase.insertarPedido(pedidos);
 
-
           for (int i = 0; i < cantidadPedidos[x]['productos'].length; i++) {
             ProductoServer productoServer = new ProductoServer();
 
@@ -311,7 +308,8 @@ class OrdenesApi {
       final list = List<PedidoServer>();
 
       final url = '$_url/api/pedido/historial_pedidos';
-      final List<User> user = await userDatabase.obtenerUsUario();/* 
+      final List<User> user = await userDatabase.obtenerUsUario();
+      /* 
       print('token ${user[0].token}');
       print('CU ${user[0].cU}'); */
 
@@ -331,8 +329,9 @@ class OrdenesApi {
         for (int x = 0; x < cantidadPedidos.length; x++) {
           //obtener el pedido si existe para actualizarlo o crear uno nuevo
 
-            final pedidoList = await pedidoDatabase.obtenerPedidoPorId(cantidadPedidos[x]['id_pedido']);
-           PedidoServer pedidos = PedidoServer();
+          final pedidoList = await pedidoDatabase
+              .obtenerPedidoPorId(cantidadPedidos[x]['id_pedido']);
+          PedidoServer pedidos = PedidoServer();
 
           pedidos.idPedido = cantidadPedidos[x]['id_pedido'];
           pedidos.pedidoTipoComprobante =
@@ -353,16 +352,13 @@ class OrdenesApi {
           pedidos.pedidoEstado = cantidadPedidos[x]['pedido_estado'];
           pedidos.pedidoCodigo = cantidadPedidos[x]['pedido_codigo'];
 
-          if(pedidoList.length>0){
-            pedidos.pedidoLink =pedidoList[0].pedidoLink;
-          }else{
-
-            pedidos.pedidoLink ="";
+          if (pedidoList.length > 0) {
+            pedidos.pedidoLink = pedidoList[0].pedidoLink;
+          } else {
+            pedidos.pedidoLink = "";
           }
-          
 
-         await pedidoDatabase.insertarPedido(pedidos);
-
+          await pedidoDatabase.insertarPedido(pedidos);
 
           for (int i = 0; i < cantidadPedidos[x]['productos'].length; i++) {
             ProductoServer productoServer = new ProductoServer();
@@ -519,7 +515,6 @@ class OrdenesApi {
         'pedido_vuelto_pago': vuelto,
       });
 
-
       final decodedData = json.decode(response.body);
 
       if (decodedData['success'] == 1) {
@@ -527,6 +522,33 @@ class OrdenesApi {
       } else {
         return 2;
       }
+    } catch (error) {
+      //print("Exception occured: $error stackTrace: $stacktrace");
+      utils.showToast(
+          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+
+      return 2;
+    }
+  }
+
+  Future<int> valorarPedido(
+      String idPedido, String valoracion, String comentario) async {
+    try {
+      final url = '$_url/api/pedido/valorar_pedido';
+
+      final List<User> user = await userDatabase.obtenerUsUario();
+
+      final response = await http.post(url, body: {
+        'app': 'true',
+        'tn': user[0].token,
+        'id_pedido': idPedido,
+        'pedido_puntaje': valoracion,
+        'pedido_valoracion': comentario,
+      });
+
+      final decodedData = json.decode(response.body);
+      String  code = decodedData['result']['code'].toString();
+      return int.parse(code);
     } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
       utils.showToast(

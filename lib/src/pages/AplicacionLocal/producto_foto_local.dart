@@ -154,6 +154,8 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
   void dispose() {
     print('dispose');
     assetsAudioPlayer.stop();
+    assetsAudioPlayer.dispose();
+    
     super.dispose();
   }
   @override

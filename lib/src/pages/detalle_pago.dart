@@ -12,6 +12,7 @@ import 'package:enchiladasapp/src/models/direccion_model.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
 import 'package:enchiladasapp/src/models/user.dart';
 import 'package:enchiladasapp/src/models/zona_model.dart';
+import 'package:enchiladasapp/src/pages/propina_page.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
@@ -30,6 +31,7 @@ class DetallePago extends StatefulWidget {
 }
 
 class _DetallePagoState extends State<DetallePago> {
+  
   int _comprobanteValue = 3;
   int _tipoPagoValue = 3;
   String ruc = "";
@@ -42,6 +44,7 @@ class _DetallePagoState extends State<DetallePago> {
   TextEditingController comprobanteController = TextEditingController();
   TextEditingController montoPagoController = TextEditingController();
   TextEditingController telefonoController = TextEditingController();
+  TextEditingController propinaController = TextEditingController();
 
   bool estadoDelivery = false;
 
@@ -53,6 +56,7 @@ class _DetallePagoState extends State<DetallePago> {
   void dispose() {
     // Limpia el controlador cuando el Widget se descarte
     comprobanteController.dispose();
+    propinaController.dispose();
     montoPagoController.dispose();
     telefonoController.dispose();
     super.dispose();
@@ -106,6 +110,9 @@ class _DetallePagoState extends State<DetallePago> {
     final carritoBloc = ProviderBloc.carrito(context);
     carritoBloc.obtenerDeliveryRapido();
 
+    final propinasBloc = ProviderBloc.propina(context);
+    propinasBloc.obtenerPropinas();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -137,6 +144,9 @@ class _DetallePagoState extends State<DetallePago> {
     final direccionBloc = ProviderBloc.dire(context);
     direccionBloc.obtenerDireccionesConZonas();
 
+    final carritoCompletoBloc = ProviderBloc.carritoCompleto(context);
+    carritoCompletoBloc.obtenerCarritoCpmpleto();
+
     return StreamBuilder(
       stream: direccionBloc.direccionZonaStream,
       builder: (BuildContext context, AsyncSnapshot<List<Direccion>> snapshot) {
@@ -144,19 +154,26 @@ class _DetallePagoState extends State<DetallePago> {
 
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
-            return _contenido(context, responsive, usuarioBloc, snapshot.data);
+            return _contenido(context, responsive, usuarioBloc, snapshot.data,
+                carritoCompletoBloc);
           } else {
-            return _contenido(context, responsive, usuarioBloc, list);
+            return _contenido(
+                context, responsive, usuarioBloc, list, carritoCompletoBloc);
           }
         } else {
-          return _contenido(context, responsive, usuarioBloc, list);
+          return _contenido(
+              context, responsive, usuarioBloc, list, carritoCompletoBloc);
         }
       },
     );
   }
 
-  Widget _contenido(BuildContext context, Responsive responsive,
-      UsuarioBloc usuarioBloc, List<Direccion> listDireccion) {
+  Widget _contenido(
+      BuildContext context,
+      Responsive responsive,
+      UsuarioBloc usuarioBloc,
+      List<Direccion> listDireccion,
+      CarritoCompletoBloc carritoCompleto) {
     final preferences = Preferences();
     String direpe = '';
     String refepe = '';
@@ -256,7 +273,6 @@ class _DetallePagoState extends State<DetallePago> {
                     child: _listaProductos(context, responsive),
                   ),
                   Divider(),
-                  Divider(),
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: responsive.wp(5),
@@ -280,6 +296,78 @@ class _DetallePagoState extends State<DetallePago> {
                       ],
                     ),
                   ),
+                  Divider(),
+                  StreamBuilder(
+                      stream: carritoCompleto.carritoCompletoStream,
+                      builder: (context,
+                          AsyncSnapshot<List<CarritoCompleto>> snapshot) {
+                            String valorPropina = '0';
+                        if (snapshot.hasData) {
+                          for (int x = 0; x < snapshot.data.length; x++) {
+                            if (snapshot.data[x].idCategoria == '97') {
+                              valorPropina = snapshot.data[x].precio;
+                            }
+                          }
+                        }
+
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(5)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Desea agregar propina',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: responsive.ip(2),
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      final carritoBloc =
+                                          ProviderBloc.carrito(context);
+                                      final carritoCompletoBloc =
+                                          ProviderBloc.carritoCompleto(context);
+                                      final carritoDatabase = CarritoDatabase();
+                                      await carritoDatabase
+                                          .deletePropinaCarritoDb();
+
+                                      carritoBloc.obtenerCarrito();
+                                      carritoCompletoBloc
+                                          .obtenerCarritoCpmpleto();
+
+                                      Navigator.of(context)
+                                          .push(_createRoutePropina());
+                                    },
+                                    child: Text(
+                                      'Agregar',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: responsive.ip(2),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                'Monto de propina : S/$valorPropina',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: responsive.ip(1.4),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                  Divider(),
                   (listDireccion.length > 0)
                       ? Padding(
                           padding: EdgeInsets.symmetric(
@@ -333,6 +421,8 @@ class _DetallePagoState extends State<DetallePago> {
                   (double.parse(snapshot.data[x].precio) *
                       double.parse(snapshot.data[x].cantidad));
             }
+
+
           }
           String precioTotalFinal = utils.format(precioTotal);
 
@@ -1335,19 +1425,21 @@ class _DetallePagoState extends State<DetallePago> {
                     height: responsive.hp(3),
                   ),
                   Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       FlatButton(
                         onPressed: () async {
                           if (comprobanteController.text.length > 0) {
-                            if (comprobanteController.text.length ==11) {
+                            if (comprobanteController.text.length == 11) {
                               Navigator.pop(context);
                               //Navigator.pop(context);
                               ruc = comprobanteController.text;
 
                               setState(() {});
                             } else {
-                              utils.showToast('El número de ruc debe contar con 11 dígitos', 2,
+                              utils.showToast(
+                                  'El número de ruc debe contar con 11 dígitos',
+                                  2,
                                   ToastGravity.TOP);
                             }
                             //Navigator.pop(context);
@@ -1368,16 +1460,19 @@ class _DetallePagoState extends State<DetallePago> {
                           child: Text(
                             'Confirmar',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsive.ip(2)),
                           ),
                         ),
-                      ),FlatButton(
+                      ),
+                      FlatButton(
                         onPressed: () async {
                           setState(() {
-                              _comprobanteValue=0;
+                            _comprobanteValue = 0;
                           });
-                        
-                         Navigator.pop(context);
+
+                          Navigator.pop(context);
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -1390,7 +1485,9 @@ class _DetallePagoState extends State<DetallePago> {
                           child: Text(
                             'Cancelar',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsive.ip(2)),
                           ),
                         ),
                       ),
@@ -1422,6 +1519,17 @@ class _DetallePagoState extends State<DetallePago> {
     if (listPedido.length > 0) {
       _modalButtonPedidoPendiente(context, responsive);
     } else {
+      bool pasoMinimoEfectivo = false;
+      if (_tipoPagoValue == 1) {
+        if (precio < 100) {
+          pasoMinimoEfectivo = true;
+        } else {
+          pasoMinimoEfectivo = false;
+        }
+      } else {
+        pasoMinimoEfectivo = true;
+      }
+
       if (direccion.length > 0) {
         if (user[0].telefono != "" && user[0].telefono != null) {
           if (_comprobanteValue == 1 || _comprobanteValue == 0) {
@@ -1471,43 +1579,50 @@ class _DetallePagoState extends State<DetallePago> {
 
               if (pasoefectivo) {
                 if (pasoFactura) {
-                  showProcessingDialog();
-                  final res = await pedidoApi.enviarpedido(pedido);
+                  if (pasoMinimoEfectivo) {
+                    showProcessingDialog();
+                    final res = await pedidoApi.enviarpedido(pedido);
 
-                  if (res.resp == 1) {
-                    if (res.link != "") {
+                    if (res.resp == 1) {
+                      if (res.link != "") {
+                        Navigator.pop(context);
+                        ArgumentsDetallePago argumentsDetallePago =
+                            ArgumentsDetallePago();
+                        argumentsDetallePago.link = res.link;
+                        argumentsDetallePago.idPedido = res.idPedido;
+                        Navigator.pushNamed(context, 'webView',
+                            arguments: argumentsDetallePago);
+                      } else {
+                        Navigator.pop(context);
+                        ArgumentsWebview argumentsWebview = ArgumentsWebview();
+                        argumentsWebview.idPedido = res.idPedido;
+                        argumentsWebview.codigo = '1';
+
+                        Navigator.pushNamed(context, 'ticket',
+                            arguments: argumentsWebview);
+                        //Navigator.pop(context);
+                        //pedidoCorrecto();
+                      }
+                    } else if (res.resp == 8) {
+                      utils.showToast(
+                          'Estamos actualizando los datos de los productos, intentelo más tarde',
+                          2,
+                          ToastGravity.TOP);
+                      //OCURRIO UNA ACTUALIZACION DE PRODUCTOS
+                      final categoriasApi = CategoriasApi();
+                      categoriasApi.obtenerAmbos();
                       Navigator.pop(context);
-                      ArgumentsDetallePago argumentsDetallePago =
-                          ArgumentsDetallePago();
-                      argumentsDetallePago.link = res.link;
-                      argumentsDetallePago.idPedido = res.idPedido;
-                      Navigator.pushNamed(context, 'webView',
-                          arguments: argumentsDetallePago);
                     } else {
+                      utils.showToast('Ocurrio un error, intentelo más tarde',
+                          2, ToastGravity.TOP);
+                      //Ocurrio un error
                       Navigator.pop(context);
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = res.idPedido;
-                      argumentsWebview.codigo = '1';
-
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                      //Navigator.pop(context);
-                      //pedidoCorrecto();
                     }
-                  } else if (res.resp == 8) {
+                  } else {
                     utils.showToast(
-                        'Estamos actualizando los datos de los productos, intentelo más tarde',
+                        'El monto máximo por pedido en efectivo es de 100 soles',
                         2,
                         ToastGravity.TOP);
-                    //OCURRIO UNA ACTUALIZACION DE PRODUCTOS
-                    final categoriasApi = CategoriasApi();
-                    categoriasApi.obtenerAmbos();
-                    Navigator.pop(context);
-                  } else {
-                    utils.showToast('Ocurrio un error, intentelo más tarde', 2,
-                        ToastGravity.TOP);
-                    //Ocurrio un error
-                    Navigator.pop(context);
                   }
                 } else {
                   utils.showToast('Debe ingresar un Comprobante de pago válido',
@@ -1691,4 +1806,168 @@ class _DetallePagoState extends State<DetallePago> {
       ],
     );
   }
+
+  Route _createRoutePropina() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return PropinaPage();
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(
+          CurveTween(curve: curve),
+        );
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
+/* 
+  void modalPropina() {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final responsive = Responsive.of(context);
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
+            padding: MediaQuery.of(context).viewInsets,
+            margin: EdgeInsets.only(top: responsive.hp(10)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(20),
+                  topStart: Radius.circular(20),
+                ),
+                color: Colors.white),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: responsive.hp(2),
+                left: responsive.wp(5),
+                right: responsive.wp(5),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Ingrese la propina que desea agregar',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    controller: propinaController,
+                    keyboardType: TextInputType.number,
+                    maxLength: 11,
+                  ),
+                  SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FlatButton(
+                        onPressed: () async {
+                          if (propinaController.text.isEmpty) {
+                            print('nada');
+                          } else {
+                            setState(() {
+                              final preferences = Preferences();
+
+                              propinaRepartidor = propinaController.text;
+                              preferences.propinaRepartidor =
+                                  propinaRepartidor.toString();
+                            });
+
+                            final carritoBloc =
+                                ProviderBloc.carritoCompleto(context);
+                            carritoBloc.obtenerCarritoCpmpleto();
+                          }
+
+                          Navigator.pop(context);
+                          /* if (propinaController.text.length > 0) {
+                            if (propinaController.text.length == 11) {
+                              Navigator.pop(context);
+                              //Navigator.pop(context);
+                              ruc = propinaController.text;
+
+                              setState(() {});
+                            } else {
+                              utils.showToast(
+                                  'El número de ruc debe contar con 11 dígitos',
+                                  2,
+                                  ToastGravity.TOP);
+                            }
+                            //Navigator.pop(context);
+
+                          } else {
+                            utils.showToast('el campo no debe estar vacio', 2,
+                                ToastGravity.TOP);
+                          } */
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.ip(3),
+                            vertical: responsive.ip(1),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.red),
+                          child: Text(
+                            'Confirmar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsive.ip(2)),
+                          ),
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.ip(3),
+                            vertical: responsive.ip(1),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.red),
+                          child: Text(
+                            'Cancelar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: responsive.ip(2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+ */
+
 }

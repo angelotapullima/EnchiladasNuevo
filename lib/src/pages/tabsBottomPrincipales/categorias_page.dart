@@ -31,6 +31,7 @@ class CategoriasPage extends StatelessWidget {
     categoriasBloc.obtenerCategoriasEnchiladas();
 
     return Scaffold(
+      
       body: Stack(children: <Widget>[
         Container(
           height: double.infinity,

@@ -11,6 +11,7 @@ import 'package:enchiladasapp/src/bloc/observaciones_chip_bloc.dart';
 import 'package:enchiladasapp/src/bloc/observaciones_productos_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_local_bloc.dart';
+import 'package:enchiladasapp/src/bloc/propinas_bloc.dart';
 import 'package:enchiladasapp/src/bloc/zona_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -74,6 +75,7 @@ class ProviderBloc extends InheritedWidget {
   final observacionesChipBloc=ObservacionesChipBloc();
   final adicionalesBloc=AdicionalesBloc();
   final itemObservacionBloc=ItemObservacionBloc();
+  final propinasBloc=PropinasBloc();
 
   static ProviderBloc _instancia;
 
@@ -205,6 +207,11 @@ class ProviderBloc extends InheritedWidget {
   static ItemObservacionBloc itemOb(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .itemObservacionBloc;
+  }
+  
+  static PropinasBloc propina(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .propinasBloc;
   }
     
 }

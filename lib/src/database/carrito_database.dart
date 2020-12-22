@@ -11,9 +11,9 @@ class CarritoDatabase{
       final db = await dbprovider.database;
 
       final res = await db.rawInsert(
-          "INSERT OR REPLACE INTO Carrito (id_producto,producto_nombre,producto_foto,producto_cantidad,producto_precio,producto_tipo,producto_observacion) "
+          "INSERT OR REPLACE INTO Carrito (id_producto,producto_nombre,producto_foto,producto_cantidad,producto_precio,producto_tipo,idCategoria,producto_observacion) "
           "VALUES ('${carrito.idProducto}','${carrito.productoNombre}','${carrito.productoFoto}','${carrito.productoCantidad}',"
-          "'${carrito.productoPrecio}','${carrito.productoTipo}','${carrito.productoObservacion}')");
+          "'${carrito.productoPrecio}','${carrito.productoTipo}','${carrito.idCategoria}','${carrito.productoObservacion}')");
       return res;
     } catch (exception) {
       print(exception);
@@ -29,6 +29,7 @@ class CarritoDatabase{
     "producto_cantidad='${carrito.productoCantidad}', "
     "producto_precio='${carrito.productoPrecio}', "
     "producto_tipo='${carrito.productoTipo}', "
+    "idCategoria='${carrito.idCategoria}', "
     "producto_observacion='${carrito.productoObservacion}' "
     "WHERE id_producto = '${carrito.idProducto}' " 
     );
@@ -51,6 +52,15 @@ class CarritoDatabase{
     final db = await dbprovider.database;
 
     final res = await db.rawDelete('DELETE FROM Carrito');
+
+    return res;
+  }
+
+
+  deletePropinaCarritoDb()async{
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete('DELETE FROM Carrito where idCategoria = "97"');
 
     return res;
   }

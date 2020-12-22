@@ -22,7 +22,7 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'enchiladasApp2.db');
+    final path = join(documentsDirectory.path, 'enchiladasAppVersionFija.db');
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onConfigure: (Database db) async {
@@ -184,6 +184,7 @@ class DatabaseProvider {
           'producto_cantidad VARCHAR,'
           'producto_precio VARCHAR,'
           'producto_tipo VARCHAR,'
+          'idCategoria VARCHAR,'
           'producto_observacion VARCHAR'
           ')');
 

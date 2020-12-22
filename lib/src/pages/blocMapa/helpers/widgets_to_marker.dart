@@ -1,11 +1,11 @@
 part of 'helpers.dart';
 
 
-Future<BitmapDescriptor> getMarkerInicioIcon( double segundos ) async {
+Future<BitmapDescriptor> getMarkerInicioIcon( double segundos,Responsive responsive) async {
 
   final recorder = new ui.PictureRecorder();
   final canvas   = new ui.Canvas(recorder);
-  final size     = new ui.Size( 350, 150 );
+  final size     = new ui.Size( 550, 250 );
 
   //final minutos = (segundos / 60).floor();
 
@@ -24,7 +24,7 @@ Future<BitmapDescriptor> getMarkerDestinoIcon( String descripcion, double metros
 
   final recorder = new ui.PictureRecorder();
   final canvas   = new ui.Canvas(recorder);
-  final size     = new ui.Size( 350, 150 );
+  final size     = new ui.Size( 550, 250 );
 
   final markerDestino = new MarkerDetinoPainter(descripcion, metros);
   markerDestino.paint(canvas, size);

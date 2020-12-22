@@ -154,4 +154,14 @@ class Preferences {
     _prefs.setString('rol', value);
   }
 
+
+
+get propinaRepartidor{
+    return _prefs.getString('propinaRepartidor');
+  }
+
+  set propinaRepartidor(String value){
+    _prefs.setString('propinaRepartidor', value);
+  }
+
 }

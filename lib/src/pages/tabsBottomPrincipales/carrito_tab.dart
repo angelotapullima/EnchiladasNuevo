@@ -256,6 +256,40 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
             );
           }
           final index = i - 1;
+
+          if (carrito[index].idCategoria == '97') {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+              child: Row(
+                children: [
+                  Text(
+                    '${carrito[index].productoNombre}',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Text(
+                    'S/.${carrito[index].productoPrecio}',
+                    style: TextStyle(
+                        fontSize: responsive.ip(2),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete_outline,
+                      size: responsive.ip(4),
+                    ),
+                    onPressed: () {
+                      utils.deleteProductoCarrito(
+                          context, carrito[index].idProducto);
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
           return _itemPedido(responsive, carrito[index]);
         },
       ),
@@ -362,8 +396,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 ),
                 GestureDetector(
                   onTap: () {
-
-                    observacionProductoController.text = '${carrito.productoObservacion}';
+                    observacionProductoController.text =
+                        '${carrito.productoObservacion}';
                     modaldialogoObservacionProducto('${carrito.idProducto}');
                   },
                   child: Row(
@@ -595,6 +629,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
             final prefs = Preferences();
 
             if (prefs.email != null && prefs.email != "") {
+              prefs.propinaRepartidor = '0';
               Navigator.pushNamed(context, 'detallePago');
             } else {
               pedirLogueo();

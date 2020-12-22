@@ -1,11 +1,11 @@
 
- 
+
 
 class ReceivedNotification {
   int id;
   String title;
   String body;
-  String payload;
+  String  payload;
 
   ReceivedNotification({
     this.id,

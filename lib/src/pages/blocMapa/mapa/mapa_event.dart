@@ -18,9 +18,10 @@ class OnMovioMapa extends MapaEvent{
 }
 
 class OnNuevaUbicacion extends MapaEvent{
+  final BuildContext context;
   final LatLng ubicacion;
   final List<TrackingData> pedido;
-  OnNuevaUbicacion(this.ubicacion, this.pedido);
+  OnNuevaUbicacion(this.ubicacion, this.pedido, this.context);
 
 } 
 

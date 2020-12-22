@@ -4,20 +4,59 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/argumentsWebview.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/mapa_page.dart';
+import 'package:enchiladasapp/src/pages/rating_repartidor.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:flutter_svg/svg.dart';
 
-class DeliveryTimeline extends StatefulWidget {
+class NotificationPage extends StatelessWidget {
+  const NotificationPage({Key key}) : super(key: key);
+
   @override
-  _DeliveryTimelineState createState() => _DeliveryTimelineState();
+  Widget build(BuildContext context) {
+    final String notificationModel = ModalRoute.of(context).settings.arguments;
+
+    print('notifissss   $notificationModel');
+
+    final noti = notificationModel.split(';');
+    final idPedido = noti[0].trim();
+    final tipoNotificacion = noti[1].trim();
+
+    final pedidoParse = idPedido.split('=');
+    String idPedidoVerdadero = pedidoParse[1].trim();
+
+    final tipoNParse = tipoNotificacion.split('=');
+    String tipoVerdadero = tipoNParse[1].trim();
+
+    print('bfbr $idPedidoVerdadero');
+
+    return Scaffold(
+      body: (tipoVerdadero == 'pedido')
+          ? DeliveryTimelineNotification(
+              id: idPedidoVerdadero,
+            )
+          : RatingRepartidor(
+              id: idPedidoVerdadero,
+            ),
+    );
+  }
 }
 
-class _DeliveryTimelineState extends State<DeliveryTimeline> {
+class DeliveryTimelineNotification extends StatefulWidget {
+  final id;
 
+  const DeliveryTimelineNotification({Key key, @required this.id})
+      : super(key: key);
+  @override
+  _DeliveryTimelineNotificationState createState() =>
+      _DeliveryTimelineNotificationState();
+}
+
+class _DeliveryTimelineNotificationState
+    extends State<DeliveryTimelineNotification> {
   Timer timer;
 
   bool banderaTimer = true;
@@ -29,24 +68,19 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
 
     timer.cancel();
     super.dispose();
-  } 
+  }
 
-  
   @override
   Widget build(BuildContext context) {
-    final id = ModalRoute.of(context).settings.arguments;
     
+
     final pedidoBloc = ProviderBloc.pedido(context);
-    pedidoBloc.obtenerPedidoPorId(id);
-
-
+    pedidoBloc.obtenerPedidoPorId(widget.id);
 
     timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
       if (banderaTimer) {
-        
-        pedidoBloc.obtenerPedidoPorId(id);
+        pedidoBloc.obtenerPedidoPorId(widget.id);
       } else {
-        
         timer.cancel();
       }
     });
@@ -67,18 +101,19 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
                             precio: snapshot.data[0].pedidoTotal,
                             codigo: snapshot.data[0].pedidoCodigo),
                         (snapshot.data[0].pedidoEstado == '3')
-                            ? _botonTracking(
-                                context, snapshot.data[0].idPedido)
+                            ? _botonTracking(context, snapshot.data[0].idPedido)
                             : Container(),
-                            (snapshot.data[0].pedidoEstado=='4')?  _botonBoleta(
-                                context, snapshot.data[0].idPedido):Container(),
+                        (snapshot.data[0].pedidoEstado == '4')
+                            ? _botonBoleta(context, snapshot.data[0].idPedido)
+                            : Container(),
                         _TimelineDelivery(
                           id: int.parse(
                             snapshot.data[0].pedidoEstado,
                           ),
                         ),
-
-                        SizedBox(height: 500,)
+                        SizedBox(
+                          height: 500,
+                        )
                       ],
                     ),
                   ),
@@ -94,20 +129,20 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
   }
 
   Widget _botonTracking(BuildContext context, String id) {
-
     //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
-    return FlatButton( 
+    return FlatButton(
       onPressed: () {
-
         timer?.cancel();
 
-         Navigator.push(
+        Navigator.push(
           context,
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
-              return MapaPage(idRepartidor: id,);
+              return MapaPage(
+                idRepartidor: id,
+              );
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
@@ -133,19 +168,16 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
   }
 
   Widget _botonBoleta(BuildContext context, String id) {
-
     //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
     return FlatButton(
       onPressed: () {
-
         timer?.cancel();
-       ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = id;
-                      argumentsWebview.codigo = '1';
+        ArgumentsWebview argumentsWebview = ArgumentsWebview();
+        argumentsWebview.idPedido = id;
+        argumentsWebview.codigo = '1';
 
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
+        Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
         //Navigator.pushNamed(context, 'mapaCliente',arguments: '${pedido[0].idPedido}');
       },
       child: Container(
@@ -153,8 +185,7 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
             horizontal: responsive.ip(5), vertical: responsive.ip(1)),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50), color: Colors.red),
-        child: Text('Ver Ticket',
-            style: TextStyle(color: Colors.white)),
+        child: Text('Ver Ticket', style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -238,7 +269,7 @@ class _TimelineDelivery extends StatelessWidget {
       disabled2 = false;
       disabled3 = false;
       disabled4 = false;
-    }else{
+    } else {
       timeline0 = Colors.yellow;
       timeline1 = Colors.yellow;
       timeline2 = Colors.yellow;
@@ -250,7 +281,6 @@ class _TimelineDelivery extends StatelessWidget {
       disabled2 = false;
       disabled3 = false;
       disabled4 = false;
-
     }
 
     return Center(

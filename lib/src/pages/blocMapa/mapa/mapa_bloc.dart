@@ -3,9 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:enchiladasapp/src/models/tracking_model.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/helpers/helpers.dart';
 import 'package:enchiladasapp/src/utils/geoUtils.dart';
+import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
-import 'package:flutter/material.dart' show Offset;
+import 'package:flutter/material.dart' show BuildContext, Offset;
 import 'package:meta/meta.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -59,6 +60,9 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
 String distancia;
   Stream<MapaState> _onNuevaUbicacion(OnNuevaUbicacion event) async* {
 
+
+    final responsive = Responsive.of(event.context);
+    
     final prefences = Preferences();
     if (state.seguirUbicacion) {
       this.moverCamara(event.ubicacion);
@@ -85,7 +89,7 @@ String distancia;
             distancia = distance.toString();
           distancia = utils.format(distance);
 
-    final iconInicio = await getMarkerInicioIcon(double.parse(distancia));
+    final iconInicio = await getMarkerInicioIcon(double.parse(distancia),responsive);
     final iconDestino = await getMarkerDestinoIcon('${prefences.personName} ', double.parse(distancia));
 
     final markerInicio = new Marker(

@@ -574,9 +574,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                     ),
                   ),
                   onPressed: () async {
-                    bool pasoSabores = false,
-                        pasoAcom = false,
-                        pasoVaria = false;
+                    bool pasoSabores = false, pasoAcom = false;
 
                     if (sabores) {
                       if (tagsSabores.length >= maximoSabores) {
@@ -600,6 +598,9 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     if (pasoSabores) {
                       if (pasoAcom) {
+                        utils.agregarProductosAlCarrito(context);
+
+                        Navigator.pop(context);
                       } else {
                         utils.showToast(
                             'debe elegir como mínimo 1 acompañamiento',
@@ -612,10 +613,6 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                           2,
                           ToastGravity.TOP);
                     }
-
-                    utils.agregarProductosAlCarrito(context);
-
-                    Navigator.pop(context);
                   },
                 ),
               ),

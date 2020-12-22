@@ -65,12 +65,14 @@ dependencies:
   url_launcher: ^5.7.10
   flutter_form_builder: ^3.14.0
   showcaseview: ^0.1.6
-  flutter_bloc: ^6.1.0
+  flutter_bloc: ^6.0.1
   assets_audio_player: ^2.0.13+1
   chips_choice: ^2.0.1
   screenshot: ^0.2.0
   esys_flutter_share: ^1.0.2
   image_gallery_saver: ^1.6.7
+  flutter_rating_bar: ^3.2.0+1
+  keyboard_actions: "^3.3.1+1"
   flutter_advanced_networkimage:
     git: https://github.com/mchome/flutter_advanced_networkimage
 

@@ -21,7 +21,7 @@ class _MapaPageState extends State<MapaPage> {
   
   @override
   void initState() {
-    context.watch()<MiUbicacionBloc>().iniciarSeguimiento(widget.idRepartidor);
+    context.bloc<MiUbicacionBloc>().iniciarSeguimiento(widget.idRepartidor);
 
     super.initState();
   }
@@ -29,7 +29,7 @@ class _MapaPageState extends State<MapaPage> {
   @override
   void dispose() {
     print('ctm');
-    context.watch<MiUbicacionBloc>().cancelarSeguimiento();
+    context.bloc<MiUbicacionBloc>().cancelarSeguimiento();
     super.dispose();
   }
 
@@ -122,11 +122,11 @@ class _MapaPageState extends State<MapaPage> {
   }
 
   Widget crearMapa(MiUbicacionState state, Responsive responsive) {
-    if (!state.existeUbicacion) return Center(child: Text('Ubicando...'));
+    if (!state.existeUbicacion) return Center(child: Text('Ubicando repartidor...'));
 
     final mapaBloc = BlocProvider.of<MapaBloc>(context);
 
-    mapaBloc.add(OnNuevaUbicacion(state.ubicacion, state.pedido));
+    mapaBloc.add(OnNuevaUbicacion(state.ubicacion, state.pedido,context));
 
     print(' tamare ${state.pedido[0].distancia}');
 

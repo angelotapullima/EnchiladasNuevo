@@ -103,6 +103,20 @@ class ProductoDatabase {
     return list;
   }
 
+
+  Future<List<ProductosData>> obtenerPropinas(
+      String id) async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery(
+        "SELECT * FROM Producto WHERE id_categoria='$id'  order by CAST(producto_orden AS INT) ASC");
+
+    List<ProductosData> list = res.isNotEmpty
+        ? res.map((c) => ProductosData.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
   Future<List<ProductosData>> obtenerFavoritos() async {
     final db = await dbprovider.database;
     final res = await db.rawQuery(

@@ -29,14 +29,14 @@ class CarritoCompletoBloc {
 
     int cantidadDeProductos = 0;
     for (int i = 0; i < carrito.length; i++) {
-      cantidadDeProductos =
-          cantidadDeProductos + int.parse(carrito[i].productoCantidad);
+      cantidadDeProductos =cantidadDeProductos + int.parse(carrito[i].productoCantidad);
       monto = double.parse(carrito[i].productoPrecio) *
           double.parse(carrito[i].productoCantidad);
 
       subtotal = subtotal + monto;
 
       CarritoCompleto carritoCompleto1 = CarritoCompleto();
+      carritoCompleto1.idCategoria = carrito[i].idCategoria;
       carritoCompleto1.producto = carrito[i].productoNombre;
       carritoCompleto1.precio = carrito[i].productoPrecio;
       carritoCompleto1.cantidad = carrito[i].productoCantidad;
@@ -49,6 +49,7 @@ class CarritoCompletoBloc {
    
    
     CarritoCompleto carritoCompleto2 = CarritoCompleto();
+      carritoCompleto2.idCategoria = carrito[0].idCategoria;
     carritoCompleto2.producto = listBolsa[0].productoNombre;
     carritoCompleto2.precio = listBolsa[0].productoPrecio;
     carritoCompleto2.cantidad = cantidadDeBolsas.toString();
@@ -60,6 +61,7 @@ class CarritoCompletoBloc {
 
       if (deliveryRapido.length > 0) {
         CarritoCompleto carritoCompleto3 = CarritoCompleto();
+      carritoCompleto3.idCategoria = carrito[0].idCategoria;
         carritoCompleto3.producto = direccion[0].deliveryProductoNombre;
         carritoCompleto3.precio = direccion[0].deliveryProductoPrecio;
         carritoCompleto3.cantidad = '1';
@@ -70,6 +72,7 @@ class CarritoCompletoBloc {
       if (subtotal < pedidoMinimo) {
         //no se agrega
         CarritoCompleto carritoCompleto4 = CarritoCompleto();
+      carritoCompleto4.idCategoria = carrito[0].idCategoria;
         carritoCompleto4.producto = direccion[0].recargoProductoNombre;
         carritoCompleto4.precio = direccion[0].recargoProductoPrecio;
         carritoCompleto4.cantidad = '1';
@@ -85,17 +88,23 @@ class CarritoCompletoBloc {
         listCarritoCompleto.add(carritoCompleto5);
       }
 
+
+
       carritoCompleto.sink.add(listCarritoCompleto);
     } else {
+
+      
       carritoCompleto.sink.add(listCarritoCompleto);
     }
   }
 }
 
 class CarritoCompleto {
+  String idCategoria;
   String producto;
   String cantidad;
   String precio;
 
-  CarritoCompleto({this.producto, this.cantidad, this.precio});
+  CarritoCompleto({this.idCategoria,this.producto, this.cantidad, this.precio});
 }
+ 

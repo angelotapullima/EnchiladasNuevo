@@ -24,17 +24,18 @@ class PushNotificationProvider {
 
     _firebaseMessaging.configure(onMessage: (info) async {
       print('=====On Message========');
+      print(info);
 
       String argumento;
       String title;
       String body;
       if (Platform.isAndroid) {
-        argumento = info['data']['id_pedido'];
+        argumento = info['data']['payload'];
 
         title = info['notification']['title'];
         body = info['notification']['body'];
       } else {
-        argumento = info['id_pedido'];
+        argumento = info['payload'];
 
         title = info['notification']['title'];
         body = info['notification']['body'];
@@ -51,9 +52,9 @@ class PushNotificationProvider {
       print('===== onLaunch========');
       String argumento;
       if (Platform.isAndroid) { 
-        argumento = info['data']['id_pedido'];
+        argumento = info['data']['payload'];
       } else {
-        argumento = info['id_pedido'];
+        argumento = info['payload'];
       }
 
       _mensajesStreamController.sink.add(argumento);
@@ -61,9 +62,9 @@ class PushNotificationProvider {
       print('=====onResume========');
       String argumento;
       if (Platform.isAndroid) {
-        argumento = info['data']['id_pedido'];
+        argumento = info['data']['payload'];
       } else {
-        argumento = info['id_pedido'];
+        argumento = info['payload'];
       }
 
       _mensajesStreamController.sink.add(argumento);

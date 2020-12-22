@@ -7,14 +7,14 @@ class MarkerInicioPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double circuloNegroR = 20;
-    final double circuloBlancoR = 7;
+    final double circuloNegroR = 30;
+    final double circuloBlancoR = 9;
 
     Paint paint = new Paint()..color = Colors.red;
 
     // Dibujar circulo negro
     canvas.drawCircle(
-        Offset(circuloNegroR, size.height - circuloNegroR), 20, paint);
+        Offset(circuloNegroR, size.height -circuloNegroR ), 30, paint);
 
     // Circulo Blanco
     paint.color = Colors.white;
@@ -33,46 +33,46 @@ class MarkerInicioPainter extends CustomPainter {
     canvas.drawShadow(path, Colors.black87, 10, false);
 
     // Caja Blanca
-    final cajaBlanca = Rect.fromLTWH(40, 20, size.width - 55, 80);
+    final cajaBlanca = Rect.fromLTWH(40, 20, size.width+ 80 , 150);
     canvas.drawRect(cajaBlanca, paint);
 
     // Caja Negra
     paint.color = Colors.red;
-    final cajaNegra = Rect.fromLTWH(40, 20, 70, 80);
+    final cajaNegra = Rect.fromLTWH(40, 20, 180, 150);
     canvas.drawRect(cajaNegra, paint);
 
     // Dibujar textos
     TextSpan textSpan = new TextSpan(
         style: TextStyle(
-            color: Colors.white, fontSize: 30, fontWeight: FontWeight.w400),
+            color: Colors.white, fontSize: 40, fontWeight: FontWeight.w400),
         text: '$km');
 
     TextPainter textPainter = new TextPainter(
         text: textSpan,
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.center)
-      ..layout(maxWidth: 70, minWidth: 70);
+      ..layout(maxWidth: 160, minWidth: 160);
 
     textPainter.paint(canvas, Offset(40, 35));
 
     // Minutos
     textSpan = new TextSpan(
         style: TextStyle(
-            color: Colors.white, fontSize: 20, fontWeight: FontWeight.w400),
+            color: Colors.white, fontSize: 40, fontWeight: FontWeight.w400),
         text: 'Km');
 
     textPainter = new TextPainter(
         text: textSpan,
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.center)
-      ..layout(maxWidth: 70, minWidth: 70);
+      ..layout(maxWidth: 120, minWidth: 120);
 
-    textPainter.paint(canvas, Offset(40, 67));
+    textPainter.paint(canvas, Offset(50, 90));
 
     // Mi ubicación
     textSpan = new TextSpan(
         style: TextStyle(
-            color: Colors.black, fontSize: 22, fontWeight: FontWeight.w400),
+            color: Colors.black, fontSize:50, fontWeight: FontWeight.w400),
         text: 'Mi pedido');
 
     textPainter = new TextPainter(
@@ -80,10 +80,10 @@ class MarkerInicioPainter extends CustomPainter {
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.center)
       ..layout(
-        maxWidth: size.width - 130,
+        maxWidth: size.width ,minWidth: size.width-100
       );
 
-    textPainter.paint(canvas, Offset(150, 50));
+    textPainter.paint(canvas, Offset(150, 70));
   }
 
   @override

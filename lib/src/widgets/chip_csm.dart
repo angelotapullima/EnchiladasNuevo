@@ -1,5 +1,4 @@
 import 'package:chips_choice/chips_choice.dart';
-import 'package:enchiladasapp/main.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:flutter/material.dart';
 
