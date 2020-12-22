@@ -31,7 +31,6 @@ class CategoriasPage extends StatelessWidget {
     categoriasBloc.obtenerCategoriasEnchiladas();
 
     return Scaffold(
-      
       body: Stack(children: <Widget>[
         Container(
           height: double.infinity,
@@ -45,35 +44,32 @@ class CategoriasPage extends StatelessWidget {
 
   Widget _conte(double anchoCategorias, double anchoProductos,
       List<CategoriaData> categorias, BuildContext context) {
-    final bottomBloc = ProviderBloc.bottom(context);
+
+        
     final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
     enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
 
     return StreamBuilder(
-        stream: bottomBloc.selectPageStream,
+        stream: enchiladasNaviBloc.enchiladasIndexStream,
         builder: (context, snapshot) {
-          return StreamBuilder(
-              stream: enchiladasNaviBloc.enchiladasIndexStream,
-              builder: (context, snapshot) {
-                return Row(
-                  children: <Widget>[
-                    Container(
-                      width: anchoCategorias,
-                      child: CategoriasProducto(
-                        ancho: anchoCategorias,
-                        data: categorias,
-                      ),
-                    ),
-                    Container(
-                      width: anchoProductos,
-                      child: ProductosIdPage(
-                        index: enchiladasNaviBloc.index,
-                        ancho: anchoProductos,
-                      ),
-                    )
-                  ],
-                );
-              });
+          return Row(
+            children: <Widget>[
+              Container(
+                width: anchoCategorias,
+                child: CategoriasProducto(
+                  ancho: anchoCategorias,
+                  data: categorias,
+                ),
+              ),
+              Container(
+                width: anchoProductos,
+                child: ProductosIdPage(
+                  index: enchiladasNaviBloc.index,
+                  ancho: anchoProductos,
+                ),
+              )
+            ],
+          );
         });
   }
 
