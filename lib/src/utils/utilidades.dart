@@ -29,6 +29,12 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoDelivery = productosData.productoDelivery;
   productos.productoDescripcion = productosData.productoDescripcion;
   productos.productoComentario = productosData.productoComentario;
+  productos.productoDestacado = productosData.productoDestacado;
+  productos.productoEstadoDestacado = productosData.productoEstadoDestacado;
+  productos.productoTupper = productosData.productoTupper;
+  productos.productoAdicionalTitulo = productosData.productoAdicionalTitulo;
+  productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
+  productos.productoNuevo = productosData.productoNuevo;
   productos.productoFavorito = 1;
 
   await productoDatabase.updateProductosDb(productos);
@@ -52,6 +58,12 @@ void quitarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoCarta = productosData.productoCarta;
   productos.productoDelivery = productosData.productoDelivery;
   productos.productoDescripcion = productosData.productoDescripcion;
+  productos.productoDestacado = productosData.productoDestacado;
+  productos.productoEstadoDestacado = productosData.productoEstadoDestacado;
+  productos.productoTupper = productosData.productoTupper;
+  productos.productoAdicionalTitulo = productosData.productoAdicionalTitulo;
+  productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
+  productos.productoNuevo = productosData.productoNuevo;
   productos.productoFavorito = 0;
 
   await productoDatabase.updateProductosDb(productos);
@@ -133,6 +145,7 @@ void agregarCarrito(
     carrito.productoPrecio = productosData.productoPrecio;
     carrito.productoTipo = '0';
     carrito.productoCantidad = cantidad;
+    carrito.productoTupper = productosData.productoTupper;
 
     if (dato.length > 0) {
       carrito.productoObservacion = dato[0].productoObservacion;
@@ -149,6 +162,52 @@ void agregarCarrito(
   carritoCompletoBloc.obtenerCarritoCpmpleto();
   //_mostrarAlert(context);
 }
+
+
+
+
+void agregarPropinaCarrito(
+    ProductosData productosData, BuildContext context, String cantidad) async {
+  Carrito carrito = new Carrito();
+  final carritoDatabase = CarritoDatabase();
+
+  final carritoBloc = ProviderBloc.carrito(context);
+  final carritoCompletoBloc = ProviderBloc.carritoCompleto(context);
+
+  if (cantidad == "0") {
+    await carritoDatabase.deletePropinaCarritoDb();
+  } else {
+
+    await carritoDatabase.deletePropinaCarritoDb();
+    
+    final dato =
+        await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
+
+    carrito.idProducto = int.parse(productosData.idProducto);
+    carrito.productoNombre = productosData.productoNombre;
+    carrito.idCategoria = productosData.idCategoria;
+    carrito.productoFoto = productosData.productoFoto;
+    carrito.productoPrecio = productosData.productoPrecio;
+    carrito.productoTipo = '0';
+    carrito.productoCantidad = cantidad;
+    carrito.productoTupper = productosData.productoTupper;
+
+    if (dato.length > 0) {
+      carrito.productoObservacion = dato[0].productoObservacion;
+
+      await carritoDatabase.updateCarritoDb(carrito);
+    } else {
+      carrito.productoObservacion = '';
+      await carritoDatabase.insertarCarritoDb(carrito);
+    }
+  }
+  //showToast('Producto agregado correctamente', 1);
+
+  carritoBloc.obtenerCarrito();
+  carritoCompletoBloc.obtenerCarritoCpmpleto();
+  //_mostrarAlert(context);
+}
+
 
 void agregarCarritoConAdicionales(ProductosData productosData,
     BuildContext context, String cantidad, String observacion) async {
@@ -170,6 +229,7 @@ void agregarCarritoConAdicionales(ProductosData productosData,
     carrito.productoTipo = '0';
     carrito.productoObservacion = observacion;
     carrito.productoCantidad = cantidad;
+    carrito.productoTupper = productosData.productoTupper;
 
     if (dato.length > 0) {
       await carritoDatabase.updateCarritoDb(carrito);
@@ -200,6 +260,12 @@ void quitarFavoritosMarket(
   productos.productoPrecio = productosData.productoPrecio;
   productos.productoUnidad = productosData.productoUnidad;
   productos.productoEstado = productosData.productoEstado;
+  productos.productoDestacado = productosData.productoDestacado;
+  productos.productoEstadoDestacado = productosData.productoEstadoDestacado;
+  productos.productoAdicionalTitulo = productosData.productoAdicionalTitulo;
+  productos.productoTupper = productosData.productoTupper;
+  productos.productoNuevo = productosData.productoNuevo;
+  productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
   productos.productoFavorito = 0;
 
   await productoDatabase.updateProductosDb(productos);
@@ -239,7 +305,7 @@ void agregarDireccion(BuildContext context, String addres, double latitud,
 }
 
 void cambiarEstadoSeleccionAdicional(
-    BuildContext context, String idProducto, bool valor) async {
+    BuildContext context, String idProducto, bool valor,String idCategoria) async {
   final adicionalesDatabase = AdicionalesDatabase();
   final adicionalesBloc = ProviderBloc.adicionales(context);
   if (valor) {
@@ -279,7 +345,7 @@ void cambiarEstadoSeleccionAdicional(
     await adicionalesDatabase.updateAdicionalesEnfalsePorId(productosData);
   }
 
-  adicionalesBloc.obtenerAdicionales();
+  adicionalesBloc.obtenerAdicionales(idCategoria);
 }
 
 void deleteDireccion(BuildContext context, idDireccion) async {
@@ -337,6 +403,7 @@ void agregarItemObservacion(
     productoData.productoPrecio = producto[0].productoPrecio;
     productoData.productoObservacion = '';
     productoData.idCategoria = producto[0].idCategoria;
+    productoData.productoTupper = producto[0].productoTupper;
 
     await itemObservacionDatabase.insertarItemObservacion(productoData);
   } else {
@@ -373,6 +440,7 @@ void agregarItemObservacionFijos(
   productoData.productoPrecio = producto[0].productoPrecio;
   productoData.productoObservacion = '';
   productoData.idCategoria = producto[0].idCategoria;
+  productoData.productoTupper = producto[0].productoTupper;
 
   await itemObservacionDatabase.insertarItemObservacion(productoData);
 
@@ -423,6 +491,7 @@ void agregarObservacionEnProductoObservacion(
       productoData.productoPrecio = itemsObservacion[i].productoPrecio;
       productoData.productoObservacion = observaciones;
       productoData.idCategoria = itemsObservacion[i].idCategoria;
+      productoData.productoTupper = itemsObservacion[i].productoTupper;
 
       await itemObservacionDatabase.insertarItemObservacion(productoData);
     }
@@ -452,6 +521,7 @@ void agregarProductosAlCarrito(BuildContext context) async {
     carrito.productoPrecio = itemsObservacion[i].productoPrecio;
     carrito.productoTipo = '0';
     carrito.productoObservacion = itemsObservacion[i].productoObservacion;
+    carrito.productoTupper = itemsObservacion[i].productoTupper;
     carrito.productoCantidad = '1';
 
     if (dato.length > 0) {
@@ -461,6 +531,22 @@ void agregarProductosAlCarrito(BuildContext context) async {
     }
   }
   //showToast('Producto agregado correctamente', 1);
+
+  carritoBloc.obtenerCarrito();
+}
+
+
+void deletePropinas(BuildContext context)async{
+
+
+  final carritoBloc = ProviderBloc.carrito(context);
+
+final carritoDatabase = CarritoDatabase();
+
+
+  await carritoDatabase.deletePropinaCarritoDb();
+
+
 
   carritoBloc.obtenerCarrito();
 }

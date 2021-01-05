@@ -29,7 +29,7 @@ class PantallaLocalBloc {
     final listGeneral = List<CategoriaData>();
 
     var listaCategorias =
-        await categoriasDatabase.obtenerCategoriasEnchiladas();
+        await categoriasDatabase.obtenerCategoriasLocalEnchiladas();
 
     for (var i = 0; i < listaCategorias.length; i++) {
       CategoriaData categoriaData = CategoriaData();

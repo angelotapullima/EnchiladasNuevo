@@ -77,9 +77,9 @@ updateAdicionalesEnTrueDb(ProductosData productos) async {
     return list;
   }
 
-  Future<List<ProductosData>> obtenerAdicionales() async {
+  Future<List<ProductosData>> obtenerAdicionales(String idCategoria) async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Adicionales where  producto_estado='1'");
+    final res = await db.rawQuery("SELECT * FROM Adicionales where id_categoria='$idCategoria' and producto_estado='1'");
 
     List<ProductosData> list = res.isNotEmpty
         ? res.map((c) => ProductosData.fromJson(c)).toList()

@@ -46,11 +46,22 @@ class CategoriasDatabase{
         : [];
 
     return list; 
-  }
+  } 
 
-  Future<List<CategoriaData>> obtenerCategoriasMarket() async {
+
+ Future<List<CategoriaData>> obtenerCategoriasLocalEnchiladas() async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Categorias where categoria_tipo = '2' and categoria_mostrar_app='1'");
+    final res = await db.rawQuery("SELECT * FROM Categorias where  categoria_mostrar_app='2' order by CAST(categoria_orden AS INT) ASC");
+
+    List<CategoriaData> list = res.isNotEmpty
+        ? res.map((c) => CategoriaData.fromJson(c)).toList()
+        : [];
+
+    return list; 
+  } 
+  Future<List<CategoriaData>> obtenerCategoriasMarket(String tipo) async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery("SELECT * FROM Categorias where categoria_tipo = '$tipo' and categoria_mostrar_app='1' order by CAST(categoria_orden AS INT) ASC");
 
     List<CategoriaData> list = res.isNotEmpty
         ? res.map((c) => CategoriaData.fromJson(c)).toList()

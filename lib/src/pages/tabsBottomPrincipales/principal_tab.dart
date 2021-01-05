@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/api/configuracion_api.dart';
+import 'package:enchiladasapp/src/bloc/cerrar_publicidad_bloc.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
+import 'package:enchiladasapp/src/models/publicidad_model.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
+import 'package:enchiladasapp/src/pages/detalle_productos_destacado.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
@@ -14,7 +17,9 @@ import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PrincipalTab extends StatelessWidget {
@@ -25,7 +30,7 @@ class PrincipalTab extends StatelessWidget {
   void _onRefresh(BuildContext context) async {
     print('_onRefresh pantalla');
     final pantallasBloc = ProviderBloc.pantalla(context);
-    final categoriasBloc = ProviderBloc.cat(context); 
+    final categoriasBloc = ProviderBloc.cat(context);
     pantallasBloc.obtenerPantallas();
 
     final categoriasApi = CategoriasApi();
@@ -39,9 +44,48 @@ class PrincipalTab extends StatelessWidget {
     final Responsive responsive = new Responsive.of(context);
     final usuarioBloc = ProviderBloc.user(context);
     usuarioBloc.obtenerUsuario();
- 
+
+    final publicidadBloc = ProviderBloc.publi(context);
+    publicidadBloc.obtenerPublicidad();
+
+    final provider = Provider.of<PrincipalChangeBloc>(context, listen: false);
+
     return Scaffold(
-      body: _inicio(context, responsive, _refreshController),
+      body: StreamBuilder(
+          stream: publicidadBloc.publicidadStream,
+          builder: (context, AsyncSnapshot<List<PublicidadModel>> snapshot) {
+            bool pase = false;
+            if (snapshot.hasData) {
+              if (snapshot.data.length > 0) {
+                if (snapshot.data[0].publicidadEstado == '1') {
+                  provider.setIndex(true);
+                }
+                pase = true;
+              }
+            }
+            return Stack(
+              children: [
+                _inicio(context, responsive, _refreshController),
+                (pase)
+                    ? ValueListenableBuilder(
+                        valueListenable: provider.cargando,
+                        builder:
+                            (BuildContext context, bool data, Widget child) {
+                          return (data)
+                              ? PublicidadDialog(
+                                  publicidadModel: snapshot.data[0],
+                                )
+                              : Container();
+                        })
+                    /*  ? (provider.cargando.value)
+                        ? PublicidadDialog(
+                            publicidadModel: snapshot.data[0],
+                          )
+                        : Container() */
+                    : Container()
+              ],
+            );
+          }),
     );
   }
 
@@ -102,7 +146,9 @@ class PrincipalTab extends StatelessWidget {
                 ),
                 color: Colors.red),
             height: responsive.hp(12),
-            padding: EdgeInsets.symmetric(horizontal: responsive.hp(2)),
+            padding: EdgeInsets.symmetric(
+              horizontal: responsive.hp(2),
+            ),
             child: SafeArea(
               child: Column(
                 children: <Widget>[
@@ -125,8 +171,9 @@ class PrincipalTab extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           showSearch(
-                              context: context,
-                              delegate: DataSearch(hintText: 'Buscar'));
+                            context: context,
+                            delegate: DataSearch(hintText: 'Buscar'),
+                          );
                         },
                         child: Icon(
                           Icons.search,
@@ -178,7 +225,9 @@ class PrincipalTab extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(child: _contenido(context, responsive, refreshController))
+          Expanded(
+            child: _contenido(context, responsive, refreshController),
+          )
         ],
       ),
     );
@@ -295,17 +344,40 @@ class PrincipalTab extends StatelessWidget {
                                 AsyncSnapshot<List<CategoriaData>> cat) {
                               if (cat.hasData) {
                                 if (cat.data.length > 0) {
-                                  return Container(
-                                    margin:
-                                        EdgeInsets.only(top: responsive.hp(1)),
-                                    height: responsive.hp(25),
-                                    child: Stack(
-                                      children: <Widget>[
-                                        _buildPageView(responsive, cat.data),
-                                        _buildCircleIndicator(
-                                            responsive, cat.data),
-                                      ],
-                                    ),
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: responsive.wp(3),
+                                        ),
+                                        child: Text(
+                                          'Promociones',
+                                          style: GoogleFonts.montserrat(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: responsive.ip(2.5),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          top: responsive.hp(1),
+                                        ),
+                                        height: responsive.hp(25),
+                                        child: Stack(
+                                          children: <Widget>[
+                                            _buildPageView(
+                                                responsive, cat.data),
+                                            _buildCircleIndicator(
+                                                responsive, cat.data),
+                                          ],
+                                        ),
+                                      ),
+                                      ProductosDestacados(),
+                                      SizedBox(height: responsive.hp(1))
+                                    ],
                                   );
                                 } else {
                                   return Container();
@@ -321,11 +393,15 @@ class PrincipalTab extends StatelessWidget {
               );
             } else {
               configuracionApi.configuracion();
-              return Center(child: CupertinoActivityIndicator());
+              return Center(
+                child: CupertinoActivityIndicator(),
+              );
             }
           } else {
             configuracionApi.configuracion();
-            return Center(child: CupertinoActivityIndicator());
+            return Center(
+              child: CupertinoActivityIndicator(),
+            );
           }
         },
       ),
@@ -534,11 +610,12 @@ class PrincipalTab extends StatelessWidget {
                       if (tipo == 'categoria') {
                         Arguments arg = new Arguments(
                             "${pantallaModel.items[i].nombreItem}",
-                            '${pantallaModel.items[i].id}');
+                            '${pantallaModel.items[i].idCategoria}');
                         Navigator.pushNamed(context, 'combo', arguments: arg);
                       } else if (tipo == 'producto') {
                         ProductosData productosData = ProductosData();
-                        productosData.idProducto = pantallaModel.items[i].id;
+                        productosData.idProducto =
+                            pantallaModel.items[i].idProducto;
 
                         Navigator.push(
                           context,
@@ -547,8 +624,13 @@ class PrincipalTab extends StatelessWidget {
                                 const Duration(milliseconds: 100),
                             pageBuilder:
                                 (context, animation, secondaryAnimation) {
-                              return DetalleProductitos(
-                                  productosData: productosData);
+                              return SliderDetalleProductos(
+                                numeroItem: pantallaModel.items[i].numeroItem,
+                                idCategoria: pantallaModel.items[i].idCategoria,
+                                cantidadItems:
+                                    pantallaModel.items[i].cantidadItems,
+                              );
+                              //return DetalleProductitos(productosData: productosData);
                             },
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
@@ -601,6 +683,31 @@ class PrincipalTab extends StatelessWidget {
                               ),
                             ),
                           ),
+                           (tipo == 'producto')?
+                          ('${pantallaModel.items[i].productoNuevo}' == '1')
+                              ?  Positioned(
+                                 /*  left: responsive.wp(1),
+                                  top: responsive.hp(.5), */
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: responsive.wp(3),
+                                      vertical: responsive.hp(.5),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        //borderRadius: BorderRadius.circular(10),
+                                        color: Colors.red),
+                                    child: Text(
+                                      'Nuevo',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: responsive.ip(1.7),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container()
+                              :Container(),
                           (tipo != 'puzzle')
                               ? Positioned(
                                   right: 0,
@@ -608,7 +715,7 @@ class PrincipalTab extends StatelessWidget {
                                   bottom: 0,
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
-                                      vertical: responsive.hp(2), 
+                                      vertical: responsive.hp(2),
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.black.withOpacity(.5),
@@ -641,5 +748,315 @@ class PrincipalTab extends StatelessWidget {
       },
     ) */
         ;
+  }
+}
+
+class ProductosDestacados extends StatelessWidget {
+  const ProductosDestacados({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
+
+    final productosDestacadosBloc = ProviderBloc.proDestacados(context);
+    productosDestacadosBloc.obtenerProductosDestacados();
+
+    return StreamBuilder(
+        stream: productosDestacadosBloc.productosDestacadosStream,
+        builder: (context, AsyncSnapshot<List<ProductosData>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            'Destacados',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: responsive.ip(2.5),
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.hp(1.5),
+                              vertical: responsive.hp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Ver más',
+                                  style: TextStyle(
+                                      fontSize: responsive.ip(1.7),
+                                      color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: responsive.ip(2.2),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                  Container(
+                    height: responsive.hp(19),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration:
+                                    const Duration(milliseconds: 100),
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) {
+                                  return SliderDetalleProductosDestacados(
+                                    idCategoria:
+                                        snapshot.data[index].idCategoria,
+                                    numeroItem: snapshot.data[index].numeroitem,
+                                    items: snapshot.data,
+                                  );
+                                  /* return DetalleProductitos(
+                                  productosData: snapshot.data[index]); */
+                                },
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: responsive.ip(18),
+                            height: responsive.ip(18),
+                            padding: EdgeInsets.only(
+                              left: responsive.wp(3),
+                            ),
+                            margin: EdgeInsets.only(
+                              right: responsive.wp(1.5),
+                            ),
+                            child: Stack(
+                              children: <Widget>[
+                                Container(
+                                  width: responsive.ip(18),
+                                  height: responsive.ip(18),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      cacheManager: CustomCacheManager(),
+                                      placeholder: (context, url) => Image(
+                                          image: AssetImage(
+                                              'assets/jar-loading.gif'),
+                                          fit: BoxFit.cover),
+                                      errorWidget: (context, url, error) =>
+                                          Image(
+                                              image: AssetImage(
+                                                  'assets/carga_fallida.jpg'),
+                                              fit: BoxFit.cover),
+                                      imageUrl:
+                                          '${snapshot.data[index].productoFoto}',
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: responsive.hp(1),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(.5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '${snapshot.data[index].productoNombre}',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: responsive.ip(2),
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ('${snapshot.data[index].productoNuevo}' == '1')
+                                    ? Positioned(
+                                       /*  left: responsive.wp(1),
+                                        top: responsive.hp(.5), */
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: responsive.wp(3),
+                                            vertical: responsive.wp(.2),
+                                          ),
+                                          decoration: BoxDecoration(
+                                              /* borderRadius:
+                                                  BorderRadius.circular(10), */
+                                              color: Colors.red),
+                                          child: Text(
+                                            'Nuevo',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: responsive.ip(1.4),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container()
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: snapshot.data.length,
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          } else {
+            return Center(
+              child: CupertinoActivityIndicator(),
+            );
+          }
+        });
+  }
+}
+
+class PublicidadDialog extends StatelessWidget {
+  final PublicidadModel publicidadModel;
+  const PublicidadDialog({Key key, @required this.publicidadModel})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<PrincipalChangeBloc>(context, listen: false);
+
+    final responsive = Responsive.of(context);
+    return Container(
+      color: Colors.black.withOpacity(.4),
+      padding: EdgeInsets.symmetric(
+        horizontal: responsive.wp(7),
+        vertical: responsive.hp(7),
+      ),
+      height: double.infinity,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              if (publicidadModel.publicidadTipo == 'producto') {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 100),
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      ProductosData producto = ProductosData();
+                      producto.idProducto = publicidadModel.idRelacionado;
+                      return DetalleProductitoss(
+                        productosData: producto,
+                        mostrarback: true,
+                      );
+                      //return DetalleProductitos(productosData: productosData);
+                    },
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+
+                Navigator.pushNamed(context, '');
+              } else {
+                Arguments arg = new Arguments(
+                    "Promociones", '${publicidadModel.idRelacionado}');
+                Navigator.pushNamed(context, 'combo', arguments: arg);
+              }
+            },
+            child: Container(
+              height: double.infinity,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                cacheManager: CustomCacheManager(),
+                placeholder: (context, url) => Image(
+                    image: AssetImage('assets/jar-loading.gif'),
+                    fit: BoxFit.cover),
+                errorWidget: (context, url, error) => Image(
+                    image: AssetImage('assets/carga_fallida.jpg'),
+                    fit: BoxFit.cover),
+                imageUrl: '${publicidadModel.publicidadImagen}',
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: GestureDetector(
+              onTap: () {
+                provider.setIndex(false);
+              },
+              child: Container(
+                transform: Matrix4.translationValues(
+                    responsive.ip(1), -responsive.ip(1.3), 0),
+                child: CircleAvatar(
+                  radius: responsive.ip(2),
+                  child: Icon(Icons.close),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

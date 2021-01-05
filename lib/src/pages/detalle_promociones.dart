@@ -101,6 +101,7 @@ class _DetallePromocionesState extends State<DetallePromociones> {
                                     return _itemPedido(
                                       context,
                                       snapshot.data[0].productos[index],
+                                      snapshot.data[0].productos.length.toString(),
                                     );
                                   }),
                             )
@@ -132,7 +133,7 @@ class _DetallePromocionesState extends State<DetallePromociones> {
     );
   }
 
-  Widget _itemPedido(BuildContext context, ProductosData productosData) {
+  Widget _itemPedido(BuildContext context, ProductosData productosData,String cantidadItems) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
@@ -232,7 +233,9 @@ class _DetallePromocionesState extends State<DetallePromociones> {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitos(productosData: productosData);
+
+                return SliderDetalleProductos(numeroItem: productosData.numeroitem, idCategoria: productosData.idCategoria,cantidadItems:cantidadItems);
+                //return DetalleProductitos(productosData: productosData);
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

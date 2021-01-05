@@ -7,6 +7,7 @@ class Carrito {
         this.productoPrecio, 
         this.productoTipo, 
         this.productoObservacion, 
+        this.productoTupper, 
         this.idCategoria, 
     });
 
@@ -17,6 +18,7 @@ class Carrito {
     String productoPrecio;
     String productoTipo; 
     String productoObservacion; 
+    String productoTupper; 
     String idCategoria; 
 
     factory Carrito.fromJson(Map<String, dynamic> json) => Carrito(
@@ -27,6 +29,7 @@ class Carrito {
         productoPrecio: json["producto_precio"], 
         productoTipo: json["producto_tipo"], 
         productoObservacion: json["producto_observacion"], 
+        productoTupper: json["producto_tupper"], 
         idCategoria: json["idCategoria"], 
     );
 

@@ -199,25 +199,52 @@ class _FavoritosTabState extends State<FavoritosTab> {
             Container(
               width: responsive.ip(15),
               height: responsive.ip(12),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
-                  placeholder: (context, url) => Image(
-                      image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Image(
-                      image: AssetImage('assets/carga_fallida.jpg'),
-                      fit: BoxFit.cover),
-                  imageUrl: '${productosData.productoFoto}',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.fill,
-                    )),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      cacheManager: CustomCacheManager(),
+                      placeholder: (context, url) => Image(
+                          image: AssetImage('assets/jar-loading.gif'),
+                          fit: BoxFit.cover),
+                      errorWidget: (context, url, error) => Image(
+                          image: AssetImage('assets/carga_fallida.jpg'),
+                          fit: BoxFit.cover),
+                      imageUrl: '${productosData.productoFoto}',
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                        )),
+                      ),
+                    ),
                   ),
-                ),
+                  ('${productosData.productoNuevo}' == '1')
+                              ?   Positioned(
+                                 /*  left: responsive.wp(1),
+                                  top: responsive.hp(.5), */
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: responsive.wp(3),
+                                      vertical: responsive.hp(.5),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        //borderRadius: BorderRadius.circular(10),
+                                        color: Colors.red),
+                                    child: Text(
+                                      'Nuevo',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: responsive.ip(1.3),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container()
+                ],
               ),
             ),
             Expanded(
@@ -296,7 +323,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitos(productosData: productosData);
+                return DetalleProductitoss(productosData: productosData,mostrarback: true,);
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

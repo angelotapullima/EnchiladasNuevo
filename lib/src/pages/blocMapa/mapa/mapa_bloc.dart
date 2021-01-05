@@ -57,60 +57,60 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     }  */
   }
 
-String distancia;
+  String distancia;
   Stream<MapaState> _onNuevaUbicacion(OnNuevaUbicacion event) async* {
-
-
     final responsive = Responsive.of(event.context);
-    
+
     final prefences = Preferences();
     if (state.seguirUbicacion) {
       this.moverCamara(event.ubicacion);
     }
 
-    
+    var repartidor = LatLng(
+      double.parse(event.pedido[0].trackingX),
+      double.parse(event.pedido[0].trackingY),
+    );
 
-        var repartidor = LatLng(
-          double.parse(event.pedido[0].trackingX),
-          double.parse(event.pedido[0].trackingY),
-        );
+    var destino = LatLng(
+      double.parse(event.pedido[0].pedidoX),
+      double.parse(event.pedido[0].pedidoY),
+    );
 
-        var destino = LatLng(
-          double.parse(event.pedido[0].pedidoX),
-          double.parse(event.pedido[0].pedidoY),
-        );
+    var distance = GeoUtils.distanceInKmBetweenEarthCoordinates(
+        repartidor.latitude,
+        repartidor.longitude,
+        destino.latitude,
+        destino.longitude);
 
-        var distance = GeoUtils.distanceInKmBetweenEarthCoordinates(
-            repartidor.latitude,
-            repartidor.longitude,
-            destino.latitude, 
-            destino.longitude);
+    distancia = distance.toString();
+    distancia = utils.format(distance);
 
-            distancia = distance.toString();
-          distancia = utils.format(distance);
-
-    final iconInicio = await getMarkerInicioIcon(double.parse(distancia),responsive);
-    final iconDestino = await getMarkerDestinoIcon('${prefences.personName} ', double.parse(distancia));
+    final iconInicio =
+        await getMarkerInicioIcon(double.parse(distancia), responsive);
+    final iconDestino = await getMarkerDestinoIcon(
+        '${prefences.personName} ', double.parse(distancia));
 
     final markerInicio = new Marker(
-        anchor: Offset(0.0, 1.0),
-        markerId: MarkerId('inicio'),
-        position: event.ubicacion,
-        icon: iconInicio,
-        infoWindow: InfoWindow(
-          title: 'Repartidor',
-          snippet: 'Duración recorrido: ${(1 / 60).floor()} minutos',
-        ));
+      anchor: Offset(0.0, 1.0),
+      markerId: MarkerId('inicio'),
+      position: event.ubicacion,
+      icon: iconInicio,
+      infoWindow: InfoWindow(
+        title: 'Repartidor',
+        snippet: 'Duración recorrido: ${(1 / 60).floor()} minutos',
+      ),
+    );
 
     final markerDestino = new Marker(
-        markerId: MarkerId('destino'),
-        position: destino,
-        icon: iconDestino,
-        anchor: Offset(0.1, 0.90),
-        infoWindow: InfoWindow(
-          title: 'detino',
-          snippet: 'Distancia: kilometros Km',
-        ));
+      markerId: MarkerId('destino'),
+      position: destino, 
+      icon: iconDestino,
+      anchor: Offset(0.1, 0.90),
+      infoWindow: InfoWindow(
+        title: 'detino',
+        snippet: 'Distancia: kilometros Km',
+      ),
+    );
 
     final newMarkers = {...state.markers};
     newMarkers['inicio'] = markerInicio;

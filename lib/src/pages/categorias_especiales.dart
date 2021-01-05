@@ -19,14 +19,14 @@ class CategoriasEspecialesPage extends StatefulWidget {
 
 class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
   @override
-  Widget build(BuildContext context) { 
-    
+  Widget build(BuildContext context) {
     final Arguments arg = ModalRoute.of(context).settings.arguments;
 
     final productosIdBloc = ProviderBloc.prod(context);
     final responsive = Responsive.of(context);
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(arg.productId);
+    productosIdBloc
+        .obtenerProductosdeliveryEnchiladasPorCategoria(arg.productId);
 
     return Scaffold(
         body: Stack(children: <Widget>[
@@ -48,7 +48,10 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
           AppBar(
             toolbarHeight: responsive.hp(8),
             elevation: 0,
-            title: Text(title,style: TextStyle(fontSize: responsive.ip(2.4)),),
+            title: Text(
+              title,
+              style: TextStyle(fontSize: responsive.ip(2.4)),
+            ),
             /* actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.card_giftcard),
@@ -79,6 +82,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                         itemBuilder: (context, i) => _itemPedido(
                           context,
                           snapshot.data[i],
+                          snapshot.data.length.toString(),
                         ),
                       );
                     } else {
@@ -100,7 +104,8 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
     );
   }
 
-  Widget _itemPedido(BuildContext context, ProductosData productosData) {
+  Widget _itemPedido(
+      BuildContext context, ProductosData productosData, String cantidadItems) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
@@ -118,29 +123,55 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
             Container(
               width: responsive.ip(20),
               height: responsive.ip(16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
-                  placeholder: (context, url) => Image(
-                      image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
-                  imageUrl:
-                      '${productosData.productoFoto}',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.fill,
-                    )),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      cacheManager: CustomCacheManager(),
+                      placeholder: (context, url) => Image(
+                          image: AssetImage('assets/jar-loading.gif'),
+                          fit: BoxFit.cover),
+                      errorWidget: (context, url, error) => Image(
+                          image: AssetImage('assets/carga_fallida.jpg'),
+                          fit: BoxFit.cover),
+                      imageUrl: '${productosData.productoFoto}',
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                        )),
+                      ),
+                    ),
                   ),
-                ),
+                  ('${productosData.productoNuevo}' == '1')
+                      ? Positioned(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                              vertical: responsive.wp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                                //borderRadius: BorderRadius.circular(10),
+                                color: Colors.red),
+                            child: Text(
+                              'Nuevo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.5),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container()
+                ],
               ),
             ),
-            SizedBox(width: responsive.wp(2),),
+            SizedBox(
+              width: responsive.wp(2),
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -199,7 +230,12 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitos(productosData: productosData);
+                return SliderDetalleProductos(
+                  numeroItem: productosData.numeroitem,
+                  idCategoria: productosData.idCategoria,
+                  cantidadItems: cantidadItems,
+                );
+                //return DetalleProductitos(productosData: productosData);
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

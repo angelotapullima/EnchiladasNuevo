@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     if(bottomBloc.page==null){
 
     bottomBloc.changePage(0);
-    }
+    } 
 
     return Scaffold(
       body: StreamBuilder(

@@ -61,7 +61,13 @@ class ProductosData {
     this.productoComentario,
     this.productoSeleccionado,
     this.productoFavorito,
+    this.productoTupper,
+    this.productoDestacado,
+    this.productoNuevo,
+    this.productoEstadoDestacado,
     this.productoObservacion,
+    this.productoAdicionalTitulo,
+    this.productoAdicionalOpciones,
     this.sonido,
   });
 
@@ -80,7 +86,13 @@ class ProductosData {
   String productoComentario;
   String productoSeleccionado;
   int productoFavorito;
+  String productoTupper;
+  String productoDestacado;
+  String productoEstadoDestacado;
   String sonido;
+  String productoNuevo;
+  String productoAdicionalTitulo;
+  String productoAdicionalOpciones;
   String productoObservacion;
 
   factory ProductosData.fromJson(Map<String, dynamic> json) => ProductosData(
@@ -99,6 +111,12 @@ class ProductosData {
         productoComentario: json["producto_comentario"],
         productoSeleccionado: json["producto_seleccionado"],
         productoFavorito: json["producto_favorito"],
+        productoDestacado: json["producto_destacado"],
+        productoEstadoDestacado: json["producto_estado_destacado"],
+        productoTupper: json["producto_tupper"],
+        productoNuevo: json["producto_nuevo"],
+        productoAdicionalOpciones: json["producto_adicional_opciones"],
+        productoAdicionalTitulo: json["producto_adicional_titulo"],
         sonido: json["producto_sonido"],
       );
 

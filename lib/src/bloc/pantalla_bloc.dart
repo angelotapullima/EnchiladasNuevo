@@ -12,15 +12,17 @@ class PantallaBloc {
   final productosDatabase = ProductoDatabase();
 
   final _pantallasController = new BehaviorSubject<List<PantallaModel>>();
-  final _estadoPantallaDesicion = new BehaviorSubject<bool>();
+  final _estadoMarketDesicion = new BehaviorSubject<bool>();
+  final _estadoCafeDesicion = new BehaviorSubject<bool>();
 
-  Stream<List<PantallaModel>> get pantallasStream =>
-      _pantallasController.stream;
-  Stream<bool> get estadoDesicionStream => _estadoPantallaDesicion.stream;
+  Stream<List<PantallaModel>> get pantallasStream =>_pantallasController.stream;
+  Stream<bool> get estadoMarketStream => _estadoMarketDesicion.stream;
+  Stream<bool> get estadoCafeStream => _estadoCafeDesicion.stream;
 
   dispose() {
     _pantallasController?.close();
-    _estadoPantallaDesicion?.close();
+    _estadoMarketDesicion?.close();
+    _estadoCafeDesicion?.close();
   }
 
   void obtenerPantallas() async {
@@ -50,9 +52,10 @@ class PantallaBloc {
           for (int x = 0; x < 10; x++) {
             ItemPantalla item = ItemPantalla();
 
-            item.id = listaCategorias[x].idCategoria;
+            item.idCategoria = listaCategorias[x].idCategoria;
             item.nombreItem = listaCategorias[x].categoriaNombre;
             item.fotoItem = listaCategorias[x].categoriaFoto;
+            item.numeroItem = x.toString();
 
             listItemPantalla.add(item);
           }
@@ -60,9 +63,10 @@ class PantallaBloc {
           for (int x = 0; x < listaCategorias.length; x++) {
             ItemPantalla item = ItemPantalla();
 
-            item.id = listaCategorias[x].idCategoria;
+            item.idCategoria = listaCategorias[x].idCategoria;
             item.nombreItem = listaCategorias[x].categoriaNombre;
             item.fotoItem = listaCategorias[x].categoriaFoto;
+            item.numeroItem = x.toString();
 
             listItemPantalla.add(item);
           }
@@ -71,15 +75,16 @@ class PantallaBloc {
         //market
 
         final listaCategorias =
-            await categoriasDatabase.obtenerCategoriasMarket();
+            await categoriasDatabase.obtenerCategoriasMarket('2');
 
         if (listaCategorias.length > 10) {
           for (int x = 0; x < 10; x++) {
             ItemPantalla item = ItemPantalla();
 
-            item.id = listaCategorias[x].idCategoria;
+            item.idCategoria = listaCategorias[x].idCategoria;
             item.nombreItem = listaCategorias[x].categoriaNombre;
             item.fotoItem = listaCategorias[x].categoriaFoto;
+            item.numeroItem = x.toString();
 
             listItemPantalla.add(item);
           }
@@ -87,9 +92,10 @@ class PantallaBloc {
           for (int x = 0; x < listaCategorias.length; x++) {
             ItemPantalla item = ItemPantalla();
 
-            item.id = listaCategorias[x].idCategoria;
+            item.idCategoria = listaCategorias[x].idCategoria;
             item.nombreItem = listaCategorias[x].categoriaNombre;
             item.fotoItem = listaCategorias[x].categoriaFoto;
+            item.numeroItem = x.toString();
 
             listItemPantalla.add(item);
           }
@@ -106,6 +112,7 @@ class PantallaBloc {
 
             item.nombreItem = listaPuzzle[x].imagenSubida;
             item.fotoItem = listaPuzzle[x].imagenRuta;
+            item.numeroItem = x.toString();
 
             listItemPantalla.add(item);
           }
@@ -121,7 +128,7 @@ class PantallaBloc {
         }
       } else {
         //resto
-
+ 
         final listaProductos = await productosDatabase
             .obtenerProductosPorCategoriaDelivery(pantalla.pantallCategoria);
 
@@ -129,9 +136,12 @@ class PantallaBloc {
           for (int x = 0; x < 10; x++) {
             ItemPantalla item = ItemPantalla();
 
-            item.id = listaProductos[x].idProducto;
+            item.idProducto = listaProductos[x].idProducto;
+            item.idCategoria = listaProductos[x].idCategoria;
             item.nombreItem = listaProductos[x].productoNombre;
             item.fotoItem = listaProductos[x].productoFoto;
+            item.numeroItem = x.toString();
+            item.cantidadItems = listaProductos.length.toString();
 
             listItemPantalla.add(item);
           }
@@ -139,9 +149,13 @@ class PantallaBloc {
           for (int x = 0; x < listaProductos.length; x++) {
             ItemPantalla item = ItemPantalla();
 
-            item.id = listaProductos[x].idProducto;
+             item.idProducto = listaProductos[x].idProducto;
+            item.idCategoria = listaProductos[x].idCategoria;
             item.nombreItem = listaProductos[x].productoNombre;
             item.fotoItem = listaProductos[x].productoFoto;
+            item.numeroItem = x.toString();
+            item.cantidadItems = listaProductos.length.toString();
+            item.productoNuevo = listaProductos[x].productoNuevo;
 
             listItemPantalla.add(item);
           }
@@ -155,7 +169,7 @@ class PantallaBloc {
     _pantallasController.sink.add(listFinal);
   }
 
-  void estadoPantalla() async {
+  void estadoPantallaMarket() async {
     bool estado = false;
     var estadoMarket = await pantallaDatabase.obtenerPantallaPorId('2');
 
@@ -167,6 +181,36 @@ class PantallaBloc {
       }
     }
 
-    _estadoPantallaDesicion.sink.add(estado);
+    _estadoMarketDesicion.sink.add(estado);
   }
+
+  void estadoPantallaCafe() async {
+    bool estado = false;
+    var estadoCafe = await pantallaDatabase.obtenerPantallaPorId('4');
+
+    if (estadoCafe.length > 0) {
+      if (estadoCafe[0].pantallaEstado == '0') {
+        estado = false;
+      } else {
+        estado = true;
+      }
+    }
+
+    _estadoCafeDesicion.sink.add(estado);
+  }
+}
+
+
+
+class MostarInicioDelivery{
+
+
+  bool market;
+  bool cafe;
+
+  MostarInicioDelivery({
+
+    this.market,
+    this.cafe
+  });
 }

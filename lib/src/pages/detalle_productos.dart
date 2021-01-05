@@ -24,15 +24,144 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class DetalleProductitos extends StatefulWidget {
-  final ProductosData productosData;
+class SliderDetalleProductos extends StatefulWidget {
+  final String numeroItem;
+  final String idCategoria;
+  final String cantidadItems;
+  const SliderDetalleProductos(
+      {Key key,
+      @required this.numeroItem,
+      @required this.idCategoria,
+      @required this.cantidadItems})
+      : super(key: key);
 
-  const DetalleProductitos({Key key, this.productosData}) : super(key: key);
+  @override
+  _SliderDetalleProductosState createState() => _SliderDetalleProductosState();
+}
+
+class _SliderDetalleProductosState extends State<SliderDetalleProductos> {
+  @override
+  Widget build(BuildContext context) {
+    final _pageController =
+        PageController(initialPage: int.parse(widget.numeroItem));
+
+    final productoBloc = ProviderBloc.prod(context);
+    final contadorProductosFotoLocal = ProviderBloc.contadorLocal(context);
+    productoBloc
+        .obtenerProductosdeliveryEnchiladasPorCategoria(widget.idCategoria);
+    contadorProductosFotoLocal.changeContador(int.parse(widget.numeroItem));
+
+    final responsive = Responsive.of(context);
+
+    return Scaffold(
+        body: Stack(
+      children: [
+        StreamBuilder(
+            stream: productoBloc.productosEnchiladasStream,
+            builder: (context, AsyncSnapshot<List<ProductosData>> snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data.length > 0) {
+                  return PageView.builder(
+                      itemCount: snapshot.data.length,
+                      controller: _pageController,
+                      itemBuilder: (BuildContext context, int index) {
+                        return DetalleProductitoss(
+                          productosData: snapshot.data[index],
+                          mostrarback: false,
+                        );
+                      },
+                      onPageChanged: (int index) {
+                        contadorProductosFotoLocal.changeContador(index);
+                      });
+                } else {
+                  return Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+                }
+              } else {
+                return Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+            }),
+        StreamBuilder(
+            stream: contadorProductosFotoLocal.selectContadorStream,
+            builder: (context, snapshotContador) {
+              if (snapshotContador.hasData) {
+                if (snapshotContador.data != null) {
+                  return Container(
+                    height: kToolbarHeight + 50,
+                    child: AppBar(
+                      backgroundColor: Colors.transparent,
+                      actions: [
+                        Container(
+                          height: responsive.hp(1),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(2),
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.grey[300],
+                            border: Border.all(color: Colors.grey[300]),
+                          ),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                            vertical: responsive.hp(1.3),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                (contadorProductosFotoLocal.pageContador + 1)
+                                    .toString(),
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.5),
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                ' / ',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.5),
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                '${widget.cantidadItems}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.5),
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                } else
+                  return Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+              } else {
+                return Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+            }),
+      ],
+    ));
+  }
+}
+
+class DetalleProductitoss extends StatefulWidget {
+  final ProductosData productosData;
+  final bool mostrarback;
+
+  const DetalleProductitoss(
+      {Key key, @required this.productosData, @required this.mostrarback})
+      : super(key: key);
   @override
   _DetalleProducto createState() => _DetalleProducto();
 }
 
-class _DetalleProducto extends State<DetalleProductitos> {
+class _DetalleProducto extends State<DetalleProductitoss> {
   GlobalKey _one = GlobalKey();
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
@@ -103,7 +232,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
                     backdropEnabled: true,
                     body: Stack(children: <Widget>[
                       _backgroundImage(context, snapshot.data[0]),
-                      _crearAppbar(responsive),
+                      _crearAppbar(responsive, widget.mostrarback),
                       TranslateAnimation(
                         duration: const Duration(milliseconds: 400),
                         child: _contenido(snapshot.data[0], responsive, context,
@@ -237,10 +366,10 @@ class _DetalleProducto extends State<DetalleProductitos> {
                           itemObservacionDatabase.deleteItemObservacion();
 
                           agregarItemObservacion(
-                              context, productosData.idProducto,true);
+                              context, productosData.idProducto, true);
 
                           Navigator.of(context)
-                              .push(_createRoute(productosData.idProducto));
+                              .push(_createRoute(productosData.idProducto,productosData.productoAdicionalOpciones));
                           /* setState(() {
                             mostrar =true;
                             
@@ -309,11 +438,12 @@ class _DetalleProducto extends State<DetalleProductitos> {
     );
   }
 
-  Route _createRoute(String idProducto) {
+  Route _createRoute(String idProducto,String adicionalObservacio) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
         return DetalleObservaciones(
           idProductoArgument: idProducto,
+          idCategoria:adicionalObservacio
         );
       },
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -390,9 +520,33 @@ class _DetalleProducto extends State<DetalleProductitos> {
                   botonesBajos(responsive, productosData, productosBloc),
                   //_cantidad(responsive),
                   SizedBox(
-                    height: responsive.hp(3),
+                    height: responsive.hp(1),
                   ),
 
+                  ('${productosData.productoNuevo}' == '1')
+                      ? Positioned(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                              vertical: responsive.wp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                                //borderRadius: BorderRadius.circular(10),
+                                color: Colors.red),
+                            child: Text(
+                              'Producto Nuevo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(2),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
                   Text(
                     '${productosData.productoDescripcion}',
                     textAlign: TextAlign.justify,
@@ -700,7 +854,6 @@ class _DetalleProducto extends State<DetalleProductitos> {
   }
 
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
-    
     final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
         double.parse(carrito.productoCantidad));
     var observacionProducto = 'Toca para agregar una observación';
@@ -938,6 +1091,25 @@ class _DetalleProducto extends State<DetalleProductitos> {
                 width: double.infinity,
                 height: responsive.hp(5),
                 child: RaisedButton(
+                    color: Colors.white,
+                    textColor: Colors.red,
+                    child: Text(
+                      'Continuar Comprando',
+                      style: TextStyle(
+                        fontSize: responsive.ip(2),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+              ),
+              SizedBox(
+                height: responsive.hp(.8),
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: responsive.hp(5),
+                child: RaisedButton(
                     color: (preferences.rol == '5') ? Colors.red : Colors.grey,
                     textColor: Colors.white,
                     child: Text(
@@ -951,7 +1123,6 @@ class _DetalleProducto extends State<DetalleProductitos> {
                         final prefs = Preferences();
 
                         if (prefs.email != null && prefs.email != "") {
-
                           prefs.propinaRepartidor = '0';
                           Navigator.pushNamed(context, 'detallePago');
                         } else {
@@ -973,7 +1144,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
         final prefs = Preferences();
 
         if (prefs.email != null && prefs.email != "") {
-                          prefs.propinaRepartidor = '0';
+          prefs.propinaRepartidor = '0';
           Navigator.pushNamed(context, 'detallePago');
         } else {
           pedirLogueo();
@@ -1012,16 +1183,18 @@ class _DetalleProducto extends State<DetalleProductitos> {
         });
   }
 
-  Widget _crearAppbar(Responsive responsive) {
-    return Container(
-      height: kToolbarHeight + 30,
-      child: AppBar(
-        leading: BackButton(
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.transparent,
-      ),
-    );
+  Widget _crearAppbar(Responsive responsive, bool mostrar) {
+    return (mostrar)
+        ? Container(
+            height: kToolbarHeight + 30,
+            child: AppBar(
+              leading: BackButton(
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.transparent,
+            ),
+          )
+        : Container();
   }
   //flutter build apk -- release gliutter buils apk -- releadse
 
@@ -1033,10 +1206,7 @@ class _DetalleProducto extends State<DetalleProductitos> {
         Navigator.pushNamed(context, 'detalleProductoFoto', arguments: carrito);
       },
       onVerticalDragUpdate: (drag) {
-        
-
         if (drag.primaryDelta > 7) {
-          
           Navigator.pop(context);
         }
       },

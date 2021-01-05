@@ -58,7 +58,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
             return InkWell(
               onTap: () {
                 if (dataToque) {
-                  _toque.value;
+                  _toque.value=false;
                 } else {
                   _toque.value = true;
                 }
@@ -200,6 +200,33 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     ),
                                   ],
                                 ),
+
+                                 SizedBox(
+                    height: responsive.hp(1),
+                  ),
+
+                  ('${productosData.productoNuevo}' == '1')
+                      ? Positioned(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                              vertical: responsive.wp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                                //borderRadius: BorderRadius.circular(10),
+                                color: Colors.red),
+                            child: Text(
+                              'Producto Nuevo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(2),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  
                                 SizedBox(
                                   height: responsive.hp(2),
                                 ),

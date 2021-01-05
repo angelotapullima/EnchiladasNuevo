@@ -14,13 +14,22 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MarketPage extends StatelessWidget {
+class MarketPage extends StatefulWidget {
+  final String tipo;
+
+  const MarketPage({Key key, @required this.tipo}) : super(key: key);
+  @override
+  _MarketPageState createState() => _MarketPageState();
+}
+
+class _MarketPageState extends State<MarketPage> {
   final _refreshController = RefreshController(initialRefresh: false);
+
   void _onRefresh(BuildContext context) async {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasMarket();
+    categoriasBloc.obtenerCategoriasMarket(widget.tipo);
     _refreshController.refreshCompleted();
   }
 
@@ -28,7 +37,7 @@ class MarketPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasMarket();
+    categoriasBloc.obtenerCategoriasMarket(widget.tipo);
 
     final reaponsive = Responsive.of(context);
 
@@ -56,7 +65,7 @@ class MarketPage extends StatelessWidget {
             backgroundColor: Colors.red,
             elevation: 0,
             title: Text(
-              'Market 247',
+              (widget.tipo == '2') ? 'Market 247' : 'Café 247',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: responsive.ip(2.8),
@@ -71,8 +80,9 @@ class MarketPage extends StatelessWidget {
                 ),
                 onPressed: () {
                   showSearch(
-                      context: context,
-                      delegate: DataSearch(hintText: 'Buscar'));
+                    context: context,
+                    delegate: DataSearch(hintText: 'Buscar'),
+                  );
                 },
               )
             ],
@@ -81,11 +91,14 @@ class MarketPage extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadiusDirectional.only(
-                        topEnd: Radius.circular(13),
-                        topStart: Radius.circular(13)),
+                      topEnd: Radius.circular(13),
+                      topStart: Radius.circular(13),
+                    ),
                     color: Colors.grey[50]),
                 padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(2), vertical: responsive.hp(1)), 
+                  horizontal: responsive.wp(2),
+                  vertical: responsive.hp(1),
+                ),
                 child: SmartRefresher(
                   controller: _refreshController,
                   onRefresh: () {
@@ -164,9 +177,9 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
   Widget build(BuildContext context) {
     final productosIdBloc = ProviderBloc.prod(context);
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc
+    /* productosIdBloc
         .obtenerProductosMarketPorCategoria(widget.data[0].idCategoria);
-
+ */
     return Scaffold(
       body: _listaCategorias(widget.data),
       /* _listaCategorias(categoriasBloc), */
@@ -188,7 +201,8 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
   _listaItems(BuildContext context, CategoriaData categoria) {
     final size = MediaQuery.of(context).size;
     final responsive = Responsive.of(context);
-    final marketBloc = ProviderBloc.market(context);/* 
+    final marketBloc = ProviderBloc.market(context);
+    /* 
     final productosIdBloc = ProviderBloc.prod(context); */
 
     return StreamBuilder(
@@ -217,13 +231,13 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                         child: Column(
                           children: <Widget>[
                             SvgPicture(
-                        AdvancedNetworkSvg('${categoria.categoriaIcono}',
-                            SvgPicture.svgByteDecoder,
-                            useDiskCache: true),
-                      ),
-                      SizedBox(
-                        height: responsive.hp(1),
-                      ),
+                              AdvancedNetworkSvg('${categoria.categoriaIcono}',
+                                  SvgPicture.svgByteDecoder,
+                                  useDiskCache: true),
+                            ),
+                            SizedBox(
+                              height: responsive.hp(1),
+                            ),
                             Text(categoria.categoriaNombre,
                                 style: TextStyle(
                                     color: Colors.black,
@@ -285,7 +299,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
               return ListView.builder(
                 itemCount: productos.length,
                 itemBuilder: (BuildContext context, int indexed) {
-                  return _itemPedido(context, productos[indexed]);
+                  return _itemPedido(
+                      context, productos[indexed], productos.length.toString());
                 },
               );
             }
@@ -302,7 +317,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 
-  Widget _itemPedido(BuildContext context, ProductosData productosData) {
+  Widget _itemPedido(
+      BuildContext context, ProductosData productosData, String cantidadItems) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
@@ -327,8 +343,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                       image: AssetImage('assets/jar-loading.gif'),
                       fit: BoxFit.cover),
                   errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                      image: AssetImage('assets/carga_fallida.jpg'),
+                      fit: BoxFit.cover),
                   imageUrl: '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
@@ -340,7 +356,9 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                 ),
               ),
             ),
-            SizedBox(width: responsive.wp(1),),
+            SizedBox(
+              width: responsive.wp(1),
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -357,9 +375,10 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                   Text(
                     'S/ ${productosData.productoPrecio}',
                     style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(2)),
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(2),
+                    ),
                   ),
                 ],
               ),
@@ -387,7 +406,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                         icon: Icon(
                           FontAwesomeIcons.heart,
                           color: Colors.red,
-                        ))
+                        ),
+                      )
               ],
             ),
           ],
@@ -399,7 +419,12 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitos(productosData: productosData);
+                return SliderDetalleProductos(
+                    numeroItem: productosData.numeroitem,
+                    idCategoria: productosData.idCategoria,
+                    cantidadItems: cantidadItems);
+
+                //return DetalleProductitos(productosData: productosData);
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

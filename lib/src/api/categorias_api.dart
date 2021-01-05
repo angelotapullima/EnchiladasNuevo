@@ -121,12 +121,27 @@ class CategoriasApi {
             productosData.productoEstado = productos[x]['producto_estado'];
             productosData.productoDescripcion =
                 productos[x]['producto_detalle'];
-            productosData.productoComentario =
-                decodedData['result']['data'][i]['categoria_comentario'];
+            productosData.productoComentario =productos[x]['producto_comentario'];
             productosData.sonido =
                 decodedData['result']['data'][i]['categoria_sonido'];
             productosData.productoCarta = productos[x]['producto_carta'];
+            productosData.productoNuevo = productos[x]['producto_nuevo'];
             productosData.productoDelivery = productos[x]['producto_delivery'];
+            productosData.productoDestacado = productos[x]['producto_destacado'];
+            productosData.productoDestacado = productos[x]['producto_destacado'];
+            productosData.productoAdicionalTitulo = productos[x]['producto_observaciones_fijas']['adicional_categoria']['titulo'];
+            productosData.productoAdicionalOpciones = productos[x]['producto_observaciones_fijas']['adicional_categoria']['opciones'];
+
+            if(productosData.productoDestacado=='0'){
+
+              productosData.productoEstadoDestacado = '0';
+
+            }else{
+
+              productosData.productoEstadoDestacado = '1';
+
+            }
+            productosData.productoTupper = productos[x]['producto_tupper'];
 
             if (datoproducto.length > 0) {
               productosData.productoFavorito = datoproducto[0].productoFavorito;

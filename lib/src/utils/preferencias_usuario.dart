@@ -35,6 +35,18 @@ class Preferences {
     _prefs.setString('idBolsa', value);
   }
 
+
+
+//sirve para obtener el id producto de la bolsa
+  get idTupper{
+    return _prefs.getString('idTupper');
+  }
+
+  set idTupper(String value){
+
+    _prefs.setString('idTupper', value);
+  }
+
   //sirve para verificar el estado de la primera carga
   get estadoCargaInicial{
     return _prefs.getString('estadoCarga');

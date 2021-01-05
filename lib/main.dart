@@ -1,17 +1,17 @@
+import 'package:enchiladasapp/src/bloc/cerrar_publicidad_bloc.dart';
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/detalle_promociones_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/home_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/productos_categoria.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/mi_ubicacion/mi_ubicacion_bloc.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto_foto.dart';
-import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/gestionar_direcciones.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
-import 'package:enchiladasapp/src/pages/market_page.dart';
 import 'package:enchiladasapp/src/pages/notification_page.dart';
 import 'package:enchiladasapp/src/pages/onboarding_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_pago_page.dart';
+import 'package:enchiladasapp/src/pages/pantalla_delivery_opciones.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
 import 'package:enchiladasapp/src/pages/detalle_promociones.dart';
@@ -201,53 +201,58 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => MapaBloc()),
         //BlocProvider(create: ( _ ) => BusquedaBloc() ),
       ],
-      child: ProviderBloc(
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          navigatorKey: navigatorkey,
-          initialRoute: 'splash',//'splash',
-          theme: ThemeData(
-            primarySwatch: Colors.red,
-            scaffoldBackgroundColor: Colors.grey[50],
-            canvasColor: Colors.transparent,
+      child: ChangeNotifierProvider(
+
+      create: (_) => PrincipalChangeBloc(),
+        child: ProviderBloc(
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            navigatorKey: navigatorkey,
+            initialRoute: 'splash',//'splash',
+            theme: ThemeData(
+              primarySwatch: Colors.red,
+              scaffoldBackgroundColor: Colors.grey[50],
+              canvasColor: Colors.transparent,
+            ),
+            routes: {
+              '/': (BuildContext context) => HomePage(),
+              'homeLocal': (BuildContext context) => HomeLocal(),
+              'HomePuzzle': (BuildContext context) => HomePuzzle(),
+              'puzzle': (BuildContext context) => PuzzlePage(),
+              'login': (BuildContext context) => LoginPage(),
+              'splash': (BuildContext context) => Splash(),
+              'desicion': (BuildContext context) => DesicionPage(),
+              //'detalleP': (BuildContext context) => DetalleProductitoss(),
+              'detallePago': (BuildContext context) => DetallePago(),
+              'sel_Direccion': (BuildContext context) => MapsSample(),
+              'combo': (BuildContext context) => CategoriasEspecialesPage(),
+              'ordenes': (BuildContext context) => OrdenesPage(),
+              'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
+              'detallePedido': (BuildContext context) => DetallePedido(),
+              /* 'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
+              'mapaRepartidor': (BuildContext context) => MapaRepartidor(), */
+              'mapaCliente': (BuildContext context) => MapaCliente(),
+              'ranking': (BuildContext context) => RankingPage(),
+              'rankingReport': (BuildContext context) => RankingReport(),
+              'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
+              
+              'timeline': (BuildContext context) => DeliveryTimeline(),
+              'webView': (BuildContext context) => WebViewExample(),
+              'ticket': (BuildContext context) => Ticket(),
+              'gestionarDirecciones': (BuildContext context) =>
+                  GestionarDirecciones(),
+              'detalleProductoFoto': (BuildContext context) =>
+                  DetalleProductoFoto(),
+              'detallePromociones': (BuildContext context) =>
+                  DetallePromociones(),
+              'onboarding': (BuildContext context) => OnboardingPage(),
+              'productosCategoria': (BuildContext context) =>
+                  ProductosCategoria(),
+              'detallePromocionesLocal': (BuildContext context) => DetallePromocionesLocal(),
+              'notificationPage': (BuildContext context) => NotificationPage(),
+              'pantallaDeliveryOpciones': (BuildContext context) => PantallaDeliveryOpciones(),
+            },
           ),
-          routes: {
-            '/': (BuildContext context) => HomePage(),
-            'homeLocal': (BuildContext context) => HomeLocal(),
-            'HomePuzzle': (BuildContext context) => HomePuzzle(),
-            'puzzle': (BuildContext context) => PuzzlePage(),
-            'login': (BuildContext context) => LoginPage(),
-            'splash': (BuildContext context) => Splash(),
-            'desicion': (BuildContext context) => DesicionPage(),
-            'detalleP': (BuildContext context) => DetalleProductitos(),
-            'detallePago': (BuildContext context) => DetallePago(),
-            'sel_Direccion': (BuildContext context) => MapsSample(),
-            'combo': (BuildContext context) => CategoriasEspecialesPage(),
-            'ordenes': (BuildContext context) => OrdenesPage(),
-            'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
-            'detallePedido': (BuildContext context) => DetallePedido(),
-            /* 'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
-            'mapaRepartidor': (BuildContext context) => MapaRepartidor(), */
-            'mapaCliente': (BuildContext context) => MapaCliente(),
-            'ranking': (BuildContext context) => RankingPage(),
-            'rankingReport': (BuildContext context) => RankingReport(),
-            'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
-            'market': (BuildContext context) => MarketPage(),
-            'timeline': (BuildContext context) => DeliveryTimeline(),
-            'webView': (BuildContext context) => WebViewExample(),
-            'ticket': (BuildContext context) => Ticket(),
-            'gestionarDirecciones': (BuildContext context) =>
-                GestionarDirecciones(),
-            'detalleProductoFoto': (BuildContext context) =>
-                DetalleProductoFoto(),
-            'detallePromociones': (BuildContext context) =>
-                DetallePromociones(),
-            'onboarding': (BuildContext context) => OnboardingPage(),
-            'productosCategoria': (BuildContext context) =>
-                ProductosCategoria(),
-            'detallePromocionesLocal': (BuildContext context) => DetallePromocionesLocal(),
-            'notificationPage': (BuildContext context) => NotificationPage(),
-          },
         ),
       ),
     );

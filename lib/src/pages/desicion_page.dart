@@ -1,4 +1,5 @@
-import 'package:enchiladasapp/src/bloc/provider.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -14,8 +15,8 @@ class _DesicionPageState extends State<DesicionPage> {
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
 
-    final pantallaBloc = ProviderBloc.pantalla(context);
-    pantallaBloc.estadoPantalla();
+    /* final pantallaBloc = ProviderBloc.pantalla(context);
+    pantallaBloc.estadoPantalla(); */
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -56,7 +57,7 @@ class _DesicionPageState extends State<DesicionPage> {
                       child: SvgPicture.asset('assets/icono_delivery.svg'),
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, '/');
+                      Navigator.pushNamed(context, 'pantallaDeliveryOpciones');
                     },
                   ),
                   SizedBox(

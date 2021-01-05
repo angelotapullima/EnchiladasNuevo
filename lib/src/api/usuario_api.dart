@@ -135,3 +135,35 @@ class UsuarioApi {
     //return true;
   }
 }
+
+
+
+
+
+
+
+
+
+
+/*
+  ('${snapshot.data[index].productoNuevo}' == '1')?Positioned(
+                                  left: responsive.wp(1),
+                                  top: responsive.hp(.5),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: responsive.wp(3),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.red),
+                                    child: Text(
+                                      'Nuevo',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: responsive.ip(1.4),
+                                      ),
+                                    ),
+                                  ),
+                                ):Container()
+                                 */

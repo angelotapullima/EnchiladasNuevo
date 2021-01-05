@@ -22,7 +22,7 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'enchiladasAppVersionFija.db');
+    final path = join(documentsDirectory.path, 'enchiladasbd4.db');
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onConfigure: (Database db) async {
@@ -71,6 +71,13 @@ class DatabaseProvider {
           'categoria_mostrar_app VARCHAR'
           ')');
 
+
+        //producto_destacado =  muestra el estado desde la api
+        //0 = cuando no es destacado
+        //cualquier número si es destacado y es la posición
+        //producto_estado_destacado es 1 si es destacado y 0 si no es destacado
+        //producto_estado_destacado es interno
+
       await db.execute('CREATE TABLE Producto ('
           'id_producto VARCHAR  PRIMARY KEY,'
           'id_categoria VARCHAR,' 
@@ -82,9 +89,15 @@ class DatabaseProvider {
           'producto_delivery VARCHAR,'
           'producto_sonido VARCHAR,'
           'producto_unidad VARCHAR,'
+          'producto_destacado VARCHAR,'
+          'producto_estado_destacado VARCHAR,'
+          'producto_tupper VARCHAR,'
           'producto_estado VARCHAR,'
+          'producto_nuevo VARCHAR,'
           'producto_descripcion VARCHAR,'
-          'producto_comentario VARCHAR,'
+          'producto_comentario VARCHAR,' 
+          'producto_adicional_titulo VARCHAR,' 
+          'producto_adicional_opciones VARCHAR,' 
           'producto_favorito int'
           ')');
 
@@ -184,6 +197,7 @@ class DatabaseProvider {
           'producto_cantidad VARCHAR,'
           'producto_precio VARCHAR,'
           'producto_tipo VARCHAR,'
+          'producto_tupper VARCHAR,'
           'idCategoria VARCHAR,'
           'producto_observacion VARCHAR'
           ')');
@@ -306,7 +320,16 @@ class DatabaseProvider {
           'producto_nombre VARCHAR,'
           'producto_foto VARCHAR,'
           'producto_precio VARCHAR,'
+          'producto_tupper VARCHAR,'
           'producto_observacion VARCHAR'
+          ')');
+
+          await db.execute('CREATE TABLE Publicidad ('
+          'publicidad_id VARCHAR PRIMARY KEY,'
+          'publicidad_imagen VARCHAR,' 
+          'publicidad_estado VARCHAR,'
+          'publicidad_tipo VARCHAR,'
+          'id_relacionado VARCHAR'
           ')');
 
     });

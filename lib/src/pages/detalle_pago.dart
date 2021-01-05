@@ -31,7 +31,6 @@ class DetallePago extends StatefulWidget {
 }
 
 class _DetallePagoState extends State<DetallePago> {
-  
   int _comprobanteValue = 3;
   int _tipoPagoValue = 3;
   String ruc = "";
@@ -169,11 +168,16 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   Widget _contenido(
-      BuildContext context,
+      BuildContext context, 
       Responsive responsive,
       UsuarioBloc usuarioBloc,
       List<Direccion> listDireccion,
       CarritoCompletoBloc carritoCompleto) {
+
+         final propinasBloc = ProviderBloc.propina(context);
+    propinasBloc.obtenerPropinas();
+
+    
     final preferences = Preferences();
     String direpe = '';
     String refepe = '';
@@ -185,224 +189,204 @@ class _DetallePagoState extends State<DetallePago> {
       refepe = listDireccion[0].referencia;
       distritope = listDireccion[0].zonaNombre;
       datoLlegadaDelivery =
-          'Su pedido llegará en máximo ${listDireccion[0].zonaTiempo} minutos';
+          'Su pedido llegará en máximo ${listDireccion[0].zonaTiempo} minutos, si el pedido supera el tiempo límite, la comisión es gratis';
     }
     final date = DateFormat("dd.MM.yyyy").format(DateTime.now());
 
     return ShowCaseWidget(
-        onFinish: () {
-          preferences.pantallaDPago = '1';
-        },
-        autoPlay: false,
-        autoPlayDelay: Duration(seconds: 7),
-        autoPlayLockEnable: true,
-        builder: Builder(builder: (context) {
-          if (preferences.pantallaDPago != "1") {
-            WidgetsBinding.instance.addPostFrameCallback(
-                (_) => ShowCaseWidget.of(context).startShowCase([_one, _two]));
-          }
-          return SafeArea(
-            child: Container(
-              margin: EdgeInsets.only(
-                top: responsive.hp(1),
+      onFinish: () {
+        preferences.pantallaDPago = '1';
+      },
+      autoPlay: false,
+      autoPlayDelay: Duration(seconds: 7),
+      autoPlayLockEnable: true,
+      builder: Builder(builder: (context) {
+        if (preferences.pantallaDPago != "1") {
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => ShowCaseWidget.of(context).startShowCase([_one, _two]));
+        }
+        return SafeArea(
+          child: Container(
+            margin: EdgeInsets.only(
+              top: responsive.hp(1),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              border: Border.all(
+                color: Colors.grey[200],
               ),
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(13),
-                border: Border.all(
-                  color: Colors.grey[200],
+            ),
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                Text(
+                  'Resumen de Orden',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: responsive.ip(2.5),
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                children: <Widget>[
-                  Text(
-                    'Resumen de Orden',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: responsive.ip(2.5),
-                        fontWeight: FontWeight.bold),
+                SizedBox(
+                  height: responsive.hp(1),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5),
                   ),
-                  SizedBox(
-                    height: responsive.hp(1),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(5),
-                    ),
-                    child: Container(
-                      height: responsive.hp(6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            date.toString(),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: responsive.ip(2),
-                            ),
-                          ),
-                          Image.asset('assets/logo_enchilada.png'),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: responsive.hp(2),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(5),
-                    ),
-                    child: Text(
-                      'Productos',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: responsive.ip(2.5),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    height: responsive.hp(2),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(5),
-                    ),
-                    child: _listaProductos(context, responsive),
-                  ),
-                  Divider(),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(5),
-                    ),
-                    color: Colors.grey[200],
-                    child: Column(
+                  child: Container(
+                    height: responsive.hp(6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Showcase(
-                            key: _one,
-                            description:
-                                'Por favor ingrese su número de teléfono',
-                            child: _numeroTelefono(
-                                usuarioBloc, context, responsive)),
-                        Divider(),
-                        Showcase(
-                            key: _two,
-                            description: 'Por favor ingrese su dirección',
-                            child: _direccion(
-                                direpe, refepe, distritope, responsive)),
-                        Divider(),
+                        Text(
+                          date.toString(),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: responsive.ip(2),
+                          ),
+                        ),
+                        Image.asset('assets/logo_enchilada.png'),
                       ],
                     ),
                   ),
-                  Divider(),
-                  StreamBuilder(
-                      stream: carritoCompleto.carritoCompletoStream,
-                      builder: (context,
-                          AsyncSnapshot<List<CarritoCompleto>> snapshot) {
-                            String valorPropina = '0';
-                        if (snapshot.hasData) {
-                          for (int x = 0; x < snapshot.data.length; x++) {
-                            if (snapshot.data[x].idCategoria == '97') {
-                              valorPropina = snapshot.data[x].precio;
-                            }
-                          }
-                        }
+                ),
+                SizedBox(
+                  height: responsive.hp(2),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5),
+                  ),
+                  child: Text(
+                    'Productos',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: responsive.ip(2.5),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: responsive.hp(2),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5),
+                  ),
+                  child: _listaProductos(context, responsive),
+                ),
+                Divider(),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5),
+                  ),
+                  color: Colors.grey[200],
+                  child: Column(
+                    children: <Widget>[
+                      Showcase(
+                          key: _one,
+                          description:
+                              'Por favor ingrese su número de teléfono',
+                          child: _numeroTelefono(
+                              usuarioBloc, context, responsive)),
+                      Divider(),
+                      Showcase(
+                          key: _two,
+                          description: 'Por favor ingrese su dirección',
+                          child: _direccion(
+                              direpe, refepe, distritope, responsive),),
+                      Divider(),
+                    ],
+                  ),
+                ),
+                Divider(),
+                Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '¿Desea agregar propina?',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: responsive.ip(2),
+                                  ),
+                                ),
+                                Spacer(),
+                                /* GestureDetector(
+                                  onTap: () async {
+                                    /* final carritoBloc =
+                                        ProviderBloc.carrito(context);
+                                    final carritoCompletoBloc =
+                                        ProviderBloc.carritoCompleto(context);
+                                    final carritoDatabase = CarritoDatabase();
+                                    await carritoDatabase
+                                        .deletePropinaCarritoDb();
 
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: responsive.wp(5)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Desea agregar propina',
+                                    carritoBloc.obtenerCarrito();
+                                    carritoCompletoBloc
+                                        .obtenerCarritoCpmpleto();
+
+                                    Navigator.of(context)
+                                        .push(_createRoutePropina()); */
+                                  },
+                                  child: Text(
+                                    'Agregar',
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.red,
                                       fontWeight: FontWeight.bold,
                                       fontSize: responsive.ip(2),
                                     ),
                                   ),
-                                  Spacer(),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      final carritoBloc =
-                                          ProviderBloc.carrito(context);
-                                      final carritoCompletoBloc =
-                                          ProviderBloc.carritoCompleto(context);
-                                      final carritoDatabase = CarritoDatabase();
-                                      await carritoDatabase
-                                          .deletePropinaCarritoDb();
-
-                                      carritoBloc.obtenerCarrito();
-                                      carritoCompletoBloc
-                                          .obtenerCarritoCpmpleto();
-
-                                      Navigator.of(context)
-                                          .push(_createRoutePropina());
-                                    },
-                                    child: Text(
-                                      'Agregar',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: responsive.ip(2),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'Monto de propina : S/$valorPropina',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: responsive.ip(1.4),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                  Divider(),
-                  (listDireccion.length > 0)
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.wp(5),
-                          ),
-                          child:
-                              _deliveryRapido(responsive, datoLlegadaDelivery),
-                        )
-                      : Container(),
-                  Divider(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(5),
-                    ),
-                    child: _tipoComprobante(context, responsive),
+                                ), */
+                              ],
+                            ),
+                            PropinaPage()
+                          ],
+                        ),
+                      ),
+                    
+                Divider(),
+                (listDireccion.length > 0)
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: responsive.wp(5),
+                        ),
+                        child: _deliveryRapido(responsive, datoLlegadaDelivery),
+                      )
+                    : Container(),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5),
                   ),
-                  Divider(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(5),
-                    ),
-                    child: _tipoPago(responsive),
+                  child: _tipoComprobante(context, responsive),
+                ),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5),
                   ),
-                  Divider(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(5),
-                    ),
-                    child: _pagarCarrito(context, responsive),
-                  )
-                ],
-              ),
+                  child: _tipoPago(responsive),
+                ),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5),
+                  ),
+                  child: _pagarCarrito(context, responsive),
+                )
+              ],
             ),
-          );
-        }));
+          ),
+        );
+      }),
+    );
   }
 
   Widget _listaProductos(BuildContext context, Responsive responsive) {
@@ -421,8 +405,6 @@ class _DetallePagoState extends State<DetallePago> {
                   (double.parse(snapshot.data[x].precio) *
                       double.parse(snapshot.data[x].cantidad));
             }
-
-
           }
           String precioTotalFinal = utils.format(precioTotal);
 
@@ -1807,7 +1789,7 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Route _createRoutePropina() {
+  /* Route _createRoutePropina() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
         return PropinaPage();
@@ -1828,7 +1810,7 @@ class _DetallePagoState extends State<DetallePago> {
       },
     );
   }
-
+ */
 /* 
   void modalPropina() {
     showModalBottomSheet(

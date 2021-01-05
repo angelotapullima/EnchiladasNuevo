@@ -1,3 +1,5 @@
+
+
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
@@ -42,36 +44,7 @@ class CategoriasPage extends StatelessWidget {
     );
   }
 
-  Widget _conte(double anchoCategorias, double anchoProductos,
-      List<CategoriaData> categorias, BuildContext context) {
 
-        
-    final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
-    enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
-
-    return StreamBuilder(
-        stream: enchiladasNaviBloc.enchiladasIndexStream,
-        builder: (context, snapshot) {
-          return Row(
-            children: <Widget>[
-              Container(
-                width: anchoCategorias,
-                child: CategoriasProducto(
-                  ancho: anchoCategorias,
-                  data: categorias,
-                ),
-              ),
-              Container(
-                width: anchoProductos,
-                child: ProductosIdPage(
-                  index: enchiladasNaviBloc.index,
-                  ancho: anchoProductos,
-                ),
-              )
-            ],
-          );
-        });
-  }
 
   Widget rowDatos(BuildContext context, CategoriasBloc categoriasBloc) {
     final responsive = Responsive.of(context);
@@ -156,6 +129,41 @@ class CategoriasPage extends StatelessWidget {
       ),
     );
   }
+
+
+
+  Widget _conte(double anchoCategorias, double anchoProductos,
+      List<CategoriaData> categorias, BuildContext context) {
+
+        
+    final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
+    enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
+
+    return StreamBuilder(
+        stream: enchiladasNaviBloc.enchiladasIndexStream,
+        builder: (context, snapshot) {
+          return Row(
+            children: <Widget>[
+              Container(
+                width: anchoCategorias,
+                child: CategoriasProducto(
+                  ancho: anchoCategorias,
+                  data: categorias,
+                ),
+              ),
+              Container(
+                width: anchoProductos,
+                child: ProductosIdPage(
+                  index: enchiladasNaviBloc.index,
+                  ancho: anchoProductos,
+                ),
+              )
+            ],
+          );
+        });
+  }
+
+
 }
 
 class CategoriasProducto extends StatefulWidget {
@@ -287,7 +295,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
       width: this.widget.ancho,
       child: StreamBuilder(
         stream: productosIdBloc.productosEnchiladasStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               final productos = snapshot.data;
@@ -298,6 +306,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                   return _itemPedido(
                     context,
                     productos[index],
+                    productos.length.toString(),
+                    
                   );
                 },
               );
@@ -315,7 +325,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 
-  Widget _itemPedido(BuildContext context, ProductosData productosData) {
+  Widget _itemPedido(BuildContext context, ProductosData productosData,String cantidadItems) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
@@ -404,7 +414,29 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                                 ),
                               ),
                             ),
-                    ),
+                    ), ('${productosData.productoNuevo}' == '1')
+                              ?   Positioned(
+                                 /*  left: responsive.wp(1),
+                                  top: responsive.hp(.5), */
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: responsive.wp(3),
+                                      vertical: responsive.hp(.5),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        //borderRadius: BorderRadius.circular(10),
+                                        color: Colors.red),
+                                    child: Text(
+                                      'Nuevo',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: responsive.ip(1.3),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container()
                   ],
                 ),
               ),
@@ -446,7 +478,12 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
-              return DetalleProductitos(productosData: productosData);
+
+              //return DetalleProductitos(productosData: productosData);
+              return SliderDetalleProductos(
+                numeroItem: productosData.numeroitem,idCategoria: productosData.idCategoria,cantidadItems:cantidadItems
+                
+                );
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {

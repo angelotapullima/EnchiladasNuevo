@@ -34,17 +34,30 @@ class CategoriasBloc{
   void obtenerCategoriasEnchiladas()async{
     _cargandoCategoriasController.sink.add(true);
     _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas());
-    await categoriasApi.obtenerAmbos();
+    /* await categoriasApi.obtenerAmbos();
 
      
-   /*  
-    _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas()); */
-    _cargandoCategoriasController.sink.add(false);
+   
+    _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas()); 
+     */_cargandoCategoriasController.sink.add(false);
   }
 
-  void obtenerCategoriasMarket()async{
+
+
+  void obtenerCategoriasLocalEnchiladas()async{
     _cargandoCategoriasController.sink.add(true);
-    _categoriasMarketController.sink.add(await categoriasDatabase.obtenerCategoriasMarket());
+    _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasLocalEnchiladas());
+    /* await categoriasApi.obtenerAmbos();
+
+     
+   
+    _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas()); 
+     */_cargandoCategoriasController.sink.add(false);
+  }
+
+  void obtenerCategoriasMarket(String tipo)async{
+    _cargandoCategoriasController.sink.add(true);
+    _categoriasMarketController.sink.add(await categoriasDatabase.obtenerCategoriasMarket(tipo));
      
     /* _categoriasMarketController.sink.add(await categoriasApi.cargarCategorias());
 

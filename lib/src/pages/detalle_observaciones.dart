@@ -13,7 +13,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class DetalleObservaciones extends StatefulWidget {
   final String idProductoArgument;
-  const DetalleObservaciones({Key key, @required this.idProductoArgument})
+  final String idCategoria;
+  const DetalleObservaciones(
+      {Key key, @required this.idProductoArgument, @required this.idCategoria})
       : super(key: key);
 
   @override
@@ -53,7 +55,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
     if (cant == 0) {
       observacionesProductoBloc.obtenerObservaciones(widget.idProductoArgument);
 
-      adicionalesBloc.obtenerAdicionales();
+      adicionalesBloc.obtenerAdicionales(widget.idCategoria);
 
       itemObservacionBloc.obtenerObservacionItem();
     }
@@ -460,17 +462,6 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                             )
                           : Container(),
                       SizedBox(height: responsive.hp(1)),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(15),
-                        color: Colors.blueGrey[50],
-                        child: Text(
-                          'Adicionales',
-                          style: const TextStyle(
-                              color: Colors.blueGrey,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
                       StreamBuilder(
                         stream: adicionalesBloc.adicionalesStream,
                         builder: (BuildContext context,
@@ -480,8 +471,23 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               return ListView.builder(
                                 shrinkWrap: true,
                                 physics: ClampingScrollPhysics(),
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (context, index) {
+                                itemCount: snapshot.data.length + 1,
+                                itemBuilder: (context, i) {
+                                  if (i == 0) {
+                                    return Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(15),
+                                      color: Colors.blueGrey[50],
+                                      child: Text(
+                                        'Adicionales',
+                                        style: const TextStyle(
+                                            color: Colors.blueGrey,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    );
+                                  }
+
+                                  int index = i - 1;
                                   return new CheckboxListTile(
                                     title: new RichText(
                                       text: TextSpan(children: [
@@ -510,7 +516,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                       utils.cambiarEstadoSeleccionAdicional(
                                           context,
                                           '${snapshot.data[index].idProducto}',
-                                          value);
+                                          value,
+                                          '${snapshot.data[index].idCategoria}',);
 
                                       utils.agregarItemObservacion(
                                           context,

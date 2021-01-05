@@ -22,6 +22,7 @@ class OrdenesApi {
   final direccionDatabase = DireccionDatabase();
   final prefs = Preferences();
   final pDatabase = ProductoDatabase();
+  int cantidadDeTupers = 0;
 
   Future<Link> enviarpedido(PedidoServer pedido) async {
     try {
@@ -57,6 +58,20 @@ class OrdenesApi {
 
         cantidadDeProductos =
             cantidadDeProductos + int.parse(productos[i].productoCantidad);
+
+        if (carri.productoTupper == '1') {
+          cantidadDeTupers++;
+        }
+      }
+
+      if (cantidadDeTupers > 0) {
+        final tupperProduct = await pDatabase.consultarPorId(prefs.idTupper);
+        Carrito carritoCompletoTupper = Carrito();
+        carritoCompletoTupper.idProducto =
+            int.parse(tupperProduct[0].idProducto);
+        carritoCompletoTupper.productoCantidad = cantidadDeTupers.toString();
+        carritoCompletoTupper.productoObservacion = '';
+        productsList.add(carritoCompletoTupper);
       }
 
       final listBolsa = await pDatabase.consultarPorId(prefs.idBolsa);
@@ -99,6 +114,7 @@ class OrdenesApi {
           "'pedido_estado_pago': '${pedido.pedidoEstadoPago.toString()}'");*/
 
       //print('productitos $productitos');
+
       final response = await http.post(url, body: {
         'app': 'true',
         'tn': user[0].token,
@@ -187,6 +203,15 @@ class OrdenesApi {
           carrito.productoObservacion = decodedData['result']['pedido']
               ['productos'][i]['detalle_observacion'];
           carrito.productoTipo = '0';
+
+          final carritoProduct = await carritoDatabase
+              .consultarCarritoPorId(carrito.idProducto.toString());
+
+          if (carritoProduct.length > 0) {
+            carrito.productoTupper = carritoProduct[0].productoTupper;
+          } else {
+            carrito.productoTupper = '';
+          }
 
           await carritoDatabase.insertarCarritoDb(carrito);
         }
@@ -547,7 +572,7 @@ class OrdenesApi {
       });
 
       final decodedData = json.decode(response.body);
-      String  code = decodedData['result']['code'].toString();
+      String code = decodedData['result']['code'].toString();
       return int.parse(code);
     } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");

@@ -11,7 +11,9 @@ import 'package:enchiladasapp/src/bloc/observaciones_chip_bloc.dart';
 import 'package:enchiladasapp/src/bloc/observaciones_productos_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_local_bloc.dart';
+import 'package:enchiladasapp/src/bloc/productos_destacados_bloc.dart';
 import 'package:enchiladasapp/src/bloc/propinas_bloc.dart';
+import 'package:enchiladasapp/src/bloc/publicidad_bloc.dart';
 import 'package:enchiladasapp/src/bloc/zona_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -76,6 +78,8 @@ class ProviderBloc extends InheritedWidget {
   final adicionalesBloc=AdicionalesBloc();
   final itemObservacionBloc=ItemObservacionBloc();
   final propinasBloc=PropinasBloc();
+  final productosDestacadosBloc=ProductosDestacadosBloc();
+  final publicidadBloc = PublicidadBloc();
 
   static ProviderBloc _instancia;
 
@@ -212,6 +216,16 @@ class ProviderBloc extends InheritedWidget {
   static PropinasBloc propina(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .propinasBloc;
+  }
+  
+  static ProductosDestacadosBloc proDestacados(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .productosDestacadosBloc;
+  }
+  
+  static PublicidadBloc publi(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .publicidadBloc;
   }
     
 }

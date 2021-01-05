@@ -47,19 +47,31 @@ class PantallaModel{
 
 
 class ItemPantalla{
-    String id;
+    String idProducto;
+    String idCategoria;
     String nombreItem;  
     String fotoItem; 
+    String numeroItem; 
+    String cantidadItems; 
+    String productoNuevo; 
 
   ItemPantalla({
-        this.id,
+        this.idProducto,
+        this.idCategoria,
         this.nombreItem,
         this.fotoItem, 
+        this.numeroItem, 
+        this.cantidadItems, 
+        this.productoNuevo, 
     });
 
      factory ItemPantalla.fromJson(Map<dynamic, dynamic> json) => ItemPantalla(
-        id: json["id"],
+        idProducto: json["idProducto"],
+        idCategoria: json["idCategoria"],
         nombreItem: json["nombreItem"],
         fotoItem: json["fotoItem"], 
+        numeroItem: json["numeroItem"], 
+        cantidadItems: json["cantidadItems"], 
+        productoNuevo: json["productoNuevo"], 
     );
 }

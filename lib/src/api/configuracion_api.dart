@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:enchiladasapp/src/database/adicionales_database.dart';
 import 'package:enchiladasapp/src/database/pantalla_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
+import 'package:enchiladasapp/src/database/publicidad_database.dart';
 import 'package:enchiladasapp/src/database/puzzle_database.dart';
 import 'package:enchiladasapp/src/database/zona_database.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
+import 'package:enchiladasapp/src/models/publicidad_model.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
@@ -21,33 +23,91 @@ class ConfiguracionApi {
   final pantallaDatabase = PantallaDatabase();
   final puzzleDatabase = PuzzleDatabase();
   final productoDatabase = ProductoDatabase();
+  final publicidadDatabase = PublicidadDatabase();
 
-  final adicionalesDatabase=AdicionalesDatabase();
+  final adicionalesDatabase = AdicionalesDatabase();
 
   Future<bool> configuracion() async {
-    try { 
-      final url = '$_url/api/categoria/configuracion'; 
+    try {
+      final url = '$_url/api/categoria/configuracion';
       final resp = await http.post(url, body: {});
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       if (decodedData['result']['code'] == 1) {
+        for (int z = 0;
+            z < decodedData['result']['data']['bolsa'].length;
+            z++) {
+          ProductosData productosData = ProductosData();
+          productosData.idProducto =
+              decodedData['result']['data']['bolsa'][z]['id_producto'];
+          productosData.idCategoria =
+              decodedData['result']['data']['bolsa'][z]['id_categoria'];
+          productosData.productoNombre =
+              decodedData['result']['data']['bolsa'][z]['producto_nombre'];
+          productosData.productoPrecio =
+              decodedData['result']['data']['bolsa'][z]['producto_precio'];
+          productosData.productoUnidad =
+              decodedData['result']['data']['bolsa'][z]['producto_unidad'];
+          productosData.productoEstado =
+              decodedData['result']['data']['bolsa'][z]['producto_estado'];
+          productosData.productoFavorito = 0;
+          productosData.productoComentario = '';
 
+          productoDatabase.insertarProductosDb(productosData);
 
-        for (int z = 0; z < decodedData['result']['data']['bolsa'].length; z++) {
-            ProductosData productosData = ProductosData();
-            productosData.idProducto = decodedData['result']['data']['bolsa'][z]['id_producto'];
-            productosData.idCategoria = decodedData['result']['data']['bolsa'][z]['id_categoria'];
-            productosData.productoNombre = decodedData['result']['data']['bolsa'][z]['producto_nombre'];
-            productosData.productoPrecio = decodedData['result']['data']['bolsa'][z]['producto_precio'];
-            productosData.productoUnidad = decodedData['result']['data']['bolsa'][z]['producto_unidad'];
-            productosData.productoEstado = decodedData['result']['data']['bolsa'][z]['producto_estado'];
-            productosData.productoFavorito = 0;
-            productosData.productoComentario = '';
-
-
-            productoDatabase.insertarProductosDb(productosData);
-
-            prefs.idBolsa=decodedData['result']['data']['bolsa'][z]['id_producto'];
+          prefs.idBolsa =
+              decodedData['result']['data']['bolsa'][z]['id_producto'];
         }
+
+        for (int a = 0;
+            a < decodedData['result']['data']['tupper'].length;
+            a++) {
+          ProductosData productosData = ProductosData();
+          productosData.idProducto =
+              decodedData['result']['data']['tupper'][a]['id_producto'];
+          productosData.idCategoria =
+              decodedData['result']['data']['tupper'][a]['id_categoria'];
+          productosData.productoNombre =
+              decodedData['result']['data']['tupper'][a]['producto_nombre'];
+          productosData.productoPrecio =
+              decodedData['result']['data']['tupper'][a]['producto_precio'];
+          productosData.productoUnidad =
+              decodedData['result']['data']['tupper'][a]['producto_unidad'];
+          productosData.productoEstado =
+              decodedData['result']['data']['tupper'][a]['producto_estado'];
+          productosData.productoFavorito = 0;
+          productosData.productoComentario = '';
+
+          productoDatabase.insertarProductosDb(productosData);
+
+          prefs.idTupper =
+              decodedData['result']['data']['tupper'][a]['id_producto'];
+        }
+
+        var tamanoPublicidad =
+            decodedData['result']['data']['publicidad'].length;
+
+        if (tamanoPublicidad > 0) {
+          await publicidadDatabase.deletePublcidadDb();
+
+          for (int j = 0;
+              j < decodedData['result']['data']['publicidad'].length;
+              j++) {
+            PublicidadModel publicidadModel = PublicidadModel();
+
+            publicidadModel.idPublicidad = j.toString();
+            publicidadModel.publicidadEstado = decodedData['result']['data']
+                ['publicidad'][j]['publicidad_estado'];
+            publicidadModel.publicidadImagen = decodedData['result']['data']
+                ['publicidad'][j]['publicidad_imagen'];
+            publicidadModel.publicidadTipo = decodedData['result']['data']
+                ['publicidad'][j]['publicidad_tipo'];
+            publicidadModel.idRelacionado =
+                decodedData['result']['data']['publicidad'][j]['publicidad_id'];
+
+            publicidadDatabase.insertarPublicidad(publicidadModel);
+          }
+        }
+
         for (int i = 0;
             i < decodedData['result']['data']['zonas'].length;
             i++) {
@@ -123,19 +183,28 @@ class ConfiguracionApi {
           await puzzleDatabase.insertarPuzzle(puzzle);
         }
 
-        for (int t = 0;t < decodedData['result']['data']['adicionales'].length;t++) {
-           ProductosData productosData = ProductosData();
-            productosData.idProducto = decodedData['result']['data']['adicionales'][t]['id_producto'];
-            productosData.idCategoria = '16';
-            productosData.productoNombre = decodedData['result']['data']['adicionales'][t]['producto_nombre'];
-            productosData.productoFoto = decodedData['result']['data']['adicionales'][t]['producto_foto'];
-            productosData.productoPrecio = decodedData['result']['data']['adicionales'][t]['producto_precio'];
-            productosData.productoCarta = decodedData['result']['data']['adicionales'][t]['producto_carta'];
-            productosData.productoDelivery = decodedData['result']['data']['adicionales'][t]['productoDelivery'];
-            productosData.productoSeleccionado = '0';
-            productosData.productoEstado = decodedData['result']['data']['adicionales'][t]['producto_estado'];
-            productosData.productoDescripcion = decodedData['result']['data']['adicionales'][t]['producto_detalle'];
-            
+        for (int t = 0;
+            t < decodedData['result']['data']['adicionales'].length;
+            t++) {
+          ProductosData productosData = ProductosData();
+          productosData.idProducto =
+              decodedData['result']['data']['adicionales'][t]['id_producto'];
+          productosData.idCategoria = '16';
+          productosData.productoNombre = decodedData['result']['data']
+              ['adicionales'][t]['producto_nombre'];
+          productosData.productoFoto =
+              decodedData['result']['data']['adicionales'][t]['producto_foto'];
+          productosData.productoPrecio = decodedData['result']['data']
+              ['adicionales'][t]['producto_precio'];
+          productosData.productoCarta =
+              decodedData['result']['data']['adicionales'][t]['producto_carta'];
+          productosData.productoDelivery = decodedData['result']['data']
+              ['adicionales'][t]['productoDelivery'];
+          productosData.productoSeleccionado = '0';
+          productosData.productoEstado = decodedData['result']['data']
+              ['adicionales'][t]['producto_estado'];
+          productosData.productoDescripcion = decodedData['result']['data']
+              ['adicionales'][t]['producto_detalle'];
 
           await adicionalesDatabase.insertarProductosDb(productosData);
         }

@@ -218,7 +218,7 @@ class DataSearch extends SearchDelegate {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitos(productosData: productosData);
+                return DetalleProductitoss(productosData: productosData,mostrarback: true,);
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

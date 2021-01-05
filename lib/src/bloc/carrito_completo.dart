@@ -28,8 +28,10 @@ class CarritoCompletoBloc {
     final deliveryRapido = await carritoDatabase.obtenerDeliveryRapido();
 
     int cantidadDeProductos = 0;
+    int cantidadDeTupers = 0;
     for (int i = 0; i < carrito.length; i++) {
-      cantidadDeProductos =cantidadDeProductos + int.parse(carrito[i].productoCantidad);
+      cantidadDeProductos =
+          cantidadDeProductos + int.parse(carrito[i].productoCantidad);
       monto = double.parse(carrito[i].productoPrecio) *
           double.parse(carrito[i].productoCantidad);
 
@@ -42,14 +44,29 @@ class CarritoCompletoBloc {
       carritoCompleto1.cantidad = carrito[i].productoCantidad;
 
       listCarritoCompleto.add(carritoCompleto1);
+
+      if (carrito[i].productoTupper == '1') {
+        cantidadDeTupers++;
+      }
+    }
+
+    if (cantidadDeTupers > 0) {
+      final tupperProduct =
+          await productoDatabase.consultarPorId(prefs.idTupper);
+      CarritoCompleto carritoCompletoTupper = CarritoCompleto();
+      carritoCompletoTupper.idCategoria = carrito[0].idCategoria;
+      carritoCompletoTupper.producto = tupperProduct[0].productoNombre;
+      carritoCompletoTupper.precio = tupperProduct[0].productoPrecio;
+      carritoCompletoTupper.cantidad = cantidadDeTupers.toString();
+
+      listCarritoCompleto.add(carritoCompletoTupper);
     }
 
     final listBolsa = await productoDatabase.consultarPorId(prefs.idBolsa);
     int cantidadDeBolsas = (cantidadDeProductos / 3).ceil();
-   
-   
+
     CarritoCompleto carritoCompleto2 = CarritoCompleto();
-      carritoCompleto2.idCategoria = carrito[0].idCategoria;
+    carritoCompleto2.idCategoria = carrito[0].idCategoria;
     carritoCompleto2.producto = listBolsa[0].productoNombre;
     carritoCompleto2.precio = listBolsa[0].productoPrecio;
     carritoCompleto2.cantidad = cantidadDeBolsas.toString();
@@ -61,7 +78,7 @@ class CarritoCompletoBloc {
 
       if (deliveryRapido.length > 0) {
         CarritoCompleto carritoCompleto3 = CarritoCompleto();
-      carritoCompleto3.idCategoria = carrito[0].idCategoria;
+        carritoCompleto3.idCategoria = carrito[0].idCategoria;
         carritoCompleto3.producto = direccion[0].deliveryProductoNombre;
         carritoCompleto3.precio = direccion[0].deliveryProductoPrecio;
         carritoCompleto3.cantidad = '1';
@@ -72,7 +89,7 @@ class CarritoCompletoBloc {
       if (subtotal < pedidoMinimo) {
         //no se agrega
         CarritoCompleto carritoCompleto4 = CarritoCompleto();
-      carritoCompleto4.idCategoria = carrito[0].idCategoria;
+        carritoCompleto4.idCategoria = carrito[0].idCategoria;
         carritoCompleto4.producto = direccion[0].recargoProductoNombre;
         carritoCompleto4.precio = direccion[0].recargoProductoPrecio;
         carritoCompleto4.cantidad = '1';
@@ -88,12 +105,8 @@ class CarritoCompletoBloc {
         listCarritoCompleto.add(carritoCompleto5);
       }
 
-
-
       carritoCompleto.sink.add(listCarritoCompleto);
     } else {
-
-      
       carritoCompleto.sink.add(listCarritoCompleto);
     }
   }
@@ -105,6 +118,6 @@ class CarritoCompleto {
   String cantidad;
   String precio;
 
-  CarritoCompleto({this.idCategoria,this.producto, this.cantidad, this.precio});
+  CarritoCompleto(
+      {this.idCategoria, this.producto, this.cantidad, this.precio});
 }
- 
