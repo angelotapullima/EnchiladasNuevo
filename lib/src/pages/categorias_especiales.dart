@@ -11,7 +11,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 
 class CategoriasEspecialesPage extends StatefulWidget {
-  const CategoriasEspecialesPage({Key key}) : super(key: key);
+  final Arguments arg;
+  const CategoriasEspecialesPage({Key key,@required this.arg}) : super(key: key);
 
   @override
   _CategoriasEspecialesPage createState() => _CategoriasEspecialesPage();
@@ -20,13 +21,13 @@ class CategoriasEspecialesPage extends StatefulWidget {
 class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
   @override
   Widget build(BuildContext context) {
-    final Arguments arg = ModalRoute.of(context).settings.arguments;
+    //final Arguments arg = ModalRoute.of(context).settings.arguments;
 
     final productosIdBloc = ProviderBloc.prod(context);
     final responsive = Responsive.of(context);
     productosIdBloc.cargandoProductosFalse();
     productosIdBloc
-        .obtenerProductosdeliveryEnchiladasPorCategoria(arg.productId);
+        .obtenerProductosdeliveryEnchiladasPorCategoria(widget.arg.productId);
 
     return Scaffold(
         body: Stack(children: <Widget>[
@@ -35,7 +36,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
         width: double.infinity,
         color: Colors.red,
       ),
-      _listaEspeciales(responsive, productosIdBloc, arg.title)
+      _listaEspeciales(responsive, productosIdBloc, widget.arg.title)
       //_favoritos(responsive, favoritosBloc),
     ]));
   }

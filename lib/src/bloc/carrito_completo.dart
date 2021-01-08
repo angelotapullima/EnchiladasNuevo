@@ -46,8 +46,10 @@ class CarritoCompletoBloc {
       listCarritoCompleto.add(carritoCompleto1);
 
       if (carrito[i].productoTupper == '1') {
-        cantidadDeTupers++;
-      }
+        int cantidadHecha = int.parse(carrito[i].productoCantidad);
+        
+        cantidadDeTupers = cantidadDeTupers + cantidadHecha;
+      } 
     }
 
     if (cantidadDeTupers > 0) {

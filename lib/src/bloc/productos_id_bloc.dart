@@ -291,6 +291,7 @@ void obtenerProductoPorQueryDelivery(String query) async {
         productos.idCategoria = listProductosPorCategoria[i].idCategoria;
         productos.productoPrecio = listProductosPorCategoria[i].productoPrecio;
         productos.sonido = listProductosPorCategoria[i].sonido;
+        productos.numeroitem = i.toString();
         productos.productoCarta = listProductosPorCategoria[i].productoCarta;
         productos.productoDelivery = listProductosPorCategoria[i].productoDelivery;
 

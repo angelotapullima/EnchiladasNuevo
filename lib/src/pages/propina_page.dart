@@ -1,7 +1,6 @@
 import 'package:chips_choice/chips_choice.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
-import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:flutter/material.dart';
 
@@ -14,15 +13,18 @@ class PropinaPage extends StatefulWidget {
 
 class _PropinaPageState extends State<PropinaPage> {
   int tagFijos;
+  int cantidad = 0;
   @override
   Widget build(BuildContext context) {
     final propinasBloc = ProviderBloc.propina(context);
     propinasBloc.obtenerPropinas();
 
+    if(cantidad==0){
+
     utils.deletePropinas(context);
-    final responsive = Responsive.of(context);
+    }
     return Container(
-      height: responsive.hp(12),
+      //height: responsive.hp(15),
       child: StreamBuilder(
         stream: propinasBloc.propinasStream,
         builder: (BuildContext context,
@@ -47,8 +49,9 @@ class _PropinaPageState extends State<PropinaPage> {
                       ProductosData productos = ProductosData();
 
                       utils.agregarPropinaCarrito(productos, context, '0');
+                      print(' me llegan al chopin');
                     } else {
-                      print('hjbugbtug ${snapshot.data[val - 1].idProducto}');
+                      print('hjbugbtug ${snapshot.data[val - 1].idProducto}   - ${snapshot.data[val - 1].productoNombre}');
 
                       ProductosData productos = ProductosData();
                       productos.idProducto = snapshot.data[val - 1].idProducto;
@@ -61,6 +64,8 @@ class _PropinaPageState extends State<PropinaPage> {
 
                       utils.agregarPropinaCarrito(productos, context, '1');
                     }
+
+                    cantidad++;
                   });
                 },
                 choiceItems: C2Choice.listFrom<int, String>(

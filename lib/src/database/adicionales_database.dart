@@ -9,11 +9,9 @@ class AdicionalesDatabase {
 
     final res = await db.rawInsert(
         'INSERT OR REPLACE INTO Adicionales (id_producto,id_categoria,producto_nombre,producto_foto,'
-        'producto_precio,producto_carta,producto_delivery,producto_seleccionado,'
-        'producto_estado,producto_descripcion) '
+        'producto_precio,producto_carta,producto_seleccionado,producto_estado,producto_descripcion) '
         'VALUES ( "${productos.idProducto}" , "${productos.idCategoria}" , "${productos.productoNombre}" ,'
-        ' "${productos.productoFoto}" , "${productos.productoPrecio}" ,'
-        ' "${productos.productoCarta}" ,"${productos.productoDelivery}",'
+        ' "${productos.productoFoto}" , "${productos.productoPrecio}" , "${productos..productoCarta}",'
         '"${productos.productoSeleccionado}","${productos.productoEstado}","${productos.productoDescripcion}" )');
     return res;
   }
@@ -32,14 +30,13 @@ updateAdicionalesEnfalsePorId(ProductosData productos) async {
     final db = await dbprovider.database;
 
     final res = await db.rawUpdate('UPDATE Adicionales SET '
-        'id_categoria="${productos.idCategoria}", '
-        'producto_nombre="${productos.productoNombre}", '
-        'producto_foto="${productos.productoFoto}", '
-        'producto_precio="${productos.productoPrecio}", '
-        'producto_carta="${productos.productoCarta}", '
-        'producto_delivery="${productos.productoDelivery}", '
-        'producto_seleccionado="0", '
-        'producto_estado="${productos.productoEstado}", '
+        'id_categoria="${productos.idCategoria}",'
+        'producto_nombre="${productos.productoNombre}",'
+        'producto_foto="${productos.productoFoto}",'
+        'producto_precio="${productos.productoPrecio}",'
+        'producto_carta="${productos.productoCarta}",'
+        'producto_seleccionado="0",'
+        'producto_estado="${productos.productoEstado}",'
         'producto_descripcion="${productos.productoDescripcion}" '
         'WHERE id_producto = "${productos.idProducto}"');
 
@@ -50,14 +47,13 @@ updateAdicionalesEnTrueDb(ProductosData productos) async {
     final db = await dbprovider.database;
 
     final res = await db.rawUpdate('UPDATE Adicionales SET '
-        'id_categoria="${productos.idCategoria}", '
-        'producto_nombre="${productos.productoNombre}", '
-        'producto_foto="${productos.productoFoto}", '
-        'producto_precio="${productos.productoPrecio}", '
-        'producto_carta="${productos.productoCarta}", '
-        'producto_delivery="${productos.productoDelivery}", '
-        'producto_seleccionado="1", '
-        'producto_estado="${productos.productoEstado}", '
+        'id_categoria="${productos.idCategoria}",'
+        'producto_nombre="${productos.productoNombre}",'
+        'producto_foto="${productos.productoFoto}",'
+        'producto_precio="${productos.productoPrecio}",'
+        'producto_carta="${productos.productoCarta}",'
+        'producto_seleccionado="1",'
+        'producto_estado="${productos.productoEstado}",'
         'producto_descripcion="${productos.productoDescripcion}" '
         'WHERE id_producto = "${productos.idProducto}"');
 
@@ -87,4 +83,15 @@ updateAdicionalesEnTrueDb(ProductosData productos) async {
 
     return list;
   }
+
+
+
+  deleteAdicionales() async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete("DELETE FROM Adicionales");
+
+    return res;
+  }
+
 }

@@ -47,6 +47,7 @@ class _CantidadTabState extends State<CantidadTab> {
     productosData.productoNombre =widget.carrito.productoNombre;
     productosData.productoFoto =widget.carrito.productoFoto;
     productosData.productoPrecio =widget.carrito.productoPrecio;
+    productosData.productoTupper =widget.carrito.productoTupper;
     _counter =  int.parse(widget.carrito.productoCantidad);
 
     return _cantidad(responsive,productosData);

@@ -3,15 +3,15 @@ import 'package:enchiladasapp/src/models/productos_model.dart';
 
 class ItemObservacionDatabase {
   final dbprovider = DatabaseProvider.db;
-
+ 
   insertarItemObservacion(ProductosData productos) async {
     final db = await dbprovider.database;
  
     final res = await db.rawInsert(
         'INSERT OR REPLACE INTO ItemObservacion (id_producto,id_categoria,producto_nombre,producto_foto,'
-        'producto_precio,producto_tupper,producto_observacion) '
+        'producto_precio,producto_tupper,producto_tipo,producto_observacion) '
         'VALUES ( "${productos.idProducto}" ,   "${productos.idCategoria}" ,"${productos.productoNombre}" ,'
-        ' "${productos.productoFoto}" , "${productos.productoPrecio}" ,"${productos.productoTupper}","${productos.productoObservacion}" )');
+        ' "${productos.productoFoto}" , "${productos.productoPrecio}" ,"${productos.productoTupper}","${productos.productoTipo}","${productos.productoObservacion}" )');
     return res;
   }
 

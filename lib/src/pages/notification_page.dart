@@ -1,9 +1,14 @@
 import 'dart:async';
 
 import 'package:enchiladasapp/src/bloc/provider.dart';
+import 'package:enchiladasapp/src/models/arguments.dart';
 import 'package:enchiladasapp/src/models/argumentsWebview.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/mapa_page.dart';
+import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
+import 'package:enchiladasapp/src/pages/detalle_productos.dart';
+import 'package:enchiladasapp/src/pages/home_page.dart';
 import 'package:enchiladasapp/src/pages/rating_repartidor.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +29,7 @@ class NotificationPage extends StatelessWidget {
     final noti = notificationModel.split(';');
     final idPedido = noti[0].trim();
     final tipoNotificacion = noti[1].trim();
+    final idMostrar = noti[2].trim();
 
     final pedidoParse = idPedido.split('=');
     String idPedidoVerdadero = pedidoParse[1].trim();
@@ -31,9 +37,58 @@ class NotificationPage extends StatelessWidget {
     final tipoNParse = tipoNotificacion.split('=');
     String tipoVerdadero = tipoNParse[1].trim();
 
+    final idMostrarDato = idMostrar.split('=');
+    String id = idMostrarDato[1].trim();
+
     print('bfbr $idPedidoVerdadero');
 
-    return Scaffold(
+    switch (tipoVerdadero) {
+      case "pedido":
+        {
+          return Scaffold(
+            body: DeliveryTimelineNotification(
+              id: idPedidoVerdadero,
+            ),
+          );
+        }
+        break;
+
+      case "valorar":
+        {
+          return Scaffold(
+            body: RatingRepartidor(
+              id: idPedidoVerdadero,
+            ),
+          );
+        }
+        break;
+
+      case "categoria":
+        {
+          Arguments arg = new Arguments("Productos", '$id');
+
+          return CategoriasEspecialesPage(arg: arg);
+        }
+        break;
+
+      case "producto":
+        ProductosData productosData = ProductosData();
+        productosData.idProducto = id;
+        {
+          return DetalleProductitoss(
+            productosData: productosData,
+            mostrarback: true,
+          );
+        }
+        break;
+
+      default:
+        {
+          return HomePage();
+        }
+        break;
+    }
+    /* return Scaffold(
       body: (tipoVerdadero == 'pedido')
           ? DeliveryTimelineNotification(
               id: idPedidoVerdadero,
@@ -41,7 +96,7 @@ class NotificationPage extends StatelessWidget {
           : RatingRepartidor(
               id: idPedidoVerdadero,
             ),
-    );
+    ); */
   }
 }
 
@@ -72,8 +127,6 @@ class _DeliveryTimelineNotificationState
 
   @override
   Widget build(BuildContext context) {
-    
-
     final pedidoBloc = ProviderBloc.pedido(context);
     pedidoBloc.obtenerPedidoPorId(widget.id);
 
@@ -209,6 +262,8 @@ class _TimelineDelivery extends StatelessWidget {
     bool disabled3 = false;
     bool disabled4 = false;
 
+    bool cancelado = false;
+
     if (id == 0) {
       timeline0 = Colors.green;
       timeline1 = Colors.red;
@@ -276,6 +331,8 @@ class _TimelineDelivery extends StatelessWidget {
       timeline3 = Colors.yellow;
       timeline4 = Colors.yellow;
 
+      cancelado = true;
+
       disabled = false;
       disabled1 = false;
       disabled2 = false;
@@ -283,104 +340,137 @@ class _TimelineDelivery extends StatelessWidget {
       disabled4 = false;
     }
 
-    return Center(
-      child: ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-          TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineX: 0.1,
-            isFirst: true,
-            indicatorStyle: IndicatorStyle(
-              width: responsive.wp(5),
-              color: timeline0,
-              padding: EdgeInsets.all(6),
+    return (cancelado)
+        ? CanceladoNotification()
+        : Center(
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineX: 0.1,
+                  isFirst: true,
+                  indicatorStyle: IndicatorStyle(
+                    width: responsive.wp(5),
+                    color: timeline0,
+                    padding: EdgeInsets.all(6),
+                  ),
+                  rightChild: _RightChild(
+                    disabled: disabled,
+                    asset: 'assets/delivery/ENCHILADAS-02.svg',
+                    title: 'Orden Recibida',
+                    message: 'Su pedido fue procesado.',
+                  ),
+                  topLineStyle: LineStyle(
+                    color: timeline0,
+                  ),
+                ),
+                TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineX: 0.1,
+                  indicatorStyle: IndicatorStyle(
+                    width: responsive.wp(5),
+                    color: timeline1,
+                    padding: EdgeInsets.all(6),
+                  ),
+                  rightChild: _RightChild(
+                    disabled: disabled1,
+                    asset: 'assets/delivery/ENCHILADAS-03.svg',
+                    title: 'Orden Confirmada',
+                    message: 'Su pedido fue confirmado.',
+                  ),
+                  topLineStyle: LineStyle(
+                    color: timeline1,
+                  ),
+                ),
+                TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineX: 0.1,
+                  indicatorStyle: IndicatorStyle(
+                    width: responsive.wp(5),
+                    color: timeline2,
+                    padding: EdgeInsets.all(6),
+                  ),
+                  rightChild: _RightChild(
+                    disabled: disabled2,
+                    asset: 'assets/delivery/ENCHILADAS-04.svg',
+                    title: 'Orden Asignada ',
+                    message: 'Su pedido fue asignado al repartidor.',
+                  ),
+                  topLineStyle: LineStyle(
+                    color: timeline2,
+                  ),
+                ),
+                TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineX: 0.1,
+                  indicatorStyle: IndicatorStyle(
+                    width: responsive.wp(5),
+                    color: timeline3,
+                    padding: EdgeInsets.all(6),
+                  ),
+                  rightChild: _RightChild(
+                    disabled: disabled3,
+                    asset: 'assets/delivery/ENCHILADAS-05.svg',
+                    title: 'Pedido en camino',
+                    message: 'Su pedido está en camino.',
+                  ),
+                  topLineStyle: LineStyle(
+                    color: timeline3,
+                  ),
+                ),
+                TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineX: 0.1,
+                  isLast: true,
+                  indicatorStyle: IndicatorStyle(
+                    width: responsive.wp(5),
+                    color: timeline4,
+                    padding: EdgeInsets.all(6),
+                  ),
+                  rightChild: _RightChild(
+                    disabled: disabled4,
+                    asset: 'assets/delivery/ENCHILADAS-06.svg',
+                    title: 'Su pedido fue entregado',
+                    message: 'El pedido se entrego correctamente.',
+                  ),
+                  topLineStyle: LineStyle(
+                    color: timeline4,
+                  ),
+                ),
+              ],
             ),
-            rightChild: _RightChild(
-              disabled: disabled,
-              asset: 'assets/delivery/ENCHILADAS-02.svg',
-              title: 'Orden Recibida',
-              message: 'Su pedido fue procesado.',
-            ),
-            topLineStyle: LineStyle(
-              color: timeline0,
-            ),
+          );
+  }
+}
+
+class CanceladoNotification extends StatelessWidget {
+  const CanceladoNotification({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: responsive.hp(3),
+        ),
+        Container(
+          width: double.infinity,
+          height: responsive.ip(20),
+          child: Image.asset('assets/logo_enchilada.png'),
+        ),
+        SizedBox(
+          height: responsive.hp(3),
+        ),
+        Text(
+          'Su pedido fue cancelado',
+          style: TextStyle(
+            fontSize: responsive.ip(3),
           ),
-          TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineX: 0.1,
-            indicatorStyle: IndicatorStyle(
-              width: responsive.wp(5),
-              color: timeline1,
-              padding: EdgeInsets.all(6),
-            ),
-            rightChild: _RightChild(
-              disabled: disabled1,
-              asset: 'assets/delivery/ENCHILADAS-03.svg',
-              title: 'Orden Confirmada',
-              message: 'Su pedido fue confirmado.',
-            ),
-            topLineStyle: LineStyle(
-              color: timeline1,
-            ),
-          ),
-          TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineX: 0.1,
-            indicatorStyle: IndicatorStyle(
-              width: responsive.wp(5),
-              color: timeline2,
-              padding: EdgeInsets.all(6),
-            ),
-            rightChild: _RightChild(
-              disabled: disabled2,
-              asset: 'assets/delivery/ENCHILADAS-04.svg',
-              title: 'Orden Asignada ',
-              message: 'Su pedido fue asignado al repartidor.',
-            ),
-            topLineStyle: LineStyle(
-              color: timeline2,
-            ),
-          ),
-          TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineX: 0.1,
-            indicatorStyle: IndicatorStyle(
-              width: responsive.wp(5),
-              color: timeline3,
-              padding: EdgeInsets.all(6),
-            ),
-            rightChild: _RightChild(
-              disabled: disabled3,
-              asset: 'assets/delivery/ENCHILADAS-05.svg',
-              title: 'Pedido en camino',
-              message: 'Su pedido está en camino.',
-            ),
-            topLineStyle: LineStyle(
-              color: timeline3,
-            ),
-          ),
-          TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineX: 0.1,
-            isLast: true,
-            indicatorStyle: IndicatorStyle(
-              width: responsive.wp(5),
-              color: timeline4,
-              padding: EdgeInsets.all(6),
-            ),
-            rightChild: _RightChild(
-              disabled: disabled4,
-              asset: 'assets/delivery/ENCHILADAS-06.svg',
-              title: 'Su pedido fue entregado',
-              message: 'El pedido se entrego correctamente.',
-            ),
-            topLineStyle: LineStyle(
-              color: timeline4,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

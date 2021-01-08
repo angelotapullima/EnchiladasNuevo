@@ -168,16 +168,14 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   Widget _contenido(
-      BuildContext context, 
+      BuildContext context,
       Responsive responsive,
       UsuarioBloc usuarioBloc,
       List<Direccion> listDireccion,
       CarritoCompletoBloc carritoCompleto) {
-
-         final propinasBloc = ProviderBloc.propina(context);
+    final propinasBloc = ProviderBloc.propina(context);
     propinasBloc.obtenerPropinas();
 
-    
     final preferences = Preferences();
     String direpe = '';
     String refepe = '';
@@ -292,65 +290,38 @@ class _DetallePagoState extends State<DetallePago> {
                               usuarioBloc, context, responsive)),
                       Divider(),
                       Showcase(
-                          key: _two,
-                          description: 'Por favor ingrese su dirección',
-                          child: _direccion(
-                              direpe, refepe, distritope, responsive),),
+                        key: _two,
+                        description: 'Por favor ingrese su dirección',
+                        child:
+                            _direccion(direpe, refepe, distritope, responsive),
+                      ),
                       Divider(),
                     ],
                   ),
                 ),
                 Divider(),
                 Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '¿Desea agregar propina?',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: responsive.ip(2),
-                                  ),
-                                ),
-                                Spacer(),
-                                /* GestureDetector(
-                                  onTap: () async {
-                                    /* final carritoBloc =
-                                        ProviderBloc.carrito(context);
-                                    final carritoCompletoBloc =
-                                        ProviderBloc.carritoCompleto(context);
-                                    final carritoDatabase = CarritoDatabase();
-                                    await carritoDatabase
-                                        .deletePropinaCarritoDb();
-
-                                    carritoBloc.obtenerCarrito();
-                                    carritoCompletoBloc
-                                        .obtenerCarritoCpmpleto();
-
-                                    Navigator.of(context)
-                                        .push(_createRoutePropina()); */
-                                  },
-                                  child: Text(
-                                    'Agregar',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: responsive.ip(2),
-                                    ),
-                                  ),
-                                ), */
-                              ],
+                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            '¿Desea agregar propina?',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(2),
                             ),
-                            PropinaPage()
-                          ],
-                        ),
+                          ),
+                          Spacer(),
+                        ],
                       ),
-                    
+                      PropinaPage()
+                    ],
+                  ),
+                ),
                 Divider(),
                 (listDireccion.length > 0)
                     ? Padding(
@@ -394,7 +365,7 @@ class _DetallePagoState extends State<DetallePago> {
     carritoCompletoBloc.obtenerCarritoCpmpleto();
 
     return StreamBuilder(
-      stream: carritoCompletoBloc.carritoCompletoStream,
+      stream: carritoCompletoBloc.carritoCompletoStream, 
       builder: (BuildContext context,
           AsyncSnapshot<List<CarritoCompleto>> snapshot) {
         if (snapshot.hasData) {
@@ -1071,7 +1042,9 @@ class _DetallePagoState extends State<DetallePago> {
               },
               child: Container(
                 padding: MediaQuery.of(context).viewInsets,
-                margin: EdgeInsets.only(top: responsive.hp(10)),
+                margin: EdgeInsets.only(
+                  top: responsive.hp(10),
+                ),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadiusDirectional.only(
                       topEnd: Radius.circular(20),
@@ -1105,11 +1078,15 @@ class _DetallePagoState extends State<DetallePago> {
                               width: responsive.wp(9),
                               child: Text(
                                 'S/ ',
-                                style: TextStyle(fontSize: responsive.ip(2)),
+                                style: TextStyle(
+                                  fontSize: responsive.ip(2),
+                                ),
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: responsive.hp(.5)),
+                              padding: EdgeInsets.only(
+                                top: responsive.hp(.5),
+                              ),
                               width: responsive.wp(60),
                               child: TextFormField(
                                 style: TextStyle(
@@ -1138,21 +1115,29 @@ class _DetallePagoState extends State<DetallePago> {
                       SizedBox(
                         height: responsive.hp(2),
                       ),
-                      Text('Precio : S/ $precio',
-                          style: TextStyle(fontSize: responsive.ip(2))),
+                      Text(
+                        'Precio : S/ $precio',
+                        style: TextStyle(
+                          fontSize: responsive.ip(2),
+                        ),
+                      ),
                       Row(
                         children: <Widget>[
                           (vuelto > 0)
                               ? Text(
                                   'Vuelto : S/ $vuelto2',
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: responsive.ip(2)),
+                                    color: Colors.black,
+                                    fontSize: responsive.ip(2),
+                                  ),
                                 )
-                              : Text('Vuelto : S/ $vuelto2',
+                              : Text(
+                                  'Vuelto : S/ $vuelto2',
                                   style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: responsive.ip(2)))
+                                    color: Colors.red,
+                                    fontSize: responsive.ip(2),
+                                  ),
+                                )
                         ],
                       ),
                       SizedBox(
@@ -1185,8 +1170,9 @@ class _DetallePagoState extends State<DetallePago> {
                                 'Confirmar',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: responsive.ip(2)),
+                                  color: Colors.white,
+                                  fontSize: responsive.ip(2),
+                                ),
                               ),
                             ),
                           ),
@@ -1209,8 +1195,9 @@ class _DetallePagoState extends State<DetallePago> {
                                 'Cancelar',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: responsive.ip(2)),
+                                  color: Colors.white,
+                                  fontSize: responsive.ip(2),
+                                ),
                               ),
                             ),
                           ),
@@ -1251,7 +1238,9 @@ class _DetallePagoState extends State<DetallePago> {
               },
               child: Container(
                 padding: MediaQuery.of(context).viewInsets,
-                margin: EdgeInsets.only(top: responsive.hp(10)),
+                margin: EdgeInsets.only(
+                  top: responsive.hp(10),
+                ),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadiusDirectional.only(
                       topEnd: Radius.circular(20),
@@ -1293,7 +1282,9 @@ class _DetallePagoState extends State<DetallePago> {
                             ),
                             Container(
                               width: responsive.wp(75),
-                              padding: EdgeInsets.only(top: responsive.hp(2.5)),
+                              padding: EdgeInsets.only(
+                                top: responsive.hp(2.5),
+                              ),
                               child: TextField(
                                 style: TextStyle(
                                     fontSize: responsive.ip(2.5),
@@ -1314,8 +1305,9 @@ class _DetallePagoState extends State<DetallePago> {
                           : Text(
                               'El número debe tener más de 9 dígitos',
                               style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: responsive.ip(1.8)),
+                                color: Colors.red,
+                                fontSize: responsive.ip(1.8),
+                              ),
                             ),
                       SizedBox(
                         height: responsive.hp(3),
@@ -1788,168 +1780,4 @@ class _DetallePagoState extends State<DetallePago> {
       ],
     );
   }
-
-  /* Route _createRoutePropina() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return PropinaPage();
-      },
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-
-        var tween = Tween(begin: begin, end: end).chain(
-          CurveTween(curve: curve),
-        );
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-    );
-  }
- */
-/* 
-  void modalPropina() {
-    showModalBottomSheet(
-      context: context,
-      isDismissible: false,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        final responsive = Responsive.of(context);
-        return GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Container(
-            padding: MediaQuery.of(context).viewInsets,
-            margin: EdgeInsets.only(top: responsive.hp(10)),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadiusDirectional.only(
-                  topEnd: Radius.circular(20),
-                  topStart: Radius.circular(20),
-                ),
-                color: Colors.white),
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: responsive.hp(2),
-                left: responsive.wp(5),
-                right: responsive.wp(5),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    'Ingrese la propina que desea agregar',
-                    style: TextStyle(
-                        fontSize: responsive.ip(2.5),
-                        fontWeight: FontWeight.bold),
-                  ),
-                  TextField(
-                    controller: propinaController,
-                    keyboardType: TextInputType.number,
-                    maxLength: 11,
-                  ),
-                  SizedBox(
-                    height: responsive.hp(3),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FlatButton(
-                        onPressed: () async {
-                          if (propinaController.text.isEmpty) {
-                            print('nada');
-                          } else {
-                            setState(() {
-                              final preferences = Preferences();
-
-                              propinaRepartidor = propinaController.text;
-                              preferences.propinaRepartidor =
-                                  propinaRepartidor.toString();
-                            });
-
-                            final carritoBloc =
-                                ProviderBloc.carritoCompleto(context);
-                            carritoBloc.obtenerCarritoCpmpleto();
-                          }
-
-                          Navigator.pop(context);
-                          /* if (propinaController.text.length > 0) {
-                            if (propinaController.text.length == 11) {
-                              Navigator.pop(context);
-                              //Navigator.pop(context);
-                              ruc = propinaController.text;
-
-                              setState(() {});
-                            } else {
-                              utils.showToast(
-                                  'El número de ruc debe contar con 11 dígitos',
-                                  2,
-                                  ToastGravity.TOP);
-                            }
-                            //Navigator.pop(context);
-
-                          } else {
-                            utils.showToast('el campo no debe estar vacio', 2,
-                                ToastGravity.TOP);
-                          } */
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.ip(3),
-                            vertical: responsive.ip(1),
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.red),
-                          child: Text(
-                            'Confirmar',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(2)),
-                          ),
-                        ),
-                      ),
-                      FlatButton(
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.ip(3),
-                            vertical: responsive.ip(1),
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.red),
-                          child: Text(
-                            'Cancelar',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: responsive.ip(2),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
- */
-
 }

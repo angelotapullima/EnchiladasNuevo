@@ -30,6 +30,8 @@ class CategoriasApi {
 
 
   Future<bool> obtenerAmbos() async {
+
+    print('ella no te ama');
     try {
       final url = '$_url/api/categoria/listar_categorias_productos';
       final resp = await http.post(url, body: {});

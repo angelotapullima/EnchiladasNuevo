@@ -13,11 +13,10 @@ class AdicionalesBloc {
   dispose() {
     _adicionalesController?.close();
   }
-
+ 
   void obtenerAdicionales(String idCategoria) async {
     final listGeneral = List<ProductosData>();
-    final listProductos =
-        await adicionalesDatabase.obtenerAdicionales(idCategoria);
+    final listProductos =await adicionalesDatabase.obtenerAdicionales(idCategoria);
 
     for (var x = 0; x < listProductos.length; x++) {
       //final listCategorias =await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);

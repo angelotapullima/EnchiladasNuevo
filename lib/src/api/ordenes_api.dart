@@ -26,7 +26,7 @@ class OrdenesApi {
 
   Future<Link> enviarpedido(PedidoServer pedido) async {
     try {
-      final url = '$_url/api/pedido/insertar_pedido';
+      final url = '$_url/api/pedido/insertar_pedido'; 
 
       int estadoDelivery = 0;
       final List<Carrito> productos = await productoDatabase.obtenerCarritoDB();
@@ -54,13 +54,15 @@ class OrdenesApi {
         carri.productoPrecio = productos[i].productoPrecio;
         carri.productoTipo = productos[i].productoTipo;
         carri.productoObservacion = productos[i].productoObservacion;
+        carri.productoTupper = productos[i].productoTupper;
         productsList.add(carri);
 
         cantidadDeProductos =
             cantidadDeProductos + int.parse(productos[i].productoCantidad);
 
         if (carri.productoTupper == '1') {
-          cantidadDeTupers++;
+          int cantidadHecha = int.parse(productos[i].productoCantidad);
+          cantidadDeTupers = cantidadDeTupers + cantidadHecha;
         }
       }
 

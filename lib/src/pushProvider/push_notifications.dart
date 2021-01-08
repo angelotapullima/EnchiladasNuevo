@@ -56,7 +56,7 @@ class PushNotificationProvider {
       } else {
         argumento = info['payload'];
       }
-
+ 
       _mensajesStreamController.sink.add(argumento);
     }, onResume: (info) async {
       print('=====onResume========');

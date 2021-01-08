@@ -50,12 +50,10 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
   @override
   Widget build(BuildContext context) {
     final observacionesProductoBloc = ProviderBloc.observaciones(context);
-    final adicionalesBloc = ProviderBloc.adicionales(context);
+
     final itemObservacionBloc = ProviderBloc.itemOb(context);
     if (cant == 0) {
       observacionesProductoBloc.obtenerObservaciones(widget.idProductoArgument);
-
-      adicionalesBloc.obtenerAdicionales(widget.idCategoria);
 
       itemObservacionBloc.obtenerObservacionItem();
     }
@@ -122,8 +120,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                 physics: ClampingScrollPhysics(),
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return ('${snapshot.data[index].idCategoria}' !=
-                                          '16')
+                                  return ('${snapshot.data[index].productoTipo}' !=
+                                          'adicional')
                                       ? Padding(
                                           padding: EdgeInsets.only(
                                               left: 15, right: 15, top: 8),
@@ -304,7 +302,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                     tagFijos = val;
 
                                     utils.agregarItemObservacionFijos(
-                                        context, idProductoFijo, true);
+                                        context, idProductoFijo, true,'producto');
                                   });
                                 },
                                 choiceItems: C2Choice.listFrom<int, String>(
@@ -315,7 +313,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                 ),
                                 choiceStyle: C2ChoiceStyle(
                                   borderRadius: const BorderRadius.all(
-                                      Radius.circular(5)),
+                                    Radius.circular(5),
+                                  ),
                                 ),
                                 wrapped: true,
                               ),
@@ -461,82 +460,11 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               ),
                             )
                           : Container(),
-                      SizedBox(height: responsive.hp(1)),
-                      StreamBuilder(
-                        stream: adicionalesBloc.adicionalesStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<ProductosData>> snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data.length > 0) {
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: ClampingScrollPhysics(),
-                                itemCount: snapshot.data.length + 1,
-                                itemBuilder: (context, i) {
-                                  if (i == 0) {
-                                    return Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(15),
-                                      color: Colors.blueGrey[50],
-                                      child: Text(
-                                        'Adicionales',
-                                        style: const TextStyle(
-                                            color: Colors.blueGrey,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    );
-                                  }
-
-                                  int index = i - 1;
-                                  return new CheckboxListTile(
-                                    title: new RichText(
-                                      text: TextSpan(children: [
-                                        TextSpan(
-                                          text:
-                                              '${snapshot.data[index].productoNombre}   ',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              'S/.${snapshot.data[index].productoPrecio}',
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ]),
-                                    ),
-                                    value:
-                                        ('${snapshot.data[index].productoSeleccionado}' ==
-                                                '0')
-                                            ? false
-                                            : true,
-                                    onChanged: (bool value) {
-                                      utils.cambiarEstadoSeleccionAdicional(
-                                          context,
-                                          '${snapshot.data[index].idProducto}',
-                                          value,
-                                          '${snapshot.data[index].idCategoria}',);
-
-                                      utils.agregarItemObservacion(
-                                          context,
-                                          '${snapshot.data[index].idProducto}',
-                                          value);
-                                    },
-                                  );
-                                },
-                              );
-                            } else {
-                              return Center(
-                                  child: Text(' No existen Adicionales'));
-                            }
-                          } else {
-                            return Center(
-                              child: CupertinoActivityIndicator(),
-                            );
-                          }
-                        },
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
+                      AdicionalesItem(
+                        idCategoria: widget.idCategoria,
                       ),
                       SizedBox(
                         height: responsive.hp(7),
@@ -627,6 +555,94 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
           )
         ],
       ),
+    );
+  }
+}
+
+class AdicionalesItem extends StatelessWidget {
+  final String idCategoria;
+  const AdicionalesItem({
+    Key key,
+    @required this.idCategoria,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final adicionalesBloc = ProviderBloc.adicionales(context);
+
+    adicionalesBloc.obtenerAdicionales(idCategoria);
+    return StreamBuilder(
+      stream: adicionalesBloc.adicionalesStream,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: snapshot.data.length + 1,
+              itemBuilder: (context, i) {
+                if (i == 0) {
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(15),
+                    color: Colors.blueGrey[50],
+                    child: Text(
+                      'Adicionales',
+                      style: const TextStyle(
+                          color: Colors.blueGrey, fontWeight: FontWeight.w500),
+                    ),
+                  );
+                }
+
+                int index = i - 1;
+                return new CheckboxListTile(
+                  title: new RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: '${snapshot.data[index].productoNombre}   ',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w600),
+                      ),
+                      TextSpan(
+                        text: 'S/.${snapshot.data[index].productoPrecio}',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.w600),
+                      ),
+                    ]),
+                  ),
+                  value: ('${snapshot.data[index].productoSeleccionado}' == '0')
+                      ? false
+                      : true,
+                  onChanged: (bool value) {
+                    print('${snapshot.data[index].productoNombre}');
+                    print('ctm $value');
+                    utils.cambiarEstadoSeleccionAdicional(
+                      context,
+                      '${snapshot.data[index].idProducto}',
+                      value,
+                      '${snapshot.data[index].idCategoria}',
+                    );
+
+                     utils.agregarItemObservacion(
+                        context,
+                        '${snapshot.data[index].idProducto}',
+                        value,'adicional'); 
+                  },
+                );
+              },
+            );
+          } else {
+            return Center(
+              child: Text(' No existen Adicionales'),
+            );
+          }
+        } else {
+          return Center(
+            child: CupertinoActivityIndicator(),
+          );
+        }
+      },
     );
   }
 }

@@ -17,11 +17,10 @@ class ItemObservacionBloc {
   void obtenerObservacionItem() async {
     final listGeneral = List<ProductosData>();
 
-    final datosObtenidos =
-        await itemObservacionDatabase.obtenerItemObservacion();
+    final datosObtenidos =await itemObservacionDatabase.obtenerItemObservacion();
 
     if (datosObtenidos.length > 0) {
-      for (var i = 0; i < datosObtenidos.length; i++) {
+      for (var i = 0; i < datosObtenidos.length; i++) { 
         if (datosObtenidos[i].idCategoria != '16') {
           ProductosData productosData = ProductosData();
           productosData.idProducto = datosObtenidos[i].idProducto;
@@ -29,8 +28,8 @@ class ItemObservacionBloc {
           productosData.productoNombre = datosObtenidos[i].productoNombre;
           productosData.productoPrecio = datosObtenidos[i].productoPrecio;
           productosData.productoFoto = datosObtenidos[i].productoFoto;
-          productosData.productoObservacion =
-              datosObtenidos[i].productoObservacion;
+          productosData.productoObservacion =datosObtenidos[i].productoObservacion;
+          productosData.productoTipo =datosObtenidos[i].productoTipo;
           listGeneral.add(productosData);
         }
       }
@@ -42,6 +41,7 @@ class ItemObservacionBloc {
           productosData.productoNombre = datosObtenidos[x].productoNombre;
           productosData.productoPrecio = datosObtenidos[x].productoPrecio;
           productosData.productoFoto = datosObtenidos[x].productoFoto;
+          productosData.productoTipo =datosObtenidos[x].productoTipo;
           productosData.productoObservacion =
               datosObtenidos[x].productoObservacion;
           listGeneral.add(productosData);

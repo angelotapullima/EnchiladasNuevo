@@ -19,9 +19,9 @@ import 'package:enchiladasapp/src/pages/ticket.dart';
 import 'package:enchiladasapp/src/pages/webview.dart';
 import 'package:enchiladasapp/src/pages/zoom_foto_direccion.dart';
 import 'package:enchiladasapp/src/pushProvider/push_notifications.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_pago.dart';
 import 'package:enchiladasapp/src/pages/detalle_pedido.dart';
 import 'package:enchiladasapp/src/pages/select_direction.dart';
@@ -36,6 +36,7 @@ import 'package:enchiladasapp/src/pages/puzzle/home_puzzle.dart';
 import 'package:enchiladasapp/src/pages/puzzle/puzzle.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -126,10 +127,13 @@ class _MyAppState extends State<MyApp> {
     pushNotificationProvider.initNotification();
 
     pushNotificationProvider.mensajesPush.listen((event) {
+
+
+        showToast('pruieb', 2, ToastGravity.TOP);
       navigatorkey.currentState.pushNamed('notificationPage', arguments: event);
     });
 
-    _requestIOSPermissions();
+    _requestIOSPermissions(); 
     _configureDidReceiveLocalNotificationSubject();
     _configureSelectNotificationSubject();
     /* final pushNotificationProvider = PushNotificationProvider();
@@ -180,6 +184,8 @@ class _MyAppState extends State<MyApp> {
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen(
       (String payload) async {
+
+        showToast('pruieb', 2, ToastGravity.TOP);
         await navigatorkey.currentState
             .pushNamed('notificationPage', arguments: payload);
       },
@@ -225,7 +231,7 @@ class _MyAppState extends State<MyApp> {
               //'detalleP': (BuildContext context) => DetalleProductitoss(),
               'detallePago': (BuildContext context) => DetallePago(),
               'sel_Direccion': (BuildContext context) => MapsSample(),
-              'combo': (BuildContext context) => CategoriasEspecialesPage(),
+              //'combo': (BuildContext context) => CategoriasEspecialesPage(),
               'ordenes': (BuildContext context) => OrdenesPage(),
               'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
               'detallePedido': (BuildContext context) => DetallePedido(),

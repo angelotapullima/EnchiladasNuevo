@@ -8,6 +8,7 @@ import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/publicidad_model.dart';
+import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos_destacado.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
@@ -31,10 +32,11 @@ class PrincipalTab extends StatelessWidget {
     print('_onRefresh pantalla');
     final pantallasBloc = ProviderBloc.pantalla(context);
     final categoriasBloc = ProviderBloc.cat(context);
-    pantallasBloc.obtenerPantallas();
 
+    pantallasBloc.obtenerPantallas();
     final categoriasApi = CategoriasApi();
     await categoriasApi.obtenerAmbos();
+    pantallasBloc.obtenerPantallas();
     categoriasBloc.obtenerCategoriasPromociones();
     _refreshController.refreshCompleted();
   }
@@ -47,6 +49,8 @@ class PrincipalTab extends StatelessWidget {
 
     final publicidadBloc = ProviderBloc.publi(context);
     publicidadBloc.obtenerPublicidad();
+
+
 
     final provider = Provider.of<PrincipalChangeBloc>(context, listen: false);
 
@@ -482,7 +486,26 @@ class PrincipalTab extends StatelessWidget {
                           "${pantallaModel.pantallaNombre}",
                           '${pantallaModel.pantallCategoria}');
 
-                      Navigator.pushNamed(context, 'combo', arguments: arg);
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 100),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return CategoriasEspecialesPage(
+                              arg: arg,
+                            );
+                            //return DetalleProductitos(productosData: productosData);
+                          },
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -538,7 +561,28 @@ class PrincipalTab extends StatelessWidget {
                           Arguments arg = new Arguments(
                               "${pantallaModel.pantallaNombre}",
                               '${pantallaModel.pantallCategoria}');
-                          Navigator.pushNamed(context, 'combo', arguments: arg);
+
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration:
+                                  const Duration(milliseconds: 100),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return CategoriasEspecialesPage(
+                                  arg: arg,
+                                );
+                                //return DetalleProductitos(productosData: productosData);
+                              },
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         }
                       },
                       child: Container(
@@ -611,7 +655,28 @@ class PrincipalTab extends StatelessWidget {
                         Arguments arg = new Arguments(
                             "${pantallaModel.items[i].nombreItem}",
                             '${pantallaModel.items[i].idCategoria}');
-                        Navigator.pushNamed(context, 'combo', arguments: arg);
+
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 100),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return CategoriasEspecialesPage(
+                                arg: arg,
+                              );
+                              //return DetalleProductitos(productosData: productosData);
+                            },
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       } else if (tipo == 'producto') {
                         ProductosData productosData = ProductosData();
                         productosData.idProducto =
@@ -683,31 +748,32 @@ class PrincipalTab extends StatelessWidget {
                               ),
                             ),
                           ),
-                           (tipo == 'producto')?
-                          ('${pantallaModel.items[i].productoNuevo}' == '1')
-                              ?  Positioned(
-                                 /*  left: responsive.wp(1),
+                          (tipo == 'producto')
+                              ? ('${pantallaModel.items[i].productoNuevo}' ==
+                                      '1')
+                                  ? Positioned(
+                                      /*  left: responsive.wp(1),
                                   top: responsive.hp(.5), */
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: responsive.wp(3),
-                                      vertical: responsive.hp(.5),
-                                    ),
-                                    decoration: BoxDecoration(
-                                        //borderRadius: BorderRadius.circular(10),
-                                        color: Colors.red),
-                                    child: Text(
-                                      'Nuevo',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: responsive.ip(1.7),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: responsive.wp(3),
+                                          vertical: responsive.hp(.5),
+                                        ),
+                                        decoration: BoxDecoration(
+                                            //borderRadius: BorderRadius.circular(10),
+                                            color: Colors.red),
+                                        child: Text(
+                                          'Nuevo',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: responsive.ip(1.7),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                )
-                              : Container()
-                              :Container(),
+                                    )
+                                  : Container()
+                              : Container(),
                           (tipo != 'puzzle')
                               ? Positioned(
                                   right: 0,
@@ -740,13 +806,8 @@ class PrincipalTab extends StatelessWidget {
           )
         ],
       ),
-    ) /* ,
-      onTap: () {
-        Arguments arg = new Arguments("Combos Delivery", '54');
-        //Navigator.pushNamed(context, 'timeline', arguments: arg);
-        Navigator.pushNamed(context, 'combo', arguments: arg);
-      },
-    ) */
+    ) 
+    
         ;
   }
 }
@@ -918,7 +979,7 @@ class ProductosDestacados extends StatelessWidget {
                                 ),
                                 ('${snapshot.data[index].productoNuevo}' == '1')
                                     ? Positioned(
-                                       /*  left: responsive.wp(1),
+                                        /*  left: responsive.wp(1),
                                         top: responsive.hp(.5), */
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
@@ -1007,12 +1068,29 @@ class PublicidadDialog extends StatelessWidget {
                     },
                   ),
                 );
-
-                Navigator.pushNamed(context, '');
               } else {
                 Arguments arg = new Arguments(
                     "Promociones", '${publicidadModel.idRelacionado}');
-                Navigator.pushNamed(context, 'combo', arguments: arg);
+
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 100),
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return CategoriasEspecialesPage(
+                        arg: arg,
+                      );
+                      //return DetalleProductitos(productosData: productosData);
+                    },
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
               }
             },
             child: Container(

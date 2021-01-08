@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:enchiladasapp/src/database/adicionales_database.dart';
 import 'package:enchiladasapp/src/database/pantalla_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
 import 'package:enchiladasapp/src/database/publicidad_database.dart';
@@ -24,8 +23,6 @@ class ConfiguracionApi {
   final puzzleDatabase = PuzzleDatabase();
   final productoDatabase = ProductoDatabase();
   final publicidadDatabase = PublicidadDatabase();
-
-  final adicionalesDatabase = AdicionalesDatabase();
 
   Future<bool> configuracion() async {
     try {
@@ -183,12 +180,11 @@ class ConfiguracionApi {
           await puzzleDatabase.insertarPuzzle(puzzle);
         }
 
-        for (int t = 0;
+       /*  for (int t = 0;
             t < decodedData['result']['data']['adicionales'].length;
             t++) {
           ProductosData productosData = ProductosData();
-          productosData.idProducto =
-              decodedData['result']['data']['adicionales'][t]['id_producto'];
+          productosData.idProducto =decodedData['result']['data']['adicionales'][t]['id_producto'];
           productosData.idCategoria = '16';
           productosData.productoNombre = decodedData['result']['data']
               ['adicionales'][t]['producto_nombre'];
@@ -207,7 +203,7 @@ class ConfiguracionApi {
               ['adicionales'][t]['producto_detalle'];
 
           await adicionalesDatabase.insertarProductosDb(productosData);
-        }
+        } */
 
         return true;
       } else {

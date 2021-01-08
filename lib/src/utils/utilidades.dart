@@ -163,51 +163,48 @@ void agregarCarrito(
   //_mostrarAlert(context);
 }
 
-
-
-
 void agregarPropinaCarrito(
     ProductosData productosData, BuildContext context, String cantidad) async {
   Carrito carrito = new Carrito();
   final carritoDatabase = CarritoDatabase();
 
-  final carritoBloc = ProviderBloc.carrito(context);
+  //final carritoBloc = ProviderBloc.carrito(context);
   final carritoCompletoBloc = ProviderBloc.carritoCompleto(context);
 
   if (cantidad == "0") {
     await carritoDatabase.deletePropinaCarritoDb();
   } else {
-
     await carritoDatabase.deletePropinaCarritoDb();
-    
+
     final dato =
         await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
 
     carrito.idProducto = int.parse(productosData.idProducto);
     carrito.productoNombre = productosData.productoNombre;
     carrito.idCategoria = productosData.idCategoria;
-    carrito.productoFoto = productosData.productoFoto;
+    carrito.productoFoto = '';
     carrito.productoPrecio = productosData.productoPrecio;
     carrito.productoTipo = '0';
     carrito.productoCantidad = cantidad;
-    carrito.productoTupper = productosData.productoTupper;
+    carrito.productoTupper = '0';
 
     if (dato.length > 0) {
       carrito.productoObservacion = dato[0].productoObservacion;
 
       await carritoDatabase.updateCarritoDb(carrito);
+      print('update');
     } else {
       carrito.productoObservacion = '';
       await carritoDatabase.insertarCarritoDb(carrito);
+      print('insertar');
     }
   }
   //showToast('Producto agregado correctamente', 1);
 
-  carritoBloc.obtenerCarrito();
+  //carritoBloc.obtenerCarrito();
   carritoCompletoBloc.obtenerCarritoCpmpleto();
   //_mostrarAlert(context);
 }
-
 
 void agregarCarritoConAdicionales(ProductosData productosData,
     BuildContext context, String cantidad, String observacion) async {
@@ -304,8 +301,8 @@ void agregarDireccion(BuildContext context, String addres, double latitud,
   direccionBloc.obtenerDirecciones();
 }
 
-void cambiarEstadoSeleccionAdicional(
-    BuildContext context, String idProducto, bool valor,String idCategoria) async {
+void cambiarEstadoSeleccionAdicional(BuildContext context, String idProducto,
+    bool valor, String idCategoria) async {
   final adicionalesDatabase = AdicionalesDatabase();
   final adicionalesBloc = ProviderBloc.adicionales(context);
   if (valor) {
@@ -320,7 +317,6 @@ void cambiarEstadoSeleccionAdicional(
     productosData.productoFoto = adicional[0].productoFoto;
     productosData.productoPrecio = adicional[0].productoPrecio;
     productosData.productoCarta = adicional[0].productoCarta;
-    productosData.productoDelivery = adicional[0].productoDelivery;
     productosData.productoSeleccionado = adicional[0].productoSeleccionado;
     productosData.productoEstado = adicional[0].productoEstado;
     productosData.productoDescripcion = adicional[0].productoDescripcion;
@@ -337,7 +333,6 @@ void cambiarEstadoSeleccionAdicional(
     productosData.productoFoto = adicional[0].productoFoto;
     productosData.productoPrecio = adicional[0].productoPrecio;
     productosData.productoCarta = adicional[0].productoCarta;
-    productosData.productoDelivery = adicional[0].productoDelivery;
     productosData.productoSeleccionado = adicional[0].productoSeleccionado;
     productosData.productoEstado = adicional[0].productoEstado;
     productosData.productoDescripcion = adicional[0].productoDescripcion;
@@ -388,7 +383,7 @@ void showToast(String msg, int duration, ToastGravity gravity) {
 }
 
 void agregarItemObservacion(
-    BuildContext context, String idProducto, bool valor) async {
+    BuildContext context, String idProducto, bool valor,String tipo) async {
   print(valor);
   final itemObservacionDatabase = ItemObservacionDatabase();
   final productoDatabase = ProductoDatabase();
@@ -403,6 +398,7 @@ void agregarItemObservacion(
     productoData.productoPrecio = producto[0].productoPrecio;
     productoData.productoObservacion = '';
     productoData.idCategoria = producto[0].idCategoria;
+    productoData.productoTipo = tipo;
     productoData.productoTupper = producto[0].productoTupper;
 
     await itemObservacionDatabase.insertarItemObservacion(productoData);
@@ -416,7 +412,7 @@ void agregarItemObservacion(
 }
 
 void agregarItemObservacionFijos(
-    BuildContext context, String idProducto, bool valor) async {
+    BuildContext context, String idProducto, bool valor,String tipo) async {
   print(valor);
   final itemObservacionDatabase = ItemObservacionDatabase();
   final productoDatabase = ProductoDatabase();
@@ -441,6 +437,7 @@ void agregarItemObservacionFijos(
   productoData.productoObservacion = '';
   productoData.idCategoria = producto[0].idCategoria;
   productoData.productoTupper = producto[0].productoTupper;
+  productoData.productoTipo = tipo;
 
   await itemObservacionDatabase.insertarItemObservacion(productoData);
 
@@ -535,18 +532,67 @@ void agregarProductosAlCarrito(BuildContext context) async {
   carritoBloc.obtenerCarrito();
 }
 
-
-void deletePropinas(BuildContext context)async{
-
-
+void deletePropinas(BuildContext context) async {
   final carritoBloc = ProviderBloc.carrito(context);
 
-final carritoDatabase = CarritoDatabase();
-
+  final carritoDatabase = CarritoDatabase();
 
   await carritoDatabase.deletePropinaCarritoDb();
 
-
-
   carritoBloc.obtenerCarrito();
+}
+
+Future<List<ProductosData>> agregarAdicionalesDeProducto(String idcategoria) async {
+
+  final listalgo =  List<ProductosData>();
+  final productoDatabase = ProductoDatabase();
+
+  final adicionalesDatabase = AdicionalesDatabase();
+
+  final listProductos =
+      await productoDatabase.obtenerProductosPorCategoriaDelivery(idcategoria);
+
+  if (listProductos.length > 0) {
+    await adicionalesDatabase.deleteAdicionales();
+
+    for (var x = 0; x < listProductos.length; x++) {
+      //final listCategorias =await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
+      ProductosData productosData = ProductosData();
+      productosData.idProducto = listProductos[x].idProducto;
+      productosData.idCategoria = listProductos[x].idCategoria;
+      productosData.productoNombre = listProductos[x].productoNombre;
+      productosData.productoFoto = listProductos[x].productoFoto;
+      productosData.productoPrecio = listProductos[x].productoPrecio;
+      productosData.productoCarta = listProductos[x].productoCarta;
+      productosData.productoDelivery = listProductos[x].productoDelivery;
+      productosData.productoSeleccionado = '0';
+      productosData.productoEstado = listProductos[x].productoEstado;
+      productosData.productoDescripcion = listProductos[x].productoDescripcion;
+
+      await adicionalesDatabase.insertarProductosDb(productosData);
+    }
+  } else {
+    await adicionalesDatabase.deleteAdicionales();
+    final listProductos =
+        await productoDatabase.obtenerProductosPorCategoriaDelivery('16');
+
+    for (var x = 0; x < listProductos.length; x++) {
+      //final listCategorias =await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
+      ProductosData productosData = ProductosData();
+      productosData.idProducto = listProductos[x].idProducto;
+      productosData.idCategoria = listProductos[x].idCategoria;
+      productosData.productoNombre = listProductos[x].productoNombre;
+      productosData.productoFoto = listProductos[x].productoFoto;
+      productosData.productoPrecio = listProductos[x].productoPrecio;
+      productosData.productoCarta = listProductos[x].productoCarta;
+      productosData.productoDelivery = listProductos[x].productoDelivery;
+      productosData.productoSeleccionado = '0';
+      productosData.productoEstado = listProductos[x].productoEstado;
+      productosData.productoDescripcion = listProductos[x].productoDescripcion;
+
+      await adicionalesDatabase.insertarProductosDb(productosData);
+    }
+  }
+
+  return listalgo;
 }

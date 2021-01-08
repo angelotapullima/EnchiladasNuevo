@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/database/adicionales_database.dart';
 import 'package:enchiladasapp/src/database/item_observacion_database.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
@@ -180,13 +179,14 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     observacionProductoController.dispose();
     super.dispose();
   }
-
+ 
   void llamado() {
     setState(() {});
   }
 
   @override
   void initState() {
+
     super.initState();
   }
 
@@ -356,17 +356,21 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                           ),
                         ),
                         onTap: () async {
-                          final adicionalesDatabase = AdicionalesDatabase();
+                          /* final adicionalesDatabase = AdicionalesDatabase();
 
                           await adicionalesDatabase
                               .updateAdicionalesEnFalseDb();
+ */
 
+
+
+                          await utils.agregarAdicionalesDeProducto(productosData.productoAdicionalOpciones);
                           final itemObservacionDatabase =
                               ItemObservacionDatabase();
                           itemObservacionDatabase.deleteItemObservacion();
 
                           agregarItemObservacion(
-                              context, productosData.idProducto, true);
+                              context, productosData.idProducto, true,'producto');
 
                           Navigator.of(context)
                               .push(_createRoute(productosData.idProducto,productosData.productoAdicionalOpciones));
@@ -524,25 +528,23 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                   ),
 
                   ('${productosData.productoNuevo}' == '1')
-                      ? Positioned(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: responsive.wp(3),
-                              vertical: responsive.wp(.5),
-                            ),
-                            decoration: BoxDecoration(
-                                //borderRadius: BorderRadius.circular(10),
-                                color: Colors.red),
-                            child: Text(
-                              'Producto Nuevo',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsive.ip(2),
-                              ),
-                            ),
+                      ? Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: responsive.wp(3),
+                          vertical: responsive.wp(.5),
+                        ),
+                        decoration: BoxDecoration(
+                            //borderRadius: BorderRadius.circular(10),
+                            color: Colors.red),
+                        child: Text(
+                          'Producto Nuevo',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: responsive.ip(2),
                           ),
-                        )
+                        ),
+                      )
                       : Container(),
                   SizedBox(
                     height: responsive.hp(1),
@@ -873,7 +875,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                   children: <Widget>[
                     Container(
                       width: responsive.wp(35),
-                      height: responsive.hp(12),
+                      height: responsive.hp(12), 
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
@@ -1091,15 +1093,15 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                 width: double.infinity,
                 height: responsive.hp(5),
                 child: RaisedButton(
-                    color: Colors.white,
-                    textColor: Colors.red,
+                    color: Colors.red,
+                    textColor: Colors.white,
                     child: Text(
-                      'Continuar Comprando',
+                      'Seguir Comprando',
                       style: TextStyle(
                         fontSize: responsive.ip(2),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () { 
                       Navigator.pop(context);
                     }),
               ),
@@ -1110,8 +1112,8 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                 width: double.infinity,
                 height: responsive.hp(5),
                 child: RaisedButton(
-                    color: (preferences.rol == '5') ? Colors.red : Colors.grey,
-                    textColor: Colors.white,
+                    color: (preferences.rol == '5') ? Colors.white : Colors.grey,
+                    textColor: Colors.red,
                     child: Text(
                       'Ordenar Pedido',
                       style: TextStyle(
