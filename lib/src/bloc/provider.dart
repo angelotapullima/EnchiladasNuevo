@@ -11,6 +11,7 @@ import 'package:enchiladasapp/src/bloc/observaciones_chip_bloc.dart';
 import 'package:enchiladasapp/src/bloc/observaciones_productos_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_local_bloc.dart';
+import 'package:enchiladasapp/src/bloc/procentaje_bloc.dart';
 import 'package:enchiladasapp/src/bloc/productos_destacados_bloc.dart';
 import 'package:enchiladasapp/src/bloc/propinas_bloc.dart';
 import 'package:enchiladasapp/src/bloc/publicidad_bloc.dart';
@@ -80,6 +81,7 @@ class ProviderBloc extends InheritedWidget {
   final propinasBloc=PropinasBloc();
   final productosDestacadosBloc=ProductosDestacadosBloc();
   final publicidadBloc = PublicidadBloc();
+  final porcentajesBloc = PorcentajesBloc();
 
   static ProviderBloc _instancia;
 
@@ -226,6 +228,11 @@ class ProviderBloc extends InheritedWidget {
   static PublicidadBloc publi(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .publicidadBloc;
+  }
+  
+  static PorcentajesBloc porcentaje(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .porcentajesBloc;
   }
     
 }

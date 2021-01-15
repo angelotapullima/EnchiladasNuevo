@@ -17,7 +17,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
 
 
     final categoriasApi = CategoriasApi();
-    categoriasApi.obtenerAmbos();
+    categoriasApi.obtenerAmbos(context);
 
     final responsive = Responsive.of(context);
     return Scaffold(

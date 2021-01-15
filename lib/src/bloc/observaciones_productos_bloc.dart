@@ -1,3 +1,4 @@
+import 'package:enchiladasapp/src/bloc/especiales_observaciones.dart';
 import 'package:enchiladasapp/src/database/observaciones_database.dart';
 import 'package:enchiladasapp/src/models/observaciones_model.dart';
 import 'package:rxdart/subjects.dart';
@@ -22,6 +23,7 @@ class ObservacionesProductoBloc {
 
   void obtenerObservaciones(String idProducto) async {
     final observacionesGeneral = List<Observaciones>();
+    EspecialesObservaciones c = EspecialesObservaciones();
 
     Observaciones observaciones = Observaciones();
 
@@ -37,6 +39,10 @@ class ObservacionesProductoBloc {
         observacionesFijasModel.productosFijos =await obtenerProductosFijos(idProducto);
         observacionesFijasModel.sabores = await obtenerSabores(idProducto);
         observacionesFijasModel.acompanhamientos = await obtenerAcompanhamientos(idProducto);
+        observacionesFijasModel.especialesA = await c.obtenerEspecialesA(idProducto);
+        observacionesFijasModel.especialesB = await c.obtenerEspecialesB(idProducto);
+        observacionesFijasModel.especialesC = await c.obtenerEspecialesC(idProducto);
+        observacionesFijasModel.especialesD = await c.obtenerEspecialesD(idProducto);
 
         observacionesFijas.add(observacionesFijasModel);
       }
@@ -48,7 +54,7 @@ class ObservacionesProductoBloc {
 
     _observacionesController.sink.add(observacionesGeneral);
   }
-
+ 
   Future<List<ObservacionesVariables>> obtenerVariables(String idProducto) async{
 
 
@@ -113,8 +119,7 @@ class ObservacionesProductoBloc {
     return listSabores;
   }
 
-  Future<List<OpcionesSabores>> obtenerOpcionesSabores(
-      String idProducto, String titulo) async {
+  Future<List<OpcionesSabores>> obtenerOpcionesSabores(String idProducto, String titulo) async {
     final listOpcionesSabores = List<OpcionesSabores>();
 
     final listOpcionesSaboresDatabase =  await opcionesSaboresDatabase.obtenerOpcionesSabores(idProducto,titulo);

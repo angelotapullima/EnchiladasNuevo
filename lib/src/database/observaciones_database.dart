@@ -213,8 +213,6 @@ final dbprovider = DatabaseProvider.db;
   }
 }
 
-
-
 class OpcionesAcompanhamientosDatabase{
 
 
@@ -256,9 +254,6 @@ final dbprovider = DatabaseProvider.db;
   }
 }
 
-
-
-
 //========================================================================================================
 class ObservacionesVariablesDatabase{
 
@@ -273,7 +268,7 @@ final dbprovider = DatabaseProvider.db;
           "INSERT OR REPLACE INTO ObservacionesVariables (idProducto,nombreVariable) "
           "VALUES ('${observacionesVariables.idProducto}','${observacionesVariables.nombreVariable}'"
           ")");
-      return res;
+      return res; 
     } catch (exception) {
       print(exception);
     }
@@ -300,3 +295,10 @@ final dbprovider = DatabaseProvider.db;
     return res;
   }
 }
+
+
+//=============================================================================================================================
+//=============================================================================================================================
+
+
+

@@ -26,7 +26,7 @@ class OrdenesApi {
 
   Future<Link> enviarpedido(PedidoServer pedido) async {
     try {
-      final url = '$_url/api/pedido/insertar_pedido'; 
+      final url = '$_url/api/pedido/insertar_pedido';
 
       int estadoDelivery = 0;
       final List<Carrito> productos = await productoDatabase.obtenerCarritoDB();

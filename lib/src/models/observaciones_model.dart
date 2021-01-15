@@ -21,6 +21,10 @@ class ObservacionesFijas {
   List<ProductosFijos> productosFijos;
   List<Sabores> sabores;
   List<Acompanhamientos> acompanhamientos;
+  List<Sabores> especialesA;
+  List<Sabores> especialesB;
+  List<Sabores> especialesC;
+  List<Sabores> especialesD;
 
   factory ObservacionesFijas.fromJson(Map<String, dynamic> json) =>
       ObservacionesFijas(

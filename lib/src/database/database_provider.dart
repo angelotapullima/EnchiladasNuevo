@@ -15,6 +15,7 @@ class DatabaseProvider {
 
     _database = await initDB();
 
+
     return _database;
   }
  
@@ -22,7 +23,7 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'enchiladasbd6.db');
+    final path = join(documentsDirectory.path, 'enchiladasbd45678.db');
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onConfigure: (Database db) async {
@@ -91,27 +92,21 @@ class DatabaseProvider {
           'producto_unidad VARCHAR,'
           'producto_destacado VARCHAR,'
           'producto_estado_destacado VARCHAR,'
-          'producto_tupper VARCHAR,'
+          'producto_tupper VARCHAR,' 
           'producto_estado VARCHAR,'
           'producto_nuevo VARCHAR,'
           'producto_descripcion VARCHAR,'
           'producto_comentario VARCHAR,' 
           'producto_adicional_titulo VARCHAR,' 
-          'producto_adicional_opciones VARCHAR,' 
           'producto_favorito int'
           ')');
 
 
           await db.execute('CREATE TABLE Adicionales ('
-          'id_producto VARCHAR  PRIMARY KEY,'
-          'id_categoria VARCHAR,' 
-          'producto_nombre VARCHAR,'
-          'producto_foto VARCHAR,'
-          'producto_precio VARCHAR,'
-          'producto_carta VARCHAR,'
-          'producto_seleccionado VARCHAR,'
-          'producto_estado VARCHAR,'
-          'producto_descripcion VARCHAR'
+          'id_adicional  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'id_producto VARCHAR,' 
+          'id_producto_adicional VARCHAR,'
+          'adicional_seleccionado VARCHAR'
           ')');
 
       await db.execute('CREATE TABLE DetallePedido ('
@@ -331,6 +326,74 @@ class DatabaseProvider {
           'publicidad_tipo VARCHAR,'
           'id_relacionado VARCHAR'
           ')');
+
+
+
+
+          await db.execute('CREATE TABLE EspecialesA ('
+          'idTextosFijosA INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'maximo VARCHAR,' 
+          'tituloTextos VARCHAR'
+          ')'); 
+
+           await db.execute('CREATE TABLE OpcionesEspecialesA ('
+          'idOpcionesTextosFijosA INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'tituloTextos VARCHAR,'
+          'nombreTexto VARCHAR'
+          ')'); 
+
+
+          await db.execute('CREATE TABLE EspecialesB ('
+          'idTextosFijosB INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'maximo VARCHAR,' 
+          'tituloTextos VARCHAR'
+          ')'); 
+
+           await db.execute('CREATE TABLE OpcionesEspecialesB ('
+          'idOpcionesTextosFijosB INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'tituloTextos VARCHAR,'
+          'nombreTexto VARCHAR'
+          ')'); 
+
+
+          await db.execute('CREATE TABLE EspecialesC ('
+          'idTextosFijosC INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'maximo VARCHAR,' 
+          'tituloTextos VARCHAR'
+          ')'); 
+
+           await db.execute('CREATE TABLE OpcionesEspecialesC ('
+          'idOpcionesTextosFijosC INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'tituloTextos VARCHAR,'
+          'nombreTexto VARCHAR'
+          ')'); 
+
+
+
+          await db.execute('CREATE TABLE EspecialesD ('
+          'idTextosFijosD INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'maximo VARCHAR,' 
+          'tituloTextos VARCHAR'
+          ')'); 
+
+           await db.execute('CREATE TABLE OpcionesEspecialesD ('
+          'idOpcionesTextosFijosD INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+          'idProducto VARCHAR,' 
+          'tituloTextos VARCHAR,'
+          'nombreTexto VARCHAR'
+          ')'); 
+       
+       
+
+
+
 
     });
   }

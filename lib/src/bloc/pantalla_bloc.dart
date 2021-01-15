@@ -55,7 +55,7 @@ class PantallaBloc {
             item.idCategoria = listaCategorias[x].idCategoria;
             item.nombreItem = listaCategorias[x].categoriaNombre;
             item.fotoItem = listaCategorias[x].categoriaFoto;
-            item.numeroItem = x.toString();
+            item.numeroItem = listaCategorias[x].categoriaOrden;
 
             listItemPantalla.add(item);
           }

@@ -53,7 +53,7 @@ class NotificationPage extends StatelessWidget {
         }
         break;
 
-      case "valorar":
+      case "valoracion":
         {
           return Scaffold(
             body: RatingRepartidor(

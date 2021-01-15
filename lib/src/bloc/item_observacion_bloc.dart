@@ -21,7 +21,7 @@ class ItemObservacionBloc {
 
     if (datosObtenidos.length > 0) {
       for (var i = 0; i < datosObtenidos.length; i++) { 
-        if (datosObtenidos[i].idCategoria != '16') {
+       // if (datosObtenidos[i].idCategoria != '16') {
           ProductosData productosData = ProductosData();
           productosData.idProducto = datosObtenidos[i].idProducto;
           productosData.idCategoria = datosObtenidos[i].idCategoria;
@@ -31,9 +31,9 @@ class ItemObservacionBloc {
           productosData.productoObservacion =datosObtenidos[i].productoObservacion;
           productosData.productoTipo =datosObtenidos[i].productoTipo;
           listGeneral.add(productosData);
-        }
+        //}
       }
-      for (var x = 0; x < datosObtenidos.length; x++) {
+      /* for (var x = 0; x < datosObtenidos.length; x++) {
         if (datosObtenidos[x].idCategoria == '16') {
           ProductosData productosData = ProductosData();
           productosData.idProducto = datosObtenidos[x].idProducto;
@@ -46,7 +46,7 @@ class ItemObservacionBloc {
               datosObtenidos[x].productoObservacion;
           listGeneral.add(productosData);
         }
-      }
+      } */
     }
 
     /* if (listGeneral.length > 0) {

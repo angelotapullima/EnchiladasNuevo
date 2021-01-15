@@ -22,6 +22,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_svg/svg.dart';
 
 class PrincipalTab extends StatelessWidget {
   final _refreshController = RefreshController(initialRefresh: false);
@@ -35,7 +36,7 @@ class PrincipalTab extends StatelessWidget {
 
     pantallasBloc.obtenerPantallas();
     final categoriasApi = CategoriasApi();
-    await categoriasApi.obtenerAmbos();
+    await categoriasApi.obtenerAmbos(context);
     pantallasBloc.obtenerPantallas();
     categoriasBloc.obtenerCategoriasPromociones();
     _refreshController.refreshCompleted();
@@ -49,8 +50,6 @@ class PrincipalTab extends StatelessWidget {
 
     final publicidadBloc = ProviderBloc.publi(context);
     publicidadBloc.obtenerPublicidad();
-
-
 
     final provider = Provider.of<PrincipalChangeBloc>(context, listen: false);
 
@@ -649,6 +648,7 @@ class PrincipalTab extends StatelessWidget {
                       ),
                     );
                   }
+
                   return GestureDetector(
                     onTap: () {
                       if (tipo == 'categoria') {
@@ -806,9 +806,7 @@ class PrincipalTab extends StatelessWidget {
           )
         ],
       ),
-    ) 
-    
-        ;
+    );
   }
 }
 
@@ -884,6 +882,15 @@ class ProductosDestacados extends StatelessWidget {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
+
+                        int item = index +1;
+                        double paddddd = responsive.ip(7);
+
+                        if(item==1){
+
+                          paddddd = responsive.ip(4.5);
+
+                        }
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -913,7 +920,7 @@ class ProductosDestacados extends StatelessWidget {
                             );
                           },
                           child: Container(
-                            width: responsive.ip(18),
+                            width: responsive.ip(30),
                             height: responsive.ip(18),
                             padding: EdgeInsets.only(
                               left: responsive.wp(3),
@@ -923,30 +930,35 @@ class ProductosDestacados extends StatelessWidget {
                             ),
                             child: Stack(
                               children: <Widget>[
-                                Container(
-                                  width: responsive.ip(18),
-                                  height: responsive.ip(18),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: CachedNetworkImage(
-                                      cacheManager: CustomCacheManager(),
-                                      placeholder: (context, url) => Image(
-                                          image: AssetImage(
-                                              'assets/jar-loading.gif'),
-                                          fit: BoxFit.cover),
-                                      errorWidget: (context, url, error) =>
-                                          Image(
-                                              image: AssetImage(
-                                                  'assets/carga_fallida.jpg'),
-                                              fit: BoxFit.cover),
-                                      imageUrl:
-                                          '${snapshot.data[index].productoFoto}',
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
+                                
+                                Positioned(
+                                  left: responsive.ip(10.5),
+                                  child: Container(
+                                    width: responsive.ip(18.2),
+                                    height: responsive.ip(17.5),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(
+                                        cacheManager: CustomCacheManager(),
+                                        placeholder: (context, url) => Image(
+                                            image: AssetImage(
+                                                'assets/jar-loading.gif'),
+                                            fit: BoxFit.cover),
+                                        errorWidget: (context, url, error) =>
+                                            Image(
+                                                image: AssetImage(
+                                                    'assets/carga_fallida.jpg'),
+                                                fit: BoxFit.cover),
+                                        imageUrl:
+                                            '${snapshot.data[index].productoFoto}',
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -955,9 +967,11 @@ class ProductosDestacados extends StatelessWidget {
                                 ),
                                 Positioned(
                                   bottom: 0,
-                                  left: 0,
+                                  left: responsive.ip(10.5),
                                   right: 0,
                                   child: Container(
+                                    width: responsive.ip(18),
+                                    //height: responsive.ip(18),
                                     padding: EdgeInsets.symmetric(
                                       vertical: responsive.hp(1),
                                     ),
@@ -977,6 +991,7 @@ class ProductosDestacados extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                
                                 ('${snapshot.data[index].productoNuevo}' == '1')
                                     ? Positioned(
                                         /*  left: responsive.wp(1),
@@ -1000,7 +1015,14 @@ class ProductosDestacados extends StatelessWidget {
                                           ),
                                         ),
                                       )
-                                    : Container()
+                                    : Container(),
+
+                                    Container(
+                                  transform: Matrix4.translationValues(-paddddd, 0, 0),
+                                  height: responsive.ip(18),
+                                  child:
+                                      SvgPicture.asset('assets/numeros/$item.svg'),
+                                ),
                               ],
                             ),
                           ),

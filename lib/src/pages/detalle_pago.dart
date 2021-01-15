@@ -1584,7 +1584,7 @@ class _DetallePagoState extends State<DetallePago> {
                           ToastGravity.TOP);
                       //OCURRIO UNA ACTUALIZACION DE PRODUCTOS
                       final categoriasApi = CategoriasApi();
-                      categoriasApi.obtenerAmbos();
+                      categoriasApi.obtenerAmbos(context);
                       Navigator.pop(context);
                     } else {
                       utils.showToast('Ocurrio un error, intentelo más tarde',
