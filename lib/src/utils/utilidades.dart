@@ -15,6 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   final favoritosBloc = ProviderBloc.fav(context);
+  final productosIdBloc = ProviderBloc.prod(context);
   ProductosData productos = new ProductosData();
   final productoDatabase = ProductoDatabase();
 
@@ -32,7 +33,6 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoDestacado = productosData.productoDestacado;
   productos.productoEstadoDestacado = productosData.productoEstadoDestacado;
   productos.productoTupper = productosData.productoTupper;
-  productos.productoAdicionalTitulo = productosData.productoAdicionalTitulo;
   productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
   productos.productoNuevo = productosData.productoNuevo;
   productos.productoFavorito = 1;
@@ -40,6 +40,8 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   await productoDatabase.updateProductosDb(productos);
 
   favoritosBloc.obtenerProductosFavoritos();
+  productosIdBloc
+      .obtenerProductosdeliveryEnchiladasPorCategoria(productos.idCategoria);
   //_mostrarAlert(context);
 }
 
@@ -47,6 +49,7 @@ void quitarFavoritos(BuildContext context, ProductosData productosData) async {
   ProductosData productos = new ProductosData();
   final productoDatabase = ProductoDatabase();
   final favoritosBloc = ProviderBloc.fav(context);
+  final productosIdBloc = ProviderBloc.prod(context);
 
   productos.idProducto = productosData.idProducto;
   productos.idCategoria = productosData.idCategoria;
@@ -61,7 +64,6 @@ void quitarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoDestacado = productosData.productoDestacado;
   productos.productoEstadoDestacado = productosData.productoEstadoDestacado;
   productos.productoTupper = productosData.productoTupper;
-  productos.productoAdicionalTitulo = productosData.productoAdicionalTitulo;
   productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
   productos.productoNuevo = productosData.productoNuevo;
   productos.productoFavorito = 0;
@@ -70,6 +72,11 @@ void quitarFavoritos(BuildContext context, ProductosData productosData) async {
 
   //_mostrarAlert(context);
   favoritosBloc.obtenerProductosFavoritos();
+  productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(productos.idCategoria);
+  productosIdBloc.obtenerProductosLocalEnchiladasPorCategoria(productos.idCategoria);
+  productosIdBloc.obtenerProductosMarketPorCategoria(productos.idCategoria);
+  productosIdBloc.cargarCategoriaProductoLocal(productos.idCategoria);
+  productosIdBloc.cargarCategoriaProductoDelivery(productos.idCategoria);
 }
 
 void agregarDeliveryRapido(BuildContext context) async {
@@ -259,7 +266,6 @@ void quitarFavoritosMarket(
   productos.productoEstado = productosData.productoEstado;
   productos.productoDestacado = productosData.productoDestacado;
   productos.productoEstadoDestacado = productosData.productoEstadoDestacado;
-  productos.productoAdicionalTitulo = productosData.productoAdicionalTitulo;
   productos.productoTupper = productosData.productoTupper;
   productos.productoNuevo = productosData.productoNuevo;
   productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
@@ -301,25 +307,24 @@ void agregarDireccion(BuildContext context, String addres, double latitud,
   direccionBloc.obtenerDirecciones();
 }
 
-  void cambiarEstadoSeleccionAdicional(BuildContext context, String idProducto,
-    bool valor, String idProdcutoAdicional) async {
+void cambiarEstadoSeleccionAdicional(BuildContext context, String idProducto,
+    bool valor, String idProdcutoAdicional, String item) async {
   final adicionalesDatabase = AdicionalesDatabase();
   final adicionalesBloc = ProviderBloc.adicionales(context);
   if (valor) {
     //await adicionalesDatabase.updateAdicionalesEnFalseDb();
-    
 
-    await adicionalesDatabase.updateAdicionalesEnTrueDb(idProducto,idProdcutoAdicional);
+    await adicionalesDatabase.updateAdicionalesEnTrueDb(
+        idProducto, idProdcutoAdicional, item);
   } else {
-    
-    
-    await adicionalesDatabase.updateAdicionalesEnfalsePorId(idProducto,idProdcutoAdicional);
+    await adicionalesDatabase.updateAdicionalesEnfalsePorId(
+        idProducto, idProdcutoAdicional, item);
   }
 
   adicionalesBloc.obtenerAdicionales(idProducto);
 }
 
- void deleteDireccion(BuildContext context, idDireccion) async {
+void deleteDireccion(BuildContext context, idDireccion) async {
   final direccionDatabase = DireccionDatabase();
   final direccionBloc = ProviderBloc.dire(context);
 
@@ -524,7 +529,8 @@ void agregarProductosAlCarrito(BuildContext context) async {
       await itemObservacionDatabase.obtenerItemObservacion();
 
   for (var i = 0; i < itemsObservacion.length; i++) {
-    final dato = await carritoDatabase.consultarCarritoPorId(itemsObservacion[i].idProducto);
+    final dato = await carritoDatabase
+        .consultarCarritoPorId(itemsObservacion[i].idProducto);
 
     carrito.idProducto = int.parse(itemsObservacion[i].idProducto);
     carrito.productoNombre = itemsObservacion[i].productoNombre;
@@ -533,14 +539,10 @@ void agregarProductosAlCarrito(BuildContext context) async {
     carrito.productoTupper = itemsObservacion[i].productoTupper;
     carrito.productoCantidad = '1';
 
-    if(itemsObservacion[i].productoTipo == 'adicional'){
-
-    carrito.productoObservacion = '';
-
-    }else{
-
-    carrito.productoObservacion = itemsObservacion[i].productoObservacion;
-
+    if (itemsObservacion[i].productoTipo == 'adicional') {
+      carrito.productoObservacion = '';
+    } else {
+      carrito.productoObservacion = itemsObservacion[i].productoObservacion;
     }
 
     if (dato.length > 0) {
@@ -564,10 +566,9 @@ void deletePropinas(BuildContext context) async {
   carritoBloc.obtenerCarrito();
 }
 
-
-void porcentaje(BuildContext context, double porcen)async{
- final porcentajeBloc = ProviderBloc.porcentaje(context);
- porcentajeBloc.changePorcentaje(porcen);
+void porcentaje(BuildContext context, double porcen) async {
+  final porcentajeBloc = ProviderBloc.porcentaje(context);
+  porcentajeBloc.changePorcentaje(porcen);
 }
 /* 
 Future<List<ProductosData>> agregarAdicionalesDeProducto(

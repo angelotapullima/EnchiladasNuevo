@@ -140,6 +140,7 @@ class PantallaBloc {
             item.idCategoria = listaProductos[x].idCategoria;
             item.nombreItem = listaProductos[x].productoNombre;
             item.fotoItem = listaProductos[x].productoFoto;
+            item.productoDestacado = listaProductos[x].productoDestacado;
             item.numeroItem = x.toString();
             item.cantidadItems = listaProductos.length.toString();
 
@@ -153,6 +154,7 @@ class PantallaBloc {
             item.idCategoria = listaProductos[x].idCategoria;
             item.nombreItem = listaProductos[x].productoNombre;
             item.fotoItem = listaProductos[x].productoFoto;
+            item.productoDestacado = listaProductos[x].productoDestacado;
             item.numeroItem = x.toString();
             item.cantidadItems = listaProductos.length.toString();
             item.productoNuevo = listaProductos[x].productoNuevo;

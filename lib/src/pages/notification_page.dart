@@ -7,7 +7,7 @@ import 'package:enchiladasapp/src/models/pedido_server_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/mapa_page.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
-import 'package:enchiladasapp/src/pages/detalle_productos.dart';
+import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/pages/home_page.dart';
 import 'package:enchiladasapp/src/pages/rating_repartidor.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -75,7 +75,7 @@ class NotificationPage extends StatelessWidget {
         ProductosData productosData = ProductosData();
         productosData.idProducto = id;
         {
-          return DetalleProductitoss(
+          return DetalleProductitoss2(
             productosData: productosData,
             mostrarback: true,
           );

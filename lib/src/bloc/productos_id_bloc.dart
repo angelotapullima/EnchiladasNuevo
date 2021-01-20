@@ -14,7 +14,8 @@ class ProductosBloc {
   final categoriaDatabase = CategoriasDatabase();
   final temporizadorDatabase = TemporizadorDatabase();
 
-  final _productosEnchiladasController =new BehaviorSubject<List<ProductosData>>();
+  final _productosEnchiladasController =
+      new BehaviorSubject<List<ProductosData>>();
   final _productosMarketController = new BehaviorSubject<List<ProductosData>>();
   final _productosIDController = new BehaviorSubject<List<ProductosData>>();
   final _productosQueryController = new BehaviorSubject<List<ProductosData>>();
@@ -55,11 +56,7 @@ class ProductosBloc {
     _cargandoProductosController.sink.add(false);
   }
 
-
-
-
-
-void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
+  void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
     _cargandoProductosController.sink.add(true);
 
     final listGeneral = List<ProductosData>();
@@ -74,13 +71,24 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
       productosData.idCategoria = listProductos[x].idCategoria;
       productosData.productoNombre = listProductos[x].productoNombre;
       productosData.productoFoto = listProductos[x].productoFoto;
+      productosData.productoOrden = listProductos[x].productoOrden;
       productosData.productoPrecio = listProductos[x].productoPrecio;
+      productosData.productoCarta = listProductos[x].productoCarta;
+      productosData.productoDelivery = listProductos[x].productoDelivery;
+      productosData.sonido = listCategorias[0].categoriaSonido;
       productosData.productoUnidad = listProductos[x].productoUnidad;
       productosData.productoEstado = listProductos[x].productoEstado;
+      productosData.productoDestacado = listProductos[x].productoDestacado;
+      productosData.productoEstadoDestacado =
+          listProductos[x].productoEstadoDestacado;
+      productosData.productoTupper = listProductos[x].productoTupper;
+      productosData.productoNuevo = listProductos[x].productoNuevo;
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
-      productosData.sonido = listCategorias[0].categoriaSonido;
+      productosData.productoCantidadAdicional =
+          listProductos[x].productoCantidadAdicional;
+      productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);
     }
     _productosEnchiladasController.sink.add(listGeneral);
@@ -88,13 +96,12 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
     _cargandoProductosController.sink.add(false);
   }
 
-  
   void obtenerProductosdeliveryEnchiladasPorCategoria(String categoria) async {
     _cargandoProductosController.sink.add(true);
 
     final listGeneral = List<ProductosData>();
-    final listProductos =
-        await productoDatabase.obtenerProductosPorCategoriaDelivery('$categoria');
+    final listProductos = await productoDatabase
+        .obtenerProductosPorCategoriaDelivery('$categoria');
 
     for (var x = 0; x < listProductos.length; x++) {
       final listCategorias =
@@ -104,16 +111,24 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
       productosData.idCategoria = listProductos[x].idCategoria;
       productosData.productoNombre = listProductos[x].productoNombre;
       productosData.productoFoto = listProductos[x].productoFoto;
+      productosData.productoOrden = listProductos[x].productoOrden;
       productosData.productoPrecio = listProductos[x].productoPrecio;
-      productosData.productoUnidad = listProductos[x].productoUnidad;
-      productosData.productoEstado = listProductos[x].productoEstado;
       productosData.productoCarta = listProductos[x].productoCarta;
       productosData.productoDelivery = listProductos[x].productoDelivery;
-      productosData.productoFavorito = listProductos[x].productoFavorito;
+      productosData.sonido = listCategorias[0].categoriaSonido;
+      productosData.productoUnidad = listProductos[x].productoUnidad;
+      productosData.productoEstado = listProductos[x].productoEstado;
+      productosData.productoDestacado = listProductos[x].productoDestacado;
+      productosData.productoEstadoDestacado =
+          listProductos[x].productoEstadoDestacado;
+      productosData.productoTupper = listProductos[x].productoTupper;
+      productosData.productoNuevo = listProductos[x].productoNuevo;
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
-      productosData.sonido = listCategorias[0].categoriaSonido;
+      productosData.productoCantidadAdicional =
+          listProductos[x].productoCantidadAdicional;
+      productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);
     }
     _productosEnchiladasController.sink.add(listGeneral);
@@ -124,10 +139,9 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
   void obtenerProductosMarketPorCategoria(String categoria) async {
     _cargandoProductosController.sink.add(true);
 
-
     final listGeneral = List<ProductosData>();
-    final listProductos =
-        await productoDatabase.obtenerProductosPorCategoriaDelivery('$categoria');
+    final listProductos = await productoDatabase
+        .obtenerProductosPorCategoriaDelivery('$categoria');
 
     for (var x = 0; x < listProductos.length; x++) {
       final listCategorias =
@@ -137,16 +151,24 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
       productosData.idCategoria = listProductos[x].idCategoria;
       productosData.productoNombre = listProductos[x].productoNombre;
       productosData.productoFoto = listProductos[x].productoFoto;
+      productosData.productoOrden = listProductos[x].productoOrden;
       productosData.productoPrecio = listProductos[x].productoPrecio;
-      productosData.productoUnidad = listProductos[x].productoUnidad;
-      productosData.productoEstado = listProductos[x].productoEstado;
       productosData.productoCarta = listProductos[x].productoCarta;
       productosData.productoDelivery = listProductos[x].productoDelivery;
-      productosData.productoFavorito = listProductos[x].productoFavorito;
+      productosData.sonido = listCategorias[0].categoriaSonido;
+      productosData.productoUnidad = listProductos[x].productoUnidad;
+      productosData.productoEstado = listProductos[x].productoEstado;
+      productosData.productoDestacado = listProductos[x].productoDestacado;
+      productosData.productoEstadoDestacado =
+          listProductos[x].productoEstadoDestacado;
+      productosData.productoTupper = listProductos[x].productoTupper;
+      productosData.productoNuevo = listProductos[x].productoNuevo;
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
-      productosData.sonido = listCategorias[0].categoriaSonido;
+      productosData.productoCantidadAdicional =
+          listProductos[x].productoCantidadAdicional;
+      productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);
     }
     _productosMarketController.sink.add(listGeneral);
@@ -165,7 +187,8 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
 
   void obtenerProductoPorQueryLocal(String query) async {
     final listGeneral = List<ProductosData>();
-    final listProductos = await productoDatabase.consultarPorQueryLocal('$query');
+    final listProductos =
+        await productoDatabase.consultarPorQueryLocal('$query');
 
     for (var x = 0; x < listProductos.length; x++) {
       final listCategorias =
@@ -177,14 +200,25 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
         productosData.idCategoria = listProductos[x].idCategoria;
         productosData.productoNombre = listProductos[x].productoNombre;
         productosData.productoFoto = listProductos[x].productoFoto;
+        productosData.productoOrden = listProductos[x].productoOrden;
         productosData.productoPrecio = listProductos[x].productoPrecio;
+        productosData.productoCarta = listProductos[x].productoCarta;
+        productosData.productoDelivery = listProductos[x].productoDelivery;
+        productosData.sonido = listCategorias[0].categoriaSonido;
         productosData.productoUnidad = listProductos[x].productoUnidad;
         productosData.productoEstado = listProductos[x].productoEstado;
+        productosData.productoDestacado = listProductos[x].productoDestacado;
+        productosData.productoEstadoDestacado =
+            listProductos[x].productoEstadoDestacado;
+        productosData.productoTupper = listProductos[x].productoTupper;
+        productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
         productosData.productoDescripcion =
             listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
-        productosData.sonido = listCategorias[0].categoriaSonido;
+        productosData.productoCantidadAdicional =
+            listProductos[x].productoCantidadAdicional;
+        productosData.productoFavorito = listProductos[x].productoFavorito;
         listGeneral.add(productosData);
       }
     }
@@ -192,10 +226,10 @@ void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
     //_productosQueryController.sink.add(await productoDatabase.consultarPorQuery('$query'));
   }
 
-
-void obtenerProductoPorQueryDelivery(String query) async {
+  void obtenerProductoPorQueryDelivery(String query) async {
     final listGeneral = List<ProductosData>();
-    final listProductos = await productoDatabase.consultarPorQueryDelivery('$query');
+    final listProductos =
+        await productoDatabase.consultarPorQueryDelivery('$query');
 
     for (var x = 0; x < listProductos.length; x++) {
       final listCategorias =
@@ -207,14 +241,25 @@ void obtenerProductoPorQueryDelivery(String query) async {
         productosData.idCategoria = listProductos[x].idCategoria;
         productosData.productoNombre = listProductos[x].productoNombre;
         productosData.productoFoto = listProductos[x].productoFoto;
+        productosData.productoOrden = listProductos[x].productoOrden;
         productosData.productoPrecio = listProductos[x].productoPrecio;
+        productosData.productoCarta = listProductos[x].productoCarta;
+        productosData.productoDelivery = listProductos[x].productoDelivery;
+        productosData.sonido = listCategorias[0].categoriaSonido;
         productosData.productoUnidad = listProductos[x].productoUnidad;
         productosData.productoEstado = listProductos[x].productoEstado;
+        productosData.productoDestacado = listProductos[x].productoDestacado;
+        productosData.productoEstadoDestacado =
+            listProductos[x].productoEstadoDestacado;
+        productosData.productoTupper = listProductos[x].productoTupper;
+        productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
         productosData.productoDescripcion =
             listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
-        productosData.sonido = listCategorias[0].categoriaSonido;
+        productosData.productoCantidadAdicional =
+            listProductos[x].productoCantidadAdicional;
+        productosData.productoFavorito = listProductos[x].productoFavorito;
         listGeneral.add(productosData);
       }
     }
@@ -222,7 +267,6 @@ void obtenerProductoPorQueryDelivery(String query) async {
     //_productosQueryController.sink.add(await productoDatabase.consultarPorQuery('$query'));
   }
 
-  
   void cargarCategoriaProductoLocal(String idCategoria) async {
     var listFinal = List<CategoriaData>();
     var listProductos = List<ProductosData>();
@@ -236,24 +280,33 @@ void obtenerProductoPorQueryDelivery(String query) async {
     categoria.categoriaBanner = listCategorias[0].categoriaBanner;
 
     if (listProductosPorCategoria.length > 0) {
-      for (int i = 0; i < listProductosPorCategoria.length; i++) {
-        ProductosData productos = ProductosData();
-        productos.idProducto = listProductosPorCategoria[i].idProducto;
-        productos.productoNombre = listProductosPorCategoria[i].productoNombre;
-        productos.productoDescripcion =
-            listProductosPorCategoria[i].productoDescripcion;
-        productos.idCategoria = listProductosPorCategoria[i].idCategoria;
-        productos.productoFoto = listProductosPorCategoria[i].productoFoto;
-        productos.productoUnidad = listProductosPorCategoria[i].productoUnidad;
-        productos.productoEstado = listProductosPorCategoria[i].productoEstado;
-        productos.productoFavorito =listProductosPorCategoria[i].productoFavorito;
-        productos.idCategoria = listProductosPorCategoria[i].idCategoria;
-        productos.productoPrecio = listProductosPorCategoria[i].productoPrecio;
-        productos.sonido = listProductosPorCategoria[i].sonido;
-        productos.productoCarta = listProductosPorCategoria[i].productoCarta;
-        productos.productoDelivery = listProductosPorCategoria[i].productoDelivery;
+      for (int x = 0; x < listProductosPorCategoria.length; x++) {
+        ProductosData productosData = ProductosData();
+        productosData.idProducto = listProductos[x].idProducto;
+        productosData.idCategoria = listProductos[x].idCategoria;
+        productosData.productoNombre = listProductos[x].productoNombre;
+        productosData.productoFoto = listProductos[x].productoFoto;
+        productosData.productoOrden = listProductos[x].productoOrden;
+        productosData.productoPrecio = listProductos[x].productoPrecio;
+        productosData.productoCarta = listProductos[x].productoCarta;
+        productosData.productoDelivery = listProductos[x].productoDelivery;
+        productosData.sonido = listCategorias[0].categoriaSonido;
+        productosData.productoUnidad = listProductos[x].productoUnidad;
+        productosData.productoEstado = listProductos[x].productoEstado;
+        productosData.productoDestacado = listProductos[x].productoDestacado;
+        productosData.productoEstadoDestacado =
+            listProductos[x].productoEstadoDestacado;
+        productosData.productoTupper = listProductos[x].productoTupper;
+        productosData.productoNuevo = listProductos[x].productoNuevo;
+        productosData.numeroitem = x.toString();
+        productosData.productoDescripcion =
+            listProductos[x].productoDescripcion;
+        productosData.productoComentario = listProductos[x].productoComentario;
+        productosData.productoCantidadAdicional =
+            listProductos[x].productoCantidadAdicional;
+        productosData.productoFavorito = listProductos[x].productoFavorito;
 
-        listProductos.add(productos);
+        listProductos.add(productosData);
       }
     }
 
@@ -263,13 +316,12 @@ void obtenerProductoPorQueryDelivery(String query) async {
     _categoriaProductosController.sink.add(listFinal);
   }
 
-
   void cargarCategoriaProductoDelivery(String idCategoria) async {
     var listFinal = List<CategoriaData>();
     var listProductos = List<ProductosData>();
     final listCategorias = await categoriaDatabase.consultarPorId(idCategoria);
-    final listProductosPorCategoria =
-        await productoDatabase.obtenerProductosPorCategoriaDelivery(idCategoria);
+    final listProductosPorCategoria = await productoDatabase
+        .obtenerProductosPorCategoriaDelivery(idCategoria);
 
     CategoriaData categoria = CategoriaData();
 
@@ -277,25 +329,45 @@ void obtenerProductoPorQueryDelivery(String query) async {
     categoria.categoriaBanner = listCategorias[0].categoriaBanner;
 
     if (listProductosPorCategoria.length > 0) {
-      for (int i = 0; i < listProductosPorCategoria.length; i++) {
-        ProductosData productos = ProductosData();
-        productos.idProducto = listProductosPorCategoria[i].idProducto;
-        productos.productoNombre = listProductosPorCategoria[i].productoNombre;
-        productos.productoDescripcion =
-            listProductosPorCategoria[i].productoDescripcion;
-        productos.idCategoria = listProductosPorCategoria[i].idCategoria;
-        productos.productoFoto = listProductosPorCategoria[i].productoFoto;
-        productos.productoUnidad = listProductosPorCategoria[i].productoUnidad;
-        productos.productoEstado = listProductosPorCategoria[i].productoEstado;
-        productos.productoFavorito =listProductosPorCategoria[i].productoFavorito;
-        productos.idCategoria = listProductosPorCategoria[i].idCategoria;
-        productos.productoPrecio = listProductosPorCategoria[i].productoPrecio;
-        productos.sonido = listProductosPorCategoria[i].sonido;
-        productos.numeroitem = i.toString();
-        productos.productoCarta = listProductosPorCategoria[i].productoCarta;
-        productos.productoDelivery = listProductosPorCategoria[i].productoDelivery;
+      for (int x = 0; x < listProductosPorCategoria.length; x++) {
+        ProductosData productosData = ProductosData();
+        productosData.idProducto = listProductosPorCategoria[x].idProducto;
+        productosData.idCategoria = listProductosPorCategoria[x].idCategoria;
+        productosData.productoNombre =
+            listProductosPorCategoria[x].productoNombre;
+        productosData.productoFoto = listProductosPorCategoria[x].productoFoto;
+        productosData.productoOrden =
+            listProductosPorCategoria[x].productoOrden;
+        productosData.productoPrecio =
+            listProductosPorCategoria[x].productoPrecio;
+        productosData.productoCarta =
+            listProductosPorCategoria[x].productoCarta;
+        productosData.productoDelivery =
+            listProductosPorCategoria[x].productoDelivery;
+        productosData.sonido = listCategorias[0].categoriaSonido;
+        productosData.productoUnidad =
+            listProductosPorCategoria[x].productoUnidad;
+        productosData.productoEstado =
+            listProductosPorCategoria[x].productoEstado;
+        productosData.productoDestacado =
+            listProductosPorCategoria[x].productoDestacado;
+        productosData.productoEstadoDestacado =
+            listProductosPorCategoria[x].productoEstadoDestacado;
+        productosData.productoTupper =
+            listProductosPorCategoria[x].productoTupper;
+        productosData.productoNuevo =
+            listProductosPorCategoria[x].productoNuevo;
+        productosData.numeroitem = x.toString();
+        productosData.productoDescripcion =
+            listProductosPorCategoria[x].productoDescripcion;
+        productosData.productoComentario =
+            listProductosPorCategoria[x].productoComentario;
+        productosData.productoCantidadAdicional =
+            listProductosPorCategoria[x].productoCantidadAdicional;
+        productosData.productoFavorito =
+            listProductosPorCategoria[x].productoFavorito;
 
-        listProductos.add(productos);
+        listProductos.add(productosData);
       }
     }
 
@@ -305,7 +377,6 @@ void obtenerProductoPorQueryDelivery(String query) async {
     _categoriaProductosController.sink.add(listFinal);
   }
 
-  
   void verificarDisponibilidad(String idProducto) async {
     var date = DateTime.now();
 

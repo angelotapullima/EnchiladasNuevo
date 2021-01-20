@@ -7,6 +7,7 @@ import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 
@@ -148,6 +149,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                   ),
                   ('${productosData.productoNuevo}' == '1')
                       ? Positioned(
+                        bottom: 0,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: responsive.wp(3),
@@ -166,7 +168,22 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                             ),
                           ),
                         )
-                      : Container()
+                      : Container(),
+
+
+                      ('${productosData.productoDestacado}' != '0')
+                      ? Positioned(
+                          
+                          //right: 0,
+                          //left: 0,
+                          child:  Container(
+                            transform: Matrix4.translationValues(
+                                -responsive.wp(16), 0, 0),
+                            height: responsive.ip(4),
+                            child: SvgPicture.asset('assets/medalla.svg'),
+                          ), 
+                        )
+                      : Container(),
                 ],
               ),
             ),

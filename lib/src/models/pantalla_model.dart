@@ -54,6 +54,7 @@ class ItemPantalla{
     String numeroItem; 
     String cantidadItems; 
     String productoNuevo; 
+    String productoDestacado; 
 
   ItemPantalla({
         this.idProducto,
@@ -63,6 +64,7 @@ class ItemPantalla{
         this.numeroItem, 
         this.cantidadItems, 
         this.productoNuevo, 
+        this.productoDestacado, 
     });
 
      factory ItemPantalla.fromJson(Map<dynamic, dynamic> json) => ItemPantalla(
@@ -73,5 +75,6 @@ class ItemPantalla{
         numeroItem: json["numeroItem"], 
         cantidadItems: json["cantidadItems"], 
         productoNuevo: json["productoNuevo"], 
+        productoDestacado: json["productoDestacado"], 
     );
 }

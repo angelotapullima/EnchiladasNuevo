@@ -23,7 +23,7 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'enchiladasbd45678.db');
+    final path = join(documentsDirectory.path, 'enchiladasbd4.db');
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onConfigure: (Database db) async {
@@ -97,7 +97,7 @@ class DatabaseProvider {
           'producto_nuevo VARCHAR,'
           'producto_descripcion VARCHAR,'
           'producto_comentario VARCHAR,' 
-          'producto_adicional_titulo VARCHAR,' 
+          'producto_cantidad_adicional VARCHAR,' 
           'producto_favorito int'
           ')');
 
@@ -106,6 +106,8 @@ class DatabaseProvider {
           'id_adicional  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
           'id_producto VARCHAR,' 
           'id_producto_adicional VARCHAR,'
+          'adicional_item VARCHAR,'
+          'titulo VARCHAR,'
           'adicional_seleccionado VARCHAR'
           ')');
 

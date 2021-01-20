@@ -51,12 +51,12 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Necesitamos acceso a la Galeeria para compartir fotos .</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Necesitamos acceso a su ubicación para la entrega de pedidos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Necesitamos acceso a su ubicación para la entrega de pedidos.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Necesitamos acceso a la Galeeria para compartir fotos .</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Necesitamos acceso a sus fotos para la visualizacion de las imágenes en la app.</string>
 	<key>UIBackgroundModes</key>

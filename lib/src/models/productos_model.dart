@@ -66,7 +66,7 @@ class ProductosData {
     this.productoNuevo,
     this.productoEstadoDestacado,
     this.productoObservacion,
-    this.productoAdicionalTitulo,
+    this.productoCantidadAdicional,
     this.productoTipo,
     this.productoAdicionalOpciones,
     this.sonido,
@@ -92,8 +92,8 @@ class ProductosData {
   String productoEstadoDestacado;
   String sonido;
   String productoNuevo;
-  String productoAdicionalTitulo;
   String productoAdicionalOpciones;
+  String productoCantidadAdicional;
   String productoTipo;
   String productoObservacion;
 
@@ -117,8 +117,8 @@ class ProductosData {
         productoEstadoDestacado: json["producto_estado_destacado"],
         productoTupper: json["producto_tupper"],
         productoNuevo: json["producto_nuevo"],
+        productoCantidadAdicional: json["producto_cantidad_adicional"],
         productoAdicionalOpciones: json["producto_adicional_opciones"],
-        productoAdicionalTitulo: json["producto_adicional_titulo"],
         productoTipo: json["producto_tipo"],
         sonido: json["producto_sonido"],
       );

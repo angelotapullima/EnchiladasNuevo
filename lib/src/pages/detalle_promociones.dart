@@ -9,6 +9,7 @@ import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetallePromociones extends StatefulWidget {
@@ -20,7 +21,7 @@ class DetallePromociones extends StatefulWidget {
 
 class _DetallePromocionesState extends State<DetallePromociones> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final Arguments arg = ModalRoute.of(context).settings.arguments;
 
     final productosIdBloc = ProviderBloc.prod(context);
@@ -149,27 +150,72 @@ class _DetallePromocionesState extends State<DetallePromociones> {
         child: Row(
           children: <Widget>[
             Container(
-              width: responsive.wp(32),
+              width: responsive.wp(42),
               height: responsive.hp(16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
-                  placeholder: (context, url) => Image(
-                      image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),
-                  errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
-                  imageUrl: '${productosData.productoFoto}',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.fill,
-                    )),
+              child: Stack(
+                children: [
+                  Container(
+              width: responsive.wp(42),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        cacheManager: CustomCacheManager(),
+                        placeholder: (context, url) => Image(
+                            image: AssetImage('assets/jar-loading.gif'),
+                            fit: BoxFit.cover),
+                        errorWidget: (context, url, error) => Image(
+                        image: AssetImage('assets/carga_fallida.jpg'),
+                        fit: BoxFit.cover),
+                        imageUrl: '${productosData.productoFoto}',
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.fill,
+                          )),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  ('${productosData.productoDestacado}' != '0')
+                      ? Positioned(
+                          
+                          //right: 0,
+                          //left: 0,
+                          child:  Container(
+                            transform: Matrix4.translationValues(
+                                -responsive.wp(13), 0, 0),
+                            height: responsive.ip(4),
+                            child: SvgPicture.asset('assets/medalla.svg'),
+                          ), 
+                        )
+                      : Container(),
+
+                      ('${productosData.productoNuevo}' == '1')
+                      ? Positioned(
+                        bottom: 0,
+                          /*  left: responsive.wp(1),
+                                  top: responsive.hp(.5), */
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                              vertical: responsive.hp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                                //borderRadius: BorderRadius.circular(10),
+                                color: Colors.red),
+                            child: Text(
+                              'Nuevo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.3),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
+                ],
               ),
             ),
             SizedBox(

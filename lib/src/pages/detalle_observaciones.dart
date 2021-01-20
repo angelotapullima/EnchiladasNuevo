@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chips_choice/chips_choice.dart';
+import 'package:enchiladasapp/src/bloc/adicionales_bloc.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/adicionales_model.dart';
 import 'package:enchiladasapp/src/models/observaciones_model.dart';
@@ -15,9 +16,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 class DetalleObservaciones extends StatefulWidget {
   final String idProductoArgument;
   final String idCategoria;
-  final String tituloAdicional;
+  final String cantidadAdicional;
   const DetalleObservaciones(
-      {Key key, @required this.idProductoArgument, @required this.idCategoria, @required  this.tituloAdicional})
+      {Key key,
+      @required this.idProductoArgument,
+      @required this.idCategoria,
+      @required this.cantidadAdicional})
       : super(key: key);
 
   @override
@@ -77,6 +81,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
   @override
   Widget build(BuildContext context) {
     final observacionesProductoBloc = ProviderBloc.observaciones(context);
+    final adicionalesBloc = ProviderBloc.adicionales(context);
+    adicionalesBloc.obtenerAdicionales(widget.idProductoArgument);
 
     final itemObservacionBloc = ProviderBloc.itemOb(context);
     if (cant == 0) {
@@ -98,6 +104,15 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
               builder: (context, AsyncSnapshot<List<Observaciones>> snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data.length > 0) {
+
+                    bool validacionFijos = false;
+                    bool validacionSabores = false;
+                    bool validacionVariables = false;
+                    bool validacionEspeciales1 = false;
+                    bool validacionEspeciales2 = false;
+                    bool validacionEspeciales3 = false;
+                    bool validacionEspeciales4 = false;
+                    bool validacionAcompa = false;
                     final optionsProductosFijos = List<String>();
                     final optionsProductosVariables = List<String>();
 
@@ -118,14 +133,14 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                     }
 
                     if (optionsProductosFijos.length > 0) {
-                      fijos = true;
+                      validacionFijos = true;
                     }
                     if (optionsProductosVariables.length > 0) {
-                      variables = true;
+                      validacionVariables = true;
                     }
 
                     if (snapshot.data[0].fijas[0].sabores.length > 0) {
-                      sabores = true;
+                      validacionSabores = true;
                       maximoSabores = int.parse(
                           snapshot.data[0].fijas[0].sabores[0].maximo);
 
@@ -135,7 +150,9 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     //especialesA
                     if (snapshot.data[0].fijas[0].especialesA.length > 0) {
-                      especiales1 = true;
+
+                      print('hay especiales1');
+                      validacionEspeciales1 = true;
                       maximoespeciales1 = int.parse(
                           snapshot.data[0].fijas[0].especialesA[0].maximo);
 
@@ -145,7 +162,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     //especialesB
                     if (snapshot.data[0].fijas[0].especialesB.length > 0) {
-                      especiales2 = true;
+                       print('hay especiales2');
+                      validacionEspeciales2 = true;
                       maximoespeciales2 = int.parse(
                           snapshot.data[0].fijas[0].especialesB[0].maximo);
 
@@ -155,7 +173,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     //especialesC
                     if (snapshot.data[0].fijas[0].especialesC.length > 0) {
-                      especiales3 = true;
+                       print('hay especiales3');
+                      validacionEspeciales3 = true;
                       maximoespeciales3 = int.parse(
                           snapshot.data[0].fijas[0].especialesC[0].maximo);
 
@@ -165,7 +184,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     //especialesD
                     if (snapshot.data[0].fijas[0].especialesD.length > 0) {
-                      especiales4 = true;
+                       print('hay especiales4');
+                      validacionEspeciales4 = true;
                       maximoespeciales4 = int.parse(
                           snapshot.data[0].fijas[0].especialesD[0].maximo);
 
@@ -175,10 +195,21 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     if (snapshot.data[0].fijas[0].acompanhamientos.length >=
                         1) {
-                      acompanhamientos = true;
+                      validacionAcompa = true;
                       tituloAcom =
                           '${snapshot.data[0].fijas[0].acompanhamientos[0].tituloTextos}';
                     }
+
+
+                    fijos = validacionFijos;
+                    variables=validacionVariables;
+                    sabores = validacionSabores;
+                    especiales1 = validacionEspeciales1;
+                    especiales2 = validacionEspeciales2;
+                    especiales3 = validacionEspeciales3;
+                    especiales4 = validacionEspeciales4;
+                    acompanhamientos = validacionAcompa;
+                    
 
                     return ListView(addAutomaticKeepAlives: true, children: [
                       StreamBuilder(
@@ -961,10 +992,32 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                       SizedBox(
                         height: responsive.hp(1),
                       ),
-                      AdicionalesItem(
-                        idProducto: widget.idProductoArgument,
-                        titulo: widget.tituloAdicional,
+ 
+                      StreamBuilder(
+                        stream: adicionalesBloc.adicionalesStream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<ItemAdicional>> snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.data.length > 0) {
+                              return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return AdicionalesItem(
+                                      lista: snapshot.data[index].lista,
+                                      item: snapshot.data[index].item);
+                                },
+                              );
+                            } else {
+                              return Container();
+                            }
+                          } else {
+                            return Container();
+                          }
+                        },
                       ),
+
                       SizedBox(
                         height: responsive.hp(7),
                       )
@@ -1131,90 +1184,68 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 }
 
 class AdicionalesItem extends StatelessWidget {
-  final String idProducto;
-  final String titulo;
+  final List<AdicionalesModel> lista;
+  final String item;
+
   const AdicionalesItem({
     Key key,
-    @required this.idProducto,  @required this.titulo,
+    @required this.lista,
+    @required this.item,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final adicionalesBloc = ProviderBloc.adicionales(context);
-
-    adicionalesBloc.obtenerAdicionales(idProducto);
-    return StreamBuilder(
-      stream: adicionalesBloc.adicionalesStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<AdicionalesModel>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemCount: snapshot.data.length + 1,
-              itemBuilder: (context, i) {
-                if (i == 0) {
-                  return Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(15),
-                    color: Colors.blueGrey[50],
-                    child: Text(
-                      titulo,
-                      style: const TextStyle(
-                          color: Colors.blueGrey, fontWeight: FontWeight.w500),
-                    ),
-                  );
-                }
-
-                int index = i - 1;
-                return new CheckboxListTile(
-                  title: new RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '${snapshot.data[index].adicionalesNombre}   ',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w600),
-                      ),
-                      TextSpan(
-                        text: 'S/.${snapshot.data[index].adicionalesPrecio}',
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.w600),
-                      ),
-                    ]),
-                  ),
-                  value: ('${snapshot.data[index].adicionalSeleccionado}' == '0')
-                      ? false
-                      : true,
-                  onChanged: (bool value) {
-                    print('${snapshot.data[index].adicionalesNombre}');
-                    print('ctm $value');
-                    utils.cambiarEstadoSeleccionAdicional(
-                      context,
-                      '${snapshot.data[index].idProducto}',
-                      value,
-                      '${snapshot.data[index].idProductoAdicional}',
-                    ); 
-
-                    utils.agregarItemObservacion(
-                        context,
-                        '${snapshot.data[index].idProductoAdicional}',
-                        value, 
-                        'adicional'); 
-                  },
-                );
-              },
-            );
-          } else {
-            return Center(
-              child: Text(' No existen Adicionales'),
-            );
-          }
-        } else {
-          return Center(
-            child: CupertinoActivityIndicator(),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      itemCount: lista.length + 1,
+      itemBuilder: (context, i) {
+        if (i == 0) {
+          return Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(15),
+            color: Colors.blueGrey[50],
+            child: Text(
+              lista[0].titulo,
+              style: const TextStyle(
+                  color: Colors.blueGrey, fontWeight: FontWeight.w500),
+            ),
           );
         }
+
+        int index = i - 1;
+        return new CheckboxListTile(
+          title: new RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: '${lista[index].adicionalesNombre}   ',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+              ),
+              TextSpan(
+                text: 'S/.${lista[index].adicionalesPrecio}',
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+              ),
+            ]),
+          ),
+          value:
+              ('${lista[index].adicionalSeleccionado}' == '0') ? false : true,
+          onChanged: (bool value) {
+            print('${lista[index].adicionalesNombre}');
+            print('ctm $value');
+            utils.cambiarEstadoSeleccionAdicional(
+              context,
+              '${lista[index].idProducto}',
+              value,
+              '${lista[index].idProductoAdicional}',
+              item,
+            );
+
+            utils.agregarItemObservacion(context,
+                '${lista[index].idProductoAdicional}', value, 'adicional');
+          },
+        );
       },
     );
   }

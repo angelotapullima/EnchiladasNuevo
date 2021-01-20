@@ -36,18 +36,23 @@ class _SliderDetalleProductosState
 
     final responsive = Responsive.of(context);
 
+    final List<Widget> imageSliders = widget.items
+        .map(
+          (item) => Container(
+            child: DetalleProductitoss(
+              productosData: item,
+              mostrarback: false,
+            ),
+          ),
+        )
+        .toList();
+
     return Scaffold(
         body: Stack(
       children: [
-        PageView.builder(
-            itemCount: widget.items.length,
+        PageView(
             controller: _pageController,
-            itemBuilder: (BuildContext context, int index) {
-              return DetalleProductitoss(
-                productosData: widget.items[index],
-                mostrarback: false,
-              );
-            },
+            children: imageSliders,
             onPageChanged: (int index) {
               contadorProductosFotoLocal.changeContador(index);
             }),

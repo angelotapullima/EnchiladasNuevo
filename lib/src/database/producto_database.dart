@@ -12,13 +12,13 @@ class ProductoDatabase {
           'INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_orden,'
           'producto_precio,producto_carta,producto_delivery,producto_sonido,'
           'producto_unidad,producto_destacado,producto_estado_destacado,producto_tupper,producto_estado,producto_nuevo,'
-          'producto_descripcion,producto_comentario,producto_adicional_titulo,producto_favorito) '
+          'producto_descripcion,producto_comentario,producto_cantidad_adicional,producto_favorito) '
           'VALUES ( "${productos.idProducto}" , "${productos.idCategoria}" , "${productos.productoNombre}" ,'
           ' "${productos.productoFoto}" ,"${productos.productoOrden}" , "${productos.productoPrecio}" ,'
           ' "${productos.productoCarta}" ,"${productos.productoDelivery}",'
           ' "${productos.sonido}" ,"${productos.productoUnidad}","${productos.productoDestacado}","${productos.productoEstadoDestacado}",'
           '"${productos.productoTupper}","${productos.productoEstado}","${productos.productoNuevo}",'
-          '"${productos.productoDescripcion}", "${productos.productoComentario}","${productos.productoAdicionalTitulo}",${productos.productoFavorito} )');
+          '"${productos.productoDescripcion}", "${productos.productoComentario}","${productos.productoCantidadAdicional}",${productos.productoFavorito} )');
       return res;
     } catch (exception) {
       print(exception);
@@ -45,7 +45,7 @@ class ProductoDatabase {
         'producto_sonido="${productos.sonido}",'
         'producto_nuevo="${productos.productoNuevo}",'
         'producto_descripcion="${productos.productoDescripcion}", '
-        'producto_adicional_titulo="${productos.productoAdicionalTitulo}", '
+        'producto_cantidad_adicional="${productos.productoCantidadAdicional}", '
         'producto_comentario="${productos.productoComentario}" '
         'WHERE id_producto = "${productos.idProducto}"');
 

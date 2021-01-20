@@ -9,6 +9,7 @@ import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/publicidad_model.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
+import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos_destacado.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
@@ -774,6 +775,22 @@ class PrincipalTab extends StatelessWidget {
                                     )
                                   : Container()
                               : Container(),
+                          (tipo == 'producto')
+                              ? ('${pantallaModel.items[i].productoDestacado}' !=
+                                      '0')
+                                  ? Positioned(
+                                      top: 0,
+                                      //right: 0,
+                                      left: 0,
+                                      child: Container(
+                                        transform: Matrix4.translationValues(responsive.wp(13), 0, 0),
+                                        height: responsive.ip(6),
+                                        child: SvgPicture.asset(
+                                            'assets/medalla.svg'),
+                                      ),
+                                    )
+                                  : Container()
+                              : Container(),
                           (tipo != 'puzzle')
                               ? Positioned(
                                   right: 0,
@@ -880,16 +897,14 @@ class ProductosDestacados extends StatelessWidget {
                   Container(
                     height: responsive.hp(19),
                     child: ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 0),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-
-                        int item = index +1;
+                        int item = index + 1;
                         double paddddd = responsive.ip(7);
 
-                        if(item==1){
-
+                        if (item == 1) {
                           paddddd = responsive.ip(4.5);
-
                         }
                         return GestureDetector(
                           onTap: () {
@@ -930,7 +945,6 @@ class ProductosDestacados extends StatelessWidget {
                             ),
                             child: Stack(
                               children: <Widget>[
-                                
                                 Positioned(
                                   left: responsive.ip(10.5),
                                   child: Container(
@@ -991,7 +1005,6 @@ class ProductosDestacados extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                
                                 ('${snapshot.data[index].productoNuevo}' == '1')
                                     ? Positioned(
                                         /*  left: responsive.wp(1),
@@ -1016,13 +1029,27 @@ class ProductosDestacados extends StatelessWidget {
                                         ),
                                       )
                                     : Container(),
-
-                                    Container(
-                                  transform: Matrix4.translationValues(-paddddd, 0, 0),
+                                Container(
+                                  transform:
+                                      Matrix4.translationValues(-paddddd, 0, 0),
                                   height: responsive.ip(18),
-                                  child:
-                                      SvgPicture.asset('assets/numeros/$item.svg'),
+                                  child: SvgPicture.asset(
+                                      'assets/numeros/$item.svg'),
                                 ),
+                                ('${snapshot.data[index].productoDestacado}' !=
+                                        '0')
+                                    ? Positioned(
+                                        top: 0,
+                                        //right: 0,
+                                        left: 0,
+                                        child: Container(
+                                          //transform: Matrix4.translationValues(-paddddd, 0, 0),
+                                          height: responsive.ip(5),
+                                          child: SvgPicture.asset(
+                                              'assets/medalla.svg'),
+                                        ),
+                                      )
+                                    : Container()
                               ],
                             ),
                           ),
@@ -1075,7 +1102,7 @@ class PublicidadDialog extends StatelessWidget {
                     pageBuilder: (context, animation, secondaryAnimation) {
                       ProductosData producto = ProductosData();
                       producto.idProducto = publicidadModel.idRelacionado;
-                      return DetalleProductitoss(
+                      return DetalleProductitoss2(
                         productosData: producto,
                         mostrarback: true,
                       );

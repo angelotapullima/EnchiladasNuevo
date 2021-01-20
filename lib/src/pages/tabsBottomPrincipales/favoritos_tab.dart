@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
-import 'package:enchiladasapp/src/pages/detalle_productos.dart';
+import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
@@ -182,6 +182,8 @@ class _FavoritosTabState extends State<FavoritosTab> {
   }
 
   Widget _itemPedido(Responsive responsive, ProductosData productosData) {
+
+    
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.symmetric(
@@ -221,29 +223,45 @@ class _FavoritosTabState extends State<FavoritosTab> {
                       ),
                     ),
                   ),
+                  ('${productosData.productoDestacado}' != '0')
+                      ? Positioned(
+                          
+                          //right: 0,
+                          //left: 0,
+                          child:  Container(
+                            transform: Matrix4.translationValues(
+                                -responsive.wp(13), 0, 0),
+                            height: responsive.ip(4),
+                            child: SvgPicture.asset('assets/medalla.svg'),
+                          ), 
+                        )
+                      : Container(),
+
                   ('${productosData.productoNuevo}' == '1')
-                              ?   Positioned(
-                                 /*  left: responsive.wp(1),
+                      ? Positioned(
+                        bottom: 0,
+                          /*  left: responsive.wp(1),
                                   top: responsive.hp(.5), */
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: responsive.wp(3),
-                                      vertical: responsive.hp(.5),
-                                    ),
-                                    decoration: BoxDecoration(
-                                        //borderRadius: BorderRadius.circular(10),
-                                        color: Colors.red),
-                                    child: Text(
-                                      'Nuevo',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: responsive.ip(1.3),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Container()
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                              vertical: responsive.hp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                                //borderRadius: BorderRadius.circular(10),
+                                color: Colors.red),
+                            child: Text(
+                              'Nuevo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.3),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  
                 ],
               ),
             ),
@@ -323,7 +341,10 @@ class _FavoritosTabState extends State<FavoritosTab> {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitoss(productosData: productosData,mostrarback: true,);
+                return DetalleProductitoss2(
+                  productosData: productosData,
+                  mostrarback: true,
+                );
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

@@ -29,7 +29,9 @@ class GestionarDirecciones extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: kToolbarHeight + responsive.hp(4)),
+            margin: EdgeInsets.only(
+              top: kToolbarHeight + responsive.hp(4),
+            ),
             decoration: BoxDecoration(
               borderRadius: BorderRadiusDirectional.only(
                 topStart: Radius.circular(20),
@@ -43,7 +45,9 @@ class GestionarDirecciones extends StatelessWidget {
               ),
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: responsive.hp(1)),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
                   Text(
                     'Agrega o escoge una dirección',
                     style: TextStyle(
@@ -51,18 +55,20 @@ class GestionarDirecciones extends StatelessWidget {
                       fontSize: responsive.ip(4),
                     ),
                   ),
-                  IconButton(icon: Icon(Icons.delete), onPressed: ()async{
-
-                    final direccionDatabase = DireccionDatabase();
-                    await direccionDatabase.deleteDireccion();
-                    direccionesBloc.obtenerDirecciones();
-                    direccionesBloc.obtenerDireccionesConZonas();
-                  }),
+                  IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () async {
+                        final direccionDatabase = DireccionDatabase();
+                        await direccionDatabase.deleteDireccion();
+                        direccionesBloc.obtenerDirecciones();
+                        direccionesBloc.obtenerDireccionesConZonas();
+                      }),
                   Padding(
                     padding: EdgeInsets.only(
-                        left: responsive.wp(3),
-                        right: responsive.wp(3),
-                        top: responsive.hp(1)),
+                      left: responsive.wp(3),
+                      right: responsive.wp(3),
+                      top: responsive.hp(1),
+                    ),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, 'sel_Direccion');
@@ -100,11 +106,14 @@ class GestionarDirecciones extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: responsive.hp(1),),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
                   Expanded(
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.wp(3),
+                      ),
                       height: double.infinity,
                       width: double.infinity,
                       child: StreamBuilder(
@@ -135,9 +144,10 @@ class GestionarDirecciones extends StatelessWidget {
                                         child: Text(
                                           'Ubicación Actual',
                                           style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: responsive.ip(2)),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: responsive.ip(2),
+                                          ),
                                         ),
                                       ),
                                       SizedBox(
@@ -161,32 +171,31 @@ class GestionarDirecciones extends StatelessWidget {
                                 Divider()
                               ],
                             );
-                            
-                            if(snapshot.hasData){
 
-                               if (snapshot.data.length > 0) {
-                              return ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: snapshot.data.length + 1,
-                                itemBuilder: (context, i) {
-                                  if (i == 0) {
-                                    return ubicacionActual;
-                                  }
+                            if (snapshot.hasData) {
+                              if (snapshot.data.length > 0) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data.length + 1,
+                                  itemBuilder: (context, i) {
+                                    if (i == 0) {
+                                      return ubicacionActual;
+                                    }
 
-                                  int index = i - 1;
-                                  return _carDirection(context, responsive,
-                                      snapshot.data[index]);
-                                },
-                              );
+                                    int index = i - 1;
+                                    return _carDirection(context, responsive,
+                                        snapshot.data[index]);
+                                  },
+                                );
+                              } else {
+                                return ubicacionActual;
+                              }
                             } else {
-                              return ubicacionActual;
+                              return Center(
+                                child: CupertinoActivityIndicator(),
+                              );
                             }
-                            }else{
-                              return Center(child: CupertinoActivityIndicator(),);
-                            }
-                            
-                           
                           }),
                     ),
                   ),
@@ -201,18 +210,18 @@ class GestionarDirecciones extends StatelessWidget {
 
   Widget _carDirection(
       BuildContext context, Responsive responsive, Direccion direccion) {
-
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         utils.seleccionarDireccion(context, '${direccion.idDireccion}');
-
       },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
         ),
         width: responsive.wp(50),
-        padding: EdgeInsets.symmetric(horizontal: responsive.ip(1.5)),
+        padding: EdgeInsets.symmetric(
+          horizontal: responsive.ip(1.5),
+        ),
         child: Column(
           children: <Widget>[
             Row(
@@ -221,7 +230,8 @@ class GestionarDirecciones extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: Container(
-                    child: Icon(FontAwesomeIcons.truck, color: Colors.grey[600]),
+                    child:
+                        Icon(FontAwesomeIcons.truck, color: Colors.grey[600]),
                   ),
                 ),
                 SizedBox(
@@ -235,13 +245,16 @@ class GestionarDirecciones extends StatelessWidget {
                       Text(
                         '${direccion.direccion}',
                         style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: responsive.ip(2)),
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsive.ip(2),
+                        ),
                       ),
                       Text(
                         '${direccion.referencia}',
-                        style: TextStyle(fontSize: responsive.ip(2)),
+                        style: TextStyle(
+                          fontSize: responsive.ip(2),
+                        ),
                       ),
                       Text(
                         '${direccion.zonaNombre}',

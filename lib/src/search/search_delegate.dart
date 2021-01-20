@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
-import 'package:enchiladasapp/src/pages/detalle_productos.dart';
+import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 
 
@@ -156,27 +157,66 @@ class DataSearch extends SearchDelegate {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Container(
-              width: responsive.wp(32),
+              width: responsive.wp(42),
               height: responsive.hp(16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(13),
-                child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
-                  placeholder: (context, url) => Image(
-                      image: AssetImage('assets/jar-loading.gif'),
-                      fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
-                  imageUrl: productosData.productoFoto,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.fill,
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(13),
+                    child: CachedNetworkImage(
+                      cacheManager: CustomCacheManager(),
+                      placeholder: (context, url) => Image(
+                          image: AssetImage('assets/jar-loading.gif'),
+                          fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                      image: AssetImage('assets/carga_fallida.jpg'),
+                      fit: BoxFit.cover),
+                      imageUrl: productosData.productoFoto,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  ),('${productosData.productoNuevo}' == '1')
+                      ? Positioned(
+                        bottom: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                              vertical: responsive.wp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                                //borderRadius: BorderRadius.circular(10),
+                                color: Colors.red),
+                            child: Text(
+                              'Nuevo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.5),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
+
+
+                      ('${productosData.productoDestacado}' != '0')
+                      ? Positioned(
+                          
+                          //right: 0,
+                          //left: 0,
+                          child:  Container(
+                            transform: Matrix4.translationValues(
+                                -responsive.wp(16), 0, 0),
+                            height: responsive.ip(4),
+                            child: SvgPicture.asset('assets/medalla.svg'),
+                          ), 
+                        ):Container()
+                ],
               ),
             ),
             SizedBox(width: responsive.wp(2),),
@@ -218,7 +258,7 @@ class DataSearch extends SearchDelegate {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitoss(productosData: productosData,mostrarback: true,);
+                return DetalleProductitoss2(productosData: productosData,mostrarback: true,);
               },
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

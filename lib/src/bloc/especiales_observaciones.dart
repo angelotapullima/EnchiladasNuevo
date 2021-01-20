@@ -27,70 +27,70 @@ class EspecialesObservaciones{
 // ESPECIALES A
 
   Future<List<Sabores>> obtenerEspecialesA(String idProducto) async {
-    final listSabores = List<Sabores>();
+    final listEspecialesA = List<Sabores>();
 
-    final listSaboresDatabase =
+    final listEspecialesADatabase =
         await especialesADatabase.obtenerEspecialesA(idProducto);
 
-    if (listSaboresDatabase.length > 0) {
-      for (var i = 0; i < listSaboresDatabase.length; i++) {
+    if (listEspecialesADatabase.length > 0) {
+      for (var i = 0; i < listEspecialesADatabase.length; i++) {
         Sabores sabores = Sabores();
-        sabores.idProducto = listSaboresDatabase[i].idProducto;
-        sabores.tituloTextos = listSaboresDatabase[i].tituloTextos;
-        sabores.maximo = listSaboresDatabase[i].maximo;
-        sabores.opciones = await obtenerOpcionesEspecialesA(idProducto, listSaboresDatabase[i].tituloTextos);
-        sabores.nombrecitos = await nombrecitosEspecialesA(idProducto, listSaboresDatabase[i].tituloTextos);
+        sabores.idProducto = listEspecialesADatabase[i].idProducto;
+        sabores.tituloTextos = listEspecialesADatabase[i].tituloTextos;
+        sabores.maximo = listEspecialesADatabase[i].maximo;
+        sabores.opciones = await obtenerOpcionesEspecialesA(idProducto, listEspecialesADatabase[i].tituloTextos);
+        sabores.nombrecitos = await nombrecitosEspecialesA(idProducto, listEspecialesADatabase[i].tituloTextos);
 
-            listSabores.add(sabores);
+        listEspecialesA.add(sabores);
       }
     }
 
-    return listSabores;
+    return listEspecialesA;
   }
 
   Future<List<OpcionesSabores>> obtenerOpcionesEspecialesA(String idProducto, String titulo) async {
-    final listOpcionesSabores = List<OpcionesSabores>();
+    final listOpcionesEspecialesA = List<OpcionesSabores>();
 
-    final listOpcionesSaboresDatabase =  await opcionesespecialesADatabase.obtenerOpcionesEspecialesA(idProducto,titulo);
+    final listOpcionesEspecialesADatabase =  await opcionesespecialesADatabase.obtenerOpcionesEspecialesA(idProducto,titulo);
 
-    if(listOpcionesSaboresDatabase.length>0){
+    if(listOpcionesEspecialesADatabase.length>0){
 
-       for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
+       for (var i = 0; i < listOpcionesEspecialesADatabase.length; i++) {
 
          OpcionesSabores opcionesTextosFijos =OpcionesSabores();
          opcionesTextosFijos.idProducto = idProducto;
          opcionesTextosFijos.tituloTextos = titulo;
-         opcionesTextosFijos.nombreTexto = listOpcionesSaboresDatabase[i].nombreTexto;
+         opcionesTextosFijos.nombreTexto = listOpcionesEspecialesADatabase[i].nombreTexto;
 
-         listOpcionesSabores.add(opcionesTextosFijos);
+         listOpcionesEspecialesA.add(opcionesTextosFijos);
 
        }
 
     }
 
-    return listOpcionesSabores;
+    return listOpcionesEspecialesA;
   }
 
   Future<List<String>> nombrecitosEspecialesA(
       String idProducto, String titulo) async {
-    final listOpcionesSabores = List<String>();
+    final listNombresEspecialesA = List<String>();
 
-    final listOpcionesSaboresDatabase =  await opcionesespecialesADatabase.obtenerOpcionesEspecialesA(idProducto,titulo);
+    final listOpcionesEspecialesADatabase =  await opcionesespecialesADatabase.obtenerOpcionesEspecialesA(idProducto,titulo);
 
-    if(listOpcionesSaboresDatabase.length>0){
+    if(listOpcionesEspecialesADatabase.length>0){
 
-       for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
+       for (var i = 0; i < listOpcionesEspecialesADatabase.length; i++) {
 
-        var name = listOpcionesSaboresDatabase[i].nombreTexto;
+        var name = listOpcionesEspecialesADatabase[i].nombreTexto;
          
 
-         listOpcionesSabores.add(name);
+         listNombresEspecialesA.add(name);
 
        }
 
     }
 
-    return listOpcionesSabores;
+    return listNombresEspecialesA;
   }
 
 
@@ -99,70 +99,70 @@ class EspecialesObservaciones{
 // ESPECIALES B
 
   Future<List<Sabores>> obtenerEspecialesB(String idProducto) async {
-    final listSabores = List<Sabores>();
+    final listEspecialesB= List<Sabores>();
 
-    final listSaboresDatabase =
+    final listEspecialesBDatabase =
         await especialesBDatabase.obtenerEspecialesB(idProducto);
 
-    if (listSaboresDatabase.length > 0) {
-      for (var i = 0; i < listSaboresDatabase.length; i++) {
+    if (listEspecialesBDatabase.length > 0) {
+      for (var i = 0; i < listEspecialesBDatabase.length; i++) {
         Sabores sabores = Sabores();
-        sabores.idProducto = listSaboresDatabase[i].idProducto;
-        sabores.tituloTextos = listSaboresDatabase[i].tituloTextos;
-        sabores.maximo = listSaboresDatabase[i].maximo;
-        sabores.opciones = await obtenerOpcionesEspecialesB(idProducto, listSaboresDatabase[i].tituloTextos);
-        sabores.nombrecitos = await nombrecitosEspecialesB(idProducto, listSaboresDatabase[i].tituloTextos);
+        sabores.idProducto = listEspecialesBDatabase[i].idProducto;
+        sabores.tituloTextos = listEspecialesBDatabase[i].tituloTextos;
+        sabores.maximo = listEspecialesBDatabase[i].maximo;
+        sabores.opciones = await obtenerOpcionesEspecialesB(idProducto, listEspecialesBDatabase[i].tituloTextos);
+        sabores.nombrecitos = await nombrecitosEspecialesB(idProducto, listEspecialesBDatabase[i].tituloTextos);
 
-            listSabores.add(sabores);
+            listEspecialesB.add(sabores);
       }
     }
 
-    return listSabores;
+    return listEspecialesB;
   }
 
   Future<List<OpcionesSabores>> obtenerOpcionesEspecialesB(String idProducto, String titulo) async {
-    final listOpcionesSabores = List<OpcionesSabores>();
+    final listOpcionesEspecialesB = List<OpcionesSabores>();
 
-    final listOpcionesSaboresDatabase =  await opcionesespecialesBDatabase.obtenerOpcionesEspecialesB(idProducto,titulo);
+    final listOpcionesEspecialesBDatabase =  await opcionesespecialesBDatabase.obtenerOpcionesEspecialesB(idProducto,titulo);
 
-    if(listOpcionesSaboresDatabase.length>0){
+    if(listOpcionesEspecialesBDatabase.length>0){
 
-       for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
+       for (var i = 0; i < listOpcionesEspecialesBDatabase.length; i++) {
 
          OpcionesSabores opcionesTextosFijos =OpcionesSabores();
          opcionesTextosFijos.idProducto = idProducto;
          opcionesTextosFijos.tituloTextos = titulo;
-         opcionesTextosFijos.nombreTexto = listOpcionesSaboresDatabase[i].nombreTexto;
+         opcionesTextosFijos.nombreTexto = listOpcionesEspecialesBDatabase[i].nombreTexto;
 
-         listOpcionesSabores.add(opcionesTextosFijos);
+         listOpcionesEspecialesB.add(opcionesTextosFijos);
 
        }
 
     }
 
-    return listOpcionesSabores;
+    return listOpcionesEspecialesB;
   }
 
   Future<List<String>> nombrecitosEspecialesB(
       String idProducto, String titulo) async {
-    final listOpcionesSabores = List<String>();
+    final listNombreEspecialesB= List<String>();
 
-    final listOpcionesSaboresDatabase =  await opcionesespecialesBDatabase.obtenerOpcionesEspecialesB(idProducto,titulo);
+    final listOpcionesEspecialesBDatabase =  await opcionesespecialesBDatabase.obtenerOpcionesEspecialesB(idProducto,titulo);
 
-    if(listOpcionesSaboresDatabase.length>0){
+    if(listOpcionesEspecialesBDatabase.length>0){
 
-       for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
+       for (var i = 0; i < listOpcionesEspecialesBDatabase.length; i++) {
 
-        var name = listOpcionesSaboresDatabase[i].nombreTexto;
+        var name = listOpcionesEspecialesBDatabase[i].nombreTexto;
          
 
-         listOpcionesSabores.add(name);
+         listNombreEspecialesB.add(name);
 
        }
 
     }
 
-    return listOpcionesSabores;
+    return listNombreEspecialesB;
   }
 
 
@@ -170,66 +170,66 @@ class EspecialesObservaciones{
 // ESPECIALES C
 
   Future<List<Sabores>> obtenerEspecialesC(String idProducto) async {
-    final listSabores = List<Sabores>();
+    final listEspecialesC = List<Sabores>();
 
-    final listSaboresDatabase =
+    final listEspecialesCDatabase =
         await especialesCDatabase.obtenerEspecialesC(idProducto);
 
-    if (listSaboresDatabase.length > 0) {
-      for (var i = 0; i < listSaboresDatabase.length; i++) {
+    if (listEspecialesCDatabase.length > 0) {
+      for (var i = 0; i < listEspecialesCDatabase.length; i++) {
         Sabores sabores = Sabores();
-        sabores.idProducto = listSaboresDatabase[i].idProducto;
-        sabores.tituloTextos = listSaboresDatabase[i].tituloTextos;
-        sabores.maximo = listSaboresDatabase[i].maximo;
-        sabores.opciones = await obtenerOpcionesEspecialesC(idProducto, listSaboresDatabase[i].tituloTextos);
-        sabores.nombrecitos = await nombrecitosEspecialesC(idProducto, listSaboresDatabase[i].tituloTextos);
+        sabores.idProducto = listEspecialesCDatabase[i].idProducto;
+        sabores.tituloTextos = listEspecialesCDatabase[i].tituloTextos;
+        sabores.maximo = listEspecialesCDatabase[i].maximo;
+        sabores.opciones = await obtenerOpcionesEspecialesC(idProducto, listEspecialesCDatabase[i].tituloTextos);
+        sabores.nombrecitos = await nombrecitosEspecialesC(idProducto, listEspecialesCDatabase[i].tituloTextos);
 
-            listSabores.add(sabores);
+            listEspecialesC.add(sabores);
       }
     }
 
-    return listSabores;
+    return listEspecialesC;
   }
 
   Future<List<OpcionesSabores>> obtenerOpcionesEspecialesC(String idProducto, String titulo) async {
-    final listOpcionesSabores = List<OpcionesSabores>();
+    final listOpcionesEspecialesC = List<OpcionesSabores>();
 
-    final listOpcionesSaboresDatabase =  await opcionesespecialesCDatabase.obtenerOpcionesEspecialesC(idProducto,titulo);
+    final listOpcionesEspecialesCDatabase =  await opcionesespecialesCDatabase.obtenerOpcionesEspecialesC(idProducto,titulo);
 
-    if(listOpcionesSaboresDatabase.length>0){
+    if(listOpcionesEspecialesCDatabase.length>0){
 
-       for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
+       for (var i = 0; i < listOpcionesEspecialesCDatabase.length; i++) {
 
          OpcionesSabores opcionesTextosFijos =OpcionesSabores();
          opcionesTextosFijos.idProducto = idProducto;
          opcionesTextosFijos.tituloTextos = titulo;
-         opcionesTextosFijos.nombreTexto = listOpcionesSaboresDatabase[i].nombreTexto;
+         opcionesTextosFijos.nombreTexto = listOpcionesEspecialesCDatabase[i].nombreTexto;
 
-         listOpcionesSabores.add(opcionesTextosFijos);
+         listOpcionesEspecialesC.add(opcionesTextosFijos);
 
        }
 
     }
 
-    return listOpcionesSabores;
+    return listOpcionesEspecialesC;
   }
 
   Future<List<String>> nombrecitosEspecialesC(
       String idProducto, String titulo) async {
-    final listOpcionesSabores = List<String>();
+    final listNombresEspecialesC = List<String>();
 
-    final listOpcionesSaboresDatabase =  await opcionesespecialesCDatabase.obtenerOpcionesEspecialesC(idProducto,titulo);
+    final listOpcionesEspecialesCDatabase =  await opcionesespecialesCDatabase.obtenerOpcionesEspecialesC(idProducto,titulo);
 
-    if(listOpcionesSaboresDatabase.length>0){
+    if(listOpcionesEspecialesCDatabase.length>0){
 
-       for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
+       for (var i = 0; i < listOpcionesEspecialesCDatabase.length; i++) {
 
-        var name = listOpcionesSaboresDatabase[i].nombreTexto;
-         listOpcionesSabores.add(name);
+        var name = listOpcionesEspecialesCDatabase[i].nombreTexto;
+         listNombresEspecialesC.add(name);
        }
     }
 
-    return listOpcionesSabores;
+    return listNombresEspecialesC;
   }
 
 

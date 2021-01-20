@@ -18,7 +18,6 @@ class MapaPage extends StatefulWidget {
 }
 
 class _MapaPageState extends State<MapaPage> {
-  
   @override
   void initState() {
     context.bloc<MiUbicacionBloc>().iniciarSeguimiento(widget.idRepartidor);
@@ -44,8 +43,8 @@ class _MapaPageState extends State<MapaPage> {
             return Stack(
               children: [
                 crearMapa(state, responsive),
-
-                (state.llegadaRepartidor)?Container(
+                (state.llegadaRepartidor)
+                    ? Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: responsive.wp(5)),
                         margin: EdgeInsets.symmetric(
@@ -83,8 +82,8 @@ class _MapaPageState extends State<MapaPage> {
                             )
                           ],
                         ),
-                      
-              ):Container()
+                      )
+                    : Container()
               ],
             );
           }),
@@ -101,7 +100,6 @@ class _MapaPageState extends State<MapaPage> {
               },
             ),
           ),
-          
           Positioned(
             bottom: responsive.hp(35),
             right: 10,
@@ -122,11 +120,12 @@ class _MapaPageState extends State<MapaPage> {
   }
 
   Widget crearMapa(MiUbicacionState state, Responsive responsive) {
-    if (!state.existeUbicacion) return Center(child: Text('Ubicando repartidor...'));
+    if (!state.existeUbicacion)
+      return Center(child: Text('Ubicando repartidor...'));
 
     final mapaBloc = BlocProvider.of<MapaBloc>(context);
 
-    mapaBloc.add(OnNuevaUbicacion(state.ubicacion, state.pedido,context));
+    mapaBloc.add(OnNuevaUbicacion(state.ubicacion, state.pedido, context));
 
     print(' tamare ${state.pedido[0].distancia}');
 
@@ -153,7 +152,9 @@ class _MapaPageState extends State<MapaPage> {
                 markers: mapaBloc.state.markers.values.toSet(),
                 onCameraMove: (cameraPosition) {
                   // cameraPosition.target = LatLng central del mapa
-                  mapaBloc.add(OnMovioMapa(cameraPosition.target));
+                  mapaBloc.add(
+                    OnMovioMapa(cameraPosition.target),
+                  );
                 },
               ),
             ),
@@ -187,14 +188,15 @@ class _MapaPageState extends State<MapaPage> {
                             CircleAvatar(
                               radius: 25,
                               child: ClipOval(
-                                  child: Image.network(
-                                ('${state.pedido[0].userImage}' != null)
-                                    ? '${state.pedido[0].userImage}'
-                                    : Container(),
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              )),
+                                child: Image.network(
+                                  ('${state.pedido[0].userImage}' != null)
+                                      ? '${state.pedido[0].userImage}'
+                                      : Container(),
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                             Expanded(
                               child: Column(
@@ -205,8 +207,9 @@ class _MapaPageState extends State<MapaPage> {
                                         ? '${state.pedido[0].personName}'
                                         : Container(),
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: responsive.ip(2)),
+                                      color: Colors.white,
+                                      fontSize: responsive.ip(2),
+                                    ),
                                   ),
                                   Text(
                                     ('${state.pedido[0].idRepartidor}' != null)

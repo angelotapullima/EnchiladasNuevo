@@ -179,9 +179,42 @@ utils.porcentaje(context, porcentaje);
             productosData.productoNuevo = productos[x]['producto_nuevo'];
             productosData.productoDelivery = productos[x]['producto_delivery'];
             productosData.productoDestacado =productos[x]['producto_destacado'];
-            productosData.productoDestacado =productos[x]['producto_destacado'];
-            productosData.productoAdicionalTitulo = productos[x]['producto_observaciones_fijas']['adicional_categoria']['titulo'];
             
+
+
+            int cantidadAdicionales = 0;
+
+            var cantiProAdi = productos[x]['producto_observaciones_fijas'];//['adicional_categoria']['opciones'];
+
+            
+
+            if(cantiProAdi['adicional_categoria']['opciones'].length>0){
+              cantidadAdicionales++;
+
+            }
+             if(cantiProAdi['adicional_categoria_2']['opciones'].length>0){
+              cantidadAdicionales++;
+
+            }
+             if(cantiProAdi['adicional_categoria_3']['opciones'].length>0){
+              cantidadAdicionales++;
+
+            }
+            if(cantiProAdi['adicional_categoria_4']['opciones'].length>0){
+              cantidadAdicionales++;
+
+            }
+            if(cantiProAdi['adicional_categoria_5']['opciones'].length>0){
+              cantidadAdicionales++;
+
+            }
+            if(cantiProAdi['adicional_categoria_6']['opciones'].length>0){
+              cantidadAdicionales++;
+
+            }
+
+
+            productosData.productoCantidadAdicional =cantidadAdicionales.toString();
             
             
            if (productosData.productoDestacado == '0') {
@@ -433,12 +466,20 @@ utils.porcentaje(context, porcentaje);
               }
             }
 
+            if(productos[x]['id_producto'] =='51'){
+              print('ctm');
+            }
            
                var adicionalesList = productos[x]['producto_observaciones_fijas']['adicional_categoria']['opciones'];
+               var adicionalesList2 = productos[x]['producto_observaciones_fijas']['adicional_categoria_2']['opciones'];
+               var adicionalesList3 = productos[x]['producto_observaciones_fijas']['adicional_categoria_3']['opciones'];
+               var adicionalesList4 = productos[x]['producto_observaciones_fijas']['adicional_categoria_4']['opciones'];
+               var adicionalesList5 = productos[x]['producto_observaciones_fijas']['adicional_categoria_5']['opciones'];
+               var adicionalesList6 = productos[x]['producto_observaciones_fijas']['adicional_categoria_6']['opciones'];
 
                 if(adicionalesList.length>0){
 
-                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto']);
+                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'0');
 
 
 
@@ -448,6 +489,8 @@ utils.porcentaje(context, porcentaje);
 
                     adicionalesModel.idProducto = productos[x]['id_producto'];
                     adicionalesModel.idProductoAdicional = adicionalesList[i];
+                    adicionalesModel.adicionalItem = '0';
+                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria']['titulo'];
                     adicionalesModel.adicionalSeleccionado = '0';
 
                     await adicionalesDatabase.insertarAdicionales(adicionalesModel);
@@ -456,7 +499,133 @@ utils.porcentaje(context, porcentaje);
                     
                   }
                 }
+
+
+
+
+           
+                if(adicionalesList2.length>0){
+
+                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'1');
+
+
+
+                  for (var i = 0; i < adicionalesList2.length; i++) {
+
+                    AdicionalesModel adicionalesModel = AdicionalesModel();
+
+                    adicionalesModel.idProducto = productos[x]['id_producto'];
+                    adicionalesModel.idProductoAdicional = adicionalesList2[i];
+                    adicionalesModel.adicionalItem = '1';
+                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_2']['titulo'];
+                  
+                    adicionalesModel.adicionalSeleccionado = '0';
+
+                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+
+                    
+                    
+                  }
+                }
+
+
+
+
+                     if(adicionalesList3.length>0){
+
+                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'2');
+
+
+
+                  for (var i = 0; i < adicionalesList3.length; i++) {
+
+                    AdicionalesModel adicionalesModel = AdicionalesModel();
+
+                    adicionalesModel.idProducto = productos[x]['id_producto'];
+                    adicionalesModel.idProductoAdicional = adicionalesList3[i];
+                    adicionalesModel.adicionalItem = '2';
+                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_3']['titulo'];
+                    adicionalesModel.adicionalSeleccionado = '0';
+
+                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+
+                    
+                    
+                  }
+                } 
             
+
+                if(adicionalesList4.length>0){
+
+                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'3');
+
+
+
+                  for (var i = 0; i < adicionalesList4.length; i++) {
+
+                    AdicionalesModel adicionalesModel = AdicionalesModel();
+
+                    adicionalesModel.idProducto = productos[x]['id_producto'];
+                    adicionalesModel.idProductoAdicional = adicionalesList4[i];
+                    adicionalesModel.adicionalItem = '3';
+                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_4']['titulo'];
+                  
+                    adicionalesModel.adicionalSeleccionado = '0';
+
+                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+
+                    
+                    
+                  }
+                }
+
+                if(adicionalesList5.length>0){
+
+                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'4');
+
+
+
+                  for (var i = 0; i < adicionalesList5.length; i++) {
+
+                    AdicionalesModel adicionalesModel = AdicionalesModel();
+
+                    adicionalesModel.idProducto = productos[x]['id_producto'];
+                    adicionalesModel.idProductoAdicional = adicionalesList5[i];
+                    adicionalesModel.adicionalItem = '4';
+                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_5']['titulo'];
+                  
+                    adicionalesModel.adicionalSeleccionado = '0';
+
+                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+
+                    
+                    
+                  }
+                }
+
+                if(adicionalesList6.length>0){
+
+                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'5');
+
+
+
+                  for (var i = 0; i < adicionalesList6.length; i++) {
+
+                    AdicionalesModel adicionalesModel = AdicionalesModel();
+
+                    adicionalesModel.idProducto = productos[x]['id_producto'];
+                    adicionalesModel.idProductoAdicional = adicionalesList6[i];
+                    adicionalesModel.adicionalItem = '5';
+                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_6']['titulo'];
+                  
+                    adicionalesModel.adicionalSeleccionado = '0';
+
+                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+
+                    
+                    
+                  }
+                }
           }
         }
       }

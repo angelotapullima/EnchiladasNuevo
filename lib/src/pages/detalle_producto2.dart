@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/database/adicionales_database.dart';
 import 'package:enchiladasapp/src/database/item_observacion_database.dart';
@@ -8,168 +7,33 @@ import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/validar_producto.dart';
 import 'package:enchiladasapp/src/pages/detalle_observaciones.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/translate_animation.dart';
-import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
-import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:showcaseview/showcaseview.dart';
+import 'package:showcaseview/showcase.dart';
+import 'package:showcaseview/showcase_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
-class SliderDetalleProductos extends StatefulWidget {
-  final String numeroItem;
-  final String idCategoria;
-  final String cantidadItems;
-  const SliderDetalleProductos(
-      {Key key,
-      @required this.numeroItem,
-      @required this.idCategoria,
-      @required this.cantidadItems})
-      : super(key: key);
-
-  @override
-  _SliderDetalleProductosState createState() => _SliderDetalleProductosState();
-}
-
-class _SliderDetalleProductosState extends State<SliderDetalleProductos> {
-
-
-  @override
-  Widget build(BuildContext context) {
-    final _pageController =
-        PageController(initialPage: int.parse(widget.numeroItem));
-
-    final productoBloc = ProviderBloc.prod(context);
-    final contadorProductosFotoLocal = ProviderBloc.contadorLocal(context);
-    productoBloc
-        .obtenerProductosdeliveryEnchiladasPorCategoria(widget.idCategoria);
-    contadorProductosFotoLocal.changeContador(int.parse(widget.numeroItem));
-
-    final responsive = Responsive.of(context);
-
-    return Scaffold(
-        body: Stack(
-      children: [
-        StreamBuilder(
-            stream: productoBloc.productosEnchiladasStream,
-            builder: (context, AsyncSnapshot<List<ProductosData>> snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data.length > 0) {
-                  final List<Widget> imageSliders = snapshot.data
-                      .map(
-                        (item) => Container(
-                          child: DetalleProductitoss(
-                            productosData: item,
-                            mostrarback: false,
-                          ),
-                        ),
-                      )
-                      .toList();
-
-                  return PageView(
-                      //itemCount: snapshot.data.length,
-                      controller: _pageController,
-                      children: imageSliders,
-                      onPageChanged: (int index) {
-                        contadorProductosFotoLocal.changeContador(index);
-                      });
-                } else {
-                  return Center(
-                    child: CupertinoActivityIndicator(),
-                  );
-                }
-              } else {
-                return Center(
-                  child: CupertinoActivityIndicator(),
-                );
-              }
-            }),
-        StreamBuilder(
-            stream: contadorProductosFotoLocal.selectContadorStream,
-            builder: (context, snapshotContador) {
-              if (snapshotContador.hasData) {
-                if (snapshotContador.data != null) {
-                  return Container(
-                    height: kToolbarHeight + 50,
-                    child: AppBar(
-                      backgroundColor: Colors.transparent,
-                      actions: [
-                        Container(
-                          height: responsive.hp(1),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.wp(2),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[300],
-                            border: Border.all(color: Colors.grey[300]),
-                          ),
-                          margin: EdgeInsets.symmetric(
-                            horizontal: responsive.wp(5),
-                            vertical: responsive.hp(1.3),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                (contadorProductosFotoLocal.pageContador + 1)
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
-                              ),
-                              Text(
-                                ' / ',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
-                              ),
-                              Text(
-                                '${widget.cantidadItems}',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                } else
-                  return Center(
-                    child: CupertinoActivityIndicator(),
-                  );
-              } else {
-                return Center(
-                  child: CupertinoActivityIndicator(),
-                );
-              }
-            }),
-      ],
-    ));
-  }
-}
-
-class DetalleProductitoss extends StatefulWidget {
+class DetalleProductitoss2 extends StatefulWidget {
   final ProductosData productosData;
   final bool mostrarback;
 
-  const DetalleProductitoss(
+  const DetalleProductitoss2(
       {Key key, @required this.productosData, @required this.mostrarback})
       : super(key: key);
   @override
-  _DetalleProducto createState() => _DetalleProducto();
+  _DetalleProductoSolo createState() => _DetalleProductoSolo();
 }
 
-class _DetalleProducto extends State<DetalleProductitoss> {
+class _DetalleProductoSolo extends State<DetalleProductitoss2> {
   GlobalKey _one = GlobalKey();
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
@@ -178,8 +42,6 @@ class _DetalleProducto extends State<DetalleProductitoss> {
 
   bool estadoDelivery = false;
   double _panelHeightOpen;
-
-  bool favourite = false;
 
   TextEditingController observacionProductoController = TextEditingController();
   PanelController panelController = new PanelController();
@@ -197,8 +59,6 @@ class _DetalleProducto extends State<DetalleProductitoss> {
 
   @override
   void initState() {
-
-      favourite = widget.productosData.productoFavorito ==1?true:false;
     super.initState();
   }
 
@@ -210,7 +70,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     final responsive = Responsive.of(context);
     final productosIdBloc = ProviderBloc.prod(context);
 
-    /* productosIdBloc.obtenerProductoPorId(widget.productosData.idProducto); */
+    productosIdBloc.obtenerProductoPorId(widget.productosData.idProducto);
     productosIdBloc.verificarDisponibilidad(widget.productosData.idProducto);
 
     return ShowCaseWidget(
@@ -229,86 +89,102 @@ class _DetalleProducto extends State<DetalleProductitoss> {
         });
 
         return Material(
-            child: Stack(
-          children: [
-            SlidingUpPanel(
-              maxHeight: _panelHeightOpen,
-              minHeight: responsive.hp(7),
-              controller: panelController, 
-              parallaxEnabled: true,
-              parallaxOffset: 0.1,
-              backdropEnabled: true,
-              body: Stack(children: <Widget>[
-                _backgroundImage(context, widget.productosData),
-                _crearAppbar(responsive, widget.mostrarback),
-                TranslateAnimation(
-                  duration: const Duration(milliseconds: 400),
-                  child: _contenido(widget.productosData, responsive, context,
-                      productosIdBloc),
-                ),
-              ]),
-              panelBuilder: (sc) {
-                return Showcase(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: responsive.wp(40)),
-                  key: _three,
-                  description:
-                      'Puedes presionar o deslizar hacia arriba para ver más detalles y hacer tu pedido',
-                  child: TranslateAnimation(
-                    duration: const Duration(milliseconds: 600),
-                    child: _carritoProductos(responsive, sc),
-                  ),
-                );
-              },
-              borderRadius: const BorderRadius.only(
-                topLeft: const Radius.circular(20),
-                topRight: const Radius.circular(20),
-              ),
-              //onPanelSlide: (double pos) => setState(() {}),
-            ),
-            (widget.productosData.productoNuevo == '1')
-                ? Positioned(
-                    top: kToolbarHeight + 50,
-                    left: 0,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: responsive.wp(3),
-                        vertical: responsive.wp(.5),
-                      ),
-                      decoration: BoxDecoration(
-                          //borderRadius: BorderRadius.circular(10),
-                          color: Colors.red),
-                      child: Text(
-                        'Producto Nuevo',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(2),
+          child: StreamBuilder(
+            stream: productosIdBloc.productosIdStream,
+            builder: (BuildContext context,
+                AsyncSnapshot<List<ProductosData>> snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data.length > 0) {
+                  return Stack(
+                    children: [
+                      SlidingUpPanel(
+                        maxHeight: _panelHeightOpen,
+                        minHeight: responsive.hp(7),
+                        controller: panelController,
+                        parallaxEnabled: true,
+                        parallaxOffset: 0.1,
+                        backdropEnabled: true,
+                        body: Stack(children: <Widget>[
+                          _backgroundImage(context, snapshot.data[0]),
+                          _crearAppbar(responsive, widget.mostrarback),
+                          TranslateAnimation(
+                            duration: const Duration(milliseconds: 400),
+                            child: _contenido(snapshot.data[0], responsive,
+                                context, productosIdBloc),
+                          ),
+                        ]),
+                        panelBuilder: (sc) {
+                          return Showcase(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: responsive.wp(40)),
+                            key: _three,
+                            description:
+                                'Puedes presionar o deslizar hacia arriba para ver más detalles y hacer tu pedido',
+                            child: TranslateAnimation(
+                              duration: const Duration(milliseconds: 600),
+                              child: _carritoProductos(responsive, sc),
+                            ),
+                          );
+                        },
+                        borderRadius: const BorderRadius.only(
+                          topLeft: const Radius.circular(20),
+                          topRight: const Radius.circular(20),
                         ),
+                        //onPanelSlide: (double pos) => setState(() {}),
                       ),
-                    ),
-                  )
-                : Container(),
-            (widget.productosData.productoDestacado != '0')
-                ? Positioned(
-                    top: kToolbarHeight + 50,
-                    //top: responsive.hp(40),
-                    right: 0,
-                    //left: 0,
-                    child: Container(
-                      /*  transform: Matrix4.translationValues(
+                      (snapshot.data[0].productoNuevo == '1')
+                          ? Positioned(
+                              top: kToolbarHeight + 50,
+                              left: 0,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: responsive.wp(3),
+                                  vertical: responsive.wp(.5),
+                                ),
+                                decoration: BoxDecoration(
+                                    //borderRadius: BorderRadius.circular(10),
+                                    color: Colors.red),
+                                child: Text(
+                                  'Producto Nuevo',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: responsive.ip(2),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      (snapshot.data[0].productoDestacado != '0')
+                          ? Positioned(
+                             top: kToolbarHeight + 30,
+                              //top: responsive.hp(40),
+                              right: 0,
+                              //left: 0,
+                              child: Container(
+                               /*  transform: Matrix4.translationValues(
                                     -responsive.wp(29), 0, 0), */
-                      height: responsive.ip(7),
-                      width: responsive.ip(7),
-                      child: SvgPicture.asset('assets/medalla.svg'),
-                    ),
-                  )
-                : Container()
-          ],
-        )
-
-           
-            );
+                                height: responsive.ip(7),
+                                width:  responsive.ip(7),
+                                child: SvgPicture.asset('assets/medalla.svg'),
+                              ),
+                            )
+                          : Container()
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+                }
+              } else {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+            },
+          ),
+        );
       }),
     );
   }
@@ -334,13 +210,12 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                 border: Border.all(color: Colors.red),
               ),
               child: Center(
-                child: favourite
+                child: (productosData.productoFavorito == 1)
                     ? IconButton(
                         onPressed: () {
-                          setState(() { 
+                          setState(() {
                             print('quitar');
-                            utils.quitarFavoritos(context, productosData);
-                            favourite=false;
+                            quitarFavoritos(context, productosData);
                           });
                         },
                         icon: Icon(
@@ -353,8 +228,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                         onPressed: () {
                           setState(() {
                             print('agregar');
-                            utils.agregarFavoritos(context, productosData);
-                            favourite=true;
+                            agregarFavoritos(context, productosData);
                           });
                         },
                         icon: Icon(
@@ -413,7 +287,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                               productosData.idProducto,
                               productosData.productoAdicionalOpciones,
                               productosData.productoCantidadAdicional));
-                          /* setState(() {
+                          /* setState(() { 
                             mostrar =true;
                             
                           }); */
@@ -441,7 +315,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                         ),
                       ),
                       onTap: () {
-                        utils.showToast(
+                        showToast(
                             '${snapshot.data.mensaje}', 2, ToastGravity.TOP);
                         //utils.agregarCarrito(productosData, context, "1");
                       },
@@ -467,7 +341,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       ),
                     ),
                     onTap: () {
-                      utils.showToast(
+                      showToast(
                           'En estos momentos el producto esta deshabilitado',
                           2,
                           ToastGravity.TOP);
@@ -509,7 +383,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
 
   Widget _contenido(ProductosData productosData, Responsive responsive,
       BuildContext context, ProductosBloc productosBloc) {
-    final precioProdcuto = utils.format(
+    final precioProdcuto = format(
       double.parse(productosData.productoPrecio),
     );
     return Container(
@@ -688,7 +562,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
 
   Widget panelRojoMonto(
       Responsive responsive, double total, String cantidadPedidos) {
-    String montoFinalex = utils.format(total);
+    String montoFinalex = format(total);
     return Container(
       height: responsive.hp(8),
       padding: EdgeInsets.symmetric(
@@ -878,8 +752,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       size: responsive.ip(4),
                     ),
                     onPressed: () {
-                      utils.deleteProductoCarrito(
-                          context, carrito[index].idProducto);
+                      deleteProductoCarrito(context, carrito[index].idProducto);
                     },
                   ),
                 ],
@@ -896,7 +769,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
   }
 
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
-    final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
+    final preciofinal = format(double.parse(carrito.productoPrecio) *
         double.parse(carrito.productoCantidad));
     var observacionProducto = 'Toca para agregar una observación';
     if (carrito.productoObservacion != null &&
@@ -975,7 +848,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                               size: responsive.ip(3),
                             ),
                             onPressed: () {
-                              utils.deleteProductoCarrito(
+                              deleteProductoCarrito(
                                   context, carrito.idProducto);
                             },
                           ),
@@ -1029,9 +902,9 @@ class _DetalleProducto extends State<DetalleProductitoss> {
 
   Widget _resumenPedido(
       Responsive responsive, double subtotal, double valorDelivery) {
-    final subtotal2 = utils.format(subtotal);
-    final valorDelivery2 = utils.format(valorDelivery);
-    final totalex = utils.format(subtotal + valorDelivery);
+    final subtotal2 = format(subtotal);
+    final valorDelivery2 = format(valorDelivery);
+    final totalex = format(subtotal + valorDelivery);
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: responsive.wp(2),
@@ -1174,8 +1047,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                         /* utils.showToast(
                             'No tiene permisos', 2, ToastGravity.TOP); */
                       } else {
-                        utils.showToast(
-                            'No tiene permisos', 2, ToastGravity.TOP);
+                        showToast('No tiene permisos', 2, ToastGravity.TOP);
                       }
                     }),
               ),
@@ -1314,7 +1186,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                   child: Text('Cancelar')),
               FlatButton(
                 onPressed: () async {
-                  utils.actualizarObservacion(
+                  actualizarObservacion(
                       context, observacionProductoController.text, id);
 
                   observacionProductoController.text = '';

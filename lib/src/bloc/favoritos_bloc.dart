@@ -12,10 +12,13 @@ class FavoritosBloc {
 
   dispose(){
     _productosFavoritosController?.close(); 
+    
   }
 
 
   void obtenerProductosFavoritos()async{
     _productosFavoritosController.sink.add(await productoDatabase.obtenerFavoritos()); 
   }
+
+
 }

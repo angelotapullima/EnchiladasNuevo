@@ -280,8 +280,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc
-        .obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
+    productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
 
     return Scaffold(
       body: _listaProductosId(productosIdBloc, responsive),
@@ -416,6 +415,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                             ),
                     ), ('${productosData.productoNuevo}' == '1')
                               ?   Positioned(
+                                bottom: 0,
                                  /*  left: responsive.wp(1),
                                   top: responsive.hp(.5), */
                                   child: Container(
@@ -436,6 +436,20 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                                     ),
                                   ),
                                 )
+                              : Container(),
+
+                              ('${productosData.productoDestacado}' != '0')
+                              ?   Positioned(
+                                      //top: 0,
+                                      //right: 0,
+                                      //left: 0,
+                                      child: Container(
+                                        transform: Matrix4.translationValues(-responsive.wp(13), 0, 0),
+                                        height: responsive.ip(3),
+                                        child: SvgPicture.asset(
+                                            'assets/medalla.svg'),
+                                      ),
+                                    )
                               : Container()
                   ],
                 ),
