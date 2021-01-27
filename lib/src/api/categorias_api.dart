@@ -21,7 +21,7 @@ class CategoriasApi {
   final categoriasDatabase = CategoriasDatabase();
   final productoDatabase = ProductoDatabase();
   final temporizadorDatabase = TemporizadorDatabase();
-  final adicionalesDatabase=AdicionalesDatabase();
+  final adicionalesDatabase = AdicionalesDatabase();
   final observacionesFijasDatabase = ObservacionesFijasDatabase();
   final productosFijosDatabase = ProductosFijosDatabase();
   final saboresDatabase = SaboresDatabase();
@@ -42,9 +42,6 @@ class CategoriasApi {
   final especialesDDatabase = EspecialesDDatabase();
   final opcionesespecialesDDatabase = OpcionesEspecialesDDatabase();
 
-
-
-
   final observacionesVariablesDatabase = ObservacionesVariablesDatabase();
 
   Future<bool> obtenerAmbos(BuildContext context) async {
@@ -55,23 +52,23 @@ class CategoriasApi {
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       if (decodedData == null) return false;
 
-    final preferences = Preferences();
+      final preferences = Preferences();
 
-     // print(decodedData['result']['data'].length);
+      // print(decodedData['result']['data'].length);
 
-     var cantidadTotal = decodedData['result']['data'].length;
-      print('cantidadTotal $cantidadTotal'); 
+      var cantidadTotal = decodedData['result']['data'].length;
+      print('cantidadTotal $cantidadTotal');
 
       for (int i = 0; i < decodedData['result']['data'].length; i++) {
-       var porcentaje = ((i + 1) * 100) / cantidadTotal;
+        var porcentaje = ((i + 1) * 100) / cantidadTotal;
 
-        print('porcentaje $porcentaje'); 
+        print('porcentaje $porcentaje');
 
-         if (preferences.estadoCargaInicial == null ||
-        preferences.estadoCargaInicial == '0') {
-utils.porcentaje(context, porcentaje);
+        if (preferences.estadoCargaInicial == null ||
+            preferences.estadoCargaInicial == '0') {
+          utils.porcentaje(context, porcentaje);
         }
-        
+
         if (decodedData['result']['data'].length > 0) {
           CategoriaData categoriaData = CategoriaData();
 
@@ -153,7 +150,7 @@ utils.porcentaje(context, porcentaje);
             ///
             ///
 
-          /*  var porcentajeProductos = ((x + 1) * 100) / cantidadTotalProductos;
+            /*  var porcentajeProductos = ((x + 1) * 100) / cantidadTotalProductos;
 
             print('porcentajeProductos $porcentajeProductos');  */
             ////////////////////////////////////////////
@@ -178,46 +175,37 @@ utils.porcentaje(context, porcentaje);
             productosData.productoCarta = productos[x]['producto_carta'];
             productosData.productoNuevo = productos[x]['producto_nuevo'];
             productosData.productoDelivery = productos[x]['producto_delivery'];
-            productosData.productoDestacado =productos[x]['producto_destacado'];
-            
-
+            productosData.productoDestacado =
+                productos[x]['producto_destacado'];
 
             int cantidadAdicionales = 0;
 
-            var cantiProAdi = productos[x]['producto_observaciones_fijas'];//['adicional_categoria']['opciones'];
+            var cantiProAdi = productos[x][
+                'producto_observaciones_fijas']; //['adicional_categoria']['opciones'];
 
-            
-
-            if(cantiProAdi['adicional_categoria']['opciones'].length>0){
+            if (cantiProAdi['adicional_categoria']['opciones'].length > 0) {
               cantidadAdicionales++;
-
             }
-             if(cantiProAdi['adicional_categoria_2']['opciones'].length>0){
+            if (cantiProAdi['adicional_categoria_2']['opciones'].length > 0) {
               cantidadAdicionales++;
-
             }
-             if(cantiProAdi['adicional_categoria_3']['opciones'].length>0){
+            if (cantiProAdi['adicional_categoria_3']['opciones'].length > 0) {
               cantidadAdicionales++;
-
             }
-            if(cantiProAdi['adicional_categoria_4']['opciones'].length>0){
+            if (cantiProAdi['adicional_categoria_4']['opciones'].length > 0) {
               cantidadAdicionales++;
-
             }
-            if(cantiProAdi['adicional_categoria_5']['opciones'].length>0){
+            if (cantiProAdi['adicional_categoria_5']['opciones'].length > 0) {
               cantidadAdicionales++;
-
             }
-            if(cantiProAdi['adicional_categoria_6']['opciones'].length>0){
+            if (cantiProAdi['adicional_categoria_6']['opciones'].length > 0) {
               cantidadAdicionales++;
-
             }
 
+            productosData.productoCantidadAdicional =
+                cantidadAdicionales.toString();
 
-            productosData.productoCantidadAdicional =cantidadAdicionales.toString();
-            
-            
-           if (productosData.productoDestacado == '0') {
+            if (productosData.productoDestacado == '0') {
               productosData.productoEstadoDestacado = '0';
             } else {
               productosData.productoEstadoDestacado = '1';
@@ -230,31 +218,44 @@ utils.porcentaje(context, porcentaje);
             } else {
               productosData.productoFavorito = 0;
 
-               productoDatabase.insertarProductosDb(productosData);
+              productoDatabase.insertarProductosDb(productosData);
             }
 
-            await observacionesFijasDatabase.deleteObservacionesFijas(productos[x]['id_producto']);
-            await productosFijosDatabase.deleteProductosFijos(productos[x]['id_producto']);
+            await observacionesFijasDatabase
+                .deleteObservacionesFijas(productos[x]['id_producto']);
+            await productosFijosDatabase
+                .deleteProductosFijos(productos[x]['id_producto']);
             await saboresDatabase.deleteSabores(productos[x]['id_producto']);
-            await opcionesSaboresDatabase.deleteOpcionesSabores(productos[x]['id_producto']);
-            
-            await acompanhamientosDatabase.deleteAcompanhamientos(productos[x]['id_producto']);
-            await opcionesAcompanhamientosDatabase.deleteOpcionesAcompanhamientos(productos[x]['id_producto']);
+            await opcionesSaboresDatabase
+                .deleteOpcionesSabores(productos[x]['id_producto']);
 
-            await especialesADatabase.deleteEspecialesA(productos[x]['id_producto']);
-            await opcionesespecialesADatabase.deleteOpcionesEspecialesA(productos[x]['id_producto']);
-            
-            
-            await especialesBDatabase.deleteEspecialesB(productos[x]['id_producto']);
-            await opcionesespecialesBDatabase.deleteOpcionesEspecialesB(productos[x]['id_producto']);
-            
-            await especialesCDatabase.deleteEspecialesC(productos[x]['id_producto']);
-            await opcionesespecialesCDatabase.deleteOpcionesEspecialesC(productos[x]['id_producto']);
-            
-            await especialesDDatabase.deleteEspecialesD(productos[x]['id_producto']);
-            await opcionesespecialesDDatabase.deleteOpcionesEspecialesD(productos[x]['id_producto']);
-            
-            await observacionesVariablesDatabase.deleteObservacionesVariables(productos[x]['id_producto']);
+            await acompanhamientosDatabase
+                .deleteAcompanhamientos(productos[x]['id_producto']);
+            await opcionesAcompanhamientosDatabase
+                .deleteOpcionesAcompanhamientos(productos[x]['id_producto']);
+
+            await especialesADatabase
+                .deleteEspecialesA(productos[x]['id_producto']);
+            await opcionesespecialesADatabase
+                .deleteOpcionesEspecialesA(productos[x]['id_producto']);
+
+            await especialesBDatabase
+                .deleteEspecialesB(productos[x]['id_producto']);
+            await opcionesespecialesBDatabase
+                .deleteOpcionesEspecialesB(productos[x]['id_producto']);
+
+            await especialesCDatabase
+                .deleteEspecialesC(productos[x]['id_producto']);
+            await opcionesespecialesCDatabase
+                .deleteOpcionesEspecialesC(productos[x]['id_producto']);
+
+            await especialesDDatabase
+                .deleteEspecialesD(productos[x]['id_producto']);
+            await opcionesespecialesDDatabase
+                .deleteOpcionesEspecialesD(productos[x]['id_producto']);
+
+            await observacionesVariablesDatabase
+                .deleteObservacionesVariables(productos[x]['id_producto']);
 
             ObservacionesFijas observacionesFijas = ObservacionesFijas();
             observacionesFijas.idProducto = productos[x]['id_producto'];
@@ -296,7 +297,7 @@ utils.porcentaje(context, porcentaje);
               for (var f = 0; f < saboresList.length; f++) {
                 Sabores sabores = Sabores();
                 sabores.idProducto = productos[x]['id_producto'];
-                sabores.tituloTextos = saboresList[f]['titulo']; 
+                sabores.tituloTextos = saboresList[f]['titulo'];
                 sabores.maximo = saboresList[f]['maximo'];
 
                 await saboresDatabase.insertarSabores(sabores);
@@ -319,48 +320,62 @@ utils.porcentaje(context, porcentaje);
             }
 
             var acompanhamientosList = productos[x]
-                ['producto_observaciones_fijas']['acompanhamientos']; 
+                ['producto_observaciones_fijas']['acompanhamientos'];
 
             if (acompanhamientosList.length > 0) {
               for (var y = 0; y < acompanhamientosList.length; y++) {
                 Acompanhamientos acompanhamientosModel = Acompanhamientos();
                 acompanhamientosModel.idProducto = productos[x]['id_producto'];
-                acompanhamientosModel.tituloTextos = acompanhamientosList[y]['titulo'].toString();
+                acompanhamientosModel.tituloTextos =
+                    acompanhamientosList[y]['titulo'].toString();
 
-                await acompanhamientosDatabase.insertarAcompanhamientos(acompanhamientosModel);
+                await acompanhamientosDatabase
+                    .insertarAcompanhamientos(acompanhamientosModel);
 
-                var listOpcionesAcompanhamientos = acompanhamientosList[y]['opciones'];
+                var listOpcionesAcompanhamientos =
+                    acompanhamientosList[y]['opciones'];
                 if (listOpcionesAcompanhamientos.length > 0) {
-                  for (var t = 0;t < listOpcionesAcompanhamientos.length; t++) {
-                    OpcionesAcompanhamientos opcionesAcompanhamientosModel = OpcionesAcompanhamientos();
-                    opcionesAcompanhamientosModel.idProducto = productos[x]['id_producto'];
-                    opcionesAcompanhamientosModel.tituloTextos = acompanhamientosList[y]['titulo'];
-                    opcionesAcompanhamientosModel.nombreTexto = listOpcionesAcompanhamientos[t].toString();
+                  for (var t = 0;
+                      t < listOpcionesAcompanhamientos.length;
+                      t++) {
+                    OpcionesAcompanhamientos opcionesAcompanhamientosModel =
+                        OpcionesAcompanhamientos();
+                    opcionesAcompanhamientosModel.idProducto =
+                        productos[x]['id_producto'];
+                    opcionesAcompanhamientosModel.tituloTextos =
+                        acompanhamientosList[y]['titulo'];
+                    opcionesAcompanhamientosModel.nombreTexto =
+                        listOpcionesAcompanhamientos[t].toString();
 
-                    await opcionesAcompanhamientosDatabase.insertarOpcionesAcompanhamientos(opcionesAcompanhamientosModel);
+                    await opcionesAcompanhamientosDatabase
+                        .insertarOpcionesAcompanhamientos(
+                            opcionesAcompanhamientosModel);
                   }
-                } 
+                }
               }
             }
 
-            var variblesObservaciones = productos[x]['producto_observaciones_variables'];
+            var variblesObservaciones =
+                productos[x]['producto_observaciones_variables'];
             if (variblesObservaciones.length > 0) {
               for (var a = 0; a < variblesObservaciones.length; a++) {
-                ObservacionesVariables observacionesVariables = ObservacionesVariables();
+                ObservacionesVariables observacionesVariables =
+                    ObservacionesVariables();
                 observacionesVariables.idProducto = productos[x]['id_producto'];
-                observacionesVariables.nombreVariable =  variblesObservaciones[a].toString();
-                await observacionesVariablesDatabase.insertarObservacionesVariables(observacionesVariables);
+                observacionesVariables.nombreVariable =
+                    variblesObservaciones[a].toString();
+                await observacionesVariablesDatabase
+                    .insertarObservacionesVariables(observacionesVariables);
               }
             }
 
-
-
-            var especialesAList = productos[x]['producto_observaciones_fijas']['especial_1'];
-             if (especialesAList.length > 0) {
+            var especialesAList =
+                productos[x]['producto_observaciones_fijas']['especial_1'];
+            if (especialesAList.length > 0) {
               for (var f = 0; f < especialesAList.length; f++) {
                 Sabores sabores = Sabores();
                 sabores.idProducto = productos[x]['id_producto'];
-                sabores.tituloTextos = especialesAList[f]['titulo']; 
+                sabores.tituloTextos = especialesAList[f]['titulo'];
                 sabores.maximo = especialesAList[f]['maximo'];
 
                 await especialesADatabase.insertarEspecialesA(sabores);
@@ -382,13 +397,14 @@ utils.porcentaje(context, porcentaje);
               }
             }
 
-            var especialesBList = productos[x]['producto_observaciones_fijas']['especial_2'];
+            var especialesBList =
+                productos[x]['producto_observaciones_fijas']['especial_2'];
 
-             if (especialesBList.length > 0) {
+            if (especialesBList.length > 0) {
               for (var f = 0; f < especialesBList.length; f++) {
                 Sabores sabores = Sabores();
                 sabores.idProducto = productos[x]['id_producto'];
-                sabores.tituloTextos = especialesBList[f]['titulo']; 
+                sabores.tituloTextos = especialesBList[f]['titulo'];
                 sabores.maximo = especialesBList[f]['maximo'];
 
                 await especialesBDatabase.insertarEspecialesB(sabores);
@@ -410,13 +426,14 @@ utils.porcentaje(context, porcentaje);
               }
             }
 
-            var especialesCList = productos[x]['producto_observaciones_fijas']['especial_3'];
+            var especialesCList =
+                productos[x]['producto_observaciones_fijas']['especial_3'];
 
             if (especialesCList.length > 0) {
               for (var f = 0; f < especialesCList.length; f++) {
                 Sabores sabores = Sabores();
                 sabores.idProducto = productos[x]['id_producto'];
-                sabores.tituloTextos = especialesCList[f]['titulo']; 
+                sabores.tituloTextos = especialesCList[f]['titulo'];
                 sabores.maximo = especialesCList[f]['maximo'];
 
                 await especialesCDatabase.insertarEspecialesC(sabores);
@@ -438,13 +455,14 @@ utils.porcentaje(context, porcentaje);
               }
             }
 
-            var especialesDList = productos[x]['producto_observaciones_fijas']['especial_4'];
+            var especialesDList =
+                productos[x]['producto_observaciones_fijas']['especial_4'];
 
-             if (especialesDList.length > 0) {
+            if (especialesDList.length > 0) {
               for (var f = 0; f < especialesDList.length; f++) {
                 Sabores sabores = Sabores();
                 sabores.idProducto = productos[x]['id_producto'];
-                sabores.tituloTextos = especialesDList[f]['titulo']; 
+                sabores.tituloTextos = especialesDList[f]['titulo'];
                 sabores.maximo = especialesDList[f]['maximo'];
 
                 await especialesDDatabase.insertarEspecialesD(sabores);
@@ -466,166 +484,140 @@ utils.porcentaje(context, porcentaje);
               }
             }
 
-            if(productos[x]['id_producto'] =='51'){
+            if (productos[x]['id_producto'] == '51') {
               print('ctm');
             }
-           
-               var adicionalesList = productos[x]['producto_observaciones_fijas']['adicional_categoria']['opciones'];
-               var adicionalesList2 = productos[x]['producto_observaciones_fijas']['adicional_categoria_2']['opciones'];
-               var adicionalesList3 = productos[x]['producto_observaciones_fijas']['adicional_categoria_3']['opciones'];
-               var adicionalesList4 = productos[x]['producto_observaciones_fijas']['adicional_categoria_4']['opciones'];
-               var adicionalesList5 = productos[x]['producto_observaciones_fijas']['adicional_categoria_5']['opciones'];
-               var adicionalesList6 = productos[x]['producto_observaciones_fijas']['adicional_categoria_6']['opciones'];
 
-                if(adicionalesList.length>0){
+            var adicionalesList = productos[x]['producto_observaciones_fijas']
+                ['adicional_categoria']['opciones'];
+            var adicionalesList2 = productos[x]['producto_observaciones_fijas']
+                ['adicional_categoria_2']['opciones'];
+            var adicionalesList3 = productos[x]['producto_observaciones_fijas']
+                ['adicional_categoria_3']['opciones'];
+            var adicionalesList4 = productos[x]['producto_observaciones_fijas']
+                ['adicional_categoria_4']['opciones'];
+            var adicionalesList5 = productos[x]['producto_observaciones_fijas']
+                ['adicional_categoria_5']['opciones'];
+            var adicionalesList6 = productos[x]['producto_observaciones_fijas']
+                ['adicional_categoria_6']['opciones'];
 
-                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'0');
+            if (adicionalesList.length > 0) {
+              await adicionalesDatabase.deleteAdicionalesPorId(
+                  productos[x]['id_producto'], '0');
 
+              for (var i = 0; i < adicionalesList.length; i++) {
+                AdicionalesModel adicionalesModel = AdicionalesModel();
 
+                adicionalesModel.idProducto = productos[x]['id_producto'];
+                adicionalesModel.idProductoAdicional = adicionalesList[i];
+                adicionalesModel.adicionalItem = '0';
+                adicionalesModel.titulo = productos[x]
+                        ['producto_observaciones_fijas']['adicional_categoria']
+                    ['titulo'];
+                adicionalesModel.adicionalSeleccionado = '0';
 
-                  for (var i = 0; i < adicionalesList.length; i++) {
+                await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+              }
+            }
 
-                    AdicionalesModel adicionalesModel = AdicionalesModel();
+            if (adicionalesList2.length > 0) {
+              await adicionalesDatabase.deleteAdicionalesPorId(
+                  productos[x]['id_producto'], '1');
 
-                    adicionalesModel.idProducto = productos[x]['id_producto'];
-                    adicionalesModel.idProductoAdicional = adicionalesList[i];
-                    adicionalesModel.adicionalItem = '0';
-                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria']['titulo'];
-                    adicionalesModel.adicionalSeleccionado = '0';
+              for (var i = 0; i < adicionalesList2.length; i++) {
+                AdicionalesModel adicionalesModel = AdicionalesModel();
 
-                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+                adicionalesModel.idProducto = productos[x]['id_producto'];
+                adicionalesModel.idProductoAdicional = adicionalesList2[i];
+                adicionalesModel.adicionalItem = '1';
+                adicionalesModel.titulo = productos[x]
+                        ['producto_observaciones_fijas']
+                    ['adicional_categoria_2']['titulo'];
 
-                    
-                    
-                  }
-                }
+                adicionalesModel.adicionalSeleccionado = '0';
 
+                await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+              }
+            }
 
+            if (adicionalesList3.length > 0) {
+              await adicionalesDatabase.deleteAdicionalesPorId(
+                  productos[x]['id_producto'], '2');
 
+              for (var i = 0; i < adicionalesList3.length; i++) {
+                AdicionalesModel adicionalesModel = AdicionalesModel();
 
-           
-                if(adicionalesList2.length>0){
+                adicionalesModel.idProducto = productos[x]['id_producto'];
+                adicionalesModel.idProductoAdicional = adicionalesList3[i];
+                adicionalesModel.adicionalItem = '2';
+                adicionalesModel.titulo = productos[x]
+                        ['producto_observaciones_fijas']
+                    ['adicional_categoria_3']['titulo'];
+                adicionalesModel.adicionalSeleccionado = '0';
 
-                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'1');
+                await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+              }
+            }
 
+            if (adicionalesList4.length > 0) {
+              await adicionalesDatabase.deleteAdicionalesPorId(
+                  productos[x]['id_producto'], '3');
 
+              for (var i = 0; i < adicionalesList4.length; i++) {
+                AdicionalesModel adicionalesModel = AdicionalesModel();
 
-                  for (var i = 0; i < adicionalesList2.length; i++) {
+                adicionalesModel.idProducto = productos[x]['id_producto'];
+                adicionalesModel.idProductoAdicional = adicionalesList4[i];
+                adicionalesModel.adicionalItem = '3';
+                adicionalesModel.titulo = productos[x]
+                        ['producto_observaciones_fijas']
+                    ['adicional_categoria_4']['titulo'];
 
-                    AdicionalesModel adicionalesModel = AdicionalesModel();
+                adicionalesModel.adicionalSeleccionado = '0';
 
-                    adicionalesModel.idProducto = productos[x]['id_producto'];
-                    adicionalesModel.idProductoAdicional = adicionalesList2[i];
-                    adicionalesModel.adicionalItem = '1';
-                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_2']['titulo'];
-                  
-                    adicionalesModel.adicionalSeleccionado = '0';
+                await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+              }
+            }
 
-                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+            if (adicionalesList5.length > 0) {
+              await adicionalesDatabase.deleteAdicionalesPorId(
+                  productos[x]['id_producto'], '4');
 
-                    
-                    
-                  }
-                }
+              for (var i = 0; i < adicionalesList5.length; i++) {
+                AdicionalesModel adicionalesModel = AdicionalesModel();
 
+                adicionalesModel.idProducto = productos[x]['id_producto'];
+                adicionalesModel.idProductoAdicional = adicionalesList5[i];
+                adicionalesModel.adicionalItem = '4';
+                adicionalesModel.titulo = productos[x]
+                        ['producto_observaciones_fijas']
+                    ['adicional_categoria_5']['titulo'];
 
+                adicionalesModel.adicionalSeleccionado = '0';
 
+                await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+              }
+            }
 
-                     if(adicionalesList3.length>0){
+            if (adicionalesList6.length > 0) {
+              await adicionalesDatabase.deleteAdicionalesPorId(
+                  productos[x]['id_producto'], '5');
 
-                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'2');
+              for (var i = 0; i < adicionalesList6.length; i++) {
+                AdicionalesModel adicionalesModel = AdicionalesModel();
 
+                adicionalesModel.idProducto = productos[x]['id_producto'];
+                adicionalesModel.idProductoAdicional = adicionalesList6[i];
+                adicionalesModel.adicionalItem = '5';
+                adicionalesModel.titulo = productos[x]
+                        ['producto_observaciones_fijas']
+                    ['adicional_categoria_6']['titulo'];
 
+                adicionalesModel.adicionalSeleccionado = '0';
 
-                  for (var i = 0; i < adicionalesList3.length; i++) {
-
-                    AdicionalesModel adicionalesModel = AdicionalesModel();
-
-                    adicionalesModel.idProducto = productos[x]['id_producto'];
-                    adicionalesModel.idProductoAdicional = adicionalesList3[i];
-                    adicionalesModel.adicionalItem = '2';
-                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_3']['titulo'];
-                    adicionalesModel.adicionalSeleccionado = '0';
-
-                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
-
-                    
-                    
-                  }
-                } 
-            
-
-                if(adicionalesList4.length>0){
-
-                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'3');
-
-
-
-                  for (var i = 0; i < adicionalesList4.length; i++) {
-
-                    AdicionalesModel adicionalesModel = AdicionalesModel();
-
-                    adicionalesModel.idProducto = productos[x]['id_producto'];
-                    adicionalesModel.idProductoAdicional = adicionalesList4[i];
-                    adicionalesModel.adicionalItem = '3';
-                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_4']['titulo'];
-                  
-                    adicionalesModel.adicionalSeleccionado = '0';
-
-                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
-
-                    
-                    
-                  }
-                }
-
-                if(adicionalesList5.length>0){
-
-                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'4');
-
-
-
-                  for (var i = 0; i < adicionalesList5.length; i++) {
-
-                    AdicionalesModel adicionalesModel = AdicionalesModel();
-
-                    adicionalesModel.idProducto = productos[x]['id_producto'];
-                    adicionalesModel.idProductoAdicional = adicionalesList5[i];
-                    adicionalesModel.adicionalItem = '4';
-                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_5']['titulo'];
-                  
-                    adicionalesModel.adicionalSeleccionado = '0';
-
-                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
-
-                    
-                    
-                  }
-                }
-
-                if(adicionalesList6.length>0){
-
-                  await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'],'5');
-
-
-
-                  for (var i = 0; i < adicionalesList6.length; i++) {
-
-                    AdicionalesModel adicionalesModel = AdicionalesModel();
-
-                    adicionalesModel.idProducto = productos[x]['id_producto'];
-                    adicionalesModel.idProductoAdicional = adicionalesList6[i];
-                    adicionalesModel.adicionalItem = '5';
-                    adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria_6']['titulo'];
-                  
-                    adicionalesModel.adicionalSeleccionado = '0';
-
-                    await adicionalesDatabase.insertarAdicionales(adicionalesModel);
-
-                    
-                    
-                  }
-                }
+                await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+              }
+            }
           }
         }
       }

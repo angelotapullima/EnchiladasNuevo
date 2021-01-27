@@ -29,6 +29,7 @@ class DetalleObservaciones extends StatefulWidget {
 }
 
 class _DetalleObservacionesState extends State<DetalleObservaciones> {
+  var nombredeProducto;
   //productos Fijos
   int tagFijos = 0;
   bool fijos = false;
@@ -42,7 +43,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
   //acompañamiento
   int tagAcompanhamientos;
-  bool acompanhamientos = false;
+  bool acompanhamientosBoolVariable = false;
   String idAcompanhamiento = 'false';
   String tituloAcom = '';
 
@@ -104,7 +105,6 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
               builder: (context, AsyncSnapshot<List<Observaciones>> snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data.length > 0) {
-
                     bool validacionFijos = false;
                     bool validacionSabores = false;
                     bool validacionVariables = false;
@@ -150,7 +150,6 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     //especialesA
                     if (snapshot.data[0].fijas[0].especialesA.length > 0) {
-
                       print('hay especiales1');
                       validacionEspeciales1 = true;
                       maximoespeciales1 = int.parse(
@@ -162,7 +161,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     //especialesB
                     if (snapshot.data[0].fijas[0].especialesB.length > 0) {
-                       print('hay especiales2');
+                      print('hay especiales2');
                       validacionEspeciales2 = true;
                       maximoespeciales2 = int.parse(
                           snapshot.data[0].fijas[0].especialesB[0].maximo);
@@ -173,7 +172,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     //especialesC
                     if (snapshot.data[0].fijas[0].especialesC.length > 0) {
-                       print('hay especiales3');
+                      print('hay especiales3');
                       validacionEspeciales3 = true;
                       maximoespeciales3 = int.parse(
                           snapshot.data[0].fijas[0].especialesC[0].maximo);
@@ -184,7 +183,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                     //especialesD
                     if (snapshot.data[0].fijas[0].especialesD.length > 0) {
-                       print('hay especiales4');
+                      print('hay especiales4');
                       validacionEspeciales4 = true;
                       maximoespeciales4 = int.parse(
                           snapshot.data[0].fijas[0].especialesD[0].maximo);
@@ -200,16 +199,14 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                           '${snapshot.data[0].fijas[0].acompanhamientos[0].tituloTextos}';
                     }
 
-
                     fijos = validacionFijos;
-                    variables=validacionVariables;
+                    variables = validacionVariables;
                     sabores = validacionSabores;
                     especiales1 = validacionEspeciales1;
                     especiales2 = validacionEspeciales2;
                     especiales3 = validacionEspeciales3;
                     especiales4 = validacionEspeciales4;
-                    acompanhamientos = validacionAcompa;
-                    
+                    acompanhamientosBoolVariable = validacionAcompa;
 
                     return ListView(addAutomaticKeepAlives: true, children: [
                       StreamBuilder(
@@ -223,6 +220,12 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                 physics: ClampingScrollPhysics(),
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
+                                  if ('${snapshot.data[index].productoTipo}' !=
+                                      'adicional') {
+                                    nombredeProducto =
+                                        snapshot.data[index].productoNombre;
+                                  }
+
                                   return ('${snapshot.data[index].productoTipo}' !=
                                           'adicional')
                                       ? Padding(
@@ -992,7 +995,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                       SizedBox(
                         height: responsive.hp(1),
                       ),
- 
+
                       StreamBuilder(
                         stream: adicionalesBloc.adicionalesStream,
                         builder: (BuildContext context,
@@ -1005,8 +1008,10 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                 physics: ClampingScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   return AdicionalesItem(
-                                      lista: snapshot.data[index].lista,
-                                      item: snapshot.data[index].item);
+                                    lista: snapshot.data[index].lista,
+                                    item: snapshot.data[index].item,
+                                    nombreProductoPrincipal: nombredeProducto,
+                                  );
                                 },
                               );
                             } else {
@@ -1119,7 +1124,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                       pasoEspeciales4 = true;
                     }
 
-                    if (acompanhamientos) {
+                    if (acompanhamientosBoolVariable) {
                       if (tagAcompanhamientos != null) {
                         pasoAcom = true;
                       } else {
@@ -1186,11 +1191,13 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 class AdicionalesItem extends StatelessWidget {
   final List<AdicionalesModel> lista;
   final String item;
+  final String nombreProductoPrincipal;
 
   const AdicionalesItem({
     Key key,
     @required this.lista,
     @required this.item,
+    @required this.nombreProductoPrincipal,
   }) : super(key: key);
 
   @override
@@ -1242,8 +1249,12 @@ class AdicionalesItem extends StatelessWidget {
               item,
             );
 
-            utils.agregarItemObservacion(context,
-                '${lista[index].idProductoAdicional}', value, 'adicional');
+            utils.agregarItemObservacion(
+                context,
+                '${lista[index].idProductoAdicional}',
+                value,
+                'adicional',
+                'adicional de $nombreProductoPrincipal');
           },
         );
       },

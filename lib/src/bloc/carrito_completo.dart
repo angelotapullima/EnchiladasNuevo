@@ -23,6 +23,7 @@ class CarritoCompletoBloc {
     final listCarritoCompleto = List<CarritoCompleto>();
     double subtotal = 0.0;
     double monto = 0.0;
+    double montoPropina = 0.0;
     List<Carrito> carrito = await carritoDatabase.obtenerCarritoDB();
     final direccion = await direccionDatabase.obtenerDireccionesConZonas();
     final deliveryRapido = await carritoDatabase.obtenerDeliveryRapido();
@@ -30,31 +31,39 @@ class CarritoCompletoBloc {
     int cantidadDeProductos = 0;
     int cantidadDeTupers = 0;
     for (int i = 0; i < carrito.length; i++) {
-      cantidadDeProductos =
-          cantidadDeProductos + int.parse(carrito[i].productoCantidad);
-      monto = double.parse(carrito[i].productoPrecio) *
-          double.parse(carrito[i].productoCantidad);
+      if (carrito[i].idCategoria != '58' && carrito[i].idCategoria != '86') {
+        cantidadDeProductos =
+            cantidadDeProductos + int.parse(carrito[i].productoCantidad);
 
-      subtotal = subtotal + monto;
+       
+          monto = double.parse(carrito[i].productoPrecio) *
+              double.parse(carrito[i].productoCantidad);
 
-      CarritoCompleto carritoCompleto1 = CarritoCompleto();
-      carritoCompleto1.idCategoria = carrito[i].idCategoria;
-      carritoCompleto1.producto = carrito[i].productoNombre;
-      carritoCompleto1.precio = carrito[i].productoPrecio;
-      carritoCompleto1.cantidad = carrito[i].productoCantidad;
-
-      listCarritoCompleto.add(carritoCompleto1);
-
-      if (carrito[i].productoTupper == '1') {
-        int cantidadHecha = int.parse(carrito[i].productoCantidad);
+          subtotal = subtotal + monto;
         
-        cantidadDeTupers = cantidadDeTupers + cantidadHecha;
-      } 
+        if(carrito[i].idCategoria=='97'){
+
+          montoPropina = double.parse(carrito[i].productoPrecio);
+        }
+
+        CarritoCompleto carritoCompleto1 = CarritoCompleto();
+        carritoCompleto1.idCategoria = carrito[i].idCategoria;
+        carritoCompleto1.producto = carrito[i].productoNombre;
+        carritoCompleto1.precio = carrito[i].productoPrecio;
+        carritoCompleto1.cantidad = carrito[i].productoCantidad;
+
+        listCarritoCompleto.add(carritoCompleto1);
+
+        if (carrito[i].productoTupper == '1') {
+          int cantidadHecha = int.parse(carrito[i].productoCantidad);
+
+          cantidadDeTupers = cantidadDeTupers + cantidadHecha;
+        }
+      }
     }
 
     if (cantidadDeTupers > 0) {
-      final tupperProduct =
-          await productoDatabase.consultarPorId(prefs.idTupper);
+      final tupperProduct =await productoDatabase.consultarPorId(prefs.idTupper);
       CarritoCompleto carritoCompletoTupper = CarritoCompleto();
       carritoCompletoTupper.idCategoria = carrito[0].idCategoria;
       carritoCompletoTupper.producto = tupperProduct[0].productoNombre;
@@ -62,6 +71,8 @@ class CarritoCompletoBloc {
       carritoCompletoTupper.cantidad = cantidadDeTupers.toString();
 
       listCarritoCompleto.add(carritoCompletoTupper);
+
+      subtotal = subtotal+ (double.parse(tupperProduct[0].productoPrecio) * cantidadDeTupers);
     }
 
     final listBolsa = await productoDatabase.consultarPorId(prefs.idBolsa);
@@ -72,6 +83,9 @@ class CarritoCompletoBloc {
     carritoCompleto2.producto = listBolsa[0].productoNombre;
     carritoCompleto2.precio = listBolsa[0].productoPrecio;
     carritoCompleto2.cantidad = cantidadDeBolsas.toString();
+
+
+    subtotal = subtotal+ (double.parse(listBolsa[0].productoPrecio) * cantidadDeBolsas);
 
     listCarritoCompleto.add(carritoCompleto2);
 
@@ -88,6 +102,7 @@ class CarritoCompletoBloc {
         listCarritoCompleto.add(carritoCompleto3);
       }
 
+        subtotal = subtotal-montoPropina;
       if (subtotal < pedidoMinimo) {
         //no se agrega
         CarritoCompleto carritoCompleto4 = CarritoCompleto();

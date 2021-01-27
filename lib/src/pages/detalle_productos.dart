@@ -233,7 +233,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
           children: [
             SlidingUpPanel(
               maxHeight: _panelHeightOpen,
-              minHeight: responsive.hp(7),
+              minHeight: responsive.hp(7), 
               controller: panelController, 
               parallaxEnabled: true,
               parallaxOffset: 0.1,
@@ -407,7 +407,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                           itemObservacionDatabase.deleteItemObservacion();
 
                           agregarItemObservacion(context,
-                              productosData.idProducto, true, 'producto');
+                              productosData.idProducto, true, 'producto','');
 
                           Navigator.of(context).push(_createRoute(
                               productosData.idProducto,
@@ -641,7 +641,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
       builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
-            return _contenidoDeCarrito(responsive, snapshot.data, sc);
+            return _contenidoDeCarrito(responsive, snapshot.data);
           } else {
             return Column(children: <Widget>[
               GestureDetector(
@@ -761,7 +761,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
   }
 
   Widget _contenidoDeCarrito(
-      Responsive responsive, List<Carrito> carrito, ScrollController sc) {
+      Responsive responsive, List<Carrito> carrito) {
     double subtotal = 0;
     double total = 0;
     double valorDelivery = 0;
@@ -804,6 +804,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
         ),
         Expanded(
           child: ListView(
+            padding: EdgeInsets.only(bottom: responsive.hp(2)),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: <Widget>[
@@ -816,7 +817,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
       ],
     );
   }
-
+ 
   Widget _listaProductos(Responsive responsive, List<Carrito> carrito) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),

@@ -51,7 +51,7 @@ class CategoriasDatabase{
 
  Future<List<CategoriaData>> obtenerCategoriasLocalEnchiladas() async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Categorias where  categoria_mostrar_app='2' order by CAST(categoria_orden AS INT) ASC");
+    final res = await db.rawQuery("SELECT * FROM Categorias where  categoria_mostrar_app='1' order by CAST(categoria_orden AS INT) ASC");
 
     List<CategoriaData> list = res.isNotEmpty
         ? res.map((c) => CategoriaData.fromJson(c)).toList()

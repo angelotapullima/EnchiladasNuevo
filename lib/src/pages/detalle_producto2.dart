@@ -281,7 +281,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                           itemObservacionDatabase.deleteItemObservacion();
 
                           agregarItemObservacion(context,
-                              productosData.idProducto, true, 'producto');
+                              productosData.idProducto, true, 'producto','');
 
                           Navigator.of(context).push(_createRoute(
                               productosData.idProducto,

@@ -219,6 +219,7 @@ class _MyAppState extends State<MyApp> {
               primarySwatch: Colors.red,
               scaffoldBackgroundColor: Colors.grey[50],
               canvasColor: Colors.transparent,
+              
             ),
             routes: {
               '/': (BuildContext context) => HomePage(),

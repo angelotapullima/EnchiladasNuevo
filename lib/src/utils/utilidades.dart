@@ -364,7 +364,7 @@ void showToast(String msg, int duration, ToastGravity gravity) {
 }
 
 void agregarItemObservacion(
-    BuildContext context, String idProducto, bool valor, String tipo) async {
+    BuildContext context, String idProducto, bool valor, String tipo,String observacion) async {
   print(valor);
   final itemObservacionDatabase = ItemObservacionDatabase();
   final productoDatabase = ProductoDatabase();
@@ -377,7 +377,7 @@ void agregarItemObservacion(
     productoData.productoNombre = producto[0].productoNombre;
     productoData.productoFoto = producto[0].productoFoto;
     productoData.productoPrecio = producto[0].productoPrecio;
-    productoData.productoObservacion = '';
+    productoData.productoObservacion = observacion;
     productoData.idCategoria = producto[0].idCategoria;
     productoData.productoTipo = tipo;
     productoData.productoTupper = producto[0].productoTupper;

@@ -223,8 +223,20 @@ class OrdenesApi {
         linkcito.link = link;
         linkcito.idPedido = decodedData['result']['pedido']['id_pedido'];
         return linkcito;
-      } else {
-        String link = "";
+      } else if (decodedData['result']['code'] == 19){
+
+        utils.showToast(decodedData['result']['message'], 4, ToastGravity.TOP);
+
+
+  String link = "";
+        Link linkcito = Link();
+        linkcito.resp = 2;
+        linkcito.link = link;
+        return linkcito;
+      
+      }else{
+
+  String link = "";
         Link linkcito = Link();
         linkcito.resp = 2;
         linkcito.link = link;

@@ -29,6 +29,11 @@ class PrincipalLocal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = new Responsive.of(context);
+
+    final pantallasBloc = ProviderBloc.pantallaLocal(context);
+    final categoriasBloc = ProviderBloc.cat(context);
+    pantallasBloc.obtenerPantallasLocal();
+    categoriasBloc.obtenerCategoriasPromociones();
     /*  final usuarioBloc = ProviderBloc.user(context);
     usuarioBloc.obtenerUsuario(); */
 
