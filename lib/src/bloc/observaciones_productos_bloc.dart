@@ -165,8 +165,6 @@ class ObservacionesProductoBloc {
   }
 
 
-
-
   Future<List<Acompanhamientos>> obtenerAcompanhamientos(String idProducto) async {
     final listAcompanhamientos = List<Acompanhamientos>();
 

@@ -234,6 +234,7 @@ void agregarCarritoConAdicionales(ProductosData productosData,
     carrito.productoObservacion = observacion;
     carrito.productoCantidad = cantidad;
     carrito.productoTupper = productosData.productoTupper;
+    carrito.idCategoria = productosData.idCategoria;
 
     if (dato.length > 0) {
       await carritoDatabase.updateCarritoDb(carrito);
@@ -525,12 +526,10 @@ void agregarProductosAlCarrito(BuildContext context) async {
   Carrito carrito = new Carrito();
   final carritoDatabase = CarritoDatabase();
 
-  final itemsObservacion =
-      await itemObservacionDatabase.obtenerItemObservacion();
+  final itemsObservacion =await itemObservacionDatabase.obtenerItemObservacion();
 
   for (var i = 0; i < itemsObservacion.length; i++) {
-    final dato = await carritoDatabase
-        .consultarCarritoPorId(itemsObservacion[i].idProducto);
+    final dato = await carritoDatabase.consultarCarritoPorId(itemsObservacion[i].idProducto);
 
     carrito.idProducto = int.parse(itemsObservacion[i].idProducto);
     carrito.productoNombre = itemsObservacion[i].productoNombre;
@@ -538,12 +537,8 @@ void agregarProductosAlCarrito(BuildContext context) async {
     carrito.productoPrecio = itemsObservacion[i].productoPrecio;
     carrito.productoTupper = itemsObservacion[i].productoTupper;
     carrito.productoCantidad = '1';
-
-    if (itemsObservacion[i].productoTipo == 'adicional') {
-      carrito.productoObservacion = '';
-    } else {
-      carrito.productoObservacion = itemsObservacion[i].productoObservacion;
-    }
+    carrito.productoObservacion = itemsObservacion[i].productoObservacion;
+    carrito.idCategoria = itemsObservacion[i].idCategoria;
 
     if (dato.length > 0) {
       await carritoDatabase.updateCarritoDb(carrito);

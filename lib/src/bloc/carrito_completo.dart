@@ -19,6 +19,7 @@ class CarritoCompletoBloc {
     carritoCompleto?.close();
   }
 
+
   void obtenerCarritoCpmpleto() async {
     final listCarritoCompleto = List<CarritoCompleto>();
     double subtotal = 0.0;
@@ -32,21 +33,11 @@ class CarritoCompletoBloc {
     int cantidadDeTupers = 0;
     for (int i = 0; i < carrito.length; i++) {
       if (carrito[i].idCategoria != '58' && carrito[i].idCategoria != '86') {
-        cantidadDeProductos =
-            cantidadDeProductos + int.parse(carrito[i].productoCantidad);
+        monto = double.parse(carrito[i].productoPrecio) * double.parse(carrito[i].productoCantidad);
+        subtotal = subtotal + monto;
+      }
 
-       
-          monto = double.parse(carrito[i].productoPrecio) *
-              double.parse(carrito[i].productoCantidad);
-
-          subtotal = subtotal + monto;
-        
-        if(carrito[i].idCategoria=='97'){
-
-          montoPropina = double.parse(carrito[i].productoPrecio);
-        }
-
-        CarritoCompleto carritoCompleto1 = CarritoCompleto();
+       CarritoCompleto carritoCompleto1 = CarritoCompleto();
         carritoCompleto1.idCategoria = carrito[i].idCategoria;
         carritoCompleto1.producto = carrito[i].productoNombre;
         carritoCompleto1.precio = carrito[i].productoPrecio;
@@ -54,12 +45,24 @@ class CarritoCompletoBloc {
 
         listCarritoCompleto.add(carritoCompleto1);
 
-        if (carrito[i].productoTupper == '1') {
-          int cantidadHecha = int.parse(carrito[i].productoCantidad);
 
-          cantidadDeTupers = cantidadDeTupers + cantidadHecha;
-        }
+      //estao sirve para sacar el monto de la propina que se agrega
+      if (carrito[i].idCategoria == '97' || carrito[i].idCategoria == '58') {
+        montoPropina = double.parse(carrito[i].productoPrecio);
       }
+
+      //esto sirve para contar la cantidad de tuppers que se utilizara
+      if (carrito[i].productoTupper == '1') {
+        int cantidadHecha = int.parse(carrito[i].productoCantidad);
+
+        cantidadDeTupers = cantidadDeTupers + cantidadHecha;
+      }
+ 
+      //productos omitidos para bolsa
+      if (carrito[i].idCategoria != '58' &&carrito[i].idCategoria != '86' && carrito[i].idCategoria != '16') {
+        cantidadDeProductos =
+            cantidadDeProductos + int.parse(carrito[i].productoCantidad);
+      } 
     }
 
     if (cantidadDeTupers > 0) {
@@ -71,8 +74,8 @@ class CarritoCompletoBloc {
       carritoCompletoTupper.cantidad = cantidadDeTupers.toString();
 
       listCarritoCompleto.add(carritoCompletoTupper);
-
-      subtotal = subtotal+ (double.parse(tupperProduct[0].productoPrecio) * cantidadDeTupers);
+      //montoPropina = montoPropina + (double.parse(tupperProduct[0].productoPrecio) * cantidadDeTupers);
+      //subtotal = subtotal +(double.parse(tupperProduct[0].productoPrecio) * cantidadDeTupers);
     }
 
     final listBolsa = await productoDatabase.consultarPorId(prefs.idBolsa);
@@ -84,8 +87,8 @@ class CarritoCompletoBloc {
     carritoCompleto2.precio = listBolsa[0].productoPrecio;
     carritoCompleto2.cantidad = cantidadDeBolsas.toString();
 
-
-    subtotal = subtotal+ (double.parse(listBolsa[0].productoPrecio) * cantidadDeBolsas);
+    subtotal = subtotal +
+        (double.parse(listBolsa[0].productoPrecio) * cantidadDeBolsas);
 
     listCarritoCompleto.add(carritoCompleto2);
 
@@ -102,7 +105,7 @@ class CarritoCompletoBloc {
         listCarritoCompleto.add(carritoCompleto3);
       }
 
-        subtotal = subtotal-montoPropina;
+      subtotal = subtotal - montoPropina;
       if (subtotal < pedidoMinimo) {
         //no se agrega
         CarritoCompleto carritoCompleto4 = CarritoCompleto();

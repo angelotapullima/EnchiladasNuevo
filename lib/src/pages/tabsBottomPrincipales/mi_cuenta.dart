@@ -555,7 +555,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    '1.0.0',
+                    '1.1.0',
                     style: TextStyle(
                         fontSize: responsive.ip(2.5),
                         fontWeight: FontWeight.bold),

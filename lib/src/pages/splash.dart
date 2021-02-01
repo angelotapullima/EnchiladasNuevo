@@ -35,9 +35,9 @@ class _SplashState extends State<Splash> with AfterLayoutMixin {
 
       preferences.estadoCargaInicial = '1';
     } else {
-      categoriasApi.obtenerAmbos(context);
+       categoriasApi.obtenerAmbos(context);
 
-      configuracionApi.configuracion();
+       configuracionApi.configuracion();
     }
 
     final user = await usuarioDatabase.obtenerUsUario();

@@ -4,6 +4,8 @@ import 'package:enchiladasapp/src/pages/AplicacionLocal/detalle_promociones_loca
 import 'package:enchiladasapp/src/pages/AplicacionLocal/home_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/productos_categoria.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/mi_ubicacion/mi_ubicacion_bloc.dart';
+import 'package:enchiladasapp/src/pages/detallePedido/bloc_detalle_pago.dart';
+import 'package:enchiladasapp/src/pages/detallePedido/detalle_pedido.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto_foto.dart';
 import 'package:enchiladasapp/src/pages/gestionar_direcciones.dart';
 import 'package:enchiladasapp/src/pages/mapa_cliente.dart';
@@ -23,7 +25,6 @@ import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/pages/detalle_pago.dart';
-import 'package:enchiladasapp/src/pages/detalle_pedido.dart';
 import 'package:enchiladasapp/src/pages/select_direction.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
@@ -86,8 +87,10 @@ void main() async {
       requestSoundPermission: true,
       onDidReceiveLocalNotification:
           (int id, String title, String body, String payload) async {
-        didReceiveLocalNotificationSubject.add(ReceivedNotification(
-            id: id, title: title, body: body, payload: payload),);
+        didReceiveLocalNotificationSubject.add(
+          ReceivedNotification(
+              id: id, title: title, body: body, payload: payload),
+        );
       });
   var initializationSettings = InitializationSettings(
       initializationSettingsAndroid, initializationSettingsIOS);
@@ -127,13 +130,11 @@ class _MyAppState extends State<MyApp> {
     pushNotificationProvider.initNotification();
 
     pushNotificationProvider.mensajesPush.listen((event) {
-
-
-        showToast('pruieb', 2, ToastGravity.TOP);
+      showToast('pruieb', 2, ToastGravity.TOP);
       navigatorkey.currentState.pushNamed('notificationPage', arguments: event);
     });
 
-    _requestIOSPermissions(); 
+    _requestIOSPermissions();
     _configureDidReceiveLocalNotificationSubject();
     _configureSelectNotificationSubject();
     /* final pushNotificationProvider = PushNotificationProvider();
@@ -184,7 +185,6 @@ class _MyAppState extends State<MyApp> {
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen(
       (String payload) async {
-
         showToast('pruieb', 2, ToastGravity.TOP);
         await navigatorkey.currentState
             .pushNamed('notificationPage', arguments: payload);
@@ -201,64 +201,71 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiProvider(
       providers: [
-        BlocProvider(create: (_) => MiUbicacionBloc()),
-        BlocProvider(create: (_) => MapaBloc()),
-        //BlocProvider(create: ( _ ) => BusquedaBloc() ),
+        ChangeNotifierProvider<DetallePedidoBloc>(
+            create: (_) => DetallePedidoBloc()),
       ],
-      child: ChangeNotifierProvider(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => MiUbicacionBloc()),
+          BlocProvider(create: (_) => MapaBloc()),
+          //BlocProvider(create: ( _ ) => BusquedaBloc() ),
+        ],
+        child: ChangeNotifierProvider(
+          create: (_) => PrincipalChangeBloc(),
+          child: ProviderBloc(
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              navigatorKey: navigatorkey,
+              initialRoute: 'splash', //'splash',
+              theme: ThemeData(
+                primarySwatch: Colors.red,
+                scaffoldBackgroundColor: Colors.grey[50],
+                canvasColor: Colors.transparent,
+              ),
+              routes: {
+                '/': (BuildContext context) => HomePage(),
+                'homeLocal': (BuildContext context) => HomeLocal(),
+                'HomePuzzle': (BuildContext context) => HomePuzzle(),
+                'puzzle': (BuildContext context) => PuzzlePage(),
+                'login': (BuildContext context) => LoginPage(),
+                'splash': (BuildContext context) => Splash(),
+                'desicion': (BuildContext context) => DesicionPage(),
+                //'detalleP': (BuildContext context) => DetalleProductitoss(),
+                'detallePago': (BuildContext context) => DetallePago(),
+                'sel_Direccion': (BuildContext context) => MapsSample(),
+                //'combo': (BuildContext context) => CategoriasEspecialesPage(),
+                'ordenes': (BuildContext context) => OrdenesPage(),
+                'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
+                'detallePedido': (BuildContext context) => DetallePedido(),
+                /* 'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
+                'mapaRepartidor': (BuildContext context) => MapaRepartidor(), */
+                'mapaCliente': (BuildContext context) => MapaCliente(),
+                'ranking': (BuildContext context) => RankingPage(),
+                'rankingReport': (BuildContext context) => RankingReport(),
+                'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
 
-      create: (_) => PrincipalChangeBloc(),
-        child: ProviderBloc(
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            navigatorKey: navigatorkey,
-            initialRoute: 'splash',//'splash',
-            theme: ThemeData(
-              primarySwatch: Colors.red,
-              scaffoldBackgroundColor: Colors.grey[50],
-              canvasColor: Colors.transparent,
-              
+                'timeline': (BuildContext context) => DeliveryTimeline(),
+                'webView': (BuildContext context) => WebViewExample(),
+                'ticket': (BuildContext context) => Ticket(),
+                'gestionarDirecciones': (BuildContext context) =>
+                    GestionarDirecciones(),
+                'detalleProductoFoto': (BuildContext context) =>
+                    DetalleProductoFoto(),
+                'detallePromociones': (BuildContext context) =>
+                    DetallePromociones(),
+                'onboarding': (BuildContext context) => OnboardingPage(),
+                'productosCategoria': (BuildContext context) =>
+                    ProductosCategoria(),
+                'detallePromocionesLocal': (BuildContext context) =>
+                    DetallePromocionesLocal(),
+                'notificationPage': (BuildContext context) =>
+                    NotificationPage(),
+                'pantallaDeliveryOpciones': (BuildContext context) =>
+                    PantallaDeliveryOpciones(),
+              },
             ),
-            routes: {
-              '/': (BuildContext context) => HomePage(),
-              'homeLocal': (BuildContext context) => HomeLocal(),
-              'HomePuzzle': (BuildContext context) => HomePuzzle(),
-              'puzzle': (BuildContext context) => PuzzlePage(),
-              'login': (BuildContext context) => LoginPage(),
-              'splash': (BuildContext context) => Splash(),
-              'desicion': (BuildContext context) => DesicionPage(),
-              //'detalleP': (BuildContext context) => DetalleProductitoss(),
-              'detallePago': (BuildContext context) => DetallePago(),
-              'sel_Direccion': (BuildContext context) => MapsSample(),
-              //'combo': (BuildContext context) => CategoriasEspecialesPage(),
-              'ordenes': (BuildContext context) => OrdenesPage(),
-              'ordenesPago': (BuildContext context) => OrdenesPagoPage(),
-              'detallePedido': (BuildContext context) => DetallePedido(),
-              /* 'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
-              'mapaRepartidor': (BuildContext context) => MapaRepartidor(), */
-              'mapaCliente': (BuildContext context) => MapaCliente(),
-              'ranking': (BuildContext context) => RankingPage(),
-              'rankingReport': (BuildContext context) => RankingReport(),
-              'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
-              
-              'timeline': (BuildContext context) => DeliveryTimeline(),
-              'webView': (BuildContext context) => WebViewExample(),
-              'ticket': (BuildContext context) => Ticket(),
-              'gestionarDirecciones': (BuildContext context) =>
-                  GestionarDirecciones(),
-              'detalleProductoFoto': (BuildContext context) =>
-                  DetalleProductoFoto(),
-              'detallePromociones': (BuildContext context) =>
-                  DetallePromociones(),
-              'onboarding': (BuildContext context) => OnboardingPage(),
-              'productosCategoria': (BuildContext context) =>
-                  ProductosCategoria(),
-              'detallePromocionesLocal': (BuildContext context) => DetallePromocionesLocal(),
-              'notificationPage': (BuildContext context) => NotificationPage(),
-              'pantallaDeliveryOpciones': (BuildContext context) => PantallaDeliveryOpciones(),
-            },
           ),
         ),
       ),

@@ -180,8 +180,7 @@ class CategoriasApi {
 
             int cantidadAdicionales = 0;
 
-            var cantiProAdi = productos[x][
-                'producto_observaciones_fijas']; //['adicional_categoria']['opciones'];
+            var cantiProAdi = productos[x]['producto_observaciones_fijas']; 
 
             if (cantiProAdi['adicional_categoria']['opciones'].length > 0) {
               cantidadAdicionales++;
@@ -202,8 +201,7 @@ class CategoriasApi {
               cantidadAdicionales++;
             }
 
-            productosData.productoCantidadAdicional =
-                cantidadAdicionales.toString();
+            productosData.productoCantidadAdicional = cantidadAdicionales.toString();
 
             if (productosData.productoDestacado == '0') {
               productosData.productoEstadoDestacado = '0';
@@ -221,68 +219,45 @@ class CategoriasApi {
               productoDatabase.insertarProductosDb(productosData);
             }
 
-            await observacionesFijasDatabase
-                .deleteObservacionesFijas(productos[x]['id_producto']);
-            await productosFijosDatabase
-                .deleteProductosFijos(productos[x]['id_producto']);
+            await observacionesFijasDatabase.deleteObservacionesFijas(productos[x]['id_producto']);
+            await productosFijosDatabase.deleteProductosFijos(productos[x]['id_producto']);
             await saboresDatabase.deleteSabores(productos[x]['id_producto']);
-            await opcionesSaboresDatabase
-                .deleteOpcionesSabores(productos[x]['id_producto']);
+            await opcionesSaboresDatabase.deleteOpcionesSabores(productos[x]['id_producto']);
 
-            await acompanhamientosDatabase
-                .deleteAcompanhamientos(productos[x]['id_producto']);
-            await opcionesAcompanhamientosDatabase
-                .deleteOpcionesAcompanhamientos(productos[x]['id_producto']);
+            await acompanhamientosDatabase.deleteAcompanhamientos(productos[x]['id_producto']);
+            await opcionesAcompanhamientosDatabase.deleteOpcionesAcompanhamientos(productos[x]['id_producto']);
 
-            await especialesADatabase
-                .deleteEspecialesA(productos[x]['id_producto']);
-            await opcionesespecialesADatabase
-                .deleteOpcionesEspecialesA(productos[x]['id_producto']);
+            await especialesADatabase.deleteEspecialesA(productos[x]['id_producto']);
+            await opcionesespecialesADatabase.deleteOpcionesEspecialesA(productos[x]['id_producto']);
 
-            await especialesBDatabase
-                .deleteEspecialesB(productos[x]['id_producto']);
-            await opcionesespecialesBDatabase
-                .deleteOpcionesEspecialesB(productos[x]['id_producto']);
+            await especialesBDatabase.deleteEspecialesB(productos[x]['id_producto']);
+            await opcionesespecialesBDatabase.deleteOpcionesEspecialesB(productos[x]['id_producto']);
 
-            await especialesCDatabase
-                .deleteEspecialesC(productos[x]['id_producto']);
-            await opcionesespecialesCDatabase
-                .deleteOpcionesEspecialesC(productos[x]['id_producto']);
+            await especialesCDatabase.deleteEspecialesC(productos[x]['id_producto']);
+            await opcionesespecialesCDatabase.deleteOpcionesEspecialesC(productos[x]['id_producto']);
 
-            await especialesDDatabase
-                .deleteEspecialesD(productos[x]['id_producto']);
-            await opcionesespecialesDDatabase
-                .deleteOpcionesEspecialesD(productos[x]['id_producto']);
+            await especialesDDatabase.deleteEspecialesD(productos[x]['id_producto']);
+            await opcionesespecialesDDatabase.deleteOpcionesEspecialesD(productos[x]['id_producto']);
 
-            await observacionesVariablesDatabase
-                .deleteObservacionesVariables(productos[x]['id_producto']);
+            await observacionesVariablesDatabase.deleteObservacionesVariables(productos[x]['id_producto']);
 
             ObservacionesFijas observacionesFijas = ObservacionesFijas();
             observacionesFijas.idProducto = productos[x]['id_producto'];
-            observacionesFijas.mostrar =
-                productos[x]['producto_observaciones_fijas']['mostrar_fijas'];
+            observacionesFijas.mostrar =productos[x]['producto_observaciones_fijas']['mostrar_fijas'];
 
-            await observacionesFijasDatabase
-                .insertarObservacionesFijas(observacionesFijas);
+            await observacionesFijasDatabase.insertarObservacionesFijas(observacionesFijas);
 
-            var productillos =
-                productos[x]['producto_observaciones_fijas']['productos'];
+            var productillos =productos[x]['producto_observaciones_fijas']['productos'];
 
             if (productillos.length > 0) {
-              for (var z = 0;
-                  z <
-                      productos[x]['producto_observaciones_fijas']['productos']
-                          .length;
-                  z++) {
-                final productoIdbuscado = await productoDatabase
-                    .consultarPorId(productillos[z].toString());
+              for (var z = 0;z <productos[x]['producto_observaciones_fijas']['productos'].length;z++) {
+                final productoIdbuscado = await productoDatabase.consultarPorId(productillos[z].toString());
 
                 if (productoIdbuscado.length > 0) {
                   ProductosFijos productosFijos = ProductosFijos();
                   productosFijos.idProducto = productos[x]['id_producto'];
                   productosFijos.idRelacionado = productillos[z].toString();
-                  productosFijos.nombreProducto =
-                      productoIdbuscado[0].productoNombre;
+                  productosFijos.nombreProducto = productoIdbuscado[0].productoNombre;
 
                   await productosFijosDatabase
                       .insertarProductosFijos(productosFijos);
@@ -307,13 +282,10 @@ class CategoriasApi {
                   for (var t = 0; t < listOpcionesSabores.length; t++) {
                     OpcionesSabores opcionesSabores = OpcionesSabores();
                     opcionesSabores.idProducto = productos[x]['id_producto'];
-                    opcionesSabores.tituloTextos =
-                        saboresList[f]['titulo'].toString();
-                    opcionesSabores.nombreTexto =
-                        listOpcionesSabores[t].toString();
+                    opcionesSabores.tituloTextos =saboresList[f]['titulo'].toString();
+                    opcionesSabores.nombreTexto =listOpcionesSabores[t].toString();
 
-                    await opcionesSaboresDatabase
-                        .insertarOpcionesSabores(opcionesSabores);
+                    await opcionesSaboresDatabase.insertarOpcionesSabores(opcionesSabores);
                   }
                 }
               }
@@ -488,22 +460,15 @@ class CategoriasApi {
               print('ctm');
             }
 
-            var adicionalesList = productos[x]['producto_observaciones_fijas']
-                ['adicional_categoria']['opciones'];
-            var adicionalesList2 = productos[x]['producto_observaciones_fijas']
-                ['adicional_categoria_2']['opciones'];
-            var adicionalesList3 = productos[x]['producto_observaciones_fijas']
-                ['adicional_categoria_3']['opciones'];
-            var adicionalesList4 = productos[x]['producto_observaciones_fijas']
-                ['adicional_categoria_4']['opciones'];
-            var adicionalesList5 = productos[x]['producto_observaciones_fijas']
-                ['adicional_categoria_5']['opciones'];
-            var adicionalesList6 = productos[x]['producto_observaciones_fijas']
-                ['adicional_categoria_6']['opciones'];
+            var adicionalesList = productos[x]['producto_observaciones_fijas']['adicional_categoria']['opciones'];
+            var adicionalesList2 = productos[x]['producto_observaciones_fijas']['adicional_categoria_2']['opciones'];
+            var adicionalesList3 = productos[x]['producto_observaciones_fijas']['adicional_categoria_3']['opciones'];
+            var adicionalesList4 = productos[x]['producto_observaciones_fijas']['adicional_categoria_4']['opciones'];
+            var adicionalesList5 = productos[x]['producto_observaciones_fijas']['adicional_categoria_5']['opciones'];
+            var adicionalesList6 = productos[x]['producto_observaciones_fijas']['adicional_categoria_6']['opciones'];
 
             if (adicionalesList.length > 0) {
-              await adicionalesDatabase.deleteAdicionalesPorId(
-                  productos[x]['id_producto'], '0');
+              await adicionalesDatabase.deleteAdicionalesPorId(productos[x]['id_producto'], '0');
 
               for (var i = 0; i < adicionalesList.length; i++) {
                 AdicionalesModel adicionalesModel = AdicionalesModel();
@@ -511,9 +476,7 @@ class CategoriasApi {
                 adicionalesModel.idProducto = productos[x]['id_producto'];
                 adicionalesModel.idProductoAdicional = adicionalesList[i];
                 adicionalesModel.adicionalItem = '0';
-                adicionalesModel.titulo = productos[x]
-                        ['producto_observaciones_fijas']['adicional_categoria']
-                    ['titulo'];
+                adicionalesModel.titulo = productos[x]['producto_observaciones_fijas']['adicional_categoria']['titulo'];
                 adicionalesModel.adicionalSeleccionado = '0';
 
                 await adicionalesDatabase.insertarAdicionales(adicionalesModel);
@@ -632,135 +595,4 @@ class CategoriasApi {
     }
   }
 
-  /*  Future<List<CategoriaData>> cargarCategorias() async {
-    try {
-      final url = '$_url/api/Categoria/listar_categorias';
-      final lista = List<CategoriaData>();
-      final resp = await http.post(url, body: {});
-      final Map<String, dynamic> decodedData = json.decode(resp.body);
-
-      if (decodedData == null) return [];
-
-      CategoriaData categorias = CategoriaData(); //.fromJson(decodedData);
-
-      categorias.idCategoria = decodedData['result']['data'];
-
-      for (int i = 0; i < decodedData['result']['data'].length; i++) {
-        CategoriaData categorias = CategoriaData();
-
-        categorias.idCategoria =
-            decodedData['result']['data'][i]['id_categoria'];
-        categorias.categoriaTipo =
-            decodedData['result']['data'][i]['categoria_tipo'];
-        categorias.categoriaNombre =
-            decodedData['result']['data'][i]['categoria_nombre'];
-        categorias.categoriaIcono =
-            decodedData['result']['data'][i]['categoria_icono'];
-        categorias.categoriaPromocion =
-            decodedData['result']['data'][i]['categoria_promocion'];
-        categorias.categoriaFoto =
-            decodedData['result']['data'][i]['categoria_foto'];
-        categorias.categoriaBanner =
-            decodedData['result']['data'][i]['categoria_banner'];
-        categorias.categoriaEstado =
-            decodedData['result']['data'][i]['categoria_estado'];
-        categorias.categoriaMostrarApp =
-            decodedData['result']['data'][i]['categoria_mostrar_app'];
-
-        categoriasDatabase.insertarCategoriasDb(categorias);
-        /* if (categorias.result.data.length > 0) {
-          final id = categorias.result.data[i].idCategoria;
-          final dato = await categoriasDatabase.consultarPorId(id);
-          CategoriaData categoriaData = CategoriaData();
-
-          categoriaData.idCategoria     = categorias.result.data[i].idCategoria;
-          categoriaData.categoriaNombre = categorias.result.data[i].categoriaNombre;
-          categoriaData.categoriaEstado = categorias.result.data[i].categoriaEstado;
-
-          if (dato.length > 0) {
-            categoriasDatabase.insertarCategoriasDb(categoriaData);
-
-            //'actualizado ${categoriaData.idCategoria}  ');
-          } else {
-            //print('nuevo ${categoriaData.idCategoria}');
-
-            categoriasDatabase.insertarCategoriasDb(categoriaData);
-          }
-          lista.add(categoriaData);
-
-          
-        } */
-      }
-
-      if (lista.length < 0) {
-        return [];
-      } else {
-        return lista;
-      }
-    } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
-      return [];
-    }
-  }
-
-   */
-
-  /* Future<List<ProductosData>> obtenerProductoCategoria(String id) async {
-    try {
-      final lista = List<ProductosData>();
-
-      final url = '$_url/api/Categoria/listar_productos/$id';
-      final resp = await http.post(url, body: {});
-      final Map<String, dynamic> decodedData = json.decode(resp.body);
-
-      if (decodedData == null) return [];
-      Productos productos = Productos.fromJson(decodedData);
-      for (int i = 0; i < productos.result.data.length; i++) {
-        if (productos.result.data.length > 0) {
-          final id = productos.result.data[i].idProducto;
-          final dato = await productoDatabase.consultarPorId(id);
-          ProductosData productosData = ProductosData();
-          productosData.idProducto = productos.result.data[i].idProducto;
-          productosData.idCategoria = productos.result.data[i].idCategoria;
-          productosData.productoNombre =
-              productos.result.data[i].productoNombre;
-          productosData.productoFoto = productos.result.data[i].productoFoto;
-          productosData.productoPrecio =
-              productos.result.data[i].productoPrecio;
-          productosData.productoUnidad =
-              productos.result.data[i].productoUnidad;
-          productosData.productoEstado =
-              productos.result.data[i].productoEstado;
-
-          productosData.productoDescripcion =
-              productos.result.data[i].productoDescripcion;
-
-          if (dato.length > 0) {
-            productosData.productoFavorito = dato[0].productoFavorito;
-            productosData.sonido = dato[0].sonido;
-            productoDatabase.updateProductosDb(productosData);
-          } else {
-            productosData.productoFavorito = 0;
-
-            productoDatabase.insertarProductosDb(productosData);
-          }
-          lista.add(productosData);
-        }
-      }
-
-      if (lista.length < 0) {
-        return [];
-      } else {
-        return lista;
-      }
-    } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
-      return [];
-    }
-  }
- */
 }

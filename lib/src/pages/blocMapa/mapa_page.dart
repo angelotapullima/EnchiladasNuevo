@@ -1,4 +1,5 @@
 import 'package:enchiladasapp/src/pages/blocMapa/widgets/widgets.dart';
+import 'package:enchiladasapp/src/pages/rating_repartidor.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +10,9 @@ import 'mapa/mapa_bloc.dart';
 import 'mi_ubicacion/mi_ubicacion_bloc.dart';
 
 class MapaPage extends StatefulWidget {
-  final idRepartidor;
+  final idPedido;
 
-  const MapaPage({Key key, @required this.idRepartidor}) : super(key: key);
+  const MapaPage({Key key,  @required this.idPedido}) : super(key: key);
 
   @override
   _MapaPageState createState() => _MapaPageState();
@@ -20,7 +21,7 @@ class MapaPage extends StatefulWidget {
 class _MapaPageState extends State<MapaPage> {
   @override
   void initState() {
-    context.bloc<MiUbicacionBloc>().iniciarSeguimiento(widget.idRepartidor);
+    context.bloc<MiUbicacionBloc>().iniciarSeguimiento(widget.idPedido);
 
     super.initState();
   }
@@ -69,11 +70,32 @@ class _MapaPageState extends State<MapaPage> {
                                 Spacer(),
                                 FlatButton(
                                   onPressed: () async {
-                                    Navigator.pop(context);
+                                    Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                          transitionDuration:
+                                              const Duration(milliseconds: 400),
+                                          pageBuilder: (context, animation,
+                                              secondaryAnimation) {
+                                            return RatingRepartidor(
+                                              idPedido: widget.idPedido,
+                                            );
+                                            //return DetalleProductitos(productosData: productosData);
+                                          },
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            return FadeTransition(
+                                              opacity: animation,
+                                              child: child,
+                                            );
+                                          },
+                                        ));
                                   },
                                   textColor: Colors.red,
                                   child: Text(
-                                    'Continuar',
+                                    'Valorar',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),

@@ -592,7 +592,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               onChanged: (val) {
                                 bool paso = false;
                                 int lalal = int.parse(snapshot.data[0].fijas[0]
-                                    .especialesA[index].maximo);
+                                        .especialesA[index].maximo) ;
 
                                 if (tagsEspeciales1.length >= lalal) {
                                   if (val.length > 0) {
@@ -689,23 +689,26 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               onChanged: (val) {
                                 bool paso = false;
 
-                                if (tagsEspeciales2.length >
+                                if (tagsEspeciales2.length >=
                                     int.parse(snapshot.data[0].fijas[0]
-                                            .especialesB[index].maximo) -
-                                        1) {
-                                  for (var i = 0; i < val.length; i++) {
-                                    var valor = val[i].toString();
+                                        .especialesB[index].maximo)) {
+                                  if (val.length > 0) {
+                                    for (var i = 0; i < val.length; i++) {
+                                      var valor = val[i].toString();
 
-                                    for (var x = 0;
-                                        x < tagsEspeciales2.length;
-                                        x++) {
-                                      var valor2 =
-                                          tagsEspeciales2[i].toString();
+                                      for (var x = 0;
+                                          x < tagsEspeciales2.length;
+                                          x++) {
+                                        var valor2 =
+                                            tagsEspeciales2[i].toString();
 
-                                      if (valor == valor2) {
-                                        paso = true;
+                                        if (valor == valor2) {
+                                          paso = true;
+                                        }
                                       }
                                     }
+                                  } else {
+                                    paso = true;
                                   }
 
                                   if (paso) {
@@ -783,23 +786,45 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               onChanged: (val) {
                                 bool paso = false;
 
-                                if (tagsEspeciales3.length >
-                                    int.parse(snapshot.data[0].fijas[0]
-                                            .especialesC[index].maximo) -
-                                        1) {
-                                  for (var i = 0; i < val.length; i++) {
-                                    var valor = val[i].toString();
+                                /*  if (tagsSabores.length >=int.parse(snapshot.data[0].fijas[0].sabores[index].maximo)) {
+                                  if (val.length > 0) {
+                                    for (var i = 0; i < val.length; i++) {
+                                      var valor = val[i].toString();
 
-                                    for (var x = 0;
-                                        x < tagsEspeciales3.length;
-                                        x++) {
-                                      var valor2 =
-                                          tagsEspeciales3[i].toString();
+                                      for (var x = 0;
+                                          x < tagsSabores.length;
+                                          x++) {
+                                        var valor2 = tagsSabores[i].toString();
 
-                                      if (valor == valor2) {
-                                        paso = true;
+                                        if (valor == valor2) {
+                                          paso = true;
+                                        }
                                       }
                                     }
+                                  } else {
+                                    paso = true;
+                                  } */
+
+                                int hhh = int.parse(snapshot.data[0].fijas[0]
+                                    .especialesC[index].maximo);
+                                if (tagsEspeciales3.length >= hhh) {
+                                  if (val.length > 0) {
+                                    for (var i = 0; i < val.length; i++) {
+                                      var valor = val[i].toString();
+
+                                      for (var x = 0;
+                                          x < tagsEspeciales3.length;
+                                          x++) {
+                                        var valor2 =
+                                            tagsEspeciales3[i].toString();
+
+                                        if (valor == valor2) {
+                                          paso = true;
+                                        }
+                                      }
+                                    }
+                                  } else {
+                                    paso = true;
                                   }
 
                                   if (paso) {
@@ -825,6 +850,26 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                             tituloAcom,
                                             idAcompanhamiento);
                                   }
+                                } else if (tagsEspeciales3.length > hhh) {
+                                  setState(() {
+                                    tagsEspeciales3 = val;
+                                    utils
+                                        .agregarObservacionEnProductoObservacion(
+                                            context,
+                                            tituloSabores,
+                                            tagsSabores,
+                                            tituloEspeciales1,
+                                            tagsEspeciales1,
+                                            tituloEspeciales2,
+                                            tagsEspeciales2,
+                                            tituloEspeciales3,
+                                            tagsEspeciales3,
+                                            tituloEspeciales4,
+                                            tagsEspeciales4,
+                                            tagsVariables,
+                                            tituloAcom,
+                                            idAcompanhamiento);
+                                  });
                                 } else {
                                   setState(() {
                                     cant++;
@@ -877,23 +922,26 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               onChanged: (val) {
                                 bool paso = false;
 
-                                if (tagsEspeciales4.length >
+                                if (tagsEspeciales4.length >=
                                     int.parse(snapshot.data[0].fijas[0]
-                                            .especialesD[index].maximo) -
-                                        1) {
-                                  for (var i = 0; i < val.length; i++) {
-                                    var valor = val[i].toString();
+                                        .especialesD[index].maximo)) {
+                                  if (val.length > 0) {
+                                    for (var i = 0; i < val.length; i++) {
+                                      var valor = val[i].toString();
 
-                                    for (var x = 0;
-                                        x < tagsEspeciales4.length;
-                                        x++) {
-                                      var valor2 =
-                                          tagsEspeciales4[i].toString();
+                                      for (var x = 0;
+                                          x < tagsEspeciales4.length;
+                                          x++) {
+                                        var valor2 =
+                                            tagsEspeciales4[i].toString();
 
-                                      if (valor == valor2) {
-                                        paso = true;
+                                        if (valor == valor2) {
+                                          paso = true;
+                                        }
                                       }
                                     }
+                                  } else {
+                                    paso = true;
                                   }
 
                                   if (paso) {

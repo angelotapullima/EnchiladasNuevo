@@ -57,7 +57,7 @@ class NotificationPage extends StatelessWidget {
         {
           return Scaffold(
             body: RatingRepartidor(
-              id: idPedidoVerdadero,
+              idPedido: idPedidoVerdadero,
             ),
           );
         }
@@ -194,7 +194,7 @@ class _DeliveryTimelineNotificationState
             transitionDuration: const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
               return MapaPage(
-                idRepartidor: id,
+                idPedido: id,
               );
             },
             transitionsBuilder:

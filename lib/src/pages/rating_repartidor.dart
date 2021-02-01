@@ -9,9 +9,9 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 
 class RatingRepartidor extends StatefulWidget {
 
-  final String id;
+  final String idPedido;
 
-  const RatingRepartidor({Key key,@required this.id}) : super(key: key);
+  const RatingRepartidor({Key key,@required this.idPedido}) : super(key: key);
   @override
   _RatingRepartidorState createState() => _RatingRepartidorState();
 }
@@ -123,13 +123,13 @@ class _RatingRepartidorState extends State<RatingRepartidor> {
                               final ordenesApi = OrdenesApi();
 
                               final res = await ordenesApi.valorarPedido(
-                                  widget.id,
+                                  widget.idPedido,
                                   ratingValue.toString(),
                                   _comentarioController.text);
 
                               if (res == 1) {
                                 showToast(
-                                    'Calificación registrada correctament',
+                                    'Calificación registrada correctamente',
                                     2,
                                     ToastGravity.TOP);
 

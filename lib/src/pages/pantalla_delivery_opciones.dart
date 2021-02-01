@@ -1,4 +1,5 @@
-import 'package:enchiladasapp/src/api/categorias_api.dart';
+
+
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/pages/market_page.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -14,10 +15,10 @@ class PantallaDeliveryOpciones extends StatelessWidget {
     pantallasBloc.obtenerPantallas();
     pantallasBloc.estadoPantallaCafe();
     pantallasBloc.estadoPantallaMarket();
-
+/* 
 
     final categoriasApi = CategoriasApi();
-    categoriasApi.obtenerAmbos(context);
+    categoriasApi.obtenerAmbos(context); */
 
     final responsive = Responsive.of(context);
     return Scaffold(

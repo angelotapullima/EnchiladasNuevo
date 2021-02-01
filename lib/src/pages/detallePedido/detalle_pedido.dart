@@ -4,11 +4,13 @@ import 'package:enchiladasapp/src/api/ordenes_api.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/argumentDetallePedido.dart';
 import 'package:enchiladasapp/src/models/pedido_server_model.dart';
+import 'package:enchiladasapp/src/pages/detallePedido/bloc_detalle_pago.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class DetallePedido extends StatefulWidget {
   @override
@@ -49,6 +51,9 @@ class _DetallePedidoState extends State<DetallePedido> {
       }
     });
 
+    final provider = Provider.of<DetallePedidoBloc>(context, listen: false);
+    provider.showDetalle.value = false;
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -57,7 +62,6 @@ class _DetallePedidoState extends State<DetallePedido> {
             width: double.infinity,
             color: Colors.red,
           ),
-          
           StreamBuilder(
               stream: pedidoBloc.pedidoIdStream,
               builder: (BuildContext context,
@@ -71,7 +75,36 @@ class _DetallePedidoState extends State<DetallePedido> {
                 } else {
                   return Center(child: CupertinoActivityIndicator());
                 }
-              })
+              }),
+          ValueListenableBuilder<bool>(
+              valueListenable: provider.showDetalle,
+              builder: (_, value, __) {
+                return (value)
+                    ? Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset:
+                                    Offset(0, 2), // changes position of shadow
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                          ),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(20),
+                          ),
+                          height: responsive.hp(10),
+                          width: double.infinity,
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      )
+                    : Container();
+              }),
         ],
       ),
     );
@@ -79,6 +112,8 @@ class _DetallePedidoState extends State<DetallePedido> {
 
   Widget _contenido(
       BuildContext context, String idPedido, List<PedidoServer> pedido) {
+    final provider = Provider.of<DetallePedidoBloc>(context, listen: false);
+
     bool completarPago = false;
     final responsive = new Responsive.of(context);
     String referencia = "-";
@@ -352,8 +387,6 @@ class _DetallePedidoState extends State<DetallePedido> {
                                                       .reintentarPedido(
                                                           '${pedido[0].idPedido}');
                                                   if (res.resp == 1) {
-                                                    
-
                                                     if (res.link != "") {
                                                       Navigator.pop(context);
                                                       ArgumentsDetallePago
@@ -401,13 +434,21 @@ class _DetallePedidoState extends State<DetallePedido> {
                                   ],
                                 )
                               : FlatButton(
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    final ordernesApi = OrdenesApi();
+
+                                    provider.showDetalle.value = true;
+                                    final listPedido = await ordernesApi
+                                        .obtenerPedidoPorId(idPedido);
+
+                                    provider.showDetalle.value = false;
+
                                     ArgumentsDetallePago argumentsDetallePago =
                                         ArgumentsDetallePago();
                                     argumentsDetallePago.link =
-                                        pedido[0].pedidoLink;
+                                        listPedido[0].pedidoLink;
                                     argumentsDetallePago.idPedido =
-                                        pedido[0].idPedido;
+                                        listPedido[0].idPedido;
                                     Navigator.pushNamed(context, 'webView',
                                         arguments: argumentsDetallePago);
                                   },
@@ -736,7 +777,6 @@ class _DetallePedidoState extends State<DetallePedido> {
                                       } else {
                                         //PAgo con tarketa Pos
                                       }
-                                      
                                     },
                                     child: Container(
                                       padding: EdgeInsets.symmetric(

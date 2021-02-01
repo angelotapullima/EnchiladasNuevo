@@ -24,6 +24,26 @@ class PedidoDatabase {
     }
   } 
 
+
+
+  deletePedidoPorIdPedido(String idPedido) async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete("DELETE FROM Pedido where id_pedido='$idPedido'");
+
+    return res;
+  }
+
+
+
+  deletePedido() async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete("DELETE FROM Pedido where");
+
+    return res;
+  }
+
   Future<List<PedidoServer>> obtenerTodosLosPedidosPendientes() async {
     final db = await dbprovider.database;
     final res = await db.rawQuery("SELECT * FROM Pedido where pedido_estado in (0,1,2,3)  ");
@@ -77,18 +97,20 @@ Future<List<PedidoServer>> obtenerPedidosPendiente() async {
 
   
  
-  deletePedido()async{
-      final db = await dbprovider.database;
-
-    final res = await db.rawDelete('DELETE FROM Pedido');
-
-    return res;
-  }
-
   deleteDetallePedido()async{
       final db = await dbprovider.database;
 
     final res = await db.rawDelete('DELETE FROM DetallePedido');
+
+    return res;
+  }
+
+
+ 
+  deleteDetallePedidoPorIdPedido(String idPedido)async{
+      final db = await dbprovider.database;
+
+    final res = await db.rawDelete('DELETE FROM DetallePedido where id_pedido ="$idPedido"');
 
     return res;
   }
@@ -110,6 +132,26 @@ Future<List<PedidoServer>> obtenerPedidosPendiente() async {
       print(exception);
     }
   }
+
+
+
+  updateDetallePedido(ProductoServer productoDetalle)async{
+    final db = await dbprovider.database;
+
+    final res = await db.rawUpdate("UPDATE DetallePedido SET " 
+    "detalle_cantidad='${productoDetalle.detalleCantidad}', "
+    "id_detalle_pedido='${productoDetalle.idDetallePedido}', "
+    "detalle_precio_unit='${productoDetalle.detallePrecioUnit}', "
+    "detalle_precio_total='${productoDetalle.detallePrecioTotal}', "
+    "detalle_observacion='${productoDetalle.detalleObservacion}', "
+    "producto_nombre='${productoDetalle.productoNombre}', "
+    "WHERE id_producto = '${productoDetalle.idProducto}'  and id_pedido = ''${productoDetalle.idPedido}''" 
+    );
+
+    return res;
+  }
+
+
   Future<List<ProductoServer>> obtenerDetallePedidoPorIdPedido(String id) async {
     final db = await dbprovider.database;
     final res =

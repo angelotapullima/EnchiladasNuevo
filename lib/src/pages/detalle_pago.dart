@@ -283,11 +283,11 @@ class _DetallePagoState extends State<DetallePago> {
                   child: Column(
                     children: <Widget>[
                       Showcase(
-                          key: _one,
-                          description:
-                              'Por favor ingrese su número de teléfono',
-                          child: _numeroTelefono(
-                              usuarioBloc, context, responsive)),
+                        key: _one,
+                        description: 'Por favor ingrese su número de teléfono',
+                        child:
+                            _numeroTelefono(usuarioBloc, context, responsive),
+                      ),
                       Divider(),
                       Showcase(
                         key: _two,
@@ -365,7 +365,7 @@ class _DetallePagoState extends State<DetallePago> {
     carritoCompletoBloc.obtenerCarritoCpmpleto();
 
     return StreamBuilder(
-      stream: carritoCompletoBloc.carritoCompletoStream, 
+      stream: carritoCompletoBloc.carritoCompletoStream,
       builder: (BuildContext context,
           AsyncSnapshot<List<CarritoCompleto>> snapshot) {
         if (snapshot.hasData) {
@@ -1500,6 +1500,12 @@ class _DetallePagoState extends State<DetallePago> {
         } else {
           pasoMinimoEfectivo = false;
         }
+      } else if (_tipoPagoValue == 2) {
+        if (precio < 100) {
+          pasoMinimoEfectivo = true;
+        } else {
+          pasoMinimoEfectivo = false;
+        }
       } else {
         pasoMinimoEfectivo = true;
       }
@@ -1586,6 +1592,7 @@ class _DetallePagoState extends State<DetallePago> {
                       final categoriasApi = CategoriasApi();
                       categoriasApi.obtenerAmbos(context);
                       Navigator.pop(context);
+                    } else if (res.resp == 19) {
                     } else {
                       utils.showToast('Ocurrio un error, intentelo más tarde',
                           2, ToastGravity.TOP);
@@ -1594,8 +1601,8 @@ class _DetallePagoState extends State<DetallePago> {
                     }
                   } else {
                     utils.showToast(
-                        'El monto máximo por pedido en efectivo es de 100 soles',
-                        2,
+                        'El monto máximo por pedido en efectivo o POS es de 100 soles',
+                        4,
                         ToastGravity.TOP);
                   }
                 } else {

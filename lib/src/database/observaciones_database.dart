@@ -20,31 +20,38 @@ class ObservacionesFijasDatabase {
 
   Future<List<ObservacionesFijas>> obtenerObservacionesFijas(
       String idProducto) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM ObservacionesFijas where idProducto='$idProducto'");
+    try {
+      final db = await dbprovider.database;
+      final res = await db.rawQuery(
+          "SELECT * FROM ObservacionesFijas where idProducto='$idProducto'");
 
-    List<ObservacionesFijas> list = res.isNotEmpty
-        ? res.map((c) => ObservacionesFijas.fromJson(c)).toList()
-        : [];
+      List<ObservacionesFijas> list = res.isNotEmpty
+          ? res.map((c) => ObservacionesFijas.fromJson(c)).toList()
+          : [];
 
-    return list;
+      return list;
+    } catch (exception) {
+      print(exception);
+      return [];
+    }
   }
 
   deleteObservacionesFijas(String idProducto) async {
-    final db = await dbprovider.database;
+    try {
+      final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM ObservacionesFijas where idProducto ='$idProducto'");
+      final res = await db.rawDelete(
+          "DELETE FROM ObservacionesFijas where idProducto ='$idProducto'");
 
-    return res;
+      return res;
+    } catch (exception) {
+      print(exception);
+    }
   }
 }
 
-
-class ProductosFijosDatabase{
-
-
-final dbprovider = DatabaseProvider.db;
+class ProductosFijosDatabase {
+  final dbprovider = DatabaseProvider.db;
 
   insertarProductosFijos(ProductosFijos productosFijos) async {
     try {
@@ -60,34 +67,39 @@ final dbprovider = DatabaseProvider.db;
     }
   }
 
-  Future<List<ProductosFijos>> obtenerProductosFijos(
-      String idProducto) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM ProductosFijos where idProducto='$idProducto'");
+  Future<List<ProductosFijos>> obtenerProductosFijos(String idProducto) async {
+    try {
+      final db = await dbprovider.database;
+      final res = await db.rawQuery(
+          "SELECT * FROM ProductosFijos where idProducto='$idProducto'");
 
-    List<ProductosFijos> list = res.isNotEmpty
-        ? res.map((c) => ProductosFijos.fromJson(c)).toList()
-        : [];
+      List<ProductosFijos> list = res.isNotEmpty
+          ? res.map((c) => ProductosFijos.fromJson(c)).toList()
+          : [];
 
-    return list;
+      return list;
+    } catch (exception) {
+      print(exception);
+      return [];
+    }
   }
 
   deleteProductosFijos(String idProducto) async {
-    final db = await dbprovider.database;
+    try {
+      final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM ProductosFijos where idProducto='$idProducto'");
+      final res = await db.rawDelete(
+          "DELETE FROM ProductosFijos where idProducto='$idProducto'");
 
-    return res;
+      return res;
+    } catch (exception) {
+      print(exception);
+    }
   }
 }
 
-
-
-class SaboresDatabase{
-
-
-final dbprovider = DatabaseProvider.db;
+class SaboresDatabase {
+  final dbprovider = DatabaseProvider.db;
 
   insertarSabores(Sabores sabores) async {
     try {
@@ -103,34 +115,38 @@ final dbprovider = DatabaseProvider.db;
     }
   }
 
-  Future<List<Sabores>> obtenerSabores(
-      String idProducto) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM Sabores where idProducto='$idProducto'");
+  Future<List<Sabores>> obtenerSabores(String idProducto) async {
+    try {
+      final db = await dbprovider.database;
+      final res = await db
+          .rawQuery("SELECT * FROM Sabores where idProducto='$idProducto'");
 
-    List<Sabores> list = res.isNotEmpty
-        ? res.map((c) => Sabores.fromJson(c)).toList()
-        : [];
+      List<Sabores> list =
+          res.isNotEmpty ? res.map((c) => Sabores.fromJson(c)).toList() : [];
 
-    return list;
+      return list;
+    } catch (exception) {
+      print(exception);
+      return [];
+    }
   }
 
   deleteSabores(String idProducto) async {
-    final db = await dbprovider.database;
+    try {
+      final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM Sabores where idProducto='$idProducto'");
+      final res = await db
+          .rawDelete("DELETE FROM Sabores where idProducto='$idProducto'");
 
-    return res;
+      return res;
+    } catch (exception) {
+      print(exception);
+    }
   }
 }
 
-
-
-class OpcionesSaboresDatabase{
-
-
-final dbprovider = DatabaseProvider.db;
+class OpcionesSaboresDatabase {
+  final dbprovider = DatabaseProvider.db;
 
   insertarOpcionesSabores(OpcionesSabores opcionesSabores) async {
     try {
@@ -147,35 +163,39 @@ final dbprovider = DatabaseProvider.db;
   }
 
   Future<List<OpcionesSabores>> obtenerOpcionesSabores(
-      String idProducto,String titulo) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM OpcionesSabores where idProducto='$idProducto' and tituloTextos='$titulo'");
+      String idProducto, String titulo) async {
+    try {
+      final db = await dbprovider.database;
+      final res = await db.rawQuery(
+          "SELECT * FROM OpcionesSabores where idProducto='$idProducto' and tituloTextos='$titulo'");
 
-    List<OpcionesSabores> list = res.isNotEmpty
-        ? res.map((c) => OpcionesSabores.fromJson(c)).toList()
-        : [];
+      List<OpcionesSabores> list = res.isNotEmpty
+          ? res.map((c) => OpcionesSabores.fromJson(c)).toList()
+          : [];
 
-    return list;
+      return list;
+    } catch (exception) {
+      print(exception);
+      return [];
+    }
   }
 
   deleteOpcionesSabores(String idProducto) async {
-    final db = await dbprovider.database;
+    try {
+      final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM OpcionesSabores where idProducto='$idProducto' ");
+      final res = await db.rawDelete(
+          "DELETE FROM OpcionesSabores where idProducto='$idProducto' ");
 
-    return res;
+      return res;
+    } catch (exception) {
+      print(exception);
+    }
   }
 }
 
-
-
-
-
-class AcompanhamientosDatabase{
-
-
-final dbprovider = DatabaseProvider.db;
+class AcompanhamientosDatabase {
+  final dbprovider = DatabaseProvider.db;
 
   insertarAcompanhamientos(Acompanhamientos acompanhamientos) async {
     try {
@@ -193,32 +213,41 @@ final dbprovider = DatabaseProvider.db;
 
   Future<List<Acompanhamientos>> obtenerAcompanhamientos(
       String idProducto) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM Acompanhamientos where idProducto='$idProducto'");
+    try {
+      final db = await dbprovider.database;
+      final res = await db.rawQuery(
+          "SELECT * FROM Acompanhamientos where idProducto='$idProducto'");
 
-    List<Acompanhamientos> list = res.isNotEmpty
-        ? res.map((c) => Acompanhamientos.fromJson(c)).toList()
-        : [];
+      List<Acompanhamientos> list = res.isNotEmpty
+          ? res.map((c) => Acompanhamientos.fromJson(c)).toList()
+          : [];
 
-    return list;
+      return list;
+    } catch (exception) {
+      print(exception);
+      return [];
+    }
   }
 
   deleteAcompanhamientos(String idProducto) async {
-    final db = await dbprovider.database;
+    try {
+      final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM Acompanhamientos where idProducto='$idProducto'");
+      final res = await db.rawDelete(
+          "DELETE FROM Acompanhamientos where idProducto='$idProducto'");
 
-    return res;
+      return res;
+    } catch (exception) {
+      print(exception);
+    }
   }
 }
 
-class OpcionesAcompanhamientosDatabase{
+class OpcionesAcompanhamientosDatabase {
+  final dbprovider = DatabaseProvider.db;
 
-
-final dbprovider = DatabaseProvider.db;
-
-  insertarOpcionesAcompanhamientos(OpcionesAcompanhamientos opcionesSabores) async {
+  insertarOpcionesAcompanhamientos(
+      OpcionesAcompanhamientos opcionesSabores) async {
     try {
       final db = await dbprovider.database;
 
@@ -233,34 +262,43 @@ final dbprovider = DatabaseProvider.db;
   }
 
   Future<List<OpcionesAcompanhamientos>> obtenerOpcionesAcompanhamientos(
-      String idProducto,String titulo) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM OpcionesAcompanhamientos where idProducto='$idProducto' and tituloTextos='$titulo'");
+      String idProducto, String titulo) async {
+    try {
+      final db = await dbprovider.database;
+      final res = await db.rawQuery(
+          "SELECT * FROM OpcionesAcompanhamientos where idProducto='$idProducto' and tituloTextos='$titulo'");
 
-    List<OpcionesAcompanhamientos> list = res.isNotEmpty
-        ? res.map((c) => OpcionesAcompanhamientos.fromJson(c)).toList()
-        : [];
+      List<OpcionesAcompanhamientos> list = res.isNotEmpty
+          ? res.map((c) => OpcionesAcompanhamientos.fromJson(c)).toList()
+          : [];
 
-    return list;
+      return list;
+    } catch (exception) {
+      print(exception);
+      return [];
+    }
   }
 
   deleteOpcionesAcompanhamientos(String idProducto) async {
-    final db = await dbprovider.database;
+    try {
+      final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM OpcionesAcompanhamientos where idProducto='$idProducto' ");
+      final res = await db.rawDelete(
+          "DELETE FROM OpcionesAcompanhamientos where idProducto='$idProducto' ");
 
-    return res;
+      return res;
+    } catch (exception) {
+      print(exception);
+    }
   }
 }
 
 //========================================================================================================
-class ObservacionesVariablesDatabase{
+class ObservacionesVariablesDatabase {
+  final dbprovider = DatabaseProvider.db;
 
-
-final dbprovider = DatabaseProvider.db;
-
-  insertarObservacionesVariables(ObservacionesVariables observacionesVariables) async {
+  insertarObservacionesVariables(
+      ObservacionesVariables observacionesVariables) async {
     try {
       final db = await dbprovider.database;
 
@@ -268,7 +306,7 @@ final dbprovider = DatabaseProvider.db;
           "INSERT OR REPLACE INTO ObservacionesVariables (idProducto,nombreVariable) "
           "VALUES ('${observacionesVariables.idProducto}','${observacionesVariables.nombreVariable}'"
           ")");
-      return res; 
+      return res;
     } catch (exception) {
       print(exception);
     }
@@ -276,29 +314,35 @@ final dbprovider = DatabaseProvider.db;
 
   Future<List<ObservacionesVariables>> obtenerObservacionesVariables(
       String idProducto) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM ObservacionesVariables where idProducto='$idProducto'");
+    try {
+      final db = await dbprovider.database;
+      final res = await db.rawQuery(
+          "SELECT * FROM ObservacionesVariables where idProducto='$idProducto'");
 
-    List<ObservacionesVariables> list = res.isNotEmpty
-        ? res.map((c) => ObservacionesVariables.fromJson(c)).toList()
-        : [];
+      List<ObservacionesVariables> list = res.isNotEmpty
+          ? res.map((c) => ObservacionesVariables.fromJson(c)).toList()
+          : [];
 
-    return list;
+      return list;
+    } catch (exception) {
+      print(exception);
+      return [];
+    }
   }
 
   deleteObservacionesVariables(String idProducto) async {
-    final db = await dbprovider.database;
+    try {
+      final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM ObservacionesVariables where idProducto='$idProducto'");
+      final res = await db.rawDelete(
+          "DELETE FROM ObservacionesVariables where idProducto='$idProducto'");
 
-    return res;
+      return res;
+    } catch (exception) {
+      print(exception);
+    }
   }
 }
 
-
 //=============================================================================================================================
 //=============================================================================================================================
-
-
-

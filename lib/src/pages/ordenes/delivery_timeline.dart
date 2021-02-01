@@ -93,7 +93,7 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
         ));
   }
 
-  Widget _botonTracking(BuildContext context, String id) {
+  Widget _botonTracking(BuildContext context, String idPedido) {
 
     //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
@@ -107,7 +107,7 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
-              return MapaPage(idRepartidor: id,);
+              return MapaPage(idPedido: idPedido,);
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
