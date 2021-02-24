@@ -5,6 +5,7 @@ import 'package:enchiladasapp/src/database/carrito_database.dart';
 import 'package:enchiladasapp/src/database/direccion_database.dart';
 import 'package:enchiladasapp/src/database/pedido_database.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
+import 'package:enchiladasapp/src/pages/blocMapa/mapa_page.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
@@ -158,8 +159,6 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       SizedBox(
                         height: responsive.hp(2),
                       ),
-                      
-                      
                       _asistencia(responsive),
                       SizedBox(
                         height: responsive.hp(2),
@@ -169,6 +168,9 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                         padding: EdgeInsets.all(responsive.ip(1.5)),
                         child: InkWell(
                           onTap: () async {
+                            
+                            
+
                             final pref = Preferences();
                             if (pref.email != "" && pref.email != null) {
                               //pref.clearPreferences();
@@ -195,7 +197,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                             await pedidoDatabase.deleteDetallePedido();
 
                             final carritoDatase = CarritoDatabase();
-                            carritoDatase.deleteCarritoDb();
+                            carritoDatase.deleteCarritoDb(); 
                           },
                           child: new Container(
                             //width: 100.0,
@@ -304,17 +306,13 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                 Divider(),
                 InkWell(
                   onTap: () {
-
-                     if (Platform.isAndroid) {
-                       _launchInBrowser(
-                        'http://play.google.com/store/apps/details?id=com.bufeotec.enchiladasapp');
-                     }else{
-
-                        _launchInBrowser(
-                        'https://apps.apple.com/us/app/la-casa-de-las-enchiladas/id1539023978');
-                       
-                     }
-                    
+                    if (Platform.isAndroid) {
+                      _launchInBrowser(
+                          'http://play.google.com/store/apps/details?id=com.bufeotec.enchiladasapp');
+                    } else {
+                      _launchInBrowser(
+                          'https://apps.apple.com/us/app/la-casa-de-las-enchiladas/id1539023978');
+                    }
                   },
                   child: Padding(
                     padding: EdgeInsets.all(responsive.ip(1)),
@@ -569,7 +567,8 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                       fontWeight: FontWeight.w800,
                       fontSize: responsive.ip(1.8),
                     ),
-                  ), SizedBox(
+                  ),
+                  SizedBox(
                     height: responsive.hp(3),
                   ),
                   Container(
@@ -586,7 +585,6 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                   SizedBox(
                     height: responsive.hp(3),
                   ),
-                  
                 ],
               ),
             ),

@@ -20,7 +20,7 @@ class GestionarDirecciones extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Container(
-            height: responsive.hp(70),
+            height: responsive.hp(80),
             width: double.infinity,
             color: Colors.green,
             child: AppBar(
@@ -30,7 +30,7 @@ class GestionarDirecciones extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(
-              top: kToolbarHeight + responsive.hp(4),
+              top: kToolbarHeight + responsive.hp(5),
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadiusDirectional.only(
@@ -44,6 +44,7 @@ class GestionarDirecciones extends StatelessWidget {
                 horizontal: responsive.wp(3),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   SizedBox(
                     height: responsive.hp(1),
@@ -52,17 +53,42 @@ class GestionarDirecciones extends StatelessWidget {
                     'Agrega o escoge una dirección',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(4),
+                      fontSize: responsive.ip(2.8),
                     ),
                   ),
-                  IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () async {
-                        final direccionDatabase = DireccionDatabase();
-                        await direccionDatabase.deleteDireccion();
-                        direccionesBloc.obtenerDirecciones();
-                        direccionesBloc.obtenerDireccionesConZonas();
-                      }),
+                  Container(
+                    width: responsive.wp(30),
+                    height: responsive.hp(4.5),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                            onPressed: () async {
+                              final direccionDatabase = DireccionDatabase();
+                              await direccionDatabase.deleteDireccion();
+                              direccionesBloc.obtenerDirecciones();
+                              direccionesBloc.obtenerDireccionesConZonas();
+                            }),
+                        Expanded(
+                          child: Text(
+                            'Eliminar todos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: responsive.ip(1.2),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsets.only(
                       left: responsive.wp(3),

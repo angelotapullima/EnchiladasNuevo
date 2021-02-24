@@ -34,8 +34,8 @@ class _WebViewExampleState extends State<WebViewExample> {
             borderRadius: BorderRadius.circular(12.0),
           ), //this right here
           child: Container(
-            height: responsive.hp(30),
-            width: responsive.wp(90),
+            height: responsive.hp(25),
+            width: responsive.wp(70),
             child: Padding(
               padding: EdgeInsets.all(
                 responsive.ip(2),
@@ -47,8 +47,8 @@ class _WebViewExampleState extends State<WebViewExample> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: responsive.ip(7),
-                        width: responsive.ip(7),
+                        height: responsive.ip(5),
+                        width: responsive.ip(5),
                         child: Image.asset('assets/logo_enchilada.png'),
                       ),
                     ],
@@ -61,7 +61,7 @@ class _WebViewExampleState extends State<WebViewExample> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
-                      fontSize: responsive.ip(2.5),
+                      fontSize: responsive.ip(2),
                     ),
                   ),
                   SizedBox(

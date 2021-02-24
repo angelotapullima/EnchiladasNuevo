@@ -1264,23 +1264,23 @@ class _DetallePagoState extends State<DetallePago> {
                       ),
                       Container(
                         height: responsive.hp(10),
+
                         child: Row(
                           children: <Widget>[
                             Container(
                               width: responsive.wp(12),
-                              child: Center(
-                                child: Text(
-                                  '+51',
-                                  style: TextStyle(
-                                      fontSize: responsive.ip(2.5),
-                                      fontWeight: FontWeight.bold),
-                                ),
+                              child: Text(
+                                '+51',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(2.5),
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             SizedBox(
                               width: responsive.wp(1),
                             ),
                             Container(
+                              transform: Matrix4.translationValues(0, -3, 0),
                               width: responsive.wp(75),
                               padding: EdgeInsets.only(
                                 top: responsive.hp(2.5),

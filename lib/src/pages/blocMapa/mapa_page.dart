@@ -21,6 +21,7 @@ class MapaPage extends StatefulWidget {
 class _MapaPageState extends State<MapaPage> {
   @override
   void initState() {
+   
     context.bloc<MiUbicacionBloc>().iniciarSeguimiento(widget.idPedido);
 
     super.initState();

@@ -62,9 +62,9 @@ class TrackingApi {
       final url = '$_url/api/pedido/tracking_pedido';
       final list = List<TrackingData>();
 
-      final resp = await http.post(url,
-          body: {'tn': prefs.token, 'app': 'true', 'id_pedido': idPedido});
+      final resp = await http.post(url, body: {'tn': prefs.token, 'app': 'true', 'id_pedido': idPedido});
       final decodedData = json.decode(resp.body);
+      print(decodedData);
       final code = decodedData['result']['code'];
 
       //print(resp.body);

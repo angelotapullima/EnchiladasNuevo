@@ -30,16 +30,16 @@ class RankingTres extends StatelessWidget {
             top: responsive.hp(50),
             left: responsive.wp(4),
             child: CirculoItenRanking(
-                nombre: 'list[1].personName',
-                tiempo: 'list[1].puzzleTiempo',
+                nombre: list[1].personName,
+                tiempo: list[1].puzzleTiempo,
                 foto: '$imagen2'),
           ),
           Positioned(
             top: responsive.hp(50),
             right: responsive.wp(4),
             child: CirculoItenRanking(
-                nombre: 'list[2].personName',
-                tiempo: 'list[2].puzzleTiempo',
+                nombre: list[2].personName,
+                tiempo: list[2].puzzleTiempo,
                 foto: '$imagen3'),
           ),
           AppBar(
