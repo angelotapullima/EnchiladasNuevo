@@ -271,8 +271,7 @@ class ProductosBloc {
     var listFinal = List<CategoriaData>();
     var listProductos = List<ProductosData>();
     final listCategorias = await categoriaDatabase.consultarPorId(idCategoria);
-    final listProductosPorCategoria =
-        await productoDatabase.obtenerProductosPorCategoriaLocal(idCategoria);
+    final listProductosPorCategoria = await productoDatabase.obtenerProductosPorCategoriaLocal(idCategoria);
 
     CategoriaData categoria = CategoriaData();
 
@@ -282,29 +281,26 @@ class ProductosBloc {
     if (listProductosPorCategoria.length > 0) {
       for (int x = 0; x < listProductosPorCategoria.length; x++) {
         ProductosData productosData = ProductosData();
-        productosData.idProducto = listProductos[x].idProducto;
-        productosData.idCategoria = listProductos[x].idCategoria;
-        productosData.productoNombre = listProductos[x].productoNombre;
-        productosData.productoFoto = listProductos[x].productoFoto;
-        productosData.productoOrden = listProductos[x].productoOrden;
-        productosData.productoPrecio = listProductos[x].productoPrecio;
-        productosData.productoCarta = listProductos[x].productoCarta;
-        productosData.productoDelivery = listProductos[x].productoDelivery;
+        productosData.idProducto = listProductosPorCategoria[x].idProducto;
+        productosData.idCategoria = listProductosPorCategoria[x].idCategoria;
+        productosData.productoNombre = listProductosPorCategoria[x].productoNombre;
+        productosData.productoFoto = listProductosPorCategoria[x].productoFoto;
+        productosData.productoOrden = listProductosPorCategoria[x].productoOrden;
+        productosData.productoPrecio = listProductosPorCategoria[x].productoPrecio;
+        productosData.productoCarta = listProductosPorCategoria[x].productoCarta;
+        productosData.productoDelivery = listProductosPorCategoria[x].productoDelivery;
         productosData.sonido = listCategorias[0].categoriaSonido;
-        productosData.productoUnidad = listProductos[x].productoUnidad;
-        productosData.productoEstado = listProductos[x].productoEstado;
-        productosData.productoDestacado = listProductos[x].productoDestacado;
-        productosData.productoEstadoDestacado =
-            listProductos[x].productoEstadoDestacado;
-        productosData.productoTupper = listProductos[x].productoTupper;
-        productosData.productoNuevo = listProductos[x].productoNuevo;
+        productosData.productoUnidad = listProductosPorCategoria[x].productoUnidad;
+        productosData.productoEstado = listProductosPorCategoria[x].productoEstado;
+        productosData.productoDestacado = listProductosPorCategoria[x].productoDestacado;
+        productosData.productoEstadoDestacado =listProductosPorCategoria[x].productoEstadoDestacado;
+        productosData.productoTupper = listProductosPorCategoria[x].productoTupper;
+        productosData.productoNuevo = listProductosPorCategoria[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.productoDescripcion =
-            listProductos[x].productoDescripcion;
-        productosData.productoComentario = listProductos[x].productoComentario;
-        productosData.productoCantidadAdicional =
-            listProductos[x].productoCantidadAdicional;
-        productosData.productoFavorito = listProductos[x].productoFavorito;
+        productosData.productoDescripcion =listProductosPorCategoria[x].productoDescripcion;
+        productosData.productoComentario = listProductosPorCategoria[x].productoComentario;
+        productosData.productoCantidadAdicional =listProductosPorCategoria[x].productoCantidadAdicional;
+        productosData.productoFavorito = listProductosPorCategoria[x].productoFavorito;
 
         listProductos.add(productosData);
       }

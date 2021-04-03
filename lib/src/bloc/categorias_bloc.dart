@@ -55,9 +55,13 @@ class CategoriasBloc{
      */_cargandoCategoriasController.sink.add(false);
   }
 
-  void obtenerCategoriasMarket(String tipo)async{
+  void obtenerCategoriasPorTipo(String tipo)async{
+
+    //tipo ==2 market
+    //tipo ==3 cafe
+    
     _cargandoCategoriasController.sink.add(true);
-    _categoriasMarketController.sink.add(await categoriasDatabase.obtenerCategoriasMarket(tipo));
+    _categoriasMarketController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
      
     /* _categoriasMarketController.sink.add(await categoriasApi.cargarCategorias());
 

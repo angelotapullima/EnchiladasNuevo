@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/models/arguments.dart';
+import 'package:enchiladasapp/src/bloc/provider.dart'; 
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
@@ -10,7 +9,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DetallePromocionesLocal extends StatefulWidget {
-  const DetallePromocionesLocal({Key key}) : super(key: key);
+
+  
+  const DetallePromocionesLocal({Key key,@required this.categoriaNombre,@required  this.idcategoria}) : super(key: key);
+
+  final String categoriaNombre;
+  final String idcategoria;
 
   @override
   _DetallePromocionesLocalState createState() =>
@@ -20,12 +24,11 @@ class DetallePromocionesLocal extends StatefulWidget {
 class _DetallePromocionesLocalState extends State<DetallePromocionesLocal> {
   @override
   Widget build(BuildContext context) {
-    final Arguments arg = ModalRoute.of(context).settings.arguments;
 
     final productosIdBloc = ProviderBloc.prod(context);
     final responsive = Responsive.of(context);
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.cargarCategoriaProductoLocal(arg.productId);
+    productosIdBloc.cargarCategoriaProductoLocal(widget.idcategoria);
 
     return Scaffold(
       body: StreamBuilder(

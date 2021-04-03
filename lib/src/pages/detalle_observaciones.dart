@@ -87,7 +87,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
     final itemObservacionBloc = ProviderBloc.itemOb(context);
     if (cant == 0) {
-      observacionesProductoBloc.obtenerObservaciones(widget.idProductoArgument);
+      observacionesProductoBloc.obtenerObservaciones(
+          context, widget.idProductoArgument);
 
       itemObservacionBloc.obtenerObservacionItem();
     }
@@ -116,20 +117,23 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                     final optionsProductosFijos = List<String>();
                     final optionsProductosVariables = List<String>();
 
-                    for (var x = 0;
-                        x < snapshot.data[0].fijas[0].productosFijos.length;
-                        x++) {
-                      String texto = snapshot
-                          .data[0].fijas[0].productosFijos[x].nombreProducto;
-                      optionsProductosFijos.add(texto);
+                    if (snapshot.data[0].fijas[0].productosFijos.length > 0) {
+                      for (var x = 0;
+                          x < snapshot.data[0].fijas[0].productosFijos.length;
+                          x++) {
+                        String texto = snapshot
+                            .data[0].fijas[0].productosFijos[x].nombreProducto;
+                        optionsProductosFijos.add(texto);
+                      }
                     }
-
-                    for (var x = 0;
-                        x < snapshot.data[0].variables.length;
-                        x++) {
-                      String texto =
-                          snapshot.data[0].variables[x].nombreVariable;
-                      optionsProductosVariables.add(texto);
+                    if (snapshot.data[0].variables.length > 0) {
+                      for (var x = 0;
+                          x < snapshot.data[0].variables.length;
+                          x++) {
+                        String texto =
+                            snapshot.data[0].variables[x].nombreVariable;
+                        optionsProductosVariables.add(texto);
+                      }
                     }
 
                     if (optionsProductosFijos.length > 0) {
@@ -592,7 +596,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               onChanged: (val) {
                                 bool paso = false;
                                 int lalal = int.parse(snapshot.data[0].fijas[0]
-                                        .especialesA[index].maximo) ;
+                                    .especialesA[index].maximo);
 
                                 if (tagsEspeciales1.length >= lalal) {
                                   if (val.length > 0) {

@@ -75,7 +75,7 @@ class PantallaBloc {
         //market
 
         final listaCategorias =
-            await categoriasDatabase.obtenerCategoriasMarket('2');
+            await categoriasDatabase.obtenerCategoriasPorTipo('2');
 
         if (listaCategorias.length > 10) {
           for (int x = 0; x < 10; x++) {

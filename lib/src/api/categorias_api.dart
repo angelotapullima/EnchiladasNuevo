@@ -57,18 +57,17 @@ class CategoriasApi {
 
       var cantidadTotal = decodedData['result']['data'].length;
       print('cantidadTotal $cantidadTotal');
+      if (decodedData['result']['data'].length > 0) {
+        for (int i = 0; i < decodedData['result']['data'].length; i++) {
+          var porcentaje = ((i + 1) * 100) / cantidadTotal;
 
-      for (int i = 0; i < decodedData['result']['data'].length; i++) {
-        var porcentaje = ((i + 1) * 100) / cantidadTotal;
+          print('porcentaje $porcentaje');
 
-        print('porcentaje $porcentaje');
+          if (preferences.estadoCargaInicial == null ||
+              preferences.estadoCargaInicial == '0') {
+            utils.porcentaje(context, porcentaje);
+          }
 
-        if (preferences.estadoCargaInicial == null ||
-            preferences.estadoCargaInicial == '0') {
-          utils.porcentaje(context, porcentaje);
-        }
-
-        if (decodedData['result']['data'].length > 0) {
           CategoriaData categoriaData = CategoriaData();
 
           categoriaData.idCategoria =
@@ -218,6 +217,9 @@ class CategoriasApi {
 
               productoDatabase.insertarProductosDb(productosData);
             }
+
+/*
+
 
             if ( preferences.estadoCargaInicial == '1') {
 
@@ -428,8 +430,7 @@ class CategoriasApi {
               }
             }
 
-            var especialesCList =
-                productos[x]['producto_observaciones_fijas']['especial_3'];
+            var especialesCList =productos[x]['producto_observaciones_fijas']['especial_3'];
 
             if (especialesCList.length > 0) {
               for (var f = 0; f < especialesCList.length; f++) {
@@ -620,7 +621,397 @@ class CategoriasApi {
                 await adicionalesDatabase.insertarAdicionales(adicionalesModel);
               }
             }
+
+            */
           }
+        }
+      }
+
+      return true;
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+
+      utils.showToast(
+          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+      return false;
+    }
+  }
+
+  Future<bool> obtenerAdicionalesPorProducto(String idProducto) async {
+
+    print(idProducto);
+    try {
+      final url = '$_url/api/categoria/listar_adicionales_producto';
+
+      final resp = await http.post(url, body: {
+
+
+        'id_producto':idProducto
+      });
+      final Map<String, dynamic> decodedData = json.decode(resp.body);
+      if (decodedData == null) return false;
+
+      // print(decodedData['result']['data'].length);
+
+      await observacionesFijasDatabase.deleteObservacionesFijas(idProducto);
+      await productosFijosDatabase.deleteProductosFijos(idProducto);
+      await saboresDatabase.deleteSabores(idProducto);
+      await opcionesSaboresDatabase.deleteOpcionesSabores(idProducto);
+
+      await acompanhamientosDatabase.deleteAcompanhamientos(idProducto);
+      await opcionesAcompanhamientosDatabase
+          .deleteOpcionesAcompanhamientos(idProducto);
+
+      await especialesADatabase.deleteEspecialesA(idProducto);
+      await opcionesespecialesADatabase.deleteOpcionesEspecialesA(idProducto);
+
+      await especialesBDatabase.deleteEspecialesB(idProducto);
+      await opcionesespecialesBDatabase.deleteOpcionesEspecialesB(idProducto);
+
+      await especialesCDatabase.deleteEspecialesC(idProducto);
+      await opcionesespecialesCDatabase.deleteOpcionesEspecialesC(idProducto);
+
+      await especialesDDatabase.deleteEspecialesD(idProducto);
+      await opcionesespecialesDDatabase.deleteOpcionesEspecialesD(idProducto);
+
+      await observacionesVariablesDatabase.deleteObservacionesVariables(idProducto);
+
+      ObservacionesFijas observacionesFijas = ObservacionesFijas();
+      observacionesFijas.idProducto = idProducto;
+      observacionesFijas.mostrar = decodedData['result']['data'] ['producto_observaciones_fijas']['mostrar_fijas'];
+
+      await observacionesFijasDatabase .insertarObservacionesFijas(observacionesFijas);
+
+      var productillos = decodedData['result']['data']['producto_observaciones_fijas']['productos'];
+
+      if (productillos.length > 0) {
+        for (var z = 0;
+            z <
+                decodedData['result']['data']['producto_observaciones_fijas']
+                        ['productos']
+                    .length;
+            z++) {
+          final productoIdbuscado =
+              await productoDatabase.consultarPorId(productillos[z].toString());
+
+          if (productoIdbuscado.length > 0) {
+            ProductosFijos productosFijos = ProductosFijos();
+            productosFijos.idProducto = idProducto;
+            productosFijos.idRelacionado = productillos[z].toString();
+            productosFijos.nombreProducto = productoIdbuscado[0].productoNombre;
+
+            await productosFijosDatabase.insertarProductosFijos(productosFijos);
+          }
+        }
+      }
+
+      var saboresList = decodedData['result']['data']
+          ['producto_observaciones_fijas']['sabores'];
+
+      if (saboresList.length > 0) {
+        for (var f = 0; f < saboresList.length; f++) {
+          Sabores sabores = Sabores();
+          sabores.idProducto = idProducto;
+          sabores.tituloTextos = saboresList[f]['titulo'];
+          sabores.maximo = saboresList[f]['maximo'];
+
+          await saboresDatabase.insertarSabores(sabores);
+
+          var listOpcionesSabores = saboresList[f]['opciones'];
+          if (listOpcionesSabores.length > 0) {
+            for (var t = 0; t < listOpcionesSabores.length; t++) {
+              OpcionesSabores opcionesSabores = OpcionesSabores();
+              opcionesSabores.idProducto = idProducto;
+              opcionesSabores.tituloTextos =
+                  saboresList[f]['titulo'].toString();
+              opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
+
+              await opcionesSaboresDatabase
+                  .insertarOpcionesSabores(opcionesSabores);
+            }
+          }
+        }
+      }
+
+      var acompanhamientosList = decodedData['result']['data']
+          ['producto_observaciones_fijas']['acompanhamientos'];
+
+      if (acompanhamientosList.length > 0) {
+        for (var y = 0; y < acompanhamientosList.length; y++) {
+          Acompanhamientos acompanhamientosModel = Acompanhamientos();
+          acompanhamientosModel.idProducto =idProducto;
+          acompanhamientosModel.tituloTextos =
+              acompanhamientosList[y]['titulo'].toString();
+
+          await acompanhamientosDatabase
+              .insertarAcompanhamientos(acompanhamientosModel);
+
+          var listOpcionesAcompanhamientos =
+              acompanhamientosList[y]['opciones'];
+          if (listOpcionesAcompanhamientos.length > 0) {
+            for (var t = 0; t < listOpcionesAcompanhamientos.length; t++) {
+              OpcionesAcompanhamientos opcionesAcompanhamientosModel =
+                  OpcionesAcompanhamientos();
+              opcionesAcompanhamientosModel.idProducto = idProducto;
+              opcionesAcompanhamientosModel.tituloTextos =
+                  acompanhamientosList[y]['titulo'];
+              opcionesAcompanhamientosModel.nombreTexto =
+                  listOpcionesAcompanhamientos[t].toString();
+
+              await opcionesAcompanhamientosDatabase
+                  .insertarOpcionesAcompanhamientos(
+                      opcionesAcompanhamientosModel);
+            }
+          }
+        }
+      }
+
+      var variblesObservaciones =
+          decodedData['result']['data']['producto_observaciones_variables'];
+      if (variblesObservaciones.length > 0) {
+        for (var a = 0; a < variblesObservaciones.length; a++) {
+          ObservacionesVariables observacionesVariables =
+              ObservacionesVariables();
+          observacionesVariables.idProducto = idProducto;
+          observacionesVariables.nombreVariable =
+              variblesObservaciones[a].toString();
+          await observacionesVariablesDatabase
+              .insertarObservacionesVariables(observacionesVariables);
+        }
+      }
+
+      var especialesAList = decodedData['result']['data']
+          ['producto_observaciones_fijas']['especial_1'];
+      if (especialesAList.length > 0) {
+        for (var f = 0; f < especialesAList.length; f++) {
+          Sabores sabores = Sabores();
+          sabores.idProducto = idProducto;
+          sabores.tituloTextos = especialesAList[f]['titulo'];
+          sabores.maximo = especialesAList[f]['maximo'];
+
+          await especialesADatabase.insertarEspecialesA(sabores);
+
+          var listOpcionesSabores = especialesAList[f]['opciones'];
+          if (listOpcionesSabores.length > 0) {
+            for (var t = 0; t < listOpcionesSabores.length; t++) {
+              OpcionesSabores opcionesSabores = OpcionesSabores();
+              opcionesSabores.idProducto = idProducto;
+              opcionesSabores.tituloTextos =
+                  especialesAList[f]['titulo'].toString();
+              opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
+
+              await opcionesespecialesADatabase
+                  .insertarOpcionesEspecialesA(opcionesSabores);
+            }
+          }
+        }
+      }
+
+      var especialesBList = decodedData['result']['data']
+          ['producto_observaciones_fijas']['especial_2'];
+
+      if (especialesBList.length > 0) {
+        for (var f = 0; f < especialesBList.length; f++) {
+          Sabores sabores = Sabores();
+          sabores.idProducto = idProducto;
+          sabores.tituloTextos = especialesBList[f]['titulo'];
+          sabores.maximo = especialesBList[f]['maximo'];
+
+          await especialesBDatabase.insertarEspecialesB(sabores);
+
+          var listOpcionesSabores = especialesBList[f]['opciones'];
+          if (listOpcionesSabores.length > 0) {
+            for (var t = 0; t < listOpcionesSabores.length; t++) {
+              OpcionesSabores opcionesSabores = OpcionesSabores();
+              opcionesSabores.idProducto = idProducto;
+              opcionesSabores.tituloTextos =
+                  especialesBList[f]['titulo'].toString();
+              opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
+
+              await opcionesespecialesBDatabase
+                  .insertarOpcionesEspecialesB(opcionesSabores);
+            }
+          }
+        }
+      }
+
+      var especialesCList = decodedData['result']['data']
+          ['producto_observaciones_fijas']['especial_3'];
+
+      if (especialesCList.length > 0) {
+        for (var f = 0; f < especialesCList.length; f++) {
+          Sabores sabores = Sabores();
+          sabores.idProducto = idProducto;
+          sabores.tituloTextos = especialesCList[f]['titulo'];
+          sabores.maximo = especialesCList[f]['maximo'];
+
+          await especialesCDatabase.insertarEspecialesC(sabores);
+
+          var listOpcionesSabores = especialesCList[f]['opciones'];
+          if (listOpcionesSabores.length > 0) {
+            for (var t = 0; t < listOpcionesSabores.length; t++) {
+              OpcionesSabores opcionesSabores = OpcionesSabores();
+              opcionesSabores.idProducto = idProducto;
+              opcionesSabores.tituloTextos =
+                  especialesCList[f]['titulo'].toString();
+              opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
+
+              await opcionesespecialesCDatabase
+                  .insertarOpcionesEspecialesC(opcionesSabores);
+            }
+          }
+        }
+      }
+
+      var especialesDList = decodedData['result']['data']
+          ['producto_observaciones_fijas']['especial_4'];
+
+      if (especialesDList.length > 0) {
+        for (var f = 0; f < especialesDList.length; f++) {
+          Sabores sabores = Sabores();
+          sabores.idProducto = idProducto;
+          sabores.tituloTextos = especialesDList[f]['titulo'];
+          sabores.maximo = especialesDList[f]['maximo'];
+
+          await especialesDDatabase.insertarEspecialesD(sabores);
+
+          var listOpcionesSabores = especialesDList[f]['opciones'];
+          if (listOpcionesSabores.length > 0) {
+            for (var t = 0; t < listOpcionesSabores.length; t++) {
+              OpcionesSabores opcionesSabores = OpcionesSabores();
+              opcionesSabores.idProducto = idProducto;
+              opcionesSabores.tituloTextos =
+                  especialesDList[f]['titulo'].toString();
+              opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
+
+              await opcionesespecialesDDatabase
+                  .insertarOpcionesEspecialesD(opcionesSabores);
+            }
+          }
+        }
+      }
+
+      var adicionalesList = decodedData['result']['data']
+          ['producto_observaciones_fijas']['adicional_categoria']['opciones'];
+      var adicionalesList2 = decodedData['result']['data']
+          ['producto_observaciones_fijas']['adicional_categoria_2']['opciones'];
+      var adicionalesList3 = decodedData['result']['data']
+          ['producto_observaciones_fijas']['adicional_categoria_3']['opciones'];
+      var adicionalesList4 = decodedData['result']['data']
+          ['producto_observaciones_fijas']['adicional_categoria_4']['opciones'];
+      var adicionalesList5 = decodedData['result']['data']
+          ['producto_observaciones_fijas']['adicional_categoria_5']['opciones'];
+      var adicionalesList6 = decodedData['result']['data']
+          ['producto_observaciones_fijas']['adicional_categoria_6']['opciones'];
+
+      if (adicionalesList.length > 0) {
+        await adicionalesDatabase.deleteAdicionalesPorId(idProducto, '0');
+
+        for (var i = 0; i < adicionalesList.length; i++) {
+          AdicionalesModel adicionalesModel = AdicionalesModel();
+
+          adicionalesModel.idProducto = idProducto;
+          adicionalesModel.idProductoAdicional = adicionalesList[i];
+          adicionalesModel.adicionalItem = '0';
+          adicionalesModel.titulo = decodedData['result']['data']
+              ['producto_observaciones_fijas']['adicional_categoria']['titulo'];
+          adicionalesModel.adicionalSeleccionado = '0';
+
+          await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+        }
+      }
+
+      if (adicionalesList2.length > 0) {
+        await adicionalesDatabase.deleteAdicionalesPorId(idProducto, '1');
+
+        for (var i = 0; i < adicionalesList2.length; i++) {
+          AdicionalesModel adicionalesModel = AdicionalesModel();
+
+          adicionalesModel.idProducto = idProducto;
+          adicionalesModel.idProductoAdicional = adicionalesList2[i];
+          adicionalesModel.adicionalItem = '1';
+          adicionalesModel.titulo = decodedData['result']['data']
+                  ['producto_observaciones_fijas']['adicional_categoria_2']
+              ['titulo'];
+
+          adicionalesModel.adicionalSeleccionado = '0';
+
+          await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+        }
+      }
+
+      if (adicionalesList3.length > 0) {
+        await adicionalesDatabase.deleteAdicionalesPorId(idProducto, '2');
+
+        for (var i = 0; i < adicionalesList3.length; i++) {
+          AdicionalesModel adicionalesModel = AdicionalesModel();
+
+          adicionalesModel.idProducto = idProducto;
+          adicionalesModel.idProductoAdicional = adicionalesList3[i];
+          adicionalesModel.adicionalItem = '2';
+          adicionalesModel.titulo = decodedData['result']['data']
+                  ['producto_observaciones_fijas']['adicional_categoria_3']
+              ['titulo'];
+          adicionalesModel.adicionalSeleccionado = '0';
+
+          await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+        }
+      }
+
+      if (adicionalesList4.length > 0) {
+        await adicionalesDatabase.deleteAdicionalesPorId(idProducto, '3');
+
+        for (var i = 0; i < adicionalesList4.length; i++) {
+          AdicionalesModel adicionalesModel = AdicionalesModel();
+
+          adicionalesModel.idProducto = idProducto;
+          adicionalesModel.idProductoAdicional = adicionalesList4[i];
+          adicionalesModel.adicionalItem = '3';
+          adicionalesModel.titulo = decodedData['result']['data']
+                  ['producto_observaciones_fijas']['adicional_categoria_4']
+              ['titulo'];
+
+          adicionalesModel.adicionalSeleccionado = '0';
+
+          await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+        }
+      }
+
+      if (adicionalesList5.length > 0) {
+        await adicionalesDatabase.deleteAdicionalesPorId(idProducto, '4');
+
+        for (var i = 0; i < adicionalesList5.length; i++) {
+          AdicionalesModel adicionalesModel = AdicionalesModel();
+
+          adicionalesModel.idProducto = idProducto;
+          adicionalesModel.idProductoAdicional = adicionalesList5[i];
+          adicionalesModel.adicionalItem = '4';
+          adicionalesModel.titulo = decodedData['result']['data']
+                  ['producto_observaciones_fijas']['adicional_categoria_5']
+              ['titulo'];
+
+          adicionalesModel.adicionalSeleccionado = '0';
+
+          await adicionalesDatabase.insertarAdicionales(adicionalesModel);
+        }
+      }
+
+      if (adicionalesList6.length > 0) {
+        await adicionalesDatabase.deleteAdicionalesPorId(idProducto, '5');
+
+        for (var i = 0; i < adicionalesList6.length; i++) {
+          AdicionalesModel adicionalesModel = AdicionalesModel();
+
+          adicionalesModel.idProducto = idProducto;
+          adicionalesModel.idProductoAdicional = adicionalesList6[i];
+          adicionalesModel.adicionalItem = '5';
+          adicionalesModel.titulo = decodedData['result']['data']
+                  ['producto_observaciones_fijas']['adicional_categoria_6']
+              ['titulo'];
+
+          adicionalesModel.adicionalSeleccionado = '0';
+
+          await adicionalesDatabase.insertarAdicionales(adicionalesModel);
         }
       }
 

@@ -3,6 +3,7 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
+import 'package:enchiladasapp/src/pages/AplicacionLocal/detalle_promociones_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
 import 'package:enchiladasapp/src/search/search_local.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -124,11 +125,26 @@ class PrincipalLocal extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () {
-                  Arguments arg = new Arguments( 
-                      "${promociones[index].categoriaNombre}",
-                      '${promociones[index].idCategoria}');
-                  Navigator.pushNamed(context, 'detallePromocionesLocal',
-                      arguments: arg);
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 400),
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return DetallePromocionesLocal(
+                              categoriaNombre:
+                                  "${promociones[index].categoriaNombre}",
+                              idcategoria: '${promociones[index].idCategoria}');
+                          //return DetalleProductitos(productosData: productosData);
+                        },
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                      ));
+
                   //Navigator.pushNamed(context, 'detallePromociones');
                 },
                 child: ClipRRect(

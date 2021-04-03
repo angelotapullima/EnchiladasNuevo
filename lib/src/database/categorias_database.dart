@@ -59,7 +59,7 @@ class CategoriasDatabase{
 
     return list; 
   } 
-  Future<List<CategoriaData>> obtenerCategoriasMarket(String tipo) async {
+  Future<List<CategoriaData>> obtenerCategoriasPorTipo(String tipo) async {
     final db = await dbprovider.database;
     final res = await db.rawQuery("SELECT * FROM Categorias where categoria_tipo = '$tipo' and categoria_mostrar_app='1' order by CAST(categoria_orden AS INT) ASC");
 

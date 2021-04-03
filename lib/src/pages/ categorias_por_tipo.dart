@@ -14,22 +14,23 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MarketPage extends StatefulWidget {
+class CategoriasPorTipo extends StatefulWidget {
+  const CategoriasPorTipo({Key key, @required this.tipo,@required this.nombreTipo})
+      : super(key: key);
   final String tipo;
-
-  const MarketPage({Key key, @required this.tipo}) : super(key: key);
+  final String nombreTipo;
   @override
   _MarketPageState createState() => _MarketPageState();
 }
 
-class _MarketPageState extends State<MarketPage> {
+class _MarketPageState extends State<CategoriasPorTipo> {
   final _refreshController = RefreshController(initialRefresh: false);
 
   void _onRefresh(BuildContext context) async {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasMarket(widget.tipo);
+    categoriasBloc.obtenerCategoriasPorTipo(widget.tipo);
     _refreshController.refreshCompleted();
   }
 
@@ -37,7 +38,7 @@ class _MarketPageState extends State<MarketPage> {
   Widget build(BuildContext context) {
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasMarket(widget.tipo);
+    categoriasBloc.obtenerCategoriasPorTipo(widget.tipo);
 
     final reaponsive = Responsive.of(context);
 
@@ -65,7 +66,8 @@ class _MarketPageState extends State<MarketPage> {
             backgroundColor: Colors.red,
             elevation: 0,
             title: Text(
-              (widget.tipo == '2') ? 'Market 247' : 'Café 247',
+             /*  (widget.tipo == '2') ? 'Market 247' : 'Café 247', */
+             widget.tipo,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: responsive.ip(2.8),

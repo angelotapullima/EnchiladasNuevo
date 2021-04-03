@@ -1,7 +1,7 @@
 
 
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/pages/market_page.dart';
+import 'package:enchiladasapp/src/pages/%20categorias_por_tipo.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +88,8 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                           const Duration(milliseconds: 400),
                                       pageBuilder: (context, animation,
                                           secondaryAnimation) {
-                                        return MarketPage(
+                                        return CategoriasPorTipo(
+                                          nombreTipo: 'Market 247',
                                           tipo: '2',
                                         );
                                         //return DetalleProductitos(productosData: productosData);
@@ -139,7 +140,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                             const Duration(milliseconds: 400),
                                         pageBuilder: (context, animation,
                                             secondaryAnimation) {
-                                          return MarketPage(
+                                          return CategoriasPorTipo(nombreTipo:'Café 247',
                                             tipo: '3',
                                           );
                                           //return DetalleProductitos(productosData: productosData);

@@ -258,8 +258,8 @@ class _MyAppState extends State<MyApp> {
                 'onboarding': (BuildContext context) => OnboardingPage(),
                 'productosCategoria': (BuildContext context) =>
                     ProductosCategoria(),
-                'detallePromocionesLocal': (BuildContext context) =>
-                    DetallePromocionesLocal(),
+               /*  'detallePromocionesLocal': (BuildContext context) =>
+                    DetallePromocionesLocal(), */
                 'notificationPage': (BuildContext context) =>
                     NotificationPage(),
                 'pantallaDeliveryOpciones': (BuildContext context) =>

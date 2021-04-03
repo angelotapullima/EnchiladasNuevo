@@ -6,7 +6,6 @@ import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:after_layout/after_layout.dart';
 import 'package:flutter/painting.dart';
 
 import 'dart:ui';
@@ -18,34 +17,38 @@ class Splash extends StatefulWidget {
   _SplashState createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash> with AfterLayoutMixin {
+class _SplashState extends State<Splash> {
   @override
-  void afterFirstLayout(BuildContext context) async {
-    final categoriasApi = CategoriasApi();
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final categoriasApi = CategoriasApi();
 
-    final configuracionApi = ConfiguracionApi();
-    final preferences = Preferences();
-    final usuarioDatabase = UsuarioDatabase();
+      final configuracionApi = ConfiguracionApi();
+      final preferences = Preferences();
+      final usuarioDatabase = UsuarioDatabase();
 
-    if (preferences.estadoCargaInicial == null ||
-        preferences.estadoCargaInicial == '0') {
-      await categoriasApi.obtenerAmbos(context);
+      if (preferences.estadoCargaInicial == null ||
+          preferences.estadoCargaInicial == '0') {
+        await categoriasApi.obtenerAmbos(context);
 
-      await configuracionApi.configuracion();
+        await configuracionApi.configuracion();
 
-      preferences.estadoCargaInicial = '1';
-    } else {
-       categoriasApi.obtenerAmbos(context);
+        preferences.estadoCargaInicial = '1';
+      } else {
+        categoriasApi.obtenerAmbos(context);
 
-       configuracionApi.configuracion();
-    }
+        configuracionApi.configuracion();
+      }
 
-    final user = await usuarioDatabase.obtenerUsUario();
-    if (user.length > 0) {
-      Navigator.pushReplacementNamed(context, 'desicion');
-    } else {
-      Navigator.pushReplacementNamed(context, 'login');
-    }
+      final user = await usuarioDatabase.obtenerUsUario();
+      if (user.length > 0) {
+        Navigator.pushReplacementNamed(context, 'desicion');
+      } else {
+        Navigator.pushReplacementNamed(context, 'login');
+      }
+    });
+
+    super.initState();
   }
 
   @override

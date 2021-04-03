@@ -1,9 +1,13 @@
+import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/bloc/especiales_observaciones.dart';
+import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/database/observaciones_database.dart';
 import 'package:enchiladasapp/src/models/observaciones_model.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 
 class ObservacionesProductoBloc {
+  final categoriasApi = CategoriasApi();
   final observacionesFijasDatabase = ObservacionesFijasDatabase();
   final productosFijosDatabase = ProductosFijosDatabase();
   final saboresDatabase = SaboresDatabase();
@@ -21,7 +25,16 @@ class ObservacionesProductoBloc {
     _observacionesController?.close();
   }
 
-  void obtenerObservaciones(String idProducto) async {
+  void obtenerObservaciones(BuildContext context, String idProducto) async {
+    _observacionesController.sink.add(null);
+    await categoriasApi.obtenerAdicionalesPorProducto(idProducto);
+
+    _observacionesController.sink.add(await obtenerObservaciones2(idProducto));
+    final adicionalesBloc = ProviderBloc.adicionales(context);
+    adicionalesBloc.obtenerAdicionales(idProducto);
+  }
+
+  Future<List<Observaciones>> obtenerObservaciones2(String idProducto) async {
     final observacionesGeneral = List<Observaciones>();
     EspecialesObservaciones c = EspecialesObservaciones();
 
@@ -29,20 +42,27 @@ class ObservacionesProductoBloc {
 
     final observacionesFijas = List<ObservacionesFijas>();
 
-    final obFijas =await observacionesFijasDatabase.obtenerObservacionesFijas(idProducto);
+    final obFijas =
+        await observacionesFijasDatabase.obtenerObservacionesFijas(idProducto);
 
     if (obFijas.length > 0) {
       for (var i = 0; i < obFijas.length; i++) {
         ObservacionesFijas observacionesFijasModel = ObservacionesFijas();
         observacionesFijasModel.idProducto = obFijas[i].idProducto;
         observacionesFijasModel.mostrar = obFijas[i].mostrar;
-        observacionesFijasModel.productosFijos =await obtenerProductosFijos(idProducto);
+        observacionesFijasModel.productosFijos =
+            await obtenerProductosFijos(idProducto);
         observacionesFijasModel.sabores = await obtenerSabores(idProducto);
-        observacionesFijasModel.acompanhamientos = await obtenerAcompanhamientos(idProducto);
-        observacionesFijasModel.especialesA = await c.obtenerEspecialesA(idProducto);
-        observacionesFijasModel.especialesB = await c.obtenerEspecialesB(idProducto);
-        observacionesFijasModel.especialesC = await c.obtenerEspecialesC(idProducto);
-        observacionesFijasModel.especialesD = await c.obtenerEspecialesD(idProducto);
+        observacionesFijasModel.acompanhamientos =
+            await obtenerAcompanhamientos(idProducto);
+        observacionesFijasModel.especialesA =
+            await c.obtenerEspecialesA(idProducto);
+        observacionesFijasModel.especialesB =
+            await c.obtenerEspecialesB(idProducto);
+        observacionesFijasModel.especialesC =
+            await c.obtenerEspecialesC(idProducto);
+        observacionesFijasModel.especialesD =
+            await c.obtenerEspecialesD(idProducto);
 
         observacionesFijas.add(observacionesFijasModel);
       }
@@ -52,21 +72,20 @@ class ObservacionesProductoBloc {
     observaciones.variables = await obtenerVariables(idProducto);
     observacionesGeneral.add(observaciones);
 
-    _observacionesController.sink.add(observacionesGeneral);
+    return observacionesGeneral;
   }
- 
-  Future<List<ObservacionesVariables>> obtenerVariables(String idProducto) async{
 
-
-
+  Future<List<ObservacionesVariables>> obtenerVariables(
+      String idProducto) async {
     final listObservacionesVariables = List<ObservacionesVariables>();
 
-
-     final obsVariables =await observacionesVariablesDatabase.obtenerObservacionesVariables(idProducto);
+    final obsVariables = await observacionesVariablesDatabase
+        .obtenerObservacionesVariables(idProducto);
 
     if (obsVariables.length > 0) {
       for (var i = 0; i < obsVariables.length; i++) {
-        ObservacionesVariables  observacionesVariables = ObservacionesVariables();
+        ObservacionesVariables observacionesVariables =
+            ObservacionesVariables();
         observacionesVariables.idProducto = obsVariables[i].idProducto;
         observacionesVariables.nombreVariable = obsVariables[i].nombreVariable;
 
@@ -77,10 +96,10 @@ class ObservacionesProductoBloc {
     return listObservacionesVariables;
   }
 
-
   Future<List<ProductosFijos>> obtenerProductosFijos(String idProducto) async {
     final listProductosFijos = List<ProductosFijos>();
-    final listProductoFijosDatabase =await productosFijosDatabase.obtenerProductosFijos(idProducto);
+    final listProductoFijosDatabase =
+        await productosFijosDatabase.obtenerProductosFijos(idProducto);
 
     if (listProductoFijosDatabase.length > 0) {
       for (var x = 0; x < listProductoFijosDatabase.length; x++) {
@@ -109,34 +128,35 @@ class ObservacionesProductoBloc {
         sabores.idProducto = listSaboresDatabase[i].idProducto;
         sabores.tituloTextos = listSaboresDatabase[i].tituloTextos;
         sabores.maximo = listSaboresDatabase[i].maximo;
-        sabores.opciones = await obtenerOpcionesSabores(idProducto, listSaboresDatabase[i].tituloTextos);
-        sabores.nombrecitos = await nombrecitosSabores(idProducto, listSaboresDatabase[i].tituloTextos);
+        sabores.opciones = await obtenerOpcionesSabores(
+            idProducto, listSaboresDatabase[i].tituloTextos);
+        sabores.nombrecitos = await nombrecitosSabores(
+            idProducto, listSaboresDatabase[i].tituloTextos);
 
-            listSabores.add(sabores);
+        listSabores.add(sabores);
       }
     }
 
     return listSabores;
   }
 
-  Future<List<OpcionesSabores>> obtenerOpcionesSabores(String idProducto, String titulo) async {
+  Future<List<OpcionesSabores>> obtenerOpcionesSabores(
+      String idProducto, String titulo) async {
     final listOpcionesSabores = List<OpcionesSabores>();
 
-    final listOpcionesSaboresDatabase =  await opcionesSaboresDatabase.obtenerOpcionesSabores(idProducto,titulo);
+    final listOpcionesSaboresDatabase = await opcionesSaboresDatabase
+        .obtenerOpcionesSabores(idProducto, titulo);
 
-    if(listOpcionesSaboresDatabase.length>0){
+    if (listOpcionesSaboresDatabase.length > 0) {
+      for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
+        OpcionesSabores opcionesTextosFijos = OpcionesSabores();
+        opcionesTextosFijos.idProducto = idProducto;
+        opcionesTextosFijos.tituloTextos = titulo;
+        opcionesTextosFijos.nombreTexto =
+            listOpcionesSaboresDatabase[i].nombreTexto;
 
-       for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
-
-         OpcionesSabores opcionesTextosFijos =OpcionesSabores();
-         opcionesTextosFijos.idProducto = idProducto;
-         opcionesTextosFijos.tituloTextos = titulo;
-         opcionesTextosFijos.nombreTexto = listOpcionesSaboresDatabase[i].nombreTexto;
-
-         listOpcionesSabores.add(opcionesTextosFijos);
-
-       }
-
+        listOpcionesSabores.add(opcionesTextosFijos);
+      }
     }
 
     return listOpcionesSabores;
@@ -146,26 +166,22 @@ class ObservacionesProductoBloc {
       String idProducto, String titulo) async {
     final listOpcionesSabores = List<String>();
 
-    final listOpcionesSaboresDatabase =  await opcionesSaboresDatabase.obtenerOpcionesSabores(idProducto,titulo);
+    final listOpcionesSaboresDatabase = await opcionesSaboresDatabase
+        .obtenerOpcionesSabores(idProducto, titulo);
 
-    if(listOpcionesSaboresDatabase.length>0){
-
-       for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
-
+    if (listOpcionesSaboresDatabase.length > 0) {
+      for (var i = 0; i < listOpcionesSaboresDatabase.length; i++) {
         var name = listOpcionesSaboresDatabase[i].nombreTexto;
-         
 
-         listOpcionesSabores.add(name);
-
-       }
-
+        listOpcionesSabores.add(name);
+      }
     }
 
     return listOpcionesSabores;
   }
 
-
-  Future<List<Acompanhamientos>> obtenerAcompanhamientos(String idProducto) async {
+  Future<List<Acompanhamientos>> obtenerAcompanhamientos(
+      String idProducto) async {
     final listAcompanhamientos = List<Acompanhamientos>();
 
     final listlistAcompanhamientosDatabase =
@@ -174,12 +190,17 @@ class ObservacionesProductoBloc {
     if (listlistAcompanhamientosDatabase.length > 0) {
       for (var i = 0; i < listlistAcompanhamientosDatabase.length; i++) {
         Acompanhamientos acompanhamientosModel = Acompanhamientos();
-        acompanhamientosModel.idProducto = listlistAcompanhamientosDatabase[i].idProducto;
-        acompanhamientosModel.tituloTextos = listlistAcompanhamientosDatabase[i].tituloTextos;
-        acompanhamientosModel.acompanhamientos = await obtenerAcompanhamientosFor(idProducto, listlistAcompanhamientosDatabase[i].tituloTextos);
-        acompanhamientosModel.nombrecitos = await nombrecitosAcompanhamientos(idProducto, listlistAcompanhamientosDatabase[i].tituloTextos);
+        acompanhamientosModel.idProducto =
+            listlistAcompanhamientosDatabase[i].idProducto;
+        acompanhamientosModel.tituloTextos =
+            listlistAcompanhamientosDatabase[i].tituloTextos;
+        acompanhamientosModel.acompanhamientos =
+            await obtenerAcompanhamientosFor(
+                idProducto, listlistAcompanhamientosDatabase[i].tituloTextos);
+        acompanhamientosModel.nombrecitos = await nombrecitosAcompanhamientos(
+            idProducto, listlistAcompanhamientosDatabase[i].tituloTextos);
 
-            listAcompanhamientos.add(acompanhamientosModel);
+        listAcompanhamientos.add(acompanhamientosModel);
       }
     }
 
@@ -190,21 +211,21 @@ class ObservacionesProductoBloc {
       String idProducto, String titulo) async {
     final listOpcionesAcompanhamientoss = List<OpcionesAcompanhamientos>();
 
-    final listOpcionesAcompanhamientosDatabase =  await opcionesAcompanhamientosDatabase.obtenerOpcionesAcompanhamientos(idProducto,titulo);
+    final listOpcionesAcompanhamientosDatabase =
+        await opcionesAcompanhamientosDatabase.obtenerOpcionesAcompanhamientos(
+            idProducto, titulo);
 
-    if(listOpcionesAcompanhamientosDatabase.length>0){
+    if (listOpcionesAcompanhamientosDatabase.length > 0) {
+      for (var i = 0; i < listOpcionesAcompanhamientosDatabase.length; i++) {
+        OpcionesAcompanhamientos opcionesAcompanhamientosModel =
+            OpcionesAcompanhamientos();
+        opcionesAcompanhamientosModel.idProducto = idProducto;
+        opcionesAcompanhamientosModel.tituloTextos = titulo;
+        opcionesAcompanhamientosModel.nombreTexto =
+            listOpcionesAcompanhamientosDatabase[i].nombreTexto;
 
-       for (var i = 0; i < listOpcionesAcompanhamientosDatabase.length; i++) {
-
-         OpcionesAcompanhamientos opcionesAcompanhamientosModel =OpcionesAcompanhamientos();
-         opcionesAcompanhamientosModel.idProducto = idProducto;
-         opcionesAcompanhamientosModel.tituloTextos = titulo;
-         opcionesAcompanhamientosModel.nombreTexto = listOpcionesAcompanhamientosDatabase[i].nombreTexto;
-
-         listOpcionesAcompanhamientoss.add(opcionesAcompanhamientosModel);
-
-       }
-
+        listOpcionesAcompanhamientoss.add(opcionesAcompanhamientosModel);
+      }
     }
 
     return listOpcionesAcompanhamientoss;
@@ -214,22 +235,18 @@ class ObservacionesProductoBloc {
       String idProducto, String titulo) async {
     final listOpcionesAcompanhamientos = List<String>();
 
-    final listOpcionesAcompanhamientosDatabase =  await  opcionesAcompanhamientosDatabase.obtenerOpcionesAcompanhamientos(idProducto,titulo);
+    final listOpcionesAcompanhamientosDatabase =
+        await opcionesAcompanhamientosDatabase.obtenerOpcionesAcompanhamientos(
+            idProducto, titulo);
 
-    if(listOpcionesAcompanhamientosDatabase.length>0){
-
-       for (var i = 0; i < listOpcionesAcompanhamientosDatabase.length; i++) {
-
+    if (listOpcionesAcompanhamientosDatabase.length > 0) {
+      for (var i = 0; i < listOpcionesAcompanhamientosDatabase.length; i++) {
         var name = listOpcionesAcompanhamientosDatabase[i].nombreTexto;
-         
 
-         listOpcionesAcompanhamientos.add(name);
-
-       }
-
+        listOpcionesAcompanhamientos.add(name);
+      }
     }
 
     return listOpcionesAcompanhamientos;
   }
-
 }
