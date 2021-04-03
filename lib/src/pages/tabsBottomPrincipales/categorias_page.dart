@@ -1,5 +1,3 @@
-
-
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
@@ -43,8 +41,6 @@ class CategoriasPage extends StatelessWidget {
       ]),
     );
   }
-
-
 
   Widget rowDatos(BuildContext context, CategoriasBloc categoriasBloc) {
     final responsive = Responsive.of(context);
@@ -130,12 +126,8 @@ class CategoriasPage extends StatelessWidget {
     );
   }
 
-
-
   Widget _conte(double anchoCategorias, double anchoProductos,
       List<CategoriaData> categorias, BuildContext context) {
-
-        
     final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
     enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
 
@@ -162,8 +154,6 @@ class CategoriasPage extends StatelessWidget {
           );
         });
   }
-
-
 }
 
 class CategoriasProducto extends StatefulWidget {
@@ -280,7 +270,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
+    productosIdBloc
+        .obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
 
     return Scaffold(
       body: _listaProductosId(productosIdBloc, responsive),
@@ -294,7 +285,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
       width: this.widget.ancho,
       child: StreamBuilder(
         stream: productosIdBloc.productosEnchiladasStream,
-        builder: (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ProductosData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               final productos = snapshot.data;
@@ -306,7 +298,6 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     context,
                     productos[index],
                     productos.length.toString(),
-                    
                   );
                 },
               );
@@ -324,7 +315,8 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 
-  Widget _itemPedido(BuildContext context, ProductosData productosData,String cantidadItems) {
+  Widget _itemPedido(
+      BuildContext context, ProductosData productosData, String cantidadItems) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
@@ -349,9 +341,29 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                       borderRadius: BorderRadius.circular(10),
                       child: CachedNetworkImage(
                         cacheManager: CustomCacheManager(),
-                        placeholder: (context, url) => Image(
-                            image: AssetImage('assets/jar-loading.gif'),
-                            fit: BoxFit.cover),
+                        progressIndicatorBuilder: (_, url, downloadProgress) {
+                          return Stack(
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  backgroundColor: Colors.green,
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.red),
+                                ),
+                              ),
+                              Center(
+                                child: (downloadProgress.progress != null)
+                                    ? Text(
+                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                    : Container(),
+                              )
+                            ],
+                          );
+                        },
+                        /*  placeholder: (context, url) => Image(
+                        image: AssetImage('assets/jar-loading.gif'),
+                        fit: BoxFit.cover), */
                         errorWidget: (context, url, error) => Image(
                             image: AssetImage('assets/carga_fallida.jpg'),
                             fit: BoxFit.cover),
@@ -413,44 +425,44 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                                 ),
                               ),
                             ),
-                    ), ('${productosData.productoNuevo}' == '1')
-                              ?   Positioned(
-                                bottom: 0,
-                                 /*  left: responsive.wp(1),
+                    ),
+                    ('${productosData.productoNuevo}' == '1')
+                        ? Positioned(
+                            bottom: 0,
+                            /*  left: responsive.wp(1),
                                   top: responsive.hp(.5), */
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: responsive.wp(3),
-                                      vertical: responsive.hp(.5),
-                                    ),
-                                    decoration: BoxDecoration(
-                                        //borderRadius: BorderRadius.circular(10),
-                                        color: Colors.red),
-                                    child: Text(
-                                      'Nuevo',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: responsive.ip(1.3),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-
-                              ('${productosData.productoDestacado}' != '0')
-                              ?   Positioned(
-                                      //top: 0,
-                                      //right: 0,
-                                      //left: 0,
-                                      child: Container(
-                                        transform: Matrix4.translationValues(-responsive.wp(13), 0, 0),
-                                        height: responsive.ip(3),
-                                        child: SvgPicture.asset(
-                                            'assets/medalla.svg'),
-                                      ),
-                                    )
-                              : Container()
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: responsive.wp(3),
+                                vertical: responsive.hp(.5),
+                              ),
+                              decoration: BoxDecoration(
+                                  //borderRadius: BorderRadius.circular(10),
+                                  color: Colors.red),
+                              child: Text(
+                                'Nuevo',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: responsive.ip(1.3),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    ('${productosData.productoDestacado}' != '0')
+                        ? Positioned(
+                            //top: 0,
+                            //right: 0,
+                            //left: 0,
+                            child: Container(
+                              transform: Matrix4.translationValues(
+                                  -responsive.wp(13), 0, 0),
+                              height: responsive.ip(3),
+                              child: SvgPicture.asset('assets/medalla.svg'),
+                            ),
+                          )
+                        : Container()
                   ],
                 ),
               ),
@@ -492,12 +504,11 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
-
               //return DetalleProductitos(productosData: productosData);
               return SliderDetalleProductos(
-                numeroItem: productosData.numeroitem,idCategoria: productosData.idCategoria,cantidadItems:cantidadItems
-                
-                );
+                  numeroItem: productosData.numeroitem,
+                  idCategoria: productosData.idCategoria,
+                  cantidadItems: cantidadItems);
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {

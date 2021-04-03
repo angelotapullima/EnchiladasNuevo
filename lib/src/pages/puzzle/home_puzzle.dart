@@ -106,6 +106,26 @@ class HomePuzzle extends StatelessWidget {
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager(),
                   imageUrl: puzzle[index].imagenRuta,
+                  progressIndicatorBuilder: (_, url, downloadProgress) {
+                          return Stack(
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  backgroundColor: Colors.green,
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.red),
+                                ),
+                              ),
+                              Center(
+                                child: (downloadProgress.progress != null)
+                                    ? Text(
+                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                    : Container(),
+                              )
+                            ],
+                          );
+                        },
                   errorWidget: (context, url, error) => Image(
                       image: AssetImage('assets/carga_fallida.jpg'),
                       fit: BoxFit.cover),
@@ -179,6 +199,26 @@ class HomePuzzle extends StatelessWidget {
               child: CachedNetworkImage(
                 cacheManager: CustomCacheManager(),
                 imageUrl: imagen,
+                progressIndicatorBuilder: (_, url, downloadProgress) {
+                          return Stack(
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  backgroundColor: Colors.green,
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.red),
+                                ),
+                              ),
+                              Center(
+                                child: (downloadProgress.progress != null)
+                                    ? Text(
+                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                    : Container(),
+                              )
+                            ],
+                          );
+                        },
                 errorWidget: (context, url, error) => Image(
                     image: AssetImage('assets/carga_fallida.jpg'),
                     fit: BoxFit.cover),

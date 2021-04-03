@@ -58,7 +58,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
             return InkWell(
               onTap: () {
                 if (dataToque) {
-                  _toque.value=false;
+                  _toque.value = false;
                 } else {
                   _toque.value = true;
                 }
@@ -74,6 +74,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                             imageProvider: CachedNetworkImageProvider(
                               '${productosData.productoFoto}',
                               cacheManager: CustomCacheManager(),
+                              
                             ),
                           ),
                         ),
@@ -142,7 +143,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                     color: Colors.black,
                     height: double.infinity,
                     width: double.infinity,
-                  ), 
+                  ),
                   Center(
                     child: GestureDetector(
                       onVerticalDragUpdate: (drag) {
@@ -164,7 +165,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                       ),
                     ),
                   ),
-                   (!dataToque)
+                  (!dataToque)
                       ? Positioned(
                           bottom: 0,
                           right: 0,
@@ -200,33 +201,9 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     ),
                                   ],
                                 ),
-
-                                 SizedBox(
-                    height: responsive.hp(1),
-                  ),
-
-                  ('${productosData.productoNuevo}' == '1')
-                      ? Positioned(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: responsive.wp(3),
-                              vertical: responsive.wp(.5),
-                            ),
-                            decoration: BoxDecoration(
-                                //borderRadius: BorderRadius.circular(10),
-                                color: Colors.red),
-                            child: Text(
-                              'Producto Nuevo',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsive.ip(2),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  
+                                SizedBox(
+                                  height: responsive.hp(1),
+                                ),
                                 SizedBox(
                                   height: responsive.hp(2),
                                 ),
@@ -245,6 +222,31 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                           ),
                         )
                       : Container(),
+                  (!dataToque)
+                      ? ('${productosData.productoNuevo}' == '1')
+                          ? Positioned(
+                              top: 0,
+                              left: 0,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: responsive.wp(3),
+                                  vertical: responsive.wp(.5),
+                                ),
+                                decoration: BoxDecoration(
+                                    //borderRadius: BorderRadius.circular(10),
+                                    color: Colors.red),
+                                child: Text(
+                                  'Producto Nuevo',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: responsive.ip(2),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container()
+                      : Container()
                 ],
               ),
             );

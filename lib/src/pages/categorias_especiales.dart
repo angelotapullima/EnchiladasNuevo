@@ -131,9 +131,26 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
                       cacheManager: CustomCacheManager(),
-                      placeholder: (context, url) => Image(
-                          image: AssetImage('assets/jar-loading.gif'),
-                          fit: BoxFit.cover),
+                     progressIndicatorBuilder: (_, url, downloadProgress) {
+                          return Stack(
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  backgroundColor: Colors.green,
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.red),
+                                ),
+                              ),
+                              Center(
+                                child: (downloadProgress.progress != null)
+                                    ? Text(
+                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                    : Container(),
+                              )
+                            ],
+                          );
+                        },
                       errorWidget: (context, url, error) => Image(
                           image: AssetImage('assets/carga_fallida.jpg'),
                           fit: BoxFit.cover),

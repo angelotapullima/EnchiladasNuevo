@@ -38,9 +38,27 @@ class RankingDos extends StatelessWidget {
                           borderRadius: BorderRadius.circular(100.0),
                           child: CachedNetworkImage(
                             cacheManager: CustomCacheManager(),
-                            placeholder: (context, url) => Image(
-                                image: AssetImage('assets/jar-loading.gif'),
-                                fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                            progressIndicatorBuilder: (_, url, downloadProgress) {
+                          return Stack(
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  backgroundColor: Colors.green,
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.red),
+                                ),
+                              ),
+                              Center(
+                                child: (downloadProgress.progress != null)
+                                    ? Text(
+                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                    : Container(),
+                              )
+                            ],
+                          );
+                        },
+                                errorWidget: (context, url, error) => Image(
                   image: AssetImage('assets/carga_fallida.jpg'),
                   fit: BoxFit.cover),
                             imageUrl: '$imagen1',
@@ -79,9 +97,27 @@ class RankingDos extends StatelessWidget {
                           borderRadius: BorderRadius.circular(100.0),
                           child: CachedNetworkImage(
                             cacheManager: CustomCacheManager(),
-                            placeholder: (context, url) => Image(
-                                image: AssetImage('assets/jar-loading.gif'),
-                                fit: BoxFit.cover),errorWidget: (context, url, error) => Image(
+                            progressIndicatorBuilder: (_, url, downloadProgress) {
+                          return Stack(
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  backgroundColor: Colors.green,
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.red),
+                                ),
+                              ),
+                              Center(
+                                child: (downloadProgress.progress != null)
+                                    ? Text(
+                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                    : Container(),
+                              )
+                            ],
+                          );
+                        },
+                                errorWidget: (context, url, error) => Image(
                   image: AssetImage('assets/carga_fallida.jpg'),
                   fit: BoxFit.cover),
                             //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
