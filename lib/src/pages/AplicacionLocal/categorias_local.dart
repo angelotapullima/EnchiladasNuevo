@@ -8,7 +8,6 @@ import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -224,12 +223,16 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                             Container(
                               height: responsive.ip(6),
                               width: responsive.ip(6),
-                              child: SvgPicture(
-                                  AdvancedNetworkSvg(
-                                      '${categoria.categoriaIcono}',
-                                      SvgPicture.svgByteDecoder,
-                                      useDiskCache: true),
-                                  fit: BoxFit.cover),
+                              child: SvgPicture.network(
+                                '${categoria.categoriaIcono}',
+                                semanticsLabel: 'A shark?!',
+                                placeholderBuilder: (BuildContext context) =>
+                                    Container(
+                                        padding: const EdgeInsets.all(30.0),
+                                        child:
+                                            const CircularProgressIndicator()),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             SizedBox(
                               height: responsive.hp(1),
@@ -341,25 +344,25 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                   child: CachedNetworkImage(
                     cacheManager: CustomCacheManager(),
                     progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                      return Stack(
+                        children: [
+                          Center(
+                            child: CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                              backgroundColor: Colors.green,
+                              valueColor:
+                                  new AlwaysStoppedAnimation<Color>(Colors.red),
+                            ),
+                          ),
+                          Center(
+                            child: (downloadProgress.progress != null)
+                                ? Text(
+                                    '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                : Container(),
+                          )
+                        ],
+                      );
+                    },
                     errorWidget: (context, url, error) => Image(
                         image: AssetImage('assets/carga_fallida.jpg'),
                         fit: BoxFit.cover),

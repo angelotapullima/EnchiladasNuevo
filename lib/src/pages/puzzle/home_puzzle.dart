@@ -9,9 +9,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class HomePuzzle extends StatelessWidget {
+class HomePuzzle extends StatefulWidget {
+  @override
+  _HomePuzzleState createState() => _HomePuzzleState();
+}
+
+class _HomePuzzleState extends State<HomePuzzle> {
   final CarouselController buttonCarouselController = CarouselController();
+
   final ScrollController _scrollController = new ScrollController();
+
+  
+
+  @override
+  void dispose() { 
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +179,7 @@ class HomePuzzle extends StatelessWidget {
       options: CarouselOptions(
         height: size.height,
         aspectRatio: 2,
-        carouselController: buttonCarouselController,
+        //carouselController: buttonCarouselController,
         viewportFraction: 0.68,
         enlargeCenterPage: true,
         enableInfiniteScroll: false,

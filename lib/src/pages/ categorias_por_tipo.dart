@@ -9,7 +9,6 @@ import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -232,11 +231,16 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
-                            SvgPicture(
-                              AdvancedNetworkSvg('${categoria.categoriaIcono}',
-                                  SvgPicture.svgByteDecoder,
-                                  useDiskCache: true),
-                            ),
+                             SvgPicture.network(
+                                '${categoria.categoriaIcono}',
+                                semanticsLabel: 'A shark?!',
+                                placeholderBuilder: (BuildContext context) =>
+                                    Container(
+                                        padding: const EdgeInsets.all(30.0),
+                                        child:
+                                            const CircularProgressIndicator()),
+                                fit: BoxFit.cover,
+                              ),
                             SizedBox(
                               height: responsive.hp(1),
                             ),

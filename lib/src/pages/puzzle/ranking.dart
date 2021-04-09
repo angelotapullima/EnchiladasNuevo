@@ -5,10 +5,10 @@ import 'package:enchiladasapp/src/pages/puzzle/ranking/ranking_dos.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking/ranking_tres.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking/ranking_uno.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:horizontal_calendar_widget/date_helper.dart';
 
 class RankingPage extends StatelessWidget {
   @override

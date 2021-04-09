@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
@@ -221,12 +220,16 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                             Container(
                               height: responsive.ip(6),
                               width: responsive.ip(6),
-                              child: SvgPicture(
-                                  AdvancedNetworkSvg(
-                                      '${categoria.categoriaIcono}',
-                                      SvgPicture.svgByteDecoder,
-                                      useDiskCache: true),
-                                  fit: BoxFit.cover),
+                             child: SvgPicture.network(
+                                '${categoria.categoriaIcono}',
+                                semanticsLabel: 'A shark?!',
+                                placeholderBuilder: (BuildContext context) =>
+                                    Container(
+                                        padding: const EdgeInsets.all(30.0),
+                                        child:
+                                            const CircularProgressIndicator()),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             SizedBox(
                               height: responsive.hp(1),

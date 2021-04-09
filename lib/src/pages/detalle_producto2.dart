@@ -18,8 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:showcaseview/showcase.dart';
-import 'package:showcaseview/showcase_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DetalleProductitoss2 extends StatefulWidget {
@@ -73,22 +71,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
     productosIdBloc.obtenerProductoPorId(widget.productosData.idProducto);
     productosIdBloc.verificarDisponibilidad(widget.productosData.idProducto);
 
-    return ShowCaseWidget(
-      onFinish: () {
-        preferences.pantallaDProducto = '1';
-      },
-      autoPlay: false,
-      autoPlayDelay: Duration(seconds: 3),
-      autoPlayLockEnable: true,
-      builder: Builder(builder: (context) {
-        Future.delayed(Duration(milliseconds: 700)).then((value) {
-          if (preferences.pantallaDProducto != "1") {
-            WidgetsBinding.instance.addPostFrameCallback((_) =>
-                ShowCaseWidget.of(context).startShowCase([_one, _two, _three]));
-          }
-        });
-
-        return Material(
+    return Material(
           child: StreamBuilder(
             stream: productosIdBloc.productosIdStream,
             builder: (BuildContext context,
@@ -114,16 +97,10 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                           ),
                         ]),
                         panelBuilder: (sc) {
-                          return Showcase(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: responsive.wp(40)),
-                            key: _three,
-                            description:
-                                'Puedes presionar o deslizar hacia arriba para ver más detalles y hacer tu pedido',
-                            child: TranslateAnimation(
+                          return TranslateAnimation(
                               duration: const Duration(milliseconds: 600),
                               child: _carritoProductos(responsive, sc),
-                            ),
+                            
                           );
                         },
                         borderRadius: const BorderRadius.only(
@@ -185,8 +162,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
             },
           ),
         );
-      }),
-    );
+      
   }
 
   Widget botonesBajos(Responsive responsive, ProductosData productosData,
@@ -199,10 +175,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
       width: double.infinity,
       child: Row(
         children: <Widget>[
-          Showcase(
-            key: _one,
-            description: 'Presione para agregar añadir a favoritos',
-            child: Container(
+          Container(
               width: responsive.wp(20),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -238,7 +211,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                         ),
                       ),
               ),
-            ),
+            
           ),
           SizedBox(
             width: responsive.wp(5),
@@ -248,10 +221,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
               builder: (context, AsyncSnapshot<ValidarProducto> snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data.valor) {
-                    return Showcase(
-                      key: _two,
-                      description: 'Presione para agregar producto al carrito',
-                      child: GestureDetector(
+                    return GestureDetector(
                         child: Container(
                           width: responsive.wp(65),
                           decoration: BoxDecoration(
@@ -293,7 +263,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                           }); */
                           //utils.agregarCarrito(productosData, context, "1");
                         },
-                      ),
+                      
                     );
                   } else {
                     return InkWell(

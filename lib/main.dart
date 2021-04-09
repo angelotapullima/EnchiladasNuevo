@@ -1,6 +1,5 @@
 import 'package:enchiladasapp/src/bloc/cerrar_publicidad_bloc.dart';
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
-import 'package:enchiladasapp/src/pages/AplicacionLocal/detalle_promociones_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/home_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/productos_categoria.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/mi_ubicacion/mi_ubicacion_bloc.dart';

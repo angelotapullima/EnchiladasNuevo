@@ -21,7 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:showcaseview/showcaseview.dart';
 
 class DetallePago extends StatefulWidget {
   const DetallePago({Key key}) : super(key: key);
@@ -191,19 +190,7 @@ class _DetallePagoState extends State<DetallePago> {
     }
     final date = DateFormat("dd.MM.yyyy").format(DateTime.now());
 
-    return ShowCaseWidget(
-      onFinish: () {
-        preferences.pantallaDPago = '1';
-      },
-      autoPlay: false,
-      autoPlayDelay: Duration(seconds: 7),
-      autoPlayLockEnable: true,
-      builder: Builder(builder: (context) {
-        if (preferences.pantallaDPago != "1") {
-          WidgetsBinding.instance.addPostFrameCallback(
-              (_) => ShowCaseWidget.of(context).startShowCase([_one, _two]));
-        }
-        return SafeArea(
+    return SafeArea(
           child: Container(
             margin: EdgeInsets.only(
               top: responsive.hp(1),
@@ -275,31 +262,7 @@ class _DetallePagoState extends State<DetallePago> {
                   child: _listaProductos(context, responsive),
                 ),
                 Divider(),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5),
-                  ),
-                  color: Colors.grey[200],
-                  child: Column(
-                    children: <Widget>[
-                      Showcase(
-                        key: _one,
-                        description: 'Por favor ingrese su número de teléfono',
-                        child:
-                            _numeroTelefono(usuarioBloc, context, responsive),
-                      ),
-                      Divider(),
-                      Showcase(
-                        key: _two,
-                        description: 'Por favor ingrese su dirección',
-                        child:
-                            _direccion(direpe, refepe, distritope, responsive),
-                      ),
-                      Divider(),
-                    ],
-                  ),
-                ),
-                Divider(),
+                
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
                   child: Column(
@@ -356,8 +319,7 @@ class _DetallePagoState extends State<DetallePago> {
             ),
           ),
         );
-      }),
-    );
+      
   }
 
   Widget _listaProductos(BuildContext context, Responsive responsive) {

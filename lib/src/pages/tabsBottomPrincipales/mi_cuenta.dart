@@ -5,7 +5,6 @@ import 'package:enchiladasapp/src/database/carrito_database.dart';
 import 'package:enchiladasapp/src/database/direccion_database.dart';
 import 'package:enchiladasapp/src/database/pedido_database.dart';
 import 'package:enchiladasapp/src/database/usuario_database.dart';
-import 'package:enchiladasapp/src/pages/blocMapa/mapa_page.dart';
 import 'package:enchiladasapp/src/utils/auth.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
@@ -14,7 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:showcaseview/showcaseview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MiCuentaTab extends StatefulWidget {
@@ -91,22 +89,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
     return StreamBuilder(
         stream: bottomBloc.selectPageStream,
         builder: (context, snapshot) {
-          return ShowCaseWidget(
-              onFinish: () {
-                preferences.pantallaCuenta = '1';
-              },
-              autoPlay: false,
-              autoPlayDelay: Duration(seconds: 7),
-              autoPlayLockEnable: true,
-              builder: Builder(builder: (context) {
-                if (bottomBloc.page == 4) {
-                  if (preferences.pantallaCuenta != "1") {
-                    WidgetsBinding.instance.addPostFrameCallback((_) =>
-                        ShowCaseWidget.of(context).startShowCase([_one]));
-                  }
-                }
-
-                return SingleChildScrollView(
+          return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
                       SizedBox(
@@ -149,13 +132,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                               ],
                             )
                           ]),
-                      (prefs.rol == '5')
-                          ? Showcase(
-                              key: _one,
-                              description:
-                                  'Aquí podrás ver todos los pedidos que hiciste',
-                              child: _ordenes(responsive))
-                          : Container(),
+                     
                       SizedBox(
                         height: responsive.hp(2),
                       ),
@@ -226,7 +203,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                     ],
                   ),
                 );
-              }));
+              
         });
   }
 

@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:horizontal_calendar_widget/date_helper.dart';
-import 'package:horizontal_calendar_widget/horizontal_calendar.dart';
 
 class RankingReport extends StatefulWidget {
   @override
@@ -52,19 +52,17 @@ class _RankingReportState extends State<RankingReport> {
 
     var horafotmat = fechaBusqueda.toString().split(' ');
     var horaformat1 = horafotmat[0];
-    
+
     puzzleBloc.obtenerTiempos(horaformat1);
 
     Future.delayed(Duration(milliseconds: 1), () {
-
-      if(cant==0){
- _scrollController.animateTo(
-        responsive.wp(13.5) * 15,
-        curve: Curves.ease,
-        duration: const Duration(milliseconds: 100),
-      );
+      if (cant == 0) {
+        _scrollController.animateTo(
+          responsive.wp(13.5) * 15,
+          curve: Curves.ease,
+          duration: const Duration(milliseconds: 100),
+        );
       }
-     
     });
 
     return Scaffold(
@@ -86,7 +84,25 @@ class _RankingReportState extends State<RankingReport> {
       children: <Widget>[
         Container(
           width: double.infinity,
-          child: HorizontalCalendar(
+          child: DatePicker(
+            firstDate,
+            initialSelectedDate: firstDate,
+            selectionColor: Colors.green,
+            locale: 'es_Es',
+            selectedTextColor: Colors.white,
+            daysCount: 30,
+            onDateChange: (date) {
+              print(date);
+              setState(() {
+                fechaBusqueda = date.toString();
+                cant++;
+                //diaDeLaSemana = date.weekday.toString();
+                //canchasBloc.obtenerReservasPorIDCancha(canchas.canchaId,canchas.idEmpresa,fechaBusqueda);
+              });
+            },
+          ),
+
+          /* HorizontalCalendar(
             height: 80,
             selectedDateTextStyle: TextStyle(color: Colors.white),
             selectedMonthTextStyle: TextStyle(color: Colors.white),
@@ -123,7 +139,7 @@ class _RankingReportState extends State<RankingReport> {
                 //canchasBloc.obtenerReservasPorIDCancha(canchas.canchaId,canchas.idEmpresa,fechaBusqueda);
               });
             },
-          ),
+          ),*/
         ),
         Expanded(
           child: StreamBuilder(
@@ -150,85 +166,86 @@ class _RankingReportState extends State<RankingReport> {
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, i) {
-        return _cardRanking(responsive, data[i],i+1);
+        return _cardRanking(responsive, data[i], i + 1);
       },
     );
   }
 
-  Widget _cardRanking(Responsive responsive, 
-    RankingPuzzle ranking,int index) {
+  Widget _cardRanking(Responsive responsive, RankingPuzzle ranking, int index) {
     return Card(
-        elevation: 3.0,
-        margin: EdgeInsets.symmetric(horizontal: responsive.wp(2), vertical: responsive.hp(.8)),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-          padding: EdgeInsets.all(responsive.ip(1)),
-          child: Row(children: <Widget>[
-            Text(
-              '$index',
-              style: TextStyle(fontSize:responsive.ip(2),fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              width: responsive.wp(2),
-            ),
-            Container(
-              height: responsive.wp(10),
-              width: responsive.wp(10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100.0),
-                child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
-                 progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
-                      errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
-                  imageUrl:'${ranking.userImage}',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
+      elevation: 3.0,
+      margin: EdgeInsets.symmetric(
+          horizontal: responsive.wp(2), vertical: responsive.hp(.8)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      child: Container(
+        padding: EdgeInsets.all(responsive.ip(1)),
+        child: Row(children: <Widget>[
+          Text(
+            '$index',
+            style: TextStyle(
+                fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: responsive.wp(2),
+          ),
+          Container(
+            height: responsive.wp(10),
+            width: responsive.wp(10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100.0),
+              child: CachedNetworkImage(
+                cacheManager: CustomCacheManager(),
+                progressIndicatorBuilder: (_, url, downloadProgress) {
+                  return Stack(
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                          backgroundColor: Colors.green,
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.red),
+                        ),
+                      ),
+                      Center(
+                        child: (downloadProgress.progress != null)
+                            ? Text(
+                                '${(downloadProgress.progress * 100).toInt().toString()}%')
+                            : Container(),
+                      )
+                    ],
+                  );
+                },
+                errorWidget: (context, url, error) => Image(
+                    image: AssetImage('assets/carga_fallida.jpg'),
+                    fit: BoxFit.cover),
+                imageUrl: '${ranking.userImage}',
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
                       image: imageProvider,
                       fit: BoxFit.cover,
-                    ),),
+                    ),
                   ),
                 ),
               ),
             ),
-            SizedBox(
-              
-              width: responsive.wp(2),
-            ),
-            Expanded(
-              child: Text('${ranking.personName}',style: TextStyle(fontSize: responsive.ip(1.8))),
-              //child: Text('Angelo Tapullima Del Aguila',style: TextStyle(fontSize: responsive.ip(1.8)),),
-            ), SizedBox(
-              
-              width: responsive.wp(2),
-            ),
-            Text('${ranking.puzzleTiempo}',style: TextStyle(fontSize: responsive.ip(1.8))),
-            //Text('00:00:00'),
-          ]),
-        ),
-    
+          ),
+          SizedBox(
+            width: responsive.wp(2),
+          ),
+          Expanded(
+            child: Text('${ranking.personName}',
+                style: TextStyle(fontSize: responsive.ip(1.8))),
+            //child: Text('Angelo Tapullima Del Aguila',style: TextStyle(fontSize: responsive.ip(1.8)),),
+          ),
+          SizedBox(
+            width: responsive.wp(2),
+          ),
+          Text('${ranking.puzzleTiempo}',
+              style: TextStyle(fontSize: responsive.ip(1.8))),
+          //Text('00:00:00'),
+        ]),
+      ),
     );
   }
 }
