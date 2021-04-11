@@ -34,7 +34,7 @@ class _WebViewExampleState extends State<WebViewExample> {
             borderRadius: BorderRadius.circular(12.0),
           ), //this right here
           child: Container(
-            height: responsive.hp(25),
+            height: responsive.hp(35),
             width: responsive.wp(70),
             child: Padding(
               padding: EdgeInsets.all(
@@ -61,7 +61,7 @@ class _WebViewExampleState extends State<WebViewExample> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
-                      fontSize: responsive.ip(2),
+                      fontSize: responsive.ip(1.8),
                     ),
                   ),
                   SizedBox(
@@ -72,7 +72,7 @@ class _WebViewExampleState extends State<WebViewExample> {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.red,
-                      fontSize: responsive.ip(2),
+                      fontSize: responsive.ip(1.8),
                     ),
                   ),
                   Row(

@@ -1,5 +1,6 @@
-import 'package:enchiladasapp/src/api/puzzle_api.dart';
+
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
+import 'package:enchiladasapp/src/pages/puzzle/ranking/pantalla_puzzle_terminado.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,8 @@ import 'PuzzlePiece.dart';
 
 class PuzzlePage extends StatefulWidget {
   final String title = "Puzzle Enchiladas";
-  final int rows = 6;
-  final int cols = 6;
+  final int rows = 2;
+  final int cols = 2;
 
   @override
   _PuzzlePageState createState() => _PuzzlePageState();
@@ -112,34 +113,63 @@ class _PuzzlePageState extends State<PuzzlePage> {
   //
   //cuando una pieza alcanza su posición final, se enviará a la parte posterior de la pila para no interponerse en el camino de otras piezas aún móviles
   void sendToBack(Widget widget, BuildContext context) {
-    setState(() {
-      pieces.remove(widget);
-      pieces.insert(0, widget);
-      completado++;
-      if (pieces.length == completado) {
-        print('finalizado $_stopwatchText');
+    //setState(() {
+    pieces.remove(widget);
+    pieces.insert(0, widget);
+    completado++;
+    if (pieces.length == completado) {
+      print('finalizado $_stopwatchText');
 
-        //_mostrarAlert(context);
+      //_mostrarAlert(context);
 
-        completex = 'lleno';
+      completex = 'lleno';
 
-        showProcessingDialog();
+      //showProcessingDialog();
 
-        retroceso = true;
-
-        //Toast.show("debe ingresar numeros", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-      }
+      retroceso = true;
+      Future.delayed(Duration(milliseconds: 400), () {
+      haceralgonoseque();
     });
+
+      //Toast.show("debe ingresar numeros", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+    }
+
+    
+    //});
   }
 
   haceralgonoseque() async {
-    final puzzleApi = PuzzleApi();
+    _startStopButtonPressed();
+
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return PuzzleTerminado(tiempo: _stopwatchText,idImagen:idImagenLlegada);
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(0.0, 1.0);
+          var end = Offset.zero;
+          var curve = Curves.ease;
+
+          var tween = Tween(begin: begin, end: end).chain(
+            CurveTween(curve: curve),
+          );
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
+
+    /* final puzzleApi = PuzzleApi();
 
     _startStopButtonPressed();
     final res = await puzzleApi.subirTiempo(_stopwatchText, idImagenLlegada);
 
     if (res) {
-      
       String hora = _stopwatchText;
 
       _image = null;
@@ -152,7 +182,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     } else {
       Navigator.pop(context);
       errorSubida();
-    }
+    } */
   }
 
   @override
@@ -218,64 +248,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
     }
   }
 
-  void errorSubida() {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (contextd) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('No se pudo registrar su tiempo por falta de conexión'),
-          actions: <Widget>[
-            FlatButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  Navigator.of(context).pop();
-                },
-                child: Text('Terminar')),
-            FlatButton(
-                onPressed: () async {
-                  haceralgonoseque();
-                },
-                child: Text('reintentar')),
-          ],
-        );
-      },
-    );
-  }
-
-  void showProcessingDialog() async {
-    return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-          content: Container(
-            width: 250.0,
-            height: 100.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(
-                  width: 5,
-                ),
-                Text("Validando...",
-                    style: TextStyle(
-                        fontFamily: "OpenSans", color: Color(0xFF5B6978)))
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _startTimeout() {
+  
+void _startTimeout() {
     new Timer(_timeout, _handleTimeout);
   }
 

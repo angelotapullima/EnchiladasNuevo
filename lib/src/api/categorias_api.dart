@@ -9,6 +9,7 @@ import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/observaciones_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/temporizador_model.dart';
+import 'package:enchiladasapp/src/utils/constant.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:flutter/material.dart';
@@ -17,7 +18,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CategoriasApi {
-  final String _url = 'https://delivery.lacasadelasenchiladas.pe';
   final categoriasDatabase = CategoriasDatabase();
   final productoDatabase = ProductoDatabase();
   final temporizadorDatabase = TemporizadorDatabase();
@@ -46,10 +46,10 @@ class CategoriasApi {
 
   Future<bool> obtenerAmbos(BuildContext context) async {
     try {
-      final url = '$_url/api/categoria/listar_categorias_productos';
-
+      final url = '$urlBase/api/categoria/listar_categorias_solo_productos';
+      
       final preferences = Preferences();
-      final resp = await http.post(url, body: {});
+      final resp = await http.post(url, body: {'numero': '1'});
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       if (decodedData == null) return false;
 
@@ -144,17 +144,9 @@ class CategoriasApi {
           for (int x = 0; x < productos.length; x++) {
             final idproducto = productos[x]['id_producto'];
 
-            ////////////////////////////////////////////
-            ///
-            ///
+            
 
-            /*  var porcentajeProductos = ((x + 1) * 100) / cantidadTotalProductos;
-
-            print('porcentajeProductos $porcentajeProductos');  */
-            ////////////////////////////////////////////
-
-            final datoproducto =
-                await productoDatabase.consultarPorId(idproducto);
+            final datoproducto =await productoDatabase.consultarPorId(idproducto);
             //print('id productos ${datoproducto.length}');
             ProductosData productosData = ProductosData();
             productosData.idProducto = productos[x]['id_producto'];
@@ -164,43 +156,19 @@ class CategoriasApi {
             productosData.productoPrecio = productos[x]['producto_precio'];
             productosData.productoUnidad = productos[x]['producto_unidad'];
             productosData.productoEstado = productos[x]['producto_estado'];
-            productosData.productoDescripcion =
-                productos[x]['producto_detalle'];
-            productosData.productoComentario =
-                productos[x]['producto_comentario'];
-            productosData.sonido =
-                decodedData['result']['data'][i]['categoria_sonido'];
-            productosData.productoCarta = productos[x]['producto_carta'];
+            productosData.productoDestacado =productos[x]['producto_destacado'];
             productosData.productoNuevo = productos[x]['producto_nuevo'];
+            productosData.productoDescripcion =productos[x]['producto_detalle'];
+            productosData.productoComentario =productos[x]['producto_comentario'];
+            productosData.sonido =decodedData['result']['data'][i]['categoria_sonido'];
+            productosData.productoCarta = productos[x]['producto_carta'];
             productosData.productoDelivery = productos[x]['producto_delivery'];
-            productosData.productoDestacado =
-                productos[x]['producto_destacado'];
 
-            int cantidadAdicionales = 0;
+         
 
-            var cantiProAdi = productos[x]['producto_observaciones_fijas'];
+            
 
-            if (cantiProAdi['adicional_categoria']['opciones'].length > 0) {
-              cantidadAdicionales++;
-            }
-            if (cantiProAdi['adicional_categoria_2']['opciones'].length > 0) {
-              cantidadAdicionales++;
-            }
-            if (cantiProAdi['adicional_categoria_3']['opciones'].length > 0) {
-              cantidadAdicionales++;
-            }
-            if (cantiProAdi['adicional_categoria_4']['opciones'].length > 0) {
-              cantidadAdicionales++;
-            }
-            if (cantiProAdi['adicional_categoria_5']['opciones'].length > 0) {
-              cantidadAdicionales++;
-            }
-            if (cantiProAdi['adicional_categoria_6']['opciones'].length > 0) {
-              cantidadAdicionales++;
-            }
-
-            productosData.productoCantidadAdicional =
-                cantidadAdicionales.toString();
+           
 
             if (productosData.productoDestacado == '0') {
               productosData.productoEstadoDestacado = '0';
@@ -641,7 +609,7 @@ class CategoriasApi {
 
     print(idProducto);
     try {
-      final url = '$_url/api/categoria/listar_adicionales_producto';
+      final url = '$urlBase/api/categoria/listar_adicionales_producto';
 
       final resp = await http.post(url, body: {
 

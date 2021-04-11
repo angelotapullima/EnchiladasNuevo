@@ -51,7 +51,7 @@ class PuzzleApi {
       final formatFecha = fecha.split(' ');
       var formatFecha1 = formatFecha[0].toString();
 
-      final url = '$_url/api/puzzle/listar_tiempos_dia';
+      final url = '$_url/api/puzzle/listar_tiempos_dia_nuevo';
       final resp = await http.post(url, body: {
         'app': 'true',
         'tn': prefs.token,
@@ -65,13 +65,11 @@ class PuzzleApi {
         if (decodedData['result']['data'].length > 0) {
           for (int i = 0; i < decodedData['result']['data'].length; i++) {
             RankingPuzzle puzzle = RankingPuzzle();
-            puzzle.idPuzzle = decodedData['result']['data'][i]['user_email'];
+            puzzle.idPuzzle = decodedData['result']['data'][i]['id_user'];
             puzzle.personName = decodedData['result']['data'][i]['person_name'];
-            puzzle.puzzleFecha =
-                decodedData['result']['data'][i]['puzzle_fecha'];
+            puzzle.puzzleFecha =decodedData['result']['data'][i]['puzzle_fecha'];
             puzzle.userImage = decodedData['result']['data'][i]['user_image'];
-            puzzle.puzzleTiempo =
-                decodedData['result']['data'][i]['puzzle_tiempo'];
+            puzzle.puzzleTiempo =decodedData['result']['data'][i]['puzzle_tiempo'];
             await rankingDatabase.insertarRanking(puzzle);
           }
         }
@@ -99,7 +97,6 @@ class PuzzleApi {
       });
 
       final decodedData = json.decode(resp.body);
-      showToast('subir ${decodedData['data']}', 2, ToastGravity.TOP);
       if (decodedData['result']['code'] == 1) {
         if (decodedData['result']['data'].length > 0) {
           for (int i = 0; i < decodedData['result']['data'].length; i++) {

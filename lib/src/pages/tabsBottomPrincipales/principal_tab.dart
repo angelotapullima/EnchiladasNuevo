@@ -8,6 +8,7 @@ import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/publicidad_model.dart';
+import 'package:enchiladasapp/src/pages/%20categorias_por_tipo.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
@@ -270,26 +271,26 @@ class PrincipalTab extends StatelessWidget {
                   child: CachedNetworkImage(
                     cacheManager: CustomCacheManager(),
                     progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
-                   /*  placeholder: (context, url) => Image(
+                      return Stack(
+                        children: [
+                          Center(
+                            child: CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                              backgroundColor: Colors.green,
+                              valueColor:
+                                  new AlwaysStoppedAnimation<Color>(Colors.red),
+                            ),
+                          ),
+                          Center(
+                            child: (downloadProgress.progress != null)
+                                ? Text(
+                                    '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                : Container(),
+                          )
+                        ],
+                      );
+                    },
+                    /*  placeholder: (context, url) => Image(
                         image: AssetImage('assets/jar-loading.gif'),
                         fit: BoxFit.cover), */
                     errorWidget: (context, url, error) => Image(
@@ -457,6 +458,24 @@ class PrincipalTab extends StatelessWidget {
       tipo = 'categoria';
 
       boxfit = BoxFit.fill;
+    } else if (pantallaModel.idPantalla == '4') {
+      //carta Principal
+      altoList = 20.0;
+      altoCard = 15.0;
+      anchoCard = 18;
+
+      tipo = 'categoria';
+
+      boxfit = BoxFit.fill;
+    } else if (pantallaModel.idPantalla == '5') {
+      //carta Principal
+      altoList = 20.0;
+      altoCard = 15.0;
+      anchoCard = 18;
+
+      tipo = 'categoria';
+
+      boxfit = BoxFit.fill;
     } else if (pantallaModel.idPantalla == '3') {
       //puzzle
       altoList = 31.0;
@@ -497,8 +516,50 @@ class PrincipalTab extends StatelessWidget {
                     if (pantallaModel.idPantalla == '1') {
                       final bottomBloc = ProviderBloc.bottom(context);
                       bottomBloc.changePage(2);
-                    } else if (pantallaModel.idPantalla == '2') {
-                      Navigator.pushNamed(context, 'market');
+                    } else if (pantallaModel.idPantalla == '5') {
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 400),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return CategoriasPorTipo(
+                                nombreTipo: 'Var 247',
+                                tipo: '4',
+                              );
+                              //return DetalleProductitos(productosData: productosData);
+                            },
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ));
+                    } else if (pantallaModel.idPantalla == '4') {
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 400),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return CategoriasPorTipo(
+                                nombreTipo: 'Café 247',
+                                tipo: '3',
+                              );
+                              //return DetalleProductitos(productosData: productosData);
+                            },
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ));
                     } else if (pantallaModel.idPantalla == '3') {
                       Navigator.pushNamed(context, 'HomePuzzle');
                     } else {
@@ -573,9 +634,51 @@ class PrincipalTab extends StatelessWidget {
                         if (pantallaModel.idPantalla == '1') {
                           final bottomBloc = ProviderBloc.bottom(context);
                           bottomBloc.changePage(2);
-                        } else if (pantallaModel.idPantalla == '2') {
-                          Navigator.pushNamed(context, 'market');
-                        } else if (pantallaModel.idPantalla == '3') {
+                        } else if (pantallaModel.idPantalla == '5') {
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 400),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return CategoriasPorTipo(
+                                nombreTipo: 'Var 247',
+                                tipo: '4',
+                              );
+                              //return DetalleProductitos(productosData: productosData);
+                            },
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ));
+                    } else if (pantallaModel.idPantalla == '4') {
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 400),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return CategoriasPorTipo(
+                                nombreTipo: 'Café 247',
+                                tipo: '3',
+                              );
+                              //return DetalleProductitos(productosData: productosData);
+                            },
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ));
+                    } else if (pantallaModel.idPantalla == '3') {
                           Navigator.pushNamed(context, 'HomePuzzle');
                         } else {
                           Arguments arg = new Arguments(
@@ -623,26 +726,29 @@ class PrincipalTab extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 child: CachedNetworkImage(
                                   cacheManager: CustomCacheManager(),
-                                  progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                                  progressIndicatorBuilder:
+                                      (_, url, downloadProgress) {
+                                    return Stack(
+                                      children: [
+                                        Center(
+                                          child: CircularProgressIndicator(
+                                            value: downloadProgress.progress,
+                                            backgroundColor: Colors.green,
+                                            valueColor:
+                                                new AlwaysStoppedAnimation<
+                                                    Color>(Colors.red),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: (downloadProgress.progress !=
+                                                  null)
+                                              ? Text(
+                                                  '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                              : Container(),
+                                        )
+                                      ],
+                                    );
+                                  },
                                   errorWidget: (context, url, error) => Image(
                                       image: AssetImage(
                                           'assets/carga_fallida.jpg'),
@@ -765,26 +871,29 @@ class PrincipalTab extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
                                 cacheManager: CustomCacheManager(),
-                               progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                                progressIndicatorBuilder:
+                                    (_, url, downloadProgress) {
+                                  return Stack(
+                                    children: [
+                                      Center(
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          backgroundColor: Colors.green,
+                                          valueColor:
+                                              new AlwaysStoppedAnimation<Color>(
+                                                  Colors.red),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: (downloadProgress.progress !=
+                                                null)
+                                            ? Text(
+                                                '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                            : Container(),
+                                      )
+                                    ],
+                                  );
+                                },
                                 errorWidget: (context, url, error) => Image(
                                     image:
                                         AssetImage('assets/carga_fallida.jpg'),
@@ -836,7 +945,8 @@ class PrincipalTab extends StatelessWidget {
                                       //right: 0,
                                       left: 0,
                                       child: Container(
-                                        transform: Matrix4.translationValues(responsive.wp(13), 0, 0),
+                                        transform: Matrix4.translationValues(
+                                            responsive.wp(13), 0, 0),
                                         height: responsive.ip(6),
                                         child: SvgPicture.asset(
                                             'assets/medalla.svg'),
@@ -1007,26 +1117,32 @@ class ProductosDestacados extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(10),
                                       child: CachedNetworkImage(
                                         cacheManager: CustomCacheManager(),
-                                        progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                                        progressIndicatorBuilder:
+                                            (_, url, downloadProgress) {
+                                          return Stack(
+                                            children: [
+                                              Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  backgroundColor: Colors.green,
+                                                  valueColor:
+                                                      new AlwaysStoppedAnimation<
+                                                          Color>(Colors.red),
+                                                ),
+                                              ),
+                                              Center(
+                                                child: (downloadProgress
+                                                            .progress !=
+                                                        null)
+                                                    ? Text(
+                                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                                    : Container(),
+                                              )
+                                            ],
+                                          );
+                                        },
                                         errorWidget: (context, url, error) =>
                                             Image(
                                                 image: AssetImage(
@@ -1217,25 +1333,25 @@ class PublicidadDialog extends StatelessWidget {
               child: CachedNetworkImage(
                 cacheManager: CustomCacheManager(),
                 progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                  return Stack(
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                          backgroundColor: Colors.green,
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.red),
+                        ),
+                      ),
+                      Center(
+                        child: (downloadProgress.progress != null)
+                            ? Text(
+                                '${(downloadProgress.progress * 100).toInt().toString()}%')
+                            : Container(),
+                      )
+                    ],
+                  );
+                },
                 errorWidget: (context, url, error) => Image(
                     image: AssetImage('assets/carga_fallida.jpg'),
                     fit: BoxFit.cover),

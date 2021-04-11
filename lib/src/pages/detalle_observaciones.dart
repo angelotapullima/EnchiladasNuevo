@@ -16,12 +16,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 class DetalleObservaciones extends StatefulWidget {
   final String idProductoArgument;
   final String idCategoria;
-  final String cantidadAdicional;
+  //final String cantidadAdicional;
   const DetalleObservaciones(
       {Key key,
       @required this.idProductoArgument,
-      @required this.idCategoria,
-      @required this.cantidadAdicional})
+      @required this.idCategoria,})
       : super(key: key);
 
   @override
@@ -99,120 +98,120 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
       appBar: AppBar(
         title: Text('Adicionales'),
       ),
-      body: Stack(
-        children: [
-          StreamBuilder(
-              stream: observacionesProductoBloc.observacionesStream,
-              builder: (context, AsyncSnapshot<List<Observaciones>> snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data.length > 0) {
-                    bool validacionFijos = false;
-                    bool validacionSabores = false;
-                    bool validacionVariables = false;
-                    bool validacionEspeciales1 = false;
-                    bool validacionEspeciales2 = false;
-                    bool validacionEspeciales3 = false;
-                    bool validacionEspeciales4 = false;
-                    bool validacionAcompa = false;
-                    final optionsProductosFijos = List<String>();
-                    final optionsProductosVariables = List<String>();
+      body: StreamBuilder(
+          stream: observacionesProductoBloc.observacionesStream,
+          builder: (context, AsyncSnapshot<List<Observaciones>> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data.length > 0) {
+                bool validacionFijos = false;
+                bool validacionSabores = false;
+                bool validacionVariables = false;
+                bool validacionEspeciales1 = false;
+                bool validacionEspeciales2 = false;
+                bool validacionEspeciales3 = false;
+                bool validacionEspeciales4 = false;
+                bool validacionAcompa = false;
+                final optionsProductosFijos = List<String>();
+                final optionsProductosVariables = List<String>();
 
-                    if (snapshot.data[0].fijas[0].productosFijos.length > 0) {
-                      for (var x = 0;
-                          x < snapshot.data[0].fijas[0].productosFijos.length;
-                          x++) {
-                        String texto = snapshot
-                            .data[0].fijas[0].productosFijos[x].nombreProducto;
-                        optionsProductosFijos.add(texto);
-                      }
-                    }
-                    if (snapshot.data[0].variables.length > 0) {
-                      for (var x = 0;
-                          x < snapshot.data[0].variables.length;
-                          x++) {
-                        String texto =
-                            snapshot.data[0].variables[x].nombreVariable;
-                        optionsProductosVariables.add(texto);
-                      }
-                    }
+                if (snapshot.data[0].fijas[0].productosFijos.length > 0) {
+                  for (var x = 0;
+                      x < snapshot.data[0].fijas[0].productosFijos.length;
+                      x++) {
+                    String texto = snapshot
+                        .data[0].fijas[0].productosFijos[x].nombreProducto;
+                    optionsProductosFijos.add(texto);
+                  }
+                }
+                if (snapshot.data[0].variables.length > 0) {
+                  for (var x = 0;
+                      x < snapshot.data[0].variables.length;
+                      x++) {
+                    String texto =
+                        snapshot.data[0].variables[x].nombreVariable;
+                    optionsProductosVariables.add(texto);
+                  }
+                }
 
-                    if (optionsProductosFijos.length > 0) {
-                      validacionFijos = true;
-                    }
-                    if (optionsProductosVariables.length > 0) {
-                      validacionVariables = true;
-                    }
+                if (optionsProductosFijos.length > 0) {
+                  validacionFijos = true;
+                }
+                if (optionsProductosVariables.length > 0) {
+                  validacionVariables = true;
+                }
 
-                    if (snapshot.data[0].fijas[0].sabores.length > 0) {
-                      validacionSabores = true;
-                      maximoSabores = int.parse(
-                          snapshot.data[0].fijas[0].sabores[0].maximo);
+                if (snapshot.data[0].fijas[0].sabores.length > 0) {
+                  validacionSabores = true;
+                  maximoSabores = int.parse(
+                      snapshot.data[0].fijas[0].sabores[0].maximo);
 
-                      tituloSabores =
-                          '${snapshot.data[0].fijas[0].sabores[0].tituloTextos} ';
-                    }
+                  tituloSabores =
+                      '${snapshot.data[0].fijas[0].sabores[0].tituloTextos} ';
+                }
 
-                    //especialesA
-                    if (snapshot.data[0].fijas[0].especialesA.length > 0) {
-                      print('hay especiales1');
-                      validacionEspeciales1 = true;
-                      maximoespeciales1 = int.parse(
-                          snapshot.data[0].fijas[0].especialesA[0].maximo);
+                //especialesA
+                if (snapshot.data[0].fijas[0].especialesA.length > 0) {
+                  print('hay especiales1');
+                  validacionEspeciales1 = true;
+                  maximoespeciales1 = int.parse(
+                      snapshot.data[0].fijas[0].especialesA[0].maximo);
 
-                      tituloEspeciales1 =
-                          '${snapshot.data[0].fijas[0].especialesA[0].tituloTextos}';
-                    }
+                  tituloEspeciales1 =
+                      '${snapshot.data[0].fijas[0].especialesA[0].tituloTextos}';
+                }
 
-                    //especialesB
-                    if (snapshot.data[0].fijas[0].especialesB.length > 0) {
-                      print('hay especiales2');
-                      validacionEspeciales2 = true;
-                      maximoespeciales2 = int.parse(
-                          snapshot.data[0].fijas[0].especialesB[0].maximo);
+                //especialesB
+                if (snapshot.data[0].fijas[0].especialesB.length > 0) {
+                  print('hay especiales2');
+                  validacionEspeciales2 = true;
+                  maximoespeciales2 = int.parse(
+                      snapshot.data[0].fijas[0].especialesB[0].maximo);
 
-                      tituloEspeciales2 =
-                          '${snapshot.data[0].fijas[0].especialesB[0].tituloTextos}';
-                    }
+                  tituloEspeciales2 =
+                      '${snapshot.data[0].fijas[0].especialesB[0].tituloTextos}';
+                }
 
-                    //especialesC
-                    if (snapshot.data[0].fijas[0].especialesC.length > 0) {
-                      print('hay especiales3');
-                      validacionEspeciales3 = true;
-                      maximoespeciales3 = int.parse(
-                          snapshot.data[0].fijas[0].especialesC[0].maximo);
+                //especialesC
+                if (snapshot.data[0].fijas[0].especialesC.length > 0) {
+                  print('hay especiales3');
+                  validacionEspeciales3 = true;
+                  maximoespeciales3 = int.parse(
+                      snapshot.data[0].fijas[0].especialesC[0].maximo);
 
-                      tituloEspeciales3 =
-                          '${snapshot.data[0].fijas[0].especialesC[0].tituloTextos}';
-                    }
+                  tituloEspeciales3 =
+                      '${snapshot.data[0].fijas[0].especialesC[0].tituloTextos}';
+                }
 
-                    //especialesD
-                    if (snapshot.data[0].fijas[0].especialesD.length > 0) {
-                      print('hay especiales4');
-                      validacionEspeciales4 = true;
-                      maximoespeciales4 = int.parse(
-                          snapshot.data[0].fijas[0].especialesD[0].maximo);
+                //especialesD
+                if (snapshot.data[0].fijas[0].especialesD.length > 0) {
+                  print('hay especiales4');
+                  validacionEspeciales4 = true;
+                  maximoespeciales4 = int.parse(
+                      snapshot.data[0].fijas[0].especialesD[0].maximo);
 
-                      tituloEspeciales4 =
-                          '${snapshot.data[0].fijas[0].especialesD[0].tituloTextos}';
-                    }
+                  tituloEspeciales4 =
+                      '${snapshot.data[0].fijas[0].especialesD[0].tituloTextos}';
+                }
 
-                    if (snapshot.data[0].fijas[0].acompanhamientos.length >=
-                        1) {
-                      validacionAcompa = true;
-                      tituloAcom =
-                          '${snapshot.data[0].fijas[0].acompanhamientos[0].tituloTextos}';
-                    }
+                if (snapshot.data[0].fijas[0].acompanhamientos.length >=
+                    1) {
+                  validacionAcompa = true;
+                  tituloAcom =
+                      '${snapshot.data[0].fijas[0].acompanhamientos[0].tituloTextos}';
+                }
 
-                    fijos = validacionFijos;
-                    variables = validacionVariables;
-                    sabores = validacionSabores;
-                    especiales1 = validacionEspeciales1;
-                    especiales2 = validacionEspeciales2;
-                    especiales3 = validacionEspeciales3;
-                    especiales4 = validacionEspeciales4;
-                    acompanhamientosBoolVariable = validacionAcompa;
+                fijos = validacionFijos;
+                variables = validacionVariables;
+                sabores = validacionSabores;
+                especiales1 = validacionEspeciales1;
+                especiales2 = validacionEspeciales2;
+                especiales3 = validacionEspeciales3;
+                especiales4 = validacionEspeciales4;
+                acompanhamientosBoolVariable = validacionAcompa;
 
-                    return ListView(addAutomaticKeepAlives: true, children: [
+                return Stack(
+                  children: [
+                    ListView(addAutomaticKeepAlives: true, children: [
                       StreamBuilder(
                         stream: itemObservacionBloc.itemObservacioStream,
                         builder: (BuildContext context,
@@ -1091,164 +1090,164 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                       SizedBox(
                         height: responsive.hp(7),
                       )
-                    ]);
+                    ]),
+                  Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Padding(
+          padding: EdgeInsets.all(
+            responsive.wp(6),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            width: double.infinity,
+            height: responsive.hp(5),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(color: Colors.red),
+              ),
+              color: Colors.red,
+              textColor: Colors.white,
+              child: Text(
+                'Agregar Producto',
+                style: TextStyle(
+                  fontSize: responsive.ip(2),
+                ),
+              ),
+              onPressed: () async {
+                bool pasoSabores = false;
+                bool pasoEspeciales1 = false;
+                bool pasoEspeciales2 = false;
+                bool pasoEspeciales3 = false;
+                bool pasoEspeciales4 = false;
+
+                bool pasoAcom = false;
+
+                if (sabores) {
+                  if (tagsSabores.length >= maximoSabores) {
+                    pasoSabores = true;
                   } else {
-                    return Center(
-                      child: Text('sin datos'),
-                    );
+                    pasoSabores = false;
                   }
                 } else {
-                  return Center(
-                    child: CupertinoActivityIndicator(),
-                  );
+                  pasoSabores = true;
                 }
-              }),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: EdgeInsets.all(
-                responsive.wp(6),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                width: double.infinity,
-                height: responsive.hp(5),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    side: BorderSide(color: Colors.red),
-                  ),
-                  color: Colors.red,
-                  textColor: Colors.white,
-                  child: Text(
-                    'Agregar Producto',
-                    style: TextStyle(
-                      fontSize: responsive.ip(2),
-                    ),
-                  ),
-                  onPressed: () async {
-                    bool pasoSabores = false;
-                    bool pasoEspeciales1 = false;
-                    bool pasoEspeciales2 = false;
-                    bool pasoEspeciales3 = false;
-                    bool pasoEspeciales4 = false;
 
-                    bool pasoAcom = false;
+                if (especiales1) {
+                  if (tagsEspeciales1.length >= maximoespeciales1) {
+                    pasoEspeciales1 = true;
+                  } else {
+                    pasoEspeciales1 = false;
+                  }
+                } else {
+                  pasoEspeciales1 = true;
+                }
 
-                    if (sabores) {
-                      if (tagsSabores.length >= maximoSabores) {
-                        pasoSabores = true;
-                      } else {
-                        pasoSabores = false;
-                      }
-                    } else {
-                      pasoSabores = true;
-                    }
+                if (especiales2) {
+                  if (tagsEspeciales2.length >= maximoespeciales2) {
+                    pasoEspeciales2 = true;
+                  } else {
+                    pasoEspeciales2 = false;
+                  }
+                } else {
+                  pasoEspeciales2 = true;
+                }
 
-                    if (especiales1) {
-                      if (tagsEspeciales1.length >= maximoespeciales1) {
-                        pasoEspeciales1 = true;
-                      } else {
-                        pasoEspeciales1 = false;
-                      }
-                    } else {
-                      pasoEspeciales1 = true;
-                    }
+                if (especiales3) {
+                  if (tagsEspeciales3.length >= maximoespeciales3) {
+                    pasoEspeciales3 = true;
+                  } else {
+                    pasoEspeciales3 = false;
+                  }
+                } else {
+                  pasoEspeciales3 = true;
+                }
 
-                    if (especiales2) {
-                      if (tagsEspeciales2.length >= maximoespeciales2) {
-                        pasoEspeciales2 = true;
-                      } else {
-                        pasoEspeciales2 = false;
-                      }
-                    } else {
-                      pasoEspeciales2 = true;
-                    }
+                if (especiales4) {
+                  if (tagsEspeciales4.length >= maximoespeciales4) {
+                    pasoEspeciales4 = true;
+                  } else {
+                    pasoEspeciales4 = false;
+                  }
+                } else {
+                  pasoEspeciales4 = true;
+                }
 
-                    if (especiales3) {
-                      if (tagsEspeciales3.length >= maximoespeciales3) {
-                        pasoEspeciales3 = true;
-                      } else {
-                        pasoEspeciales3 = false;
-                      }
-                    } else {
-                      pasoEspeciales3 = true;
-                    }
+                if (acompanhamientosBoolVariable) {
+                  if (tagAcompanhamientos != null) {
+                    pasoAcom = true;
+                  } else {
+                    pasoAcom = false;
+                  }
+                } else {
+                  pasoAcom = true;
+                }
 
-                    if (especiales4) {
-                      if (tagsEspeciales4.length >= maximoespeciales4) {
-                        pasoEspeciales4 = true;
-                      } else {
-                        pasoEspeciales4 = false;
-                      }
-                    } else {
-                      pasoEspeciales4 = true;
-                    }
+                if (pasoSabores) {
+                  if (pasoAcom) {
+                    if (pasoEspeciales1) {
+                      if (pasoEspeciales2) {
+                        if (pasoEspeciales3) {
+                          if (pasoEspeciales4) {
+                            utils.agregarProductosAlCarrito(context);
 
-                    if (acompanhamientosBoolVariable) {
-                      if (tagAcompanhamientos != null) {
-                        pasoAcom = true;
-                      } else {
-                        pasoAcom = false;
-                      }
-                    } else {
-                      pasoAcom = true;
-                    }
-
-                    if (pasoSabores) {
-                      if (pasoAcom) {
-                        if (pasoEspeciales1) {
-                          if (pasoEspeciales2) {
-                            if (pasoEspeciales3) {
-                              if (pasoEspeciales4) {
-                                utils.agregarProductosAlCarrito(context);
-
-                                Navigator.pop(context);
-                              } else {
-                                utils.showToast(
-                                    'debe elegir como mínimo $maximoespeciales4 $tituloEspeciales4',
-                                    2,
-                                    ToastGravity.TOP);
-                              }
-                            } else {
-                              utils.showToast(
-                                  'debe elegir como mínimo $maximoespeciales3 $tituloEspeciales3',
-                                  2,
-                                  ToastGravity.TOP);
-                            }
+                            Navigator.pop(context);
                           } else {
                             utils.showToast(
-                                'debe elegir como mínimo $maximoespeciales2 $tituloEspeciales2',
+                                'debe elegir como mínimo $maximoespeciales4 $tituloEspeciales4',
                                 2,
                                 ToastGravity.TOP);
                           }
                         } else {
                           utils.showToast(
-                              'debe elegir como mínimo $maximoespeciales1 $tituloEspeciales1',
+                              'debe elegir como mínimo $maximoespeciales3 $tituloEspeciales3',
                               2,
                               ToastGravity.TOP);
                         }
                       } else {
-                        utils.showToast('debe elegir como mínimo 1 $tituloAcom',
-                            2, ToastGravity.TOP);
+                        utils.showToast(
+                            'debe elegir como mínimo $maximoespeciales2 $tituloEspeciales2',
+                            2,
+                            ToastGravity.TOP);
                       }
                     } else {
                       utils.showToast(
-                          'debe elegir como mínimo $maximoSabores $tituloSabores',
+                          'debe elegir como mínimo $maximoespeciales1 $tituloEspeciales1',
                           2,
                           ToastGravity.TOP);
                     }
-                  },
-                ),
-              ),
+                  } else {
+                    utils.showToast('debe elegir como mínimo 1 $tituloAcom',
+                        2, ToastGravity.TOP);
+                  }
+                } else {
+                  utils.showToast(
+                      'debe elegir como mínimo $maximoSabores $tituloSabores',
+                      2,
+                      ToastGravity.TOP);
+                }
+              },
             ),
-          )
+          ),
+        ),
+      )
         ],
-      ),
+                );
+              } else {
+                return Center(
+                  child: Text('sin datos'),
+                );
+              }
+            } else {
+              return Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
+          }),
     );
   }
 }

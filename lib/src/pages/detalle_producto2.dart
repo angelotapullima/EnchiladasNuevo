@@ -32,10 +32,6 @@ class DetalleProductitoss2 extends StatefulWidget {
 }
 
 class _DetalleProductoSolo extends State<DetalleProductitoss2> {
-  GlobalKey _one = GlobalKey();
-  GlobalKey _two = GlobalKey();
-  GlobalKey _three = GlobalKey();
-
   bool mostrar = false;
 
   bool estadoDelivery = false;
@@ -62,7 +58,6 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
 
   @override
   Widget build(BuildContext context) {
-    final preferences = Preferences();
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
     //final ProductosData productos = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
@@ -72,97 +67,95 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
     productosIdBloc.verificarDisponibilidad(widget.productosData.idProducto);
 
     return Material(
-          child: StreamBuilder(
-            stream: productosIdBloc.productosIdStream,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<ProductosData>> snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data.length > 0) {
-                  return Stack(
-                    children: [
-                      SlidingUpPanel(
-                        maxHeight: _panelHeightOpen,
-                        minHeight: responsive.hp(7),
-                        controller: panelController,
-                        parallaxEnabled: true,
-                        parallaxOffset: 0.1,
-                        backdropEnabled: true,
-                        body: Stack(children: <Widget>[
-                          _backgroundImage(context, snapshot.data[0]),
-                          _crearAppbar(responsive, widget.mostrarback),
-                          TranslateAnimation(
-                            duration: const Duration(milliseconds: 400),
-                            child: _contenido(snapshot.data[0], responsive,
-                                context, productosIdBloc),
-                          ),
-                        ]),
-                        panelBuilder: (sc) {
-                          return TranslateAnimation(
-                              duration: const Duration(milliseconds: 600),
-                              child: _carritoProductos(responsive, sc),
-                            
-                          );
-                        },
-                        borderRadius: const BorderRadius.only(
-                          topLeft: const Radius.circular(20),
-                          topRight: const Radius.circular(20),
-                        ),
-                        //onPanelSlide: (double pos) => setState(() {}),
+      child: StreamBuilder(
+        stream: productosIdBloc.productosIdStream,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ProductosData>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return Stack(
+                children: [
+                  SlidingUpPanel(
+                    maxHeight: _panelHeightOpen,
+                    minHeight: responsive.hp(7),
+                    controller: panelController,
+                    parallaxEnabled: true,
+                    parallaxOffset: 0.1,
+                    backdropEnabled: true,
+                    body: Stack(children: <Widget>[
+                      _backgroundImage(context, snapshot.data[0]),
+                      _crearAppbar(responsive, widget.mostrarback),
+                      TranslateAnimation(
+                        duration: const Duration(milliseconds: 400),
+                        child: _contenido(snapshot.data[0], responsive, context,
+                            productosIdBloc),
                       ),
-                      (snapshot.data[0].productoNuevo == '1')
-                          ? Positioned(
-                              top: kToolbarHeight + 50,
-                              left: 0,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: responsive.wp(3),
-                                  vertical: responsive.wp(.5),
-                                ),
-                                decoration: BoxDecoration(
-                                    //borderRadius: BorderRadius.circular(10),
-                                    color: Colors.red),
-                                child: Text(
-                                  'Producto Nuevo',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: responsive.ip(2),
-                                  ),
-                                ),
+                    ]),
+                    panelBuilder: (sc) {
+                      return TranslateAnimation(
+                        duration: const Duration(milliseconds: 600),
+                        child: _carritoProductos(responsive, sc),
+                      );
+                    },
+                    borderRadius: const BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20),
+                    ),
+                    //onPanelSlide: (double pos) => setState(() {}),
+                  ),
+                  (snapshot.data[0].productoNuevo == '1') 
+                      ? Positioned(
+                          top: kToolbarHeight +responsive.hp(2) ,
+                          left: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                              vertical: responsive.wp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                                //borderRadius: BorderRadius.circular(10),
+                                color: Colors.red),
+                            child: Text(
+                              'Producto Nuevo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(2),
                               ),
-                            )
-                          : Container(),
-                      (snapshot.data[0].productoDestacado != '0')
-                          ? Positioned(
-                             top: kToolbarHeight + 30,
-                              //top: responsive.hp(40),
-                              right: 0,
-                              //left: 0,
-                              child: Container(
-                               /*  transform: Matrix4.translationValues(
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  (snapshot.data[0].productoDestacado != '0')
+                      ? Positioned(
+                          top: kToolbarHeight+responsive.hp(2),
+                          //top: responsive.hp(40),
+                          right: 0,
+                          //left: 0,
+                          child: Container(
+                            /*  transform: Matrix4.translationValues(
                                     -responsive.wp(29), 0, 0), */
-                                height: responsive.ip(7),
-                                width:  responsive.ip(7),
-                                child: SvgPicture.asset('assets/medalla.svg'),
-                              ),
-                            )
-                          : Container()
-                    ],
-                  );
-                } else {
-                  return const Center(
-                    child: CupertinoActivityIndicator(),
-                  );
-                }
-              } else {
-                return const Center(
-                  child: CupertinoActivityIndicator(),
-                );
-              }
-            },
-          ),
-        );
-      
+                            height: responsive.ip(7),
+                            width: responsive.ip(7),
+                            child: SvgPicture.asset('assets/medalla.svg'),
+                          ),
+                        )
+                      : Container()
+                ],
+              );
+            } else {
+              return const Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
+          } else {
+            return const Center(
+              child: CupertinoActivityIndicator(),
+            );
+          }
+        },
+      ),
+    );
   }
 
   Widget botonesBajos(Responsive responsive, ProductosData productosData,
@@ -176,42 +169,41 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
       child: Row(
         children: <Widget>[
           Container(
-              width: responsive.wp(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.red),
-              ),
-              child: Center(
-                child: (productosData.productoFavorito == 1)
-                    ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            print('quitar');
-                            quitarFavoritos(context, productosData);
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.solidHeart,
-                          color: Colors.red,
-                          size: responsive.ip(2.5),
-                        ),
-                      )
-                    : IconButton(
-                        onPressed: () {
-                          setState(() {
-                            print('agregar');
-                            agregarFavoritos(context, productosData);
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.heart,
-                          color: Colors.red,
-                          size: responsive.ip(2.5),
-                        ),
+            width: responsive.wp(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.red),
+            ),
+            child: Center(
+              child: (productosData.productoFavorito == 1)
+                  ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          print('quitar');
+                          quitarFavoritos(context, productosData);
+                        });
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.solidHeart,
+                        color: Colors.red,
+                        size: responsive.ip(2.5),
                       ),
-              ),
-            
+                    )
+                  : IconButton(
+                      onPressed: () {
+                        setState(() {
+                          print('agregar');
+                          agregarFavoritos(context, productosData);
+                        });
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.heart,
+                        color: Colors.red,
+                        size: responsive.ip(2.5),
+                      ),
+                    ),
+            ),
           ),
           SizedBox(
             width: responsive.wp(5),
@@ -222,48 +214,45 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                 if (snapshot.hasData) {
                   if (snapshot.data.valor) {
                     return GestureDetector(
-                        child: Container(
-                          width: responsive.wp(65),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.red,
-                            border: Border.all(color: Colors.red),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Agregar al Carrito',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(2.5),
-                              ),
+                      child: Container(
+                        width: responsive.wp(65),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.red,
+                          border: Border.all(color: Colors.red),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Agregar al Carrito',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: responsive.ip(2.5),
                             ),
                           ),
                         ),
-                        onTap: () async {
-                          final adicionalesDatabase = AdicionalesDatabase();
+                      ),
+                      onTap: () async {
+                        final adicionalesDatabase = AdicionalesDatabase();
 
-                          await adicionalesDatabase
-                              .updateAdicionalesEnFalseDb();
+                        await adicionalesDatabase.updateAdicionalesEnFalseDb();
 
-                          //await utils.agregarAdicionalesDeProducto(productosData.productoAdicionalOpciones);
-                          final itemObservacionDatabase =
-                              ItemObservacionDatabase();
-                          itemObservacionDatabase.deleteItemObservacion();
+                        //await utils.agregarAdicionalesDeProducto(productosData.productoAdicionalOpciones);
+                        final itemObservacionDatabase =
+                            ItemObservacionDatabase();
+                        itemObservacionDatabase.deleteItemObservacion();
 
-                          agregarItemObservacion(context,
-                              productosData.idProducto, true, 'producto','');
+                        agregarItemObservacion(context,
+                            productosData.idProducto, true, 'producto', '');
 
-                          Navigator.of(context).push(_createRoute(
-                              productosData.idProducto,
-                              productosData.productoAdicionalOpciones,
-                              productosData.productoCantidadAdicional));
-                          /* setState(() { 
+                        Navigator.of(context).push(_createRoute(
+                            productosData.idProducto,
+                            productosData.productoAdicionalOpciones));
+                        /* setState(() { 
                             mostrar =true;
                             
                           }); */
-                          //utils.agregarCarrito(productosData, context, "1");
-                        },
-                      
+                        //utils.agregarCarrito(productosData, context, "1");
+                      },
                     );
                   } else {
                     return InkWell(
@@ -325,14 +314,13 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
     );
   }
 
-  Route _createRoute(
-      String idProducto, String adicionalObservacio, String numeroAdicionales) {
+  Route _createRoute(String idProducto, String adicionalObservacio) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
         return DetalleObservaciones(
-            idProductoArgument: idProducto,
-            idCategoria: adicionalObservacio,
-            cantidadAdicional: numeroAdicionales);
+          idProductoArgument: idProducto,
+          idCategoria: adicionalObservacio,
+        );
       },
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, 1.0);
@@ -763,26 +751,27 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
                           cacheManager: CustomCacheManager(),
-                         progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
+                          progressIndicatorBuilder: (_, url, downloadProgress) {
+                            return Stack(
+                              children: [
+                                Center(
+                                  child: CircularProgressIndicator(
+                                    value: downloadProgress.progress,
+                                    backgroundColor: Colors.green,
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            Colors.red),
+                                  ),
                                 ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                                Center(
+                                  child: (downloadProgress.progress != null)
+                                      ? Text(
+                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                      : Container(),
+                                )
+                              ],
+                            );
+                          },
                           errorWidget: (context, url, error) => Image(
                               image: AssetImage('assets/carga_fallida.jpg'),
                               fit: BoxFit.cover),
@@ -1121,25 +1110,25 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
             child: CachedNetworkImage(
               cacheManager: CustomCacheManager(),
               progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                return Stack(
+                  children: [
+                    Center(
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        backgroundColor: Colors.green,
+                        valueColor:
+                            new AlwaysStoppedAnimation<Color>(Colors.red),
+                      ),
+                    ),
+                    Center(
+                      child: (downloadProgress.progress != null)
+                          ? Text(
+                              '${(downloadProgress.progress * 100).toInt().toString()}%')
+                          : Container(),
+                    )
+                  ],
+                );
+              },
               errorWidget: (context, url, error) => Image(
                   image: AssetImage('assets/carga_fallida.jpg'),
                   fit: BoxFit.cover),

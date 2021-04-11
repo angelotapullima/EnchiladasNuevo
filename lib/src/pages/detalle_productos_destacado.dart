@@ -62,7 +62,7 @@ class _SliderDetalleProductosState
               if (snapshotContador.hasData) {
                 if (snapshotContador.data != null) {
                   return Container(
-                    height: kToolbarHeight + 50,
+                    height: kToolbarHeight ,
                     child: AppBar(
                       backgroundColor: Colors.transparent,
                       actions: [

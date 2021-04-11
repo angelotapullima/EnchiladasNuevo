@@ -168,10 +168,7 @@ class DetalleProductitoss extends StatefulWidget {
   _DetalleProducto createState() => _DetalleProducto();
 }
 
-class _DetalleProducto extends State<DetalleProductitoss> {
-  GlobalKey _one = GlobalKey();
-  GlobalKey _two = GlobalKey();
-  GlobalKey _three = GlobalKey();
+class _DetalleProducto extends State<DetalleProductitoss> { 
 
   bool mostrar = false;
 
@@ -202,8 +199,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final preferences = Preferences();
+  Widget build(BuildContext context) { 
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
     //final ProductosData productos = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
@@ -246,7 +242,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
             ),
             (widget.productosData.productoNuevo == '1')
                 ? Positioned(
-                    top: kToolbarHeight + 50,
+                    top: kToolbarHeight +responsive.hp(2),
                     left: 0,
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -269,7 +265,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                 : Container(),
             (widget.productosData.productoDestacado != '0')
                 ? Positioned(
-                    top: kToolbarHeight + 50,
+                    top: kToolbarHeight +responsive.hp(2),
                     //top: responsive.hp(40),
                     right: 0,
                     //left: 0,
@@ -382,8 +378,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
 
                           Navigator.of(context).push(_createRoute(
                               productosData.idProducto,
-                              productosData.productoAdicionalOpciones,
-                              productosData.productoCantidadAdicional));
+                              productosData.productoAdicionalOpciones));
                           /* setState(() {
                             mostrar =true;
                             
@@ -453,13 +448,12 @@ class _DetalleProducto extends State<DetalleProductitoss> {
   }
 
   Route _createRoute(
-      String idProducto, String adicionalObservacio, String numeroAdicionales) {
+      String idProducto, String adicionalObservacio ) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
         return DetalleObservaciones(
             idProductoArgument: idProducto,
-            idCategoria: adicionalObservacio,
-            cantidadAdicional: numeroAdicionales);
+            idCategoria: adicionalObservacio );
       },
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, 1.0);

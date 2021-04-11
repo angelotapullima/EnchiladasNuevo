@@ -14,6 +14,7 @@ import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_pago_page.dart';
 import 'package:enchiladasapp/src/pages/pantalla_delivery_opciones.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
+import 'package:enchiladasapp/src/pages/puzzle/ranking/pantalla_puzzle_terminado.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
 import 'package:enchiladasapp/src/pages/detalle_promociones.dart';
 import 'package:enchiladasapp/src/pages/ticket.dart';
@@ -217,14 +218,16 @@ class _MyAppState extends State<MyApp> {
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               navigatorKey: navigatorkey,
-              initialRoute: 'splash', //'splash',
+              initialRoute:  'splash',
               theme: ThemeData(
                 primarySwatch: Colors.red,
                 scaffoldBackgroundColor: Colors.grey[50],
                 canvasColor: Colors.transparent,
               ),
               routes: {
-                '/': (BuildContext context) => HomePage(),
+
+                '/': (BuildContext context) => HomePage(), 
+                '/2': (BuildContext context) => PuzzleTerminado(), 
                 'homeLocal': (BuildContext context) => HomeLocal(),
                 'HomePuzzle': (BuildContext context) => HomePuzzle(),
                 'puzzle': (BuildContext context) => PuzzlePage(),

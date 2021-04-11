@@ -14,7 +14,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
     final pantallasBloc = ProviderBloc.pantalla(context);
     pantallasBloc.obtenerPantallas();
     pantallasBloc.estadoPantallaCafe();
-    pantallasBloc.estadoPantallaMarket();
+    pantallasBloc.estadoPantallaVar();
 /* 
 
     final categoriasApi = CategoriasApi();
@@ -69,7 +69,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                       height: responsive.hp(2),
                     ),
                     StreamBuilder(
-                      stream: pantallasBloc.estadoMarketStream,
+                      stream: pantallasBloc.estadoVarStream,
                       builder:
                           (BuildContext context, AsyncSnapshot<bool> snapshot) {
                         if (snapshot.hasData) {
@@ -78,7 +78,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                               child: Container(
                                 width: double.infinity,
                                 height: responsive.ip(16),
-                                child: Image.asset('assets/market.png'),
+                                child: Image.asset('assets/var.png'),
                               ),
                               onTap: () {
                                 Navigator.push(
@@ -89,8 +89,8 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                       pageBuilder: (context, animation,
                                           secondaryAnimation) {
                                         return CategoriasPorTipo(
-                                          nombreTipo: 'Market 247',
-                                          tipo: '2',
+                                          nombreTipo: 'Var 247',
+                                          tipo: '4',
                                         );
                                         //return DetalleProductitos(productosData: productosData);
                                       },

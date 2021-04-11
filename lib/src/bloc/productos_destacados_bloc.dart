@@ -45,7 +45,6 @@ class ProductosDestacadosBloc {
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
-      productosData.productoCantidadAdicional = listProductos[x].productoCantidadAdicional;
       productosData.productoFavorito = listProductos[x].productoFavorito;
 
         listGeneral.add(productosData);

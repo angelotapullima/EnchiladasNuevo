@@ -12,16 +12,16 @@ class PantallaBloc {
   final productosDatabase = ProductoDatabase();
 
   final _pantallasController = new BehaviorSubject<List<PantallaModel>>();
-  final _estadoMarketDesicion = new BehaviorSubject<bool>();
+  final _estadoVarDesicion = new BehaviorSubject<bool>();
   final _estadoCafeDesicion = new BehaviorSubject<bool>();
 
   Stream<List<PantallaModel>> get pantallasStream =>_pantallasController.stream;
-  Stream<bool> get estadoMarketStream => _estadoMarketDesicion.stream;
+  Stream<bool> get estadoVarStream => _estadoVarDesicion.stream;
   Stream<bool> get estadoCafeStream => _estadoCafeDesicion.stream;
 
   dispose() {
     _pantallasController?.close();
-    _estadoMarketDesicion?.close();
+    _estadoVarDesicion?.close();
     _estadoCafeDesicion?.close();
   }
 
@@ -71,11 +71,11 @@ class PantallaBloc {
             listItemPantalla.add(item);
           }
         }
-      } else if (pantalla.idPantalla == '2') {
-        //market
+      } else if (pantalla.idPantalla == '4') {
+        //cafe
 
         final listaCategorias =
-            await categoriasDatabase.obtenerCategoriasPorTipo('2');
+            await categoriasDatabase.obtenerCategoriasPorTipo('3');
 
         if (listaCategorias.length > 10) {
           for (int x = 0; x < 10; x++) {
@@ -100,7 +100,36 @@ class PantallaBloc {
             listItemPantalla.add(item);
           }
         }
-      } else if (pantalla.idPantalla == '3') {
+      } else if (pantalla.idPantalla == '5') {
+        //var
+
+        final listaCategorias =
+            await categoriasDatabase.obtenerCategoriasPorTipo('4');
+
+        if (listaCategorias.length > 10) {
+          for (int x = 0; x < 10; x++) {
+            ItemPantalla item = ItemPantalla();
+
+            item.idCategoria = listaCategorias[x].idCategoria;
+            item.nombreItem = listaCategorias[x].categoriaNombre;
+            item.fotoItem = listaCategorias[x].categoriaFoto;
+            item.numeroItem = x.toString();
+
+            listItemPantalla.add(item);
+          }
+        } else {
+          for (int x = 0; x < listaCategorias.length; x++) {
+            ItemPantalla item = ItemPantalla();
+
+            item.idCategoria = listaCategorias[x].idCategoria;
+            item.nombreItem = listaCategorias[x].categoriaNombre;
+            item.fotoItem = listaCategorias[x].categoriaFoto;
+            item.numeroItem = x.toString();
+
+            listItemPantalla.add(item);
+          }
+        }
+      }else if (pantalla.idPantalla == '3') {
         //puzzle
 
         final listaPuzzle = await puzzleDatabase
@@ -171,19 +200,19 @@ class PantallaBloc {
     _pantallasController.sink.add(listFinal);
   }
 
-  void estadoPantallaMarket() async {
+  void estadoPantallaVar() async {
     bool estado = false;
-    var estadoMarket = await pantallaDatabase.obtenerPantallaPorId('2');
+    var estadoVar = await pantallaDatabase.obtenerPantallaPorId('5');
 
-    if (estadoMarket.length > 0) {
-      if (estadoMarket[0].pantallaEstado == '0') {
+    if (estadoVar.length > 0) {
+      if (estadoVar[0].pantallaEstado == '0') {
         estado = false;
       } else {
         estado = true;
       }
     }
 
-    _estadoMarketDesicion.sink.add(estado);
+    _estadoVarDesicion.sink.add(estado);
   }
 
   void estadoPantallaCafe() async {

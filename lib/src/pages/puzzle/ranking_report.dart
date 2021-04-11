@@ -15,6 +15,8 @@ class RankingReport extends StatefulWidget {
 }
 
 class _RankingReportState extends State<RankingReport> {
+  DatePickerController _controller = DatePickerController();
+
   DateTime today;
   DateTime firstDate;
   DateTime lastDate;
@@ -33,12 +35,10 @@ class _RankingReportState extends State<RankingReport> {
     return selectedDates;
   }
 
-  final ScrollController _scrollController = new ScrollController();
   void initState() {
     const int days = 30;
     today = toDateMonthYear(DateTime.now());
     firstDate = toDateMonthYear(today.subtract(Duration(days: days - 15)));
-    lastDate = toDateMonthYear(today.add(Duration(days: days - 15)));
     fechaBusqueda = today.toString();
     //diaDeLaSemana = today.weekday.toString();
     initialSelectedDates = feedInitialSelectedDates(today);
@@ -55,15 +55,11 @@ class _RankingReportState extends State<RankingReport> {
 
     puzzleBloc.obtenerTiempos(horaformat1);
 
-    Future.delayed(Duration(milliseconds: 1), () {
-      if (cant == 0) {
-        _scrollController.animateTo(
-          responsive.wp(13.5) * 15,
-          curve: Curves.ease,
-          duration: const Duration(milliseconds: 100),
-        );
-      }
+    Future.delayed(Duration(milliseconds:500), () {
+      _controller.animateToDate(today);
     });
+
+    //_controller.animateToDate(firstDate);
 
     return Scaffold(
       appBar: AppBar(
@@ -75,30 +71,37 @@ class _RankingReportState extends State<RankingReport> {
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
       ),
-      body: _calendar(responsive, puzzleBloc),
+      body: _calendar(responsive, puzzleBloc, _controller),
     );
   }
 
-  Widget _calendar(Responsive responsive, PuzzleBloc puzzleBloc) {
+  Widget _calendar(Responsive responsive, PuzzleBloc puzzleBloc,
+      DatePickerController controller) {
     return Column(
       children: <Widget>[
         Container(
           width: double.infinity,
           child: DatePicker(
             firstDate,
-            initialSelectedDate: firstDate,
+            initialSelectedDate: today,
             selectionColor: Colors.green,
             locale: 'es_Es',
             selectedTextColor: Colors.white,
-            daysCount: 30,
+            controller: controller,
+            daysCount: 16,
             onDateChange: (date) {
               print(date);
-              setState(() {
+              var horafotmat = date.toString().split(' ');
+              var horaformat1 = horafotmat[0];
+
+              puzzleBloc.obtenerTiempos(horaformat1);
+              controller.animateToDate(date);
+              /* setState(() {
                 fechaBusqueda = date.toString();
                 cant++;
                 //diaDeLaSemana = date.weekday.toString();
                 //canchasBloc.obtenerReservasPorIDCancha(canchas.canchaId,canchas.idEmpresa,fechaBusqueda);
-              });
+              }); */
             },
           ),
 

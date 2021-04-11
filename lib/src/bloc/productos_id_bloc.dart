@@ -86,8 +86,6 @@ class ProductosBloc {
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
-      productosData.productoCantidadAdicional =
-          listProductos[x].productoCantidadAdicional;
       productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);
     }
@@ -126,8 +124,7 @@ class ProductosBloc {
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
-      productosData.productoCantidadAdicional =
-          listProductos[x].productoCantidadAdicional;
+      
       productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);
     }
@@ -166,8 +163,6 @@ class ProductosBloc {
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
-      productosData.productoCantidadAdicional =
-          listProductos[x].productoCantidadAdicional;
       productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);
     }
@@ -216,8 +211,6 @@ class ProductosBloc {
         productosData.productoDescripcion =
             listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
-        productosData.productoCantidadAdicional =
-            listProductos[x].productoCantidadAdicional;
         productosData.productoFavorito = listProductos[x].productoFavorito;
         listGeneral.add(productosData);
       }
@@ -257,8 +250,6 @@ class ProductosBloc {
         productosData.productoDescripcion =
             listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
-        productosData.productoCantidadAdicional =
-            listProductos[x].productoCantidadAdicional;
         productosData.productoFavorito = listProductos[x].productoFavorito;
         listGeneral.add(productosData);
       }
@@ -271,7 +262,7 @@ class ProductosBloc {
     var listFinal = List<CategoriaData>();
     var listProductos = List<ProductosData>();
     final listCategorias = await categoriaDatabase.consultarPorId(idCategoria);
-    final listProductosPorCategoria = await productoDatabase.obtenerProductosPorCategoriaLocal(idCategoria);
+    final listProductosPorCategoria = await productoDatabase.obtenerProductosPorCategoriaDelivery(idCategoria);
 
     CategoriaData categoria = CategoriaData();
 
@@ -299,7 +290,6 @@ class ProductosBloc {
         productosData.numeroitem = x.toString();
         productosData.productoDescripcion =listProductosPorCategoria[x].productoDescripcion;
         productosData.productoComentario = listProductosPorCategoria[x].productoComentario;
-        productosData.productoCantidadAdicional =listProductosPorCategoria[x].productoCantidadAdicional;
         productosData.productoFavorito = listProductosPorCategoria[x].productoFavorito;
 
         listProductos.add(productosData);
@@ -358,8 +348,6 @@ class ProductosBloc {
             listProductosPorCategoria[x].productoDescripcion;
         productosData.productoComentario =
             listProductosPorCategoria[x].productoComentario;
-        productosData.productoCantidadAdicional =
-            listProductosPorCategoria[x].productoCantidadAdicional;
         productosData.productoFavorito =
             listProductosPorCategoria[x].productoFavorito;
 

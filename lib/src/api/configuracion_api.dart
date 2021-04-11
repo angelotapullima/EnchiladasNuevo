@@ -27,7 +27,7 @@ class ConfiguracionApi {
   Future<bool> configuracion() async {
     try {
       final url = '$_url/api/categoria/configuracion';
-      final resp = await http.post(url, body: {});
+      final resp = await http.post(url, body: {'numero':'1'});
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       if (decodedData['result']['code'] == 1) {
         for (int z = 0;
@@ -141,18 +141,12 @@ class ConfiguracionApi {
             x++) {
           PantallaModel pantalla = PantallaModel();
 
-          pantalla.idPantalla =
-              decodedData['result']['data']['pantallas'][x]['id_pantalla'];
-          pantalla.pantallaNombre =
-              decodedData['result']['data']['pantallas'][x]['pantalla_nombre'];
-          pantalla.pantallaOrden =
-              decodedData['result']['data']['pantallas'][x]['pantalla_orden'];
-          pantalla.pantallaFoto =
-              decodedData['result']['data']['pantallas'][x]['pantalla_foto'];
-          pantalla.pantallaEstado =
-              decodedData['result']['data']['pantallas'][x]['pantalla_estado'];
-          pantalla.pantallCategoria = decodedData['result']['data']['pantallas']
-              [x]['pantalla_categorias'][0]['id_categoria'];
+          pantalla.idPantalla = decodedData['result']['data']['pantallas'][x]['id_pantalla'];
+          pantalla.pantallaNombre = decodedData['result']['data']['pantallas'][x]['pantalla_nombre'];
+          pantalla.pantallaOrden = decodedData['result']['data']['pantallas'][x]['pantalla_orden'];
+          pantalla.pantallaFoto = decodedData['result']['data']['pantallas'][x]['pantalla_foto'];
+          pantalla.pantallaEstado = decodedData['result']['data']['pantallas'][x]['pantalla_estado'];
+          pantalla.pantallCategoria = decodedData['result']['data']['pantallas'][x]['pantalla_categorias'][0]['id_categoria'];
 
           await pantallaDatabase.insertarPantalla(pantalla);
         }
@@ -161,21 +155,14 @@ class ConfiguracionApi {
             y < decodedData['result']['data']['puzzle'].length;
             y++) {
           PuzzleDatum puzzle = PuzzleDatum();
-          puzzle.idImagen =
-              decodedData['result']['data']['puzzle'][y]['id_imagen'];
-          puzzle.imagenRuta =
-              decodedData['result']['data']['puzzle'][y]['imagen_ruta'];
-          puzzle.imagenTitulo =
-              decodedData['result']['data']['puzzle'][y]['imagen_titulo'];
+          puzzle.idImagen = decodedData['result']['data']['puzzle'][y]['id_imagen'];
+          puzzle.imagenRuta = decodedData['result']['data']['puzzle'][y]['imagen_ruta'];
+          puzzle.imagenTitulo = decodedData['result']['data']['puzzle'][y]['imagen_titulo'];
 
-          puzzle.imagenSubida =
-              decodedData['result']['data']['puzzle'][y]['imagen_subida'];
-          puzzle.imagenInicio =
-              decodedData['result']['data']['puzzle'][y]['imagen_inicio'];
-          puzzle.imagenFin =
-              decodedData['result']['data']['puzzle'][y]['imagen_fin'];
-          puzzle.imagenEstado =
-              decodedData['result']['data']['puzzle'][y]['imagen_estado'];
+          puzzle.imagenSubida = decodedData['result']['data']['puzzle'][y]['imagen_subida'];
+          puzzle.imagenInicio = decodedData['result']['data']['puzzle'][y]['imagen_inicio'];
+          puzzle.imagenFin = decodedData['result']['data']['puzzle'][y]['imagen_fin'];
+          puzzle.imagenEstado = decodedData['result']['data']['puzzle'][y]['imagen_estado'];
 
           await puzzleDatabase.insertarPuzzle(puzzle);
         }

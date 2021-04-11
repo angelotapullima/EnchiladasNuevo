@@ -1,3 +1,4 @@
+  
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
@@ -10,11 +11,12 @@ import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart'; 
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CategoriasPorTipo extends StatefulWidget {
-  const CategoriasPorTipo({Key key, @required this.tipo,@required this.nombreTipo})
+  const CategoriasPorTipo(
+      {Key key, @required this.tipo, @required this.nombreTipo})
       : super(key: key);
   final String tipo;
   final String nombreTipo;
@@ -65,8 +67,8 @@ class _MarketPageState extends State<CategoriasPorTipo> {
             backgroundColor: Colors.red,
             elevation: 0,
             title: Text(
-             /*  (widget.tipo == '2') ? 'Market 247' : 'Café 247', */
-             widget.tipo,
+              /*  (widget.tipo == '2') ? 'Market 247' : 'Café 247', */
+              widget.nombreTipo,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: responsive.ip(2.8),
@@ -213,14 +215,13 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
               child: Container(
                 width: size.width * 0.25,
                 decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(color: Colors.black12, blurRadius: 4)
-                    ],
-                    color: (categoria.idCategoria == snapshot.data)
-                        ? Colors.red
-                        : Colors.white,
-                    border: Border.all(color: Colors.grey[100]),
-                    borderRadius: BorderRadius.circular(5)),
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                  color: (categoria.idCategoria == snapshot.data)
+                      ? Colors.red
+                      : Colors.white,
+                  border: Border.all(color: Colors.grey[100]),
+                  borderRadius: BorderRadius.circular(5),
+                ),
                 child: Row(
                   children: <Widget>[
                     SizedBox(width: 4),
@@ -231,7 +232,10 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
-                             SvgPicture.network(
+                            Container(
+                              height: responsive.ip(6),
+                              width: responsive.ip(6),
+                              child: SvgPicture.network(
                                 '${categoria.categoriaIcono}',
                                 semanticsLabel: 'A shark?!',
                                 placeholderBuilder: (BuildContext context) =>
@@ -241,6 +245,7 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                                             const CircularProgressIndicator()),
                                 fit: BoxFit.cover,
                               ),
+                            ), 
                             SizedBox(
                               height: responsive.hp(1),
                             ),
@@ -346,25 +351,25 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager(),
                   progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                    return Stack(
+                      children: [
+                        Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                            backgroundColor: Colors.green,
+                            valueColor:
+                                new AlwaysStoppedAnimation<Color>(Colors.red),
+                          ),
+                        ),
+                        Center(
+                          child: (downloadProgress.progress != null)
+                              ? Text(
+                                  '${(downloadProgress.progress * 100).toInt().toString()}%')
+                              : Container(),
+                        )
+                      ],
+                    );
+                  },
                   errorWidget: (context, url, error) => Image(
                       image: AssetImage('assets/carga_fallida.jpg'),
                       fit: BoxFit.cover),

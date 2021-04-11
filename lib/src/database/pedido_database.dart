@@ -39,7 +39,7 @@ class PedidoDatabase {
   deletePedido() async {
     final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM Pedido where");
+    final res = await db.rawDelete("DELETE FROM Pedido");
 
     return res;
   }

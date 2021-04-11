@@ -75,6 +75,7 @@ dependencies:
   nuts_activity_indicator: ^0.1.1
   keyboard_actions: "^3.3.1+1"
   flutter_svg: ^0.19.3
+
   
 dev_dependencies:
   flutter_test:
