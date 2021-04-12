@@ -1,9 +1,12 @@
-
+import 'package:enchiladasapp/src/api/puzzle_api.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking/pantalla_puzzle_terminado.dart';
+import 'package:enchiladasapp/src/utils/responsive.dart';
+import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -19,6 +22,9 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
+  final _completado = ValueNotifier<bool>(false);
+  final _subida = ValueNotifier<bool>(false);
+
   String pathLlegada;
   String idImagenLlegada;
   String _stopwatchText = '00:00:00';
@@ -62,16 +68,16 @@ class _PuzzlePageState extends State<PuzzlePage> {
   Future<Size> getImageSize(Image image) async {
     final Completer<Size> completer = Completer<Size>();
 
-    image.image
-        .resolve(const ImageConfiguration())
-        .addListener(new ImageStreamListener(
-      (ImageInfo info, bool synchronousCall) {
-        completer.complete(Size(
-          info.image.width.toDouble(),
-          info.image.height.toDouble(),
-        ));
-      },
-    ));
+    image.image.resolve(const ImageConfiguration()).addListener(
+      new ImageStreamListener(
+        (ImageInfo info, bool synchronousCall) {
+          completer.complete(Size(
+            info.image.width.toDouble(),
+            info.image.height.toDouble(),
+          ));
+        },
+      ),
+    );
 
     final Size imageSize = await completer.future;
 
@@ -127,14 +133,14 @@ class _PuzzlePageState extends State<PuzzlePage> {
       //showProcessingDialog();
 
       retroceso = true;
-      Future.delayed(Duration(milliseconds: 400), () {
+      _completado.value = true;
+      /* Future.delayed(Duration(milliseconds: 400), () {
       haceralgonoseque();
-    });
+    }); */
 
       //Toast.show("debe ingresar numeros", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
     }
 
-    
     //});
   }
 
@@ -145,7 +151,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
       PageRouteBuilder(
         opaque: false,
         pageBuilder: (context, animation, secondaryAnimation) {
-          return PuzzleTerminado(tiempo: _stopwatchText,idImagen:idImagenLlegada);
+          return PuzzleTerminado(
+              tiempo: _stopwatchText, idImagen: idImagenLlegada);
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           var begin = Offset(0.0, 1.0);
@@ -187,6 +194,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
     final RankingPuzzle rankingPuzzle =
         ModalRoute.of(context).settings.arguments;
     pathLlegada = rankingPuzzle.path;
@@ -227,6 +235,90 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ],
             ),
           ),
+          ValueListenableBuilder(
+              valueListenable: _completado,
+              builder: (BuildContext context, bool completo, Widget child) {
+                return (completo)
+                    ? Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RaisedButton(
+                              color: Colors.red,
+                              onPressed: () async {
+                                _subida.value = true;
+                                String hora = _stopwatchText;
+
+                                final puzzleApi = PuzzleApi();
+                                //showProcessingDialog();
+
+                                final res = await puzzleApi.subirTiempo(
+                                    hora, idImagenLlegada);
+
+                                if (res) {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      'ranking',
+                                      ModalRoute.withName('HomePuzzle'),
+                                      arguments: hora);
+
+                                  /* Navigator.of(context).pushNamedAndRemoveUntil(
+                          'ranking', ModalRoute.withName('HomePuzzle'),
+                          arguments: '${widget.tiempo}'); */
+
+                                } else {
+                                  showToast('Error al subir lo datos', 3,
+                                      ToastGravity.CENTER);
+                                }
+                                _subida.value = false;
+                              },
+                              child: Text(
+                                'Registrar tiempo',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: responsive.ip(2.2),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : Container();
+              }),
+          ValueListenableBuilder(
+              valueListenable: _subida,
+              builder: (BuildContext context, bool data, Widget child) {
+                return (data)
+                    ? Positioned(
+                        top: responsive.hp(50),
+                        left: responsive.wp(10),
+                        child: Container(
+                          color: Colors.white,
+                          width: responsive.wp(80),
+                          height: responsive.hp(15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "Validando...",
+                                style: TextStyle(
+                                  color: Color(0xFF5B6978),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : Container();
+              }),
+
           //_cargandoContenidoPuzzle(context),
         ],
       ),
@@ -248,8 +340,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     }
   }
 
-  
-void _startTimeout() {
+  void _startTimeout() {
     new Timer(_timeout, _handleTimeout);
   }
 

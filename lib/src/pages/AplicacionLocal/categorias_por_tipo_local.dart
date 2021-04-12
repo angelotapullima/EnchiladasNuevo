@@ -61,38 +61,33 @@ class _CategoriasPorTipoLocalState extends State<CategoriasPorTipoLocal> {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: responsive.wp(2),
-              vertical: responsive.hp(1),
+          AppBar(
+            backgroundColor: Colors.red,
+            elevation: 0,
+            title: Text(
+              /*  (widget.tipo == '2') ? 'Market 247' : 'Café 247', */
+              widget.nombreCategoriaTipo,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: responsive.ip(2.8),
+                  fontWeight: FontWeight.bold),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  widget.nombreCategoriaTipo,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: responsive.ip(2.8),
-                      fontWeight: FontWeight.bold),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                  size: responsive.ip(3.5),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: responsive.ip(3.5),
-                  ),
-                  onPressed: () {
-                    showSearch(
-                      context: context,
-                      delegate: SearchLocal(hintText: 'Buscar'),
-                    );
-                  },
-                )
-              ],
-            ),
-          ),
-          Expanded(
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: SearchLocal(hintText: 'Buscar'),
+                  );
+                },
+              )
+            ],
+          ),Expanded(
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadiusDirectional.only(
