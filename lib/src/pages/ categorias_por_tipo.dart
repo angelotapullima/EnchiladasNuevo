@@ -108,7 +108,7 @@ class _MarketPageState extends State<CategoriasPorTipo> {
                     _onRefresh(context);
                   },
                   child: StreamBuilder(
-                    stream: categoriasBloc.categoriasMarketStream,
+                    stream: categoriasBloc.categoriasPorTipoStream,
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data.length > 0) {

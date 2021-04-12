@@ -3,6 +3,7 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
+import 'package:enchiladasapp/src/pages/AplicacionLocal/categorias_por_tipo_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/detalle_promociones_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
 import 'package:enchiladasapp/src/search/search_local.dart';
@@ -35,8 +36,7 @@ class PrincipalLocal extends StatelessWidget {
     final categoriasBloc = ProviderBloc.cat(context);
     pantallasBloc.obtenerPantallasLocal();
     categoriasBloc.obtenerCategoriasPromociones();
-    /*  final usuarioBloc = ProviderBloc.user(context);
-    usuarioBloc.obtenerUsuario(); */
+    
 
     return Scaffold(
       body: _inicio(context, responsive, _refreshController),
@@ -126,24 +126,25 @@ class PrincipalLocal extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(milliseconds: 400),
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                          return DetallePromocionesLocal(
-                              categoriaNombre:
-                                  "${promociones[index].categoriaNombre}",
-                              idcategoria: '${promociones[index].idCategoria}');
-                          //return DetalleProductitos(productosData: productosData);
-                        },
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
-                      ));
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 400),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return DetallePromocionesLocal(
+                            categoriaNombre:
+                                "${promociones[index].categoriaNombre}",
+                            idcategoria: '${promociones[index].idCategoria}');
+                        //return DetalleProductitos(productosData: productosData);
+                      },
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
 
                   //Navigator.pushNamed(context, 'detallePromociones');
                 },
@@ -151,26 +152,26 @@ class PrincipalLocal extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
                     cacheManager: CustomCacheManager(),
-                   progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                    progressIndicatorBuilder: (_, url, downloadProgress) {
+                      return Stack(
+                        children: [
+                          Center(
+                            child: CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                              backgroundColor: Colors.green,
+                              valueColor:
+                                  new AlwaysStoppedAnimation<Color>(Colors.red),
+                            ),
+                          ),
+                          Center(
+                            child: (downloadProgress.progress != null)
+                                ? Text(
+                                    '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                : Container(),
+                          )
+                        ],
+                      );
+                    },
                     errorWidget: (context, url, error) => Image(
                         image: AssetImage('assets/carga_fallida.jpg'),
                         fit: BoxFit.cover),
@@ -269,170 +270,18 @@ class PrincipalLocal extends StatelessWidget {
                                     return Container();
                                   }
                                 }),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: responsive.wp(3)),
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      'Carta Principal',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: responsive.ip(2.5),
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      final bottomBloc =
-                                          ProviderBloc.bottomLocal(context);
-                                      bottomBloc.changePageLocal(1);
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: responsive.hp(1.5),
-                                        vertical: responsive.hp(.5),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(
-                                            'Ver más',
-                                            style: TextStyle(
-                                                fontSize: responsive.ip(1.7),
-                                                color: Colors.white),
-                                          ),
-                                          Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Colors.white,
-                                            size: responsive.ip(2.2),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                            CartaPrincipal(categoria: snapshot.data),
                             SizedBox(
                               height: responsive.hp(1),
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: responsive.hp(.5)),
-                              height: responsive.hp(19),
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Arguments arg = new Arguments(
-                                            "${snapshot.data[index].categoriaNombre}",
-                                            '${snapshot.data[index].idCategoria}');
-                                        Navigator.pushNamed(
-                                            context, 'productosCategoria',
-                                            arguments: arg);
-                                      },
-                                      child: Container(
-                                        width: responsive.ip(18),
-                                        height: responsive.ip(15),
-                                        padding: EdgeInsets.only(
-                                          left: responsive.wp(3),
-                                        ),
-                                        margin: EdgeInsets.only(
-                                          right: responsive.wp(1.5),
-                                        ),
-                                        child: Stack(
-                                          children: <Widget>[
-                                            Container(
-                                              width: responsive.ip(18),
-                                              height: responsive.ip(19),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: CachedNetworkImage(
-                                                  cacheManager:
-                                                      CustomCacheManager(),
-                                                  progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
-                                                  errorWidget: (context, url,
-                                                          error) =>
-                                                      Image(
-                                                          image: AssetImage(
-                                                              'assets/carga_fallida.jpg'),
-                                                          fit: BoxFit.cover),
-                                                  imageUrl:
-                                                      '${snapshot.data[index].categoriaFoto}',
-                                                  imageBuilder: (context,
-                                                          imageProvider) =>
-                                                      Container(
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              right: 0,
-                                              left: 0,
-                                              bottom: 0,
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  vertical: responsive.hp(2),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.black
-                                                      .withOpacity(.5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: Text(
-                                                  '${snapshot.data[index].categoriaNombre}',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize:
-                                                          responsive.ip(2),
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            )
+                            VarLocal(),
+                            SizedBox(
+                              height: responsive.hp(1),
+                            ),
+                            CafeLocal(),
+                            SizedBox(
+                              height: responsive.hp(1),
+                            ),
                           ],
                         );
                       }
@@ -572,26 +421,29 @@ class PrincipalLocal extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
                                 cacheManager: CustomCacheManager(),
-                                progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                                progressIndicatorBuilder:
+                                    (_, url, downloadProgress) {
+                                  return Stack(
+                                    children: [
+                                      Center(
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          backgroundColor: Colors.green,
+                                          valueColor:
+                                              new AlwaysStoppedAnimation<Color>(
+                                                  Colors.red),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: (downloadProgress.progress !=
+                                                null)
+                                            ? Text(
+                                                '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                            : Container(),
+                                      )
+                                    ],
+                                  );
+                                },
                                 errorWidget: (context, url, error) => Image(
                                     image:
                                         AssetImage('assets/carga_fallida.jpg'),
@@ -640,6 +492,585 @@ class PrincipalLocal extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class VarLocal extends StatelessWidget {
+  const VarLocal({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
+    final pantallasBloc = ProviderBloc.pantallaLocal(context);
+    pantallasBloc.obtenerVar247Local();
+
+    return StreamBuilder(
+        stream: pantallasBloc.varLocalStream,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<CategoriaData>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: responsive.wp(3),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Var 247',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: responsive.ip(2.5),
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 400),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return CategoriasPorTipoLocal(
+                          nombreCategoriaTipo: 'Var 247',idCategoriaTipo: '4',
+                             );
+                        //return DetalleProductitos(productosData: productosData);
+                      },
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+
+                
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.hp(1.5),
+                              vertical: responsive.hp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Ver más',
+                                  style: TextStyle(
+                                      fontSize: responsive.ip(1.7),
+                                      color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: responsive.ip(2.2),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: responsive.hp(1),),
+                  Container(
+                    height: responsive.hp(20),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Arguments arg = new Arguments(
+                                "${snapshot.data[index].categoriaNombre}",
+                                '${snapshot.data[index].idCategoria}');
+                            Navigator.pushNamed(context, 'productosCategoria',
+                                arguments: arg);
+                          },
+                          child: Container(
+                            width: responsive.ip(18),
+                            height: responsive.ip(15),
+                            padding: EdgeInsets.only(
+                              left: responsive.wp(3),
+                            ),
+                            margin: EdgeInsets.only(
+                              right: responsive.wp(1.5),
+                            ),
+                            child: Stack(
+                              children: <Widget>[
+                                Container(
+                                  width: responsive.ip(18),
+                                  height: responsive.ip(19),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      cacheManager: CustomCacheManager(),
+                                      progressIndicatorBuilder:
+                                          (_, url, downloadProgress) {
+                                        return Stack(
+                                          children: [
+                                            Center(
+                                              child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                backgroundColor: Colors.green,
+                                                valueColor:
+                                                    new AlwaysStoppedAnimation<
+                                                        Color>(Colors.red),
+                                              ),
+                                            ),
+                                            Center(
+                                              child: (downloadProgress
+                                                          .progress !=
+                                                      null)
+                                                  ? Text(
+                                                      '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                                  : Container(),
+                                            )
+                                          ],
+                                        );
+                                      },
+                                      errorWidget: (context, url, error) =>
+                                          Image(
+                                              image: AssetImage(
+                                                  'assets/carga_fallida.jpg'),
+                                              fit: BoxFit.cover),
+                                      imageUrl:
+                                          '${snapshot.data[index].categoriaFoto}',
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  left: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: responsive.hp(2),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(.5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      '${snapshot.data[index].categoriaNombre}',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsive.ip(2),
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          } else {
+            return Container();
+          }
+        });
+  }
+}
+
+class CafeLocal extends StatelessWidget {
+  const CafeLocal({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
+    final pantallasBloc = ProviderBloc.pantallaLocal(context);
+    pantallasBloc.obtenerCafe247Local();
+    return StreamBuilder(
+        stream: pantallasBloc.cafeLocalStream,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<CategoriaData>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: responsive.wp(3),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Café 247',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: responsive.ip(2.5),
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 400),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return CategoriasPorTipoLocal(
+                          nombreCategoriaTipo: 'Café 247',idCategoriaTipo: '3',
+                             );
+                        //return DetalleProductitos(productosData: productosData);
+                      },
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.hp(1.5),
+                              vertical: responsive.hp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Ver más',
+                                  style: TextStyle(
+                                      fontSize: responsive.ip(1.7),
+                                      color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: responsive.ip(2.2),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: responsive.hp(1),),
+                  Container(
+                    height: responsive.hp(20),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Arguments arg = new Arguments(
+                                "${snapshot.data[index].categoriaNombre}",
+                                '${snapshot.data[index].idCategoria}');
+                            Navigator.pushNamed(context, 'productosCategoria',
+                                arguments: arg);
+                          },
+                          child: Container(
+                            width: responsive.ip(18),
+                            height: responsive.ip(15),
+                            padding: EdgeInsets.only(
+                              left: responsive.wp(3),
+                            ),
+                            margin: EdgeInsets.only(
+                              right: responsive.wp(1.5),
+                            ),
+                            child: Stack(
+                              children: <Widget>[
+                                Container(
+                                  width: responsive.ip(18),
+                                  height: responsive.ip(19),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      cacheManager: CustomCacheManager(),
+                                      progressIndicatorBuilder:
+                                          (_, url, downloadProgress) {
+                                        return Stack(
+                                          children: [
+                                            Center(
+                                              child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                backgroundColor: Colors.green,
+                                                valueColor:
+                                                    new AlwaysStoppedAnimation<
+                                                        Color>(Colors.red),
+                                              ),
+                                            ),
+                                            Center(
+                                              child: (downloadProgress
+                                                          .progress !=
+                                                      null)
+                                                  ? Text(
+                                                      '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                                  : Container(),
+                                            )
+                                          ],
+                                        );
+                                      },
+                                      errorWidget: (context, url, error) =>
+                                          Image(
+                                              image: AssetImage(
+                                                  'assets/carga_fallida.jpg'),
+                                              fit: BoxFit.cover),
+                                      imageUrl:
+                                          '${snapshot.data[index].categoriaFoto}',
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  left: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: responsive.hp(2),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(.5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      '${snapshot.data[index].categoriaNombre}',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsive.ip(2),
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          } else {
+            return Container();
+          }
+        });
+  }
+}
+
+class CartaPrincipal extends StatelessWidget {
+  const CartaPrincipal({
+    Key key,
+    @required this.categoria,
+  }) : super(key: key);
+
+  final List<CategoriaData> categoria;
+
+  @override
+  Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: responsive.wp(3),
+          ),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  'Carta Principal',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: responsive.ip(2.5),
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  final bottomBloc = ProviderBloc.bottomLocal(context);
+                  bottomBloc.changePageLocal(1);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.hp(1.5),
+                    vertical: responsive.hp(.5),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        'Ver más',
+                        style: TextStyle(
+                            fontSize: responsive.ip(1.7), color: Colors.white),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                        size: responsive.ip(2.2),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(
+          height: responsive.hp(1),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(
+            vertical: responsive.hp(.5),
+          ),
+          height: responsive.hp(19),
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categoria.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Arguments arg = new Arguments(
+                        "${categoria[index].categoriaNombre}",
+                        '${categoria[index].idCategoria}');
+                    Navigator.pushNamed(context, 'productosCategoria',
+                        arguments: arg);
+                  },
+                  child: Container(
+                    width: responsive.ip(18),
+                    height: responsive.ip(15),
+                    padding: EdgeInsets.only(
+                      left: responsive.wp(3),
+                    ),
+                    margin: EdgeInsets.only(
+                      right: responsive.wp(1.5),
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          width: responsive.ip(18),
+                          height: responsive.ip(19),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              cacheManager: CustomCacheManager(),
+                              progressIndicatorBuilder:
+                                  (_, url, downloadProgress) {
+                                return Stack(
+                                  children: [
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        backgroundColor: Colors.green,
+                                        valueColor:
+                                            new AlwaysStoppedAnimation<Color>(
+                                                Colors.red),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: (downloadProgress.progress != null)
+                                          ? Text(
+                                              '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                          : Container(),
+                                    )
+                                  ],
+                                );
+                              },
+                              errorWidget: (context, url, error) => Image(
+                                  image: AssetImage('assets/carga_fallida.jpg'),
+                                  fit: BoxFit.cover),
+                              imageUrl: '${categoria[index].categoriaFoto}',
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          left: 0,
+                          bottom: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: responsive.hp(2),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '${categoria[index].categoriaNombre}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: responsive.ip(2),
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        )
+      ],
     );
   }
 }
