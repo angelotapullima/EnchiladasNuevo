@@ -26,11 +26,11 @@ class PantallaBloc {
   }
 
   void obtenerPantallas() async {
-    var listFinal = List<PantallaModel>();
+    final List<PantallaModel> listFinal = [];
     final listPantallas = await pantallaDatabase.obtenerPantallas();
 
     for (int i = 0; i < listPantallas.length; i++) {
-      var listItemPantalla = List<ItemPantalla>();
+      final List<ItemPantalla> listItemPantalla = [];
 
       PantallaModel pantalla = PantallaModel();
 
@@ -103,8 +103,7 @@ class PantallaBloc {
       } else if (pantalla.idPantalla == '5') {
         //var
 
-        final listaCategorias =
-            await categoriasDatabase.obtenerCategoriasPorTipo('4');
+        final listaCategorias = await categoriasDatabase.obtenerCategoriasPorTipo('4');
 
         if (listaCategorias.length > 10) {
           for (int x = 0; x < 10; x++) {
