@@ -752,24 +752,28 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                         child: CachedNetworkImage(
                           cacheManager: CustomCacheManager(),
                           progressIndicatorBuilder: (_, url, downloadProgress) {
-                            return Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor:
-                                        new AlwaysStoppedAnimation<Color>(
-                                            Colors.red),
+                            return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: CircularProgressIndicator(
+                                      value: downloadProgress.progress,
+                                      backgroundColor: Colors.green,
+                                      valueColor:
+                                          new AlwaysStoppedAnimation<Color>(
+                                              Colors.red),
+                                    ),
                                   ),
-                                ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
+                                  Center(
+                                    child: (downloadProgress.progress != null)
+                                        ? Text(
+                                            '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                        : Container(),
+                                  )
+                                ],
+                              ),
                             );
                           },
                           errorWidget: (context, url, error) => Image(
@@ -1110,23 +1114,27 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
             child: CachedNetworkImage(
               cacheManager: CustomCacheManager(),
               progressIndicatorBuilder: (_, url, downloadProgress) {
-                return Stack(
-                  children: [
-                    Center(
-                      child: CircularProgressIndicator(
-                        value: downloadProgress.progress,
-                        backgroundColor: Colors.green,
-                        valueColor:
-                            new AlwaysStoppedAnimation<Color>(Colors.red),
+                return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                          backgroundColor: Colors.green,
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.red),
+                        ),
                       ),
-                    ),
-                    Center(
-                      child: (downloadProgress.progress != null)
-                          ? Text(
-                              '${(downloadProgress.progress * 100).toInt().toString()}%')
-                          : Container(),
-                    )
-                  ],
+                      Center(
+                        child: (downloadProgress.progress != null)
+                            ? Text(
+                                '${(downloadProgress.progress * 100).toInt().toString()}%')
+                            : Container(),
+                      )
+                    ],
+                  ),
                 );
               },
               errorWidget: (context, url, error) => Image(

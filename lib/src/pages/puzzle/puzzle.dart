@@ -1,6 +1,5 @@
 import 'package:enchiladasapp/src/api/puzzle_api.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
-import 'package:enchiladasapp/src/pages/puzzle/ranking/pantalla_puzzle_terminado.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
@@ -43,7 +42,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
   }
 
   void initState() {
-    retroceso = false;
     /* _stopWatch.start();
         _startTimeout();  */
     _startStopButtonPressed();
@@ -132,8 +130,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
       //showProcessingDialog();
 
-      retroceso = true;
       _completado.value = true;
+      _startStopButtonPressed();
       /* Future.delayed(Duration(milliseconds: 400), () {
       haceralgonoseque();
     }); */
@@ -143,67 +141,13 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
     //});
   }
-
-  haceralgonoseque() async {
-    _startStopButtonPressed();
-
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return PuzzleTerminado(
-              tiempo: _stopwatchText, idImagen: idImagenLlegada);
-        },
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          var begin = Offset(0.0, 1.0);
-          var end = Offset.zero;
-          var curve = Curves.ease;
-
-          var tween = Tween(begin: begin, end: end).chain(
-            CurveTween(curve: curve),
-          );
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-      ),
-    );
-
-    /* final puzzleApi = PuzzleApi();
-
-    _startStopButtonPressed();
-    final res = await puzzleApi.subirTiempo(_stopwatchText, idImagenLlegada);
-
-    if (res) {
-      String hora = _stopwatchText;
-
-      _image = null;
-      _resetButtonPressed();
-
-      Navigator.pop(context);
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          'ranking', ModalRoute.withName('HomePuzzle'),
-          arguments: hora);
-    } else {
-      Navigator.pop(context);
-      errorSubida();
-    } */
-  }
-
-  @override
+ @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
     final RankingPuzzle rankingPuzzle =
         ModalRoute.of(context).settings.arguments;
     pathLlegada = rankingPuzzle.path;
     idImagenLlegada = rankingPuzzle.idImagen;
-
-    if (retroceso) {
-      haceralgonoseque();
-      retroceso = false;
-    }
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -259,20 +203,16 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                     hora, idImagenLlegada);
 
                                 if (res) {
+                                  _subida.value = false;
                                   Navigator.of(context).pushNamedAndRemoveUntil(
                                       'ranking',
                                       ModalRoute.withName('HomePuzzle'),
-                                      arguments: hora);
-
-                                  /* Navigator.of(context).pushNamedAndRemoveUntil(
-                          'ranking', ModalRoute.withName('HomePuzzle'),
-                          arguments: '${widget.tiempo}'); */
-
+                                      arguments: '$hora');
                                 } else {
+                                  _subida.value = false;
                                   showToast('Error al subir lo datos', 3,
                                       ToastGravity.CENTER);
                                 }
-                                _subida.value = false;
                               },
                               child: Text(
                                 'Registrar tiempo',
@@ -289,35 +229,36 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     : Container();
               }),
           ValueListenableBuilder(
-              valueListenable: _subida,
-              builder: (BuildContext context, bool data, Widget child) {
-                return (data)
-                    ? Positioned(
-                        top: responsive.hp(50),
-                        left: responsive.wp(10),
-                        child: Container(
-                          color: Colors.white,
-                          width: responsive.wp(80),
-                          height: responsive.hp(15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(),
-                              SizedBox(
-                                width: 5,
+            valueListenable: _subida,
+            builder: (BuildContext context, bool data, Widget child) {
+              return (data)
+                  ? Positioned(
+                      top: responsive.hp(50),
+                      left: responsive.wp(10),
+                      child: Container(
+                        color: Colors.white,
+                        width: responsive.wp(80),
+                        height: responsive.hp(15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Validando...",
+                              style: TextStyle(
+                                color: Color(0xFF5B6978),
                               ),
-                              Text(
-                                "Validando...",
-                                style: TextStyle(
-                                  color: Color(0xFF5B6978),
-                                ),
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         ),
-                      )
-                    : Container();
-              }),
+                      ),
+                    )
+                  : Container();
+            },
+          ),
 
           //_cargandoContenidoPuzzle(context),
         ],

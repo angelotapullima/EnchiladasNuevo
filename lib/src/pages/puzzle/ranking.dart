@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 class RankingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final String time = ModalRoute.of(context).settings.arguments;
     DateTime today = toDateMonthYear(DateTime.now());
     final puzzleBloc = ProviderBloc.puzzle(context);
     var horafotmat = today.toString().split(' ');
@@ -22,51 +21,50 @@ class RankingPage extends StatelessWidget {
 
     return Scaffold(
       body: StreamBuilder(
-          stream: puzzleBloc.puzzleTiempoStream,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<RankingPuzzle>> snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data.length > 0) {
-                if (snapshot.data.length == 1) {
-                  return RankingUno(list: snapshot.data);
-                  //return Container();
-                } else if (snapshot.data.length == 2) {
-                  return RankingDos(list: snapshot.data);
-                  //return Container();
-                } else if (snapshot.data.length == 3) {
-                  return RankingTres(list: snapshot.data);
-                  //return Container();
-                } else {
-                  return Mayor3(time: time, list: snapshot.data);
-                  //return Container();
-                }
+        stream: puzzleBloc.puzzleTiempoStream,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<RankingPuzzle>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              if (snapshot.data.length == 1) {
+                return RankingUno(list: snapshot.data);
+                //return Container();
+              } else if (snapshot.data.length == 2) {
+                return RankingDos(list: snapshot.data);
+                //return Container();
+              } else if (snapshot.data.length == 3) {
+                return RankingTres(list: snapshot.data);
+                //return Container();
               } else {
-                return Center(child: Text('No hay datos'));
+                return Mayor3(list: snapshot.data);
+                //return Container();
               }
             } else {
-              return Center(child: CupertinoActivityIndicator());
+              return Center(child: Text('No hay datos'));
             }
-          }),
+          } else {
+            return Center(child: CupertinoActivityIndicator());
+          }
+        },
+      ),
     );
   }
 }
 
 class Mayor3 extends StatelessWidget {
-  final String time;
   final List<RankingPuzzle> list;
-  const Mayor3({Key key, this.time, this.list}) : super(key: key);
+  const Mayor3({Key key, this.list}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
-    return Scaffold(
-        body: contenidoRankingMayora3(context, 'time', responsive, list));
+    return Scaffold(body: contenidoRankingMayora3(context, responsive, list));
   }
 
-  Widget contenidoRankingMayora3(BuildContext context, String time,
-      Responsive responsive, List<RankingPuzzle> data) {
-    final list3primeros = List<RankingPuzzle>();
-    final listrestantes = List<RankingPuzzle>();
+  Widget contenidoRankingMayora3(
+      BuildContext context, Responsive responsive, List<RankingPuzzle> data) {
+    final List<RankingPuzzle> list3primeros = [];
+    final List<RankingPuzzle> listrestantes = [];
 
     for (int i = 0; i < data.length; i++) {
       if (i > 2) {
@@ -87,14 +85,16 @@ class Mayor3 extends StatelessWidget {
         list3primeros.add(rankingPuzzle);
       }
     }
-    return CustomScrollView(slivers: <Widget>[
-      _crearAppbar(context, time, list3primeros),
-      SliverList(
-        delegate: SliverChildBuilderDelegate((BuildContext context, int i) {
-          return _cardRanking(responsive, listrestantes[i], i + 4);
-        }, childCount: listrestantes.length),
-      )
-    ]);
+    return CustomScrollView(
+      slivers: <Widget>[
+        _crearAppbar(context, list3primeros),
+        SliverList(
+          delegate: SliverChildBuilderDelegate((BuildContext context, int i) {
+            return _cardRanking(responsive, listrestantes[i], i + 4);
+          }, childCount: listrestantes.length),
+        )
+      ],
+    );
   }
 
   Widget _circulo(Size size, String foto) {
@@ -106,22 +106,26 @@ class Mayor3 extends StatelessWidget {
         child: CachedNetworkImage(
           cacheManager: CustomCacheManager(),
           progressIndicatorBuilder: (_, url, downloadProgress) {
-            return Stack(
-              children: [
-                Center(
-                  child: CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                    backgroundColor: Colors.green,
-                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+            return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+              child: Stack(
+                children: [
+                  Center(
+                    child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                      backgroundColor: Colors.green,
+                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                    ),
                   ),
-                ),
-                Center(
-                  child: (downloadProgress.progress != null)
-                      ? Text(
-                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                      : Container(),
-                )
-              ],
+                  Center(
+                    child: (downloadProgress.progress != null)
+                        ? Text(
+                            '${(downloadProgress.progress * 100).toInt().toString()}%')
+                        : Container(),
+                  )
+                ],
+              ),
             );
           },
           errorWidget: (context, url, error) => Image(
@@ -151,22 +155,26 @@ class Mayor3 extends StatelessWidget {
           child: CachedNetworkImage(
             cacheManager: CustomCacheManager(),
             progressIndicatorBuilder: (_, url, downloadProgress) {
-              return Stack(
-                children: [
-                  Center(
-                    child: CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                      backgroundColor: Colors.green,
-                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+              return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                child: Stack(
+                  children: [
+                    Center(
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        backgroundColor: Colors.green,
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: (downloadProgress.progress != null)
-                        ? Text(
-                            '${(downloadProgress.progress * 100).toInt().toString()}%')
-                        : Container(),
-                  )
-                ],
+                    Center(
+                      child: (downloadProgress.progress != null)
+                          ? Text(
+                              '${(downloadProgress.progress * 100).toInt().toString()}%')
+                          : Container(),
+                    )
+                  ],
+                ),
               );
             },
             errorWidget: (context, url, error) => Image.asset(
@@ -222,7 +230,7 @@ class Mayor3 extends StatelessWidget {
                       children: <Widget>[
                         _circulo(size, '${list[1].userImage}'),
                         Text(
-                          '${list[0].puzzleTiempo}',
+                          '${list[1].puzzleTiempo}',
 
                           textAlign: TextAlign.center,
                           //overflow:TextOverflow.ellipsis,
@@ -246,7 +254,7 @@ class Mayor3 extends StatelessWidget {
                       children: <Widget>[
                         _circulo(size, '${list[2].userImage}'),
                         Text(
-                          '${list[0].puzzleTiempo}',
+                          '${list[2].puzzleTiempo}',
 
                           textAlign: TextAlign.center,
                           //overflow:TextOverflow.ellipsis,
@@ -272,8 +280,7 @@ class Mayor3 extends StatelessWidget {
     );
   }
 
-  Widget _crearAppbar(
-      BuildContext context, String time, List<RankingPuzzle> list) {
+  Widget _crearAppbar(BuildContext context, List<RankingPuzzle> list) {
     final size = MediaQuery.of(context).size;
     return SliverAppBar(
       shape: ContinuousRectangleBorder(
@@ -328,23 +335,27 @@ class Mayor3 extends StatelessWidget {
               child: CachedNetworkImage(
                 cacheManager: CustomCacheManager(),
                 progressIndicatorBuilder: (_, url, downloadProgress) {
-                  return Stack(
-                    children: [
-                      Center(
-                        child: CircularProgressIndicator(
-                          value: downloadProgress.progress,
-                          backgroundColor: Colors.green,
-                          valueColor:
-                              new AlwaysStoppedAnimation<Color>(Colors.red),
+                  return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                            backgroundColor: Colors.green,
+                            valueColor:
+                                new AlwaysStoppedAnimation<Color>(Colors.red),
+                          ),
                         ),
-                      ),
-                      Center(
-                        child: (downloadProgress.progress != null)
-                            ? Text(
-                                '${(downloadProgress.progress * 100).toInt().toString()}%')
-                            : Container(),
-                      )
-                    ],
+                        Center(
+                          child: (downloadProgress.progress != null)
+                              ? Text(
+                                  '${(downloadProgress.progress * 100).toInt().toString()}%')
+                              : Container(),
+                        )
+                      ],
+                    ),
                   );
                 },
                 errorWidget: (context, url, error) => Image(
@@ -368,7 +379,7 @@ class Mayor3 extends StatelessWidget {
           Expanded(
             //child: Text('${ranking.personName}'),
             child: Text(
-              'Angelo Tapullima Del Aguila',
+              '${ranking.personName}',
               style: TextStyle(
                 fontSize: responsive.ip(1.8),
               ),

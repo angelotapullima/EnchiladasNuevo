@@ -39,8 +39,6 @@ class SliderDetalleProductos extends StatefulWidget {
 }
 
 class _SliderDetalleProductosState extends State<SliderDetalleProductos> {
-
-
   @override
   Widget build(BuildContext context) {
     final _pageController =
@@ -168,8 +166,7 @@ class DetalleProductitoss extends StatefulWidget {
   _DetalleProducto createState() => _DetalleProducto();
 }
 
-class _DetalleProducto extends State<DetalleProductitoss> { 
-
+class _DetalleProducto extends State<DetalleProductitoss> {
   bool mostrar = false;
 
   bool estadoDelivery = false;
@@ -193,13 +190,12 @@ class _DetalleProducto extends State<DetalleProductitoss> {
 
   @override
   void initState() {
-
-      favourite = widget.productosData.productoFavorito ==1?true:false;
+    favourite = widget.productosData.productoFavorito == 1 ? true : false;
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
     //final ProductosData productos = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
@@ -209,81 +205,76 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     productosIdBloc.verificarDisponibilidad(widget.productosData.idProducto);
 
     return Material(
-            child: Stack(
-          children: [
-            SlidingUpPanel(
-              maxHeight: _panelHeightOpen,
-              minHeight: responsive.hp(7), 
-              controller: panelController, 
-              parallaxEnabled: true,
-              parallaxOffset: 0.1,
-              backdropEnabled: true,
-              body: Stack(children: <Widget>[
-                _backgroundImage(context, widget.productosData),
-                _crearAppbar(responsive, widget.mostrarback),
-                TranslateAnimation(
-                  duration: const Duration(milliseconds: 400),
-                  child: _contenido(widget.productosData, responsive, context,
-                      productosIdBloc),
-                ),
-              ]),
-              panelBuilder: (sc) {
-                return TranslateAnimation(
-                    duration: const Duration(milliseconds: 600),
-                    child: _carritoProductos(responsive, sc),
-                  
-                );
-              },
-              borderRadius: const BorderRadius.only(
-                topLeft: const Radius.circular(20),
-                topRight: const Radius.circular(20),
-              ),
-              //onPanelSlide: (double pos) => setState(() {}),
+        child: Stack(
+      children: [
+        SlidingUpPanel(
+          maxHeight: _panelHeightOpen,
+          minHeight: responsive.hp(7),
+          controller: panelController,
+          parallaxEnabled: true,
+          parallaxOffset: 0.1,
+          backdropEnabled: true,
+          body: Stack(children: <Widget>[
+            _backgroundImage(context, widget.productosData),
+            _crearAppbar(responsive, widget.mostrarback),
+            TranslateAnimation(
+              duration: const Duration(milliseconds: 400),
+              child: _contenido(
+                  widget.productosData, responsive, context, productosIdBloc),
             ),
-            (widget.productosData.productoNuevo == '1')
-                ? Positioned(
-                    top: kToolbarHeight +responsive.hp(2),
-                    left: 0,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: responsive.wp(3),
-                        vertical: responsive.wp(.5),
-                      ),
-                      decoration: BoxDecoration(
-                          //borderRadius: BorderRadius.circular(10),
-                          color: Colors.red),
-                      child: Text(
-                        'Producto Nuevo',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(2),
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(),
-            (widget.productosData.productoDestacado != '0')
-                ? Positioned(
-                    top: kToolbarHeight +responsive.hp(2),
-                    //top: responsive.hp(40),
-                    right: 0,
-                    //left: 0,
-                    child: Container(
-                      /*  transform: Matrix4.translationValues(
-                                    -responsive.wp(29), 0, 0), */
-                      height: responsive.ip(7),
-                      width: responsive.ip(7),
-                      child: SvgPicture.asset('assets/medalla.svg'),
-                    ),
-                  )
-                : Container()
-          ],
-        )
-
-           
+          ]),
+          panelBuilder: (sc) {
+            return TranslateAnimation(
+              duration: const Duration(milliseconds: 600),
+              child: _carritoProductos(responsive, sc),
             );
-      
+          },
+          borderRadius: const BorderRadius.only(
+            topLeft: const Radius.circular(20),
+            topRight: const Radius.circular(20),
+          ),
+          //onPanelSlide: (double pos) => setState(() {}),
+        ),
+        (widget.productosData.productoNuevo == '1')
+            ? Positioned(
+                top: kToolbarHeight + responsive.hp(2),
+                left: 0,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(3),
+                    vertical: responsive.wp(.5),
+                  ),
+                  decoration: BoxDecoration(
+                      //borderRadius: BorderRadius.circular(10),
+                      color: Colors.red),
+                  child: Text(
+                    'Producto Nuevo',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(2),
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
+        (widget.productosData.productoDestacado != '0')
+            ? Positioned(
+                top: kToolbarHeight + responsive.hp(2),
+                //top: responsive.hp(40),
+                right: 0,
+                //left: 0,
+                child: Container(
+                  /*  transform: Matrix4.translationValues(
+                                    -responsive.wp(29), 0, 0), */
+                  height: responsive.ip(7),
+                  width: responsive.ip(7),
+                  child: SvgPicture.asset('assets/medalla.svg'),
+                ),
+              )
+            : Container()
+      ],
+    ));
   }
 
   Widget botonesBajos(Responsive responsive, ProductosData productosData,
@@ -297,44 +288,43 @@ class _DetalleProducto extends State<DetalleProductitoss> {
       child: Row(
         children: <Widget>[
           Container(
-              width: responsive.wp(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.red),
-              ),
-              child: Center(
-                child: favourite
-                    ? IconButton(
-                        onPressed: () {
-                          setState(() { 
-                            print('quitar');
-                            utils.quitarFavoritos(context, productosData);
-                            favourite=false;
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.solidHeart,
-                          color: Colors.red,
-                          size: responsive.ip(2.5),
-                        ),
-                      )
-                    : IconButton(
-                        onPressed: () {
-                          setState(() {
-                            print('agregar');
-                            utils.agregarFavoritos(context, productosData);
-                            favourite=true;
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.heart,
-                          color: Colors.red,
-                          size: responsive.ip(2.5),
-                        ),
+            width: responsive.wp(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.red),
+            ),
+            child: Center(
+              child: favourite
+                  ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          print('quitar');
+                          utils.quitarFavoritos(context, productosData);
+                          favourite = false;
+                        });
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.solidHeart,
+                        color: Colors.red,
+                        size: responsive.ip(2.5),
                       ),
-              ),
-            
+                    )
+                  : IconButton(
+                      onPressed: () {
+                        setState(() {
+                          print('agregar');
+                          utils.agregarFavoritos(context, productosData);
+                          favourite = true;
+                        });
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.heart,
+                        color: Colors.red,
+                        size: responsive.ip(2.5),
+                      ),
+                    ),
+            ),
           ),
           SizedBox(
             width: responsive.wp(5),
@@ -345,47 +335,45 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                 if (snapshot.hasData) {
                   if (snapshot.data.valor) {
                     return GestureDetector(
-                        child: Container(
-                          width: responsive.wp(65),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.red,
-                            border: Border.all(color: Colors.red),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Agregar al Carrito',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(2.5),
-                              ),
+                      child: Container(
+                        width: responsive.wp(65),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.red,
+                          border: Border.all(color: Colors.red),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Agregar al Carrito',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: responsive.ip(2.5),
                             ),
                           ),
                         ),
-                        onTap: () async {
-                          final adicionalesDatabase = AdicionalesDatabase();
+                      ),
+                      onTap: () async {
+                        final adicionalesDatabase = AdicionalesDatabase();
 
-                          await adicionalesDatabase
-                              .updateAdicionalesEnFalseDb();
+                        await adicionalesDatabase.updateAdicionalesEnFalseDb();
 
-                          //await utils.agregarAdicionalesDeProducto(productosData.productoAdicionalOpciones);
-                          final itemObservacionDatabase =
-                              ItemObservacionDatabase();
-                          itemObservacionDatabase.deleteItemObservacion();
+                        //await utils.agregarAdicionalesDeProducto(productosData.productoAdicionalOpciones);
+                        final itemObservacionDatabase =
+                            ItemObservacionDatabase();
+                        itemObservacionDatabase.deleteItemObservacion();
 
-                          agregarItemObservacion(context,
-                              productosData.idProducto, true, 'producto','');
+                        agregarItemObservacion(context,
+                            productosData.idProducto, true, 'producto', '');
 
-                          Navigator.of(context).push(_createRoute(
-                              productosData.idProducto,
-                              productosData.productoAdicionalOpciones));
-                          /* setState(() {
+                        Navigator.of(context).push(_createRoute(
+                            productosData.idProducto,
+                            productosData.productoAdicionalOpciones));
+                        /* setState(() {
                             mostrar =true;
                             
                           }); */
-                          //utils.agregarCarrito(productosData, context, "1");
-                        },
-                      
+                        //utils.agregarCarrito(productosData, context, "1");
+                      },
                     );
                   } else {
                     return InkWell(
@@ -447,13 +435,11 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     );
   }
 
-  Route _createRoute(
-      String idProducto, String adicionalObservacio ) {
+  Route _createRoute(String idProducto, String adicionalObservacio) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
         return DetalleObservaciones(
-            idProductoArgument: idProducto,
-            idCategoria: adicionalObservacio );
+            idProductoArgument: idProducto, idCategoria: adicionalObservacio);
       },
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, 1.0);
@@ -725,8 +711,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     );
   }
 
-  Widget _contenidoDeCarrito(
-      Responsive responsive, List<Carrito> carrito) {
+  Widget _contenidoDeCarrito(Responsive responsive, List<Carrito> carrito) {
     double subtotal = 0;
     double total = 0;
     double valorDelivery = 0;
@@ -782,7 +767,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
       ],
     );
   }
- 
+
   Widget _listaProductos(Responsive responsive, List<Carrito> carrito) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -887,25 +872,30 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                         child: CachedNetworkImage(
                           cacheManager: CustomCacheManager(),
                           progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
+                            return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: CircularProgressIndicator(
+                                      value: downloadProgress.progress,
+                                      backgroundColor: Colors.green,
+                                      valueColor:
+                                          new AlwaysStoppedAnimation<Color>(
+                                              Colors.red),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: (downloadProgress.progress != null)
+                                        ? Text(
+                                            '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                        : Container(),
+                                  )
+                                ],
                               ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                            );
+                          },
                           errorWidget: (context, url, error) => Image(
                               image: AssetImage('assets/carga_fallida.jpg'),
                               fit: BoxFit.cover),
@@ -1245,25 +1235,29 @@ class _DetalleProducto extends State<DetalleProductitoss> {
             child: CachedNetworkImage(
               cacheManager: CustomCacheManager(),
               progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Stack(
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  backgroundColor: Colors.green,
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.red),
-                                ),
-                              ),
-                              Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text(
-                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
-                              )
-                            ],
-                          );
-                        },
+                return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                          backgroundColor: Colors.green,
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.red),
+                        ),
+                      ),
+                      Center(
+                        child: (downloadProgress.progress != null)
+                            ? Text(
+                                '${(downloadProgress.progress * 100).toInt().toString()}%')
+                            : Container(),
+                      )
+                    ],
+                  ),
+                );
+              },
               errorWidget: (context, url, error) => Image(
                   image: AssetImage('assets/carga_fallida.jpg'),
                   fit: BoxFit.cover),

@@ -163,13 +163,9 @@ class CategoriasApi {
             productosData.sonido =decodedData['result']['data'][i]['categoria_sonido'];
             productosData.productoCarta = productos[x]['producto_carta'];
             productosData.productoDelivery = productos[x]['producto_delivery'];
+            productosData.productoOrden = productos[x]['producto_orden'];
 
          
-
-            
-
-           
-
             if (productosData.productoDestacado == '0') {
               productosData.productoEstadoDestacado = '0';
             } else {

@@ -21,7 +21,6 @@ class MiCuentaTab extends StatefulWidget {
 }
 
 class _MiCuentaTabState extends State<MiCuentaTab> {
-  GlobalKey _one = GlobalKey();
 
   Future<void> _launchInBrowser(String url) async {
     if (await canLaunch(url)) {
@@ -132,7 +131,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
                               ],
                             )
                           ]),
-                     
+                     _ordenes(responsive),
                       SizedBox(
                         height: responsive.hp(2),
                       ),

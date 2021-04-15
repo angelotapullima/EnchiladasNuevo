@@ -356,7 +356,7 @@ void actualizarObservacion(
 void showToast(String msg, int duration, ToastGravity gravity) {
   Fluttertoast.showToast(
       msg: '$msg',
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: Toast.LENGTH_LONG,
       gravity: gravity,
       timeInSecForIosWeb: duration,
       backgroundColor: Colors.black,

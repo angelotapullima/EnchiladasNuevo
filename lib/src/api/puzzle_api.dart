@@ -16,7 +16,7 @@ class PuzzleApi {
   final puzzleDatabase = PuzzleDatabase();
   Future<List<PuzzleDatum>> obtenerImagenesPuzzle() async {
     final url = '$_url/api/puzzle/listar_imagenes_activa';
-    final list = List<PuzzleDatum>();
+    final  List<PuzzleDatum> list =[];
     final resp = await http.post(url, body: {'app': 'true', 'tn': prefs.token});
 
     final decodedData = json.decode(resp.body);
@@ -50,13 +50,13 @@ class PuzzleApi {
     try {
       final formatFecha = fecha.split(' ');
       var formatFecha1 = formatFecha[0].toString();
-
+      print('token ${prefs.token}');
       final url = '$_url/api/puzzle/listar_tiempos_dia_nuevo';
       final resp = await http.post(url, body: {
         'app': 'true',
         'tn': prefs.token,
         'puzzle_fecha': formatFecha1.toString()
-      });
+      },);
 
       final decodedData = json.decode(resp.body);
 
@@ -94,20 +94,18 @@ class PuzzleApi {
         'id_user': prefs.idUser,
         'id_imagen': idImagen,
         'tn': prefs.token
-      });
+      },);
 
       final decodedData = json.decode(resp.body);
       if (decodedData['result']['code'] == 1) {
         if (decodedData['result']['data'].length > 0) {
           for (int i = 0; i < decodedData['result']['data'].length; i++) {
             RankingPuzzle puzzle = RankingPuzzle();
-            puzzle.idPuzzle = decodedData['result']['data'][i]['user_email'];
+            puzzle.idPuzzle = decodedData['result']['data'][i]['id_user'];
             puzzle.personName = decodedData['result']['data'][i]['person_name'];
-            puzzle.puzzleFecha =
-                decodedData['result']['data'][i]['puzzle_fecha'];
+            puzzle.puzzleFecha = decodedData['result']['data'][i]['puzzle_fecha'];
             puzzle.userImage = decodedData['result']['data'][i]['user_image'];
-            puzzle.puzzleTiempo =
-                decodedData['result']['data'][i]['puzzle_tiempo'];
+            puzzle.puzzleTiempo = decodedData['result']['data'][i]['puzzle_tiempo'];
             await rankingDatabase.insertarRanking(puzzle);
           }
         }

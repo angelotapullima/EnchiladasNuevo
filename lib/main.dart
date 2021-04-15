@@ -14,7 +14,6 @@ import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_pago_page.dart';
 import 'package:enchiladasapp/src/pages/pantalla_delivery_opciones.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
-import 'package:enchiladasapp/src/pages/puzzle/ranking/pantalla_puzzle_terminado.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
 import 'package:enchiladasapp/src/pages/detalle_promociones.dart';
 import 'package:enchiladasapp/src/pages/ticket.dart';
@@ -130,7 +129,7 @@ class _MyAppState extends State<MyApp> {
     pushNotificationProvider.initNotification();
 
     pushNotificationProvider.mensajesPush.listen((event) {
-      showToast('pruieb', 2, ToastGravity.TOP);
+      //showToast('pruieb', 2, ToastGravity.TOP);
       navigatorkey.currentState.pushNamed('notificationPage', arguments: event);
     });
 
@@ -204,12 +203,17 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<DetallePedidoBloc>(
-            create: (_) => DetallePedidoBloc()),
+          create: (_) => DetallePedidoBloc(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => MiUbicacionBloc()),
-          BlocProvider(create: (_) => MapaBloc()),
+          BlocProvider(
+            create: (_) => MiUbicacionBloc(),
+          ),
+          BlocProvider(
+            create: (_) => MapaBloc(),
+          ),
           //BlocProvider(create: ( _ ) => BusquedaBloc() ),
         ],
         child: ChangeNotifierProvider(
@@ -218,16 +222,14 @@ class _MyAppState extends State<MyApp> {
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               navigatorKey: navigatorkey,
-              initialRoute:  'splash',
+              initialRoute: 'splash',
               theme: ThemeData(
                 primarySwatch: Colors.red,
                 scaffoldBackgroundColor: Colors.grey[50],
                 canvasColor: Colors.transparent,
               ),
               routes: {
-
-                '/': (BuildContext context) => HomePage(), 
-                '/2': (BuildContext context) => PuzzleTerminado(), 
+                '/': (BuildContext context) => HomePage(),
                 'homeLocal': (BuildContext context) => HomeLocal(),
                 'HomePuzzle': (BuildContext context) => HomePuzzle(),
                 'puzzle': (BuildContext context) => PuzzlePage(),
@@ -260,7 +262,7 @@ class _MyAppState extends State<MyApp> {
                 'onboarding': (BuildContext context) => OnboardingPage(),
                 'productosCategoria': (BuildContext context) =>
                     ProductosCategoria(),
-               /*  'detallePromocionesLocal': (BuildContext context) =>
+                /*  'detallePromocionesLocal': (BuildContext context) =>
                     DetallePromocionesLocal(), */
                 'notificationPage': (BuildContext context) =>
                     NotificationPage(),

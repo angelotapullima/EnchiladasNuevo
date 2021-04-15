@@ -15,7 +15,6 @@ import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/pages/propina_page.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -97,10 +96,7 @@ class _DetallePagoState extends State<DetallePago> {
       }
     });
   }
-
-  GlobalKey _one = GlobalKey();
-  GlobalKey _two = GlobalKey();
-
+  
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = new Responsive.of(context);
@@ -175,7 +171,7 @@ class _DetallePagoState extends State<DetallePago> {
     final propinasBloc = ProviderBloc.propina(context);
     propinasBloc.obtenerPropinas();
 
-    final preferences = Preferences();
+
     String direpe = '';
     String refepe = '';
     String distritope = '';
@@ -262,7 +258,23 @@ class _DetallePagoState extends State<DetallePago> {
                   child: _listaProductos(context, responsive),
                 ),
                 Divider(),
-                
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(5),
+                  ),
+                  color: Colors.grey[200],
+                  child: Column(
+                    children: <Widget>[
+                      _numeroTelefono(usuarioBloc, context, responsive),
+                      
+                      Divider(),
+                      _direccion(direpe, refepe, distritope, responsive),
+                      
+                      Divider(),
+                    ],
+                  ),
+                ),
+                Divider(),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
                   child: Column(
@@ -995,7 +1007,6 @@ class _DetallePagoState extends State<DetallePago> {
             return GestureDetector(
               onTap: () {
                 /*   if (montoPagoController.text.length == 0) {
-
                   print('unfocus');
                   setState(() {});
                   _tipoPagoValue = 0;
