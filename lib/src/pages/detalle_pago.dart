@@ -1566,6 +1566,7 @@ class _DetallePagoState extends State<DetallePago> {
                       categoriasApi.obtenerAmbos(context);
                       Navigator.pop(context);
                     } else if (res.resp == 19) {
+                      Navigator.pop(context);
                     } else {
                       utils.showToast('Ocurrio un error, intentelo más tarde',
                           2, ToastGravity.TOP);
