@@ -85,10 +85,8 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     distancia = distance.toString();
     distancia = utils.format(distance);
 
-    final iconInicio =
-        await getMarkerInicioIcon(double.parse(distancia), responsive);
-    final iconDestino = await getMarkerDestinoIcon(
-        '${prefences.personName} ', double.parse(distancia));
+    final iconInicio = await getMarkerInicioIcon(double.parse(distancia), responsive);
+    final iconDestino = await getMarkerDestinoIcon('${prefences.personName} ', double.parse(distancia));
 
     final markerInicio = new Marker(
       anchor: Offset(0.0, 1.0),

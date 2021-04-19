@@ -103,6 +103,7 @@ class _SliderDetalleProductosState extends State<SliderDetalleProductos> {
                           height: responsive.hp(1),
                           padding: EdgeInsets.symmetric(
                             horizontal: responsive.wp(2),
+                            vertical: responsive.hp(1)
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),

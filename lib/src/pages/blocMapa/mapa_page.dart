@@ -12,7 +12,7 @@ import 'mi_ubicacion/mi_ubicacion_bloc.dart';
 class MapaPage extends StatefulWidget {
   final idPedido;
 
-  const MapaPage({Key key,  @required this.idPedido}) : super(key: key);
+  const MapaPage({Key key, @required this.idPedido}) : super(key: key);
 
   @override
   _MapaPageState createState() => _MapaPageState();
@@ -21,7 +21,6 @@ class MapaPage extends StatefulWidget {
 class _MapaPageState extends State<MapaPage> {
   @override
   void initState() {
-   
     context.bloc<MiUbicacionBloc>().iniciarSeguimiento(widget.idPedido);
 
     super.initState();
@@ -305,26 +304,33 @@ class _MapaPageState extends State<MapaPage> {
                               children: <Widget>[
                                 Text(
                                   'Distancia aprox. de Repartidor',
-                                  style: TextStyle(fontSize: responsive.ip(2)),
+                                  style: TextStyle(
+                                    fontSize: responsive.ip(2),
+                                  ),
                                 ),
-                                Text('${state.pedido[0].distancia} Km',
-                                    style: TextStyle(
-                                        fontSize: responsive.ip(2.1),
-                                        fontWeight: FontWeight.bold)),
+                                Text(
+                                  '${state.pedido[0].distancia} Km',
+                                  style: TextStyle(
+                                      fontSize: responsive.ip(2.1),
+                                      fontWeight: FontWeight.bold),
+                                ),
                                 SizedBox(
                                   height: responsive.hp(8),
                                 ),
-                                Text('Dirección de entrega',
-                                    style:
-                                        TextStyle(fontSize: responsive.ip(2))),
                                 Text(
-                                    ('${state.pedido[0].pedidoDireccion}' !=
-                                            null)
-                                        ? '${state.pedido[0].pedidoDireccion}'
-                                        : Container(),
-                                    style: TextStyle(
-                                        fontSize: responsive.ip(2.1),
-                                        fontWeight: FontWeight.bold)),
+                                  'Dirección de entrega',
+                                  style: TextStyle(
+                                    fontSize: responsive.ip(2),
+                                  ),
+                                ),
+                                Text(
+                                  ('${state.pedido[0].pedidoDireccion}' != null)
+                                      ? '${state.pedido[0].pedidoDireccion}'
+                                      : Container(),
+                                  style: TextStyle(
+                                      fontSize: responsive.ip(2.1),
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                           )
