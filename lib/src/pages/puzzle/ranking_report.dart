@@ -83,6 +83,8 @@ class _RankingReportState extends State<RankingReport> {
           width: double.infinity,
           child: DatePicker(
             firstDate,
+                  height: responsive.hp(14),
+                  width: responsive.wp(15),
             initialSelectedDate: today,
             selectionColor: Colors.green,
             locale: 'es_Es',
