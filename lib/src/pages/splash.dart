@@ -27,15 +27,14 @@ class _SplashState extends State<Splash> {
       final preferences = Preferences();
       final usuarioDatabase = UsuarioDatabase();
 
-      if (preferences.estadoCargaInicial == null ||
-          preferences.estadoCargaInicial == '0') {
-        await categoriasApi.obtenerAmbos(context);
+      if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
+        //await categoriasApi.obtenerAmbos(context);
 
         await configuracionApi.configuracion();
 
         preferences.estadoCargaInicial = '1';
       } else {
-        categoriasApi.obtenerAmbos(context);
+        //categoriasApi.obtenerAmbos(context);
 
         configuracionApi.configuracion();
       }
@@ -56,6 +55,7 @@ class _SplashState extends State<Splash> {
     final responsive = Responsive.of(context);
 
     final porcentajeBloc = ProviderBloc.porcentaje(context);
+    porcentajeBloc.changePorcentaje(0);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -106,18 +106,14 @@ class _SplashState extends State<Splash> {
                             children: [
                               Text(
                                 'Estamos cargando nuestros platos',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.8),
-                                    color: Colors.white),
+                                style: TextStyle(fontSize: responsive.ip(1.8), color: Colors.white),
                               ),
                               SizedBox(
                                 width: responsive.wp(3),
                               ),
                               Text(
                                 '$porcentaje%',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.8),
-                                    color: Colors.white),
+                                style: TextStyle(fontSize: responsive.ip(1.8), color: Colors.white),
                               ),
                             ],
                           );
