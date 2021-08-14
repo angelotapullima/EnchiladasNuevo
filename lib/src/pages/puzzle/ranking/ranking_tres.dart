@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/material.dart';
 
 class RankingTres extends StatelessWidget {
@@ -21,26 +20,17 @@ class RankingTres extends StatelessWidget {
           Positioned(
             top: responsive.hp(25),
             right: responsive.wp(30),
-            child: CirculoItenRanking(
-                nombre: list[0].personName,
-                tiempo: list[0].puzzleTiempo,
-                foto: '$imagen1'),
+            child: CirculoItenRanking(nombre: list[0].personName, tiempo: list[0].puzzleTiempo, foto: '$imagen1'),
           ),
           Positioned(
             top: responsive.hp(50),
             left: responsive.wp(4),
-            child: CirculoItenRanking(
-                nombre: list[1].personName,
-                tiempo: list[1].puzzleTiempo,
-                foto: '$imagen2'),
+            child: CirculoItenRanking(nombre: list[1].personName, tiempo: list[1].puzzleTiempo, foto: '$imagen2'),
           ),
           Positioned(
             top: responsive.hp(50),
             right: responsive.wp(4),
-            child: CirculoItenRanking(
-                nombre: list[2].personName,
-                tiempo: list[2].puzzleTiempo,
-                foto: '$imagen3'),
+            child: CirculoItenRanking(nombre: list[2].personName, tiempo: list[2].puzzleTiempo, foto: '$imagen3'),
           ),
           AppBar(
             backgroundColor: Colors.transparent,
@@ -69,8 +59,7 @@ class CirculoItenRanking extends StatelessWidget {
   final String foto;
   final String nombre;
   final String tiempo;
-  CirculoItenRanking({Key key, this.foto, this.nombre, this.tiempo})
-      : super(key: key);
+  CirculoItenRanking({Key key, this.foto, this.nombre, this.tiempo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,34 +75,27 @@ class CirculoItenRanking extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(100.0),
               child: CachedNetworkImage(
-                cacheManager: CustomCacheManager(),
                 progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                  ),
-                                ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                    errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                  return Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                            backgroundColor: Colors.green,
+                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                          ),
+                        ),
+                        Center(
+                          child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
+                        )
+                      ],
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                 imageUrl: foto,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(

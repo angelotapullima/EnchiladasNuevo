@@ -47,9 +47,9 @@ class CategoriasApi {
   Future<bool> obtenerAmbos(BuildContext context) async {
     try {
       final url = '$urlBase/api/categoria/listar_categorias_solo_productos';
-      
+
       final preferences = Preferences();
-      final resp = await http.post(url, body: {'numero': '1'});
+      final resp = await http.post((Uri.parse(url)), body: {'numero': '1'});
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       if (decodedData == null) return false;
 
@@ -63,35 +63,23 @@ class CategoriasApi {
 
           print('porcentaje $porcentaje');
 
-          if (preferences.estadoCargaInicial == null ||
-              preferences.estadoCargaInicial == '0') {
+          if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
             utils.porcentaje(context, porcentaje);
           }
 
           CategoriaData categoriaData = CategoriaData();
 
-          categoriaData.idCategoria =
-              decodedData['result']['data'][i]['id_categoria'];
-          categoriaData.categoriaNombre =
-              decodedData['result']['data'][i]['categoria_nombre'];
-          categoriaData.categoriaIcono =
-              decodedData['result']['data'][i]['categoria_icono'];
-          categoriaData.categoriaTipo =
-              decodedData['result']['data'][i]['categoria_tipo'];
-          categoriaData.categoriaFoto =
-              decodedData['result']['data'][i]['categoria_foto'];
-          categoriaData.categoriaBanner =
-              decodedData['result']['data'][i]['categoria_banner'];
-          categoriaData.categoriaPromocion =
-              decodedData['result']['data'][i]['categoria_promocion'];
-          categoriaData.categoriaSonido =
-              decodedData['result']['data'][i]['categoria_sonido'];
-          categoriaData.categoriaEstado =
-              decodedData['result']['data'][i]['categoria_estado'];
-          categoriaData.categoriaMostrarApp =
-              decodedData['result']['data'][i]['categoria_mostrar_app'];
-          categoriaData.categoriaOrden =
-              decodedData['result']['data'][i]['categoria_orden'];
+          categoriaData.idCategoria = decodedData['result']['data'][i]['id_categoria'];
+          categoriaData.categoriaNombre = decodedData['result']['data'][i]['categoria_nombre'];
+          categoriaData.categoriaIcono = decodedData['result']['data'][i]['categoria_icono'];
+          categoriaData.categoriaTipo = decodedData['result']['data'][i]['categoria_tipo'];
+          categoriaData.categoriaFoto = decodedData['result']['data'][i]['categoria_foto'];
+          categoriaData.categoriaBanner = decodedData['result']['data'][i]['categoria_banner'];
+          categoriaData.categoriaPromocion = decodedData['result']['data'][i]['categoria_promocion'];
+          categoriaData.categoriaSonido = decodedData['result']['data'][i]['categoria_sonido'];
+          categoriaData.categoriaEstado = decodedData['result']['data'][i]['categoria_estado'];
+          categoriaData.categoriaMostrarApp = decodedData['result']['data'][i]['categoria_mostrar_app'];
+          categoriaData.categoriaOrden = decodedData['result']['data'][i]['categoria_orden'];
 
           categoriasDatabase.insertarCategoriasDb(categoriaData);
 
@@ -100,34 +88,20 @@ class CategoriasApi {
           temporizador = decodedData['result']['data'][i]['temporizador'];
 
           TemporizadorModel temporizadorModel = TemporizadorModel();
-          temporizadorModel.idTemporizador =
-              decodedData['result']['data'][i]['id_categoria'];
-          temporizadorModel.temporizadorTipo =
-              temporizador[0]['temporizador_tipo'];
-          temporizadorModel.temporizadorFechainicio =
-              temporizador[0]['temporizador_fechainicio'];
-          temporizadorModel.temporizadorFechafin =
-              temporizador[0]['temporizador_fechafin'];
-          temporizadorModel.temporizadorHorainicio =
-              temporizador[0]['temporizador_horainicio'];
-          temporizadorModel.temporizadorHorafin =
-              temporizador[0]['temporizador_horafin'];
-          temporizadorModel.temporizadorMensaje =
-              temporizador[0]['temporizador_mensaje'];
-          temporizadorModel.temporizadorLunes =
-              temporizador[0]['temporizador_dias']['Lunes'];
-          temporizadorModel.temporizadorMartes =
-              temporizador[0]['temporizador_dias']['Martes'];
-          temporizadorModel.temporizadorMiercoles =
-              temporizador[0]['temporizador_dias']['Miercoles'];
-          temporizadorModel.temporizadorJueves =
-              temporizador[0]['temporizador_dias']['Jueves'];
-          temporizadorModel.temporizadorViernes =
-              temporizador[0]['temporizador_dias']['Viernes'];
-          temporizadorModel.temporizadorSabado =
-              temporizador[0]['temporizador_dias']['Sabado'];
-          temporizadorModel.temporizadorDomingo =
-              temporizador[0]['temporizador_dias']['Domingo'];
+          temporizadorModel.idTemporizador = decodedData['result']['data'][i]['id_categoria'];
+          temporizadorModel.temporizadorTipo = temporizador[0]['temporizador_tipo'];
+          temporizadorModel.temporizadorFechainicio = temporizador[0]['temporizador_fechainicio'];
+          temporizadorModel.temporizadorFechafin = temporizador[0]['temporizador_fechafin'];
+          temporizadorModel.temporizadorHorainicio = temporizador[0]['temporizador_horainicio'];
+          temporizadorModel.temporizadorHorafin = temporizador[0]['temporizador_horafin'];
+          temporizadorModel.temporizadorMensaje = temporizador[0]['temporizador_mensaje'];
+          temporizadorModel.temporizadorLunes = temporizador[0]['temporizador_dias']['Lunes'];
+          temporizadorModel.temporizadorMartes = temporizador[0]['temporizador_dias']['Martes'];
+          temporizadorModel.temporizadorMiercoles = temporizador[0]['temporizador_dias']['Miercoles'];
+          temporizadorModel.temporizadorJueves = temporizador[0]['temporizador_dias']['Jueves'];
+          temporizadorModel.temporizadorViernes = temporizador[0]['temporizador_dias']['Viernes'];
+          temporizadorModel.temporizadorSabado = temporizador[0]['temporizador_dias']['Sabado'];
+          temporizadorModel.temporizadorDomingo = temporizador[0]['temporizador_dias']['Domingo'];
 
           await temporizadorDatabase.insertarTemporizador(temporizadorModel);
 
@@ -144,9 +118,7 @@ class CategoriasApi {
           for (int x = 0; x < productos.length; x++) {
             final idproducto = productos[x]['id_producto'];
 
-            
-
-            final datoproducto =await productoDatabase.consultarPorId(idproducto);
+            final datoproducto = await productoDatabase.consultarPorId(idproducto);
             //print('id productos ${datoproducto.length}');
             ProductosData productosData = ProductosData();
             productosData.idProducto = productos[x]['id_producto'];
@@ -156,16 +128,15 @@ class CategoriasApi {
             productosData.productoPrecio = productos[x]['producto_precio'];
             productosData.productoUnidad = productos[x]['producto_unidad'];
             productosData.productoEstado = productos[x]['producto_estado'];
-            productosData.productoDestacado =productos[x]['producto_destacado'];
+            productosData.productoDestacado = productos[x]['producto_destacado'];
             productosData.productoNuevo = productos[x]['producto_nuevo'];
-            productosData.productoDescripcion =productos[x]['producto_detalle'];
-            productosData.productoComentario =productos[x]['producto_comentario'];
-            productosData.sonido =decodedData['result']['data'][i]['categoria_sonido'];
+            productosData.productoDescripcion = productos[x]['producto_detalle'];
+            productosData.productoComentario = productos[x]['producto_comentario'];
+            productosData.sonido = decodedData['result']['data'][i]['categoria_sonido'];
             productosData.productoCarta = productos[x]['producto_carta'];
             productosData.productoDelivery = productos[x]['producto_delivery'];
             productosData.productoOrden = productos[x]['producto_orden'];
 
-         
             if (productosData.productoDestacado == '0') {
               productosData.productoEstadoDestacado = '0';
             } else {
@@ -595,23 +566,17 @@ class CategoriasApi {
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
 
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+      utils.showToast("Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return false;
     }
   }
 
   Future<bool> obtenerAdicionalesPorProducto(String idProducto) async {
-
     print(idProducto);
     try {
       final url = '$urlBase/api/categoria/listar_adicionales_producto';
 
-      final resp = await http.post(url, body: {
-
-
-        'id_producto':idProducto
-      });
+      final resp = await http.post((Uri.parse(url)), body: {'id_producto': idProducto});
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       if (decodedData == null) return false;
 
@@ -623,8 +588,7 @@ class CategoriasApi {
       await opcionesSaboresDatabase.deleteOpcionesSabores(idProducto);
 
       await acompanhamientosDatabase.deleteAcompanhamientos(idProducto);
-      await opcionesAcompanhamientosDatabase
-          .deleteOpcionesAcompanhamientos(idProducto);
+      await opcionesAcompanhamientosDatabase.deleteOpcionesAcompanhamientos(idProducto);
 
       await especialesADatabase.deleteEspecialesA(idProducto);
       await opcionesespecialesADatabase.deleteOpcionesEspecialesA(idProducto);
@@ -642,21 +606,15 @@ class CategoriasApi {
 
       ObservacionesFijas observacionesFijas = ObservacionesFijas();
       observacionesFijas.idProducto = idProducto;
-      observacionesFijas.mostrar = decodedData['result']['data'] ['producto_observaciones_fijas']['mostrar_fijas'];
+      observacionesFijas.mostrar = decodedData['result']['data']['producto_observaciones_fijas']['mostrar_fijas'];
 
-      await observacionesFijasDatabase .insertarObservacionesFijas(observacionesFijas);
+      await observacionesFijasDatabase.insertarObservacionesFijas(observacionesFijas);
 
       var productillos = decodedData['result']['data']['producto_observaciones_fijas']['productos'];
 
       if (productillos.length > 0) {
-        for (var z = 0;
-            z <
-                decodedData['result']['data']['producto_observaciones_fijas']
-                        ['productos']
-                    .length;
-            z++) {
-          final productoIdbuscado =
-              await productoDatabase.consultarPorId(productillos[z].toString());
+        for (var z = 0; z < decodedData['result']['data']['producto_observaciones_fijas']['productos'].length; z++) {
+          final productoIdbuscado = await productoDatabase.consultarPorId(productillos[z].toString());
 
           if (productoIdbuscado.length > 0) {
             ProductosFijos productosFijos = ProductosFijos();
@@ -669,8 +627,7 @@ class CategoriasApi {
         }
       }
 
-      var saboresList = decodedData['result']['data']
-          ['producto_observaciones_fijas']['sabores'];
+      var saboresList = decodedData['result']['data']['producto_observaciones_fijas']['sabores'];
 
       if (saboresList.length > 0) {
         for (var f = 0; f < saboresList.length; f++) {
@@ -686,66 +643,50 @@ class CategoriasApi {
             for (var t = 0; t < listOpcionesSabores.length; t++) {
               OpcionesSabores opcionesSabores = OpcionesSabores();
               opcionesSabores.idProducto = idProducto;
-              opcionesSabores.tituloTextos =
-                  saboresList[f]['titulo'].toString();
+              opcionesSabores.tituloTextos = saboresList[f]['titulo'].toString();
               opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
 
-              await opcionesSaboresDatabase
-                  .insertarOpcionesSabores(opcionesSabores);
+              await opcionesSaboresDatabase.insertarOpcionesSabores(opcionesSabores);
             }
           }
         }
       }
 
-      var acompanhamientosList = decodedData['result']['data']
-          ['producto_observaciones_fijas']['acompanhamientos'];
+      var acompanhamientosList = decodedData['result']['data']['producto_observaciones_fijas']['acompanhamientos'];
 
       if (acompanhamientosList.length > 0) {
         for (var y = 0; y < acompanhamientosList.length; y++) {
           Acompanhamientos acompanhamientosModel = Acompanhamientos();
-          acompanhamientosModel.idProducto =idProducto;
-          acompanhamientosModel.tituloTextos =
-              acompanhamientosList[y]['titulo'].toString();
+          acompanhamientosModel.idProducto = idProducto;
+          acompanhamientosModel.tituloTextos = acompanhamientosList[y]['titulo'].toString();
 
-          await acompanhamientosDatabase
-              .insertarAcompanhamientos(acompanhamientosModel);
+          await acompanhamientosDatabase.insertarAcompanhamientos(acompanhamientosModel);
 
-          var listOpcionesAcompanhamientos =
-              acompanhamientosList[y]['opciones'];
+          var listOpcionesAcompanhamientos = acompanhamientosList[y]['opciones'];
           if (listOpcionesAcompanhamientos.length > 0) {
             for (var t = 0; t < listOpcionesAcompanhamientos.length; t++) {
-              OpcionesAcompanhamientos opcionesAcompanhamientosModel =
-                  OpcionesAcompanhamientos();
+              OpcionesAcompanhamientos opcionesAcompanhamientosModel = OpcionesAcompanhamientos();
               opcionesAcompanhamientosModel.idProducto = idProducto;
-              opcionesAcompanhamientosModel.tituloTextos =
-                  acompanhamientosList[y]['titulo'];
-              opcionesAcompanhamientosModel.nombreTexto =
-                  listOpcionesAcompanhamientos[t].toString();
+              opcionesAcompanhamientosModel.tituloTextos = acompanhamientosList[y]['titulo'];
+              opcionesAcompanhamientosModel.nombreTexto = listOpcionesAcompanhamientos[t].toString();
 
-              await opcionesAcompanhamientosDatabase
-                  .insertarOpcionesAcompanhamientos(
-                      opcionesAcompanhamientosModel);
+              await opcionesAcompanhamientosDatabase.insertarOpcionesAcompanhamientos(opcionesAcompanhamientosModel);
             }
           }
         }
       }
 
-      var variblesObservaciones =
-          decodedData['result']['data']['producto_observaciones_variables'];
+      var variblesObservaciones = decodedData['result']['data']['producto_observaciones_variables'];
       if (variblesObservaciones.length > 0) {
         for (var a = 0; a < variblesObservaciones.length; a++) {
-          ObservacionesVariables observacionesVariables =
-              ObservacionesVariables();
+          ObservacionesVariables observacionesVariables = ObservacionesVariables();
           observacionesVariables.idProducto = idProducto;
-          observacionesVariables.nombreVariable =
-              variblesObservaciones[a].toString();
-          await observacionesVariablesDatabase
-              .insertarObservacionesVariables(observacionesVariables);
+          observacionesVariables.nombreVariable = variblesObservaciones[a].toString();
+          await observacionesVariablesDatabase.insertarObservacionesVariables(observacionesVariables);
         }
       }
 
-      var especialesAList = decodedData['result']['data']
-          ['producto_observaciones_fijas']['especial_1'];
+      var especialesAList = decodedData['result']['data']['producto_observaciones_fijas']['especial_1'];
       if (especialesAList.length > 0) {
         for (var f = 0; f < especialesAList.length; f++) {
           Sabores sabores = Sabores();
@@ -760,19 +701,16 @@ class CategoriasApi {
             for (var t = 0; t < listOpcionesSabores.length; t++) {
               OpcionesSabores opcionesSabores = OpcionesSabores();
               opcionesSabores.idProducto = idProducto;
-              opcionesSabores.tituloTextos =
-                  especialesAList[f]['titulo'].toString();
+              opcionesSabores.tituloTextos = especialesAList[f]['titulo'].toString();
               opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
 
-              await opcionesespecialesADatabase
-                  .insertarOpcionesEspecialesA(opcionesSabores);
+              await opcionesespecialesADatabase.insertarOpcionesEspecialesA(opcionesSabores);
             }
           }
         }
       }
 
-      var especialesBList = decodedData['result']['data']
-          ['producto_observaciones_fijas']['especial_2'];
+      var especialesBList = decodedData['result']['data']['producto_observaciones_fijas']['especial_2'];
 
       if (especialesBList.length > 0) {
         for (var f = 0; f < especialesBList.length; f++) {
@@ -788,19 +726,16 @@ class CategoriasApi {
             for (var t = 0; t < listOpcionesSabores.length; t++) {
               OpcionesSabores opcionesSabores = OpcionesSabores();
               opcionesSabores.idProducto = idProducto;
-              opcionesSabores.tituloTextos =
-                  especialesBList[f]['titulo'].toString();
+              opcionesSabores.tituloTextos = especialesBList[f]['titulo'].toString();
               opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
 
-              await opcionesespecialesBDatabase
-                  .insertarOpcionesEspecialesB(opcionesSabores);
+              await opcionesespecialesBDatabase.insertarOpcionesEspecialesB(opcionesSabores);
             }
           }
         }
       }
 
-      var especialesCList = decodedData['result']['data']
-          ['producto_observaciones_fijas']['especial_3'];
+      var especialesCList = decodedData['result']['data']['producto_observaciones_fijas']['especial_3'];
 
       if (especialesCList.length > 0) {
         for (var f = 0; f < especialesCList.length; f++) {
@@ -816,19 +751,16 @@ class CategoriasApi {
             for (var t = 0; t < listOpcionesSabores.length; t++) {
               OpcionesSabores opcionesSabores = OpcionesSabores();
               opcionesSabores.idProducto = idProducto;
-              opcionesSabores.tituloTextos =
-                  especialesCList[f]['titulo'].toString();
+              opcionesSabores.tituloTextos = especialesCList[f]['titulo'].toString();
               opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
 
-              await opcionesespecialesCDatabase
-                  .insertarOpcionesEspecialesC(opcionesSabores);
+              await opcionesespecialesCDatabase.insertarOpcionesEspecialesC(opcionesSabores);
             }
           }
         }
       }
 
-      var especialesDList = decodedData['result']['data']
-          ['producto_observaciones_fijas']['especial_4'];
+      var especialesDList = decodedData['result']['data']['producto_observaciones_fijas']['especial_4'];
 
       if (especialesDList.length > 0) {
         for (var f = 0; f < especialesDList.length; f++) {
@@ -844,29 +776,21 @@ class CategoriasApi {
             for (var t = 0; t < listOpcionesSabores.length; t++) {
               OpcionesSabores opcionesSabores = OpcionesSabores();
               opcionesSabores.idProducto = idProducto;
-              opcionesSabores.tituloTextos =
-                  especialesDList[f]['titulo'].toString();
+              opcionesSabores.tituloTextos = especialesDList[f]['titulo'].toString();
               opcionesSabores.nombreTexto = listOpcionesSabores[t].toString();
 
-              await opcionesespecialesDDatabase
-                  .insertarOpcionesEspecialesD(opcionesSabores);
+              await opcionesespecialesDDatabase.insertarOpcionesEspecialesD(opcionesSabores);
             }
           }
         }
       }
 
-      var adicionalesList = decodedData['result']['data']
-          ['producto_observaciones_fijas']['adicional_categoria']['opciones'];
-      var adicionalesList2 = decodedData['result']['data']
-          ['producto_observaciones_fijas']['adicional_categoria_2']['opciones'];
-      var adicionalesList3 = decodedData['result']['data']
-          ['producto_observaciones_fijas']['adicional_categoria_3']['opciones'];
-      var adicionalesList4 = decodedData['result']['data']
-          ['producto_observaciones_fijas']['adicional_categoria_4']['opciones'];
-      var adicionalesList5 = decodedData['result']['data']
-          ['producto_observaciones_fijas']['adicional_categoria_5']['opciones'];
-      var adicionalesList6 = decodedData['result']['data']
-          ['producto_observaciones_fijas']['adicional_categoria_6']['opciones'];
+      var adicionalesList = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria']['opciones'];
+      var adicionalesList2 = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_2']['opciones'];
+      var adicionalesList3 = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_3']['opciones'];
+      var adicionalesList4 = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_4']['opciones'];
+      var adicionalesList5 = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_5']['opciones'];
+      var adicionalesList6 = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_6']['opciones'];
 
       if (adicionalesList.length > 0) {
         await adicionalesDatabase.deleteAdicionalesPorId(idProducto, '0');
@@ -877,8 +801,7 @@ class CategoriasApi {
           adicionalesModel.idProducto = idProducto;
           adicionalesModel.idProductoAdicional = adicionalesList[i];
           adicionalesModel.adicionalItem = '0';
-          adicionalesModel.titulo = decodedData['result']['data']
-              ['producto_observaciones_fijas']['adicional_categoria']['titulo'];
+          adicionalesModel.titulo = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria']['titulo'];
           adicionalesModel.adicionalSeleccionado = '0';
 
           await adicionalesDatabase.insertarAdicionales(adicionalesModel);
@@ -894,9 +817,7 @@ class CategoriasApi {
           adicionalesModel.idProducto = idProducto;
           adicionalesModel.idProductoAdicional = adicionalesList2[i];
           adicionalesModel.adicionalItem = '1';
-          adicionalesModel.titulo = decodedData['result']['data']
-                  ['producto_observaciones_fijas']['adicional_categoria_2']
-              ['titulo'];
+          adicionalesModel.titulo = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_2']['titulo'];
 
           adicionalesModel.adicionalSeleccionado = '0';
 
@@ -913,9 +834,7 @@ class CategoriasApi {
           adicionalesModel.idProducto = idProducto;
           adicionalesModel.idProductoAdicional = adicionalesList3[i];
           adicionalesModel.adicionalItem = '2';
-          adicionalesModel.titulo = decodedData['result']['data']
-                  ['producto_observaciones_fijas']['adicional_categoria_3']
-              ['titulo'];
+          adicionalesModel.titulo = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_3']['titulo'];
           adicionalesModel.adicionalSeleccionado = '0';
 
           await adicionalesDatabase.insertarAdicionales(adicionalesModel);
@@ -931,9 +850,7 @@ class CategoriasApi {
           adicionalesModel.idProducto = idProducto;
           adicionalesModel.idProductoAdicional = adicionalesList4[i];
           adicionalesModel.adicionalItem = '3';
-          adicionalesModel.titulo = decodedData['result']['data']
-                  ['producto_observaciones_fijas']['adicional_categoria_4']
-              ['titulo'];
+          adicionalesModel.titulo = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_4']['titulo'];
 
           adicionalesModel.adicionalSeleccionado = '0';
 
@@ -950,9 +867,7 @@ class CategoriasApi {
           adicionalesModel.idProducto = idProducto;
           adicionalesModel.idProductoAdicional = adicionalesList5[i];
           adicionalesModel.adicionalItem = '4';
-          adicionalesModel.titulo = decodedData['result']['data']
-                  ['producto_observaciones_fijas']['adicional_categoria_5']
-              ['titulo'];
+          adicionalesModel.titulo = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_5']['titulo'];
 
           adicionalesModel.adicionalSeleccionado = '0';
 
@@ -969,9 +884,7 @@ class CategoriasApi {
           adicionalesModel.idProducto = idProducto;
           adicionalesModel.idProductoAdicional = adicionalesList6[i];
           adicionalesModel.adicionalItem = '5';
-          adicionalesModel.titulo = decodedData['result']['data']
-                  ['producto_observaciones_fijas']['adicional_categoria_6']
-              ['titulo'];
+          adicionalesModel.titulo = decodedData['result']['data']['producto_observaciones_fijas']['adicional_categoria_6']['titulo'];
 
           adicionalesModel.adicionalSeleccionado = '0';
 
@@ -983,8 +896,7 @@ class CategoriasApi {
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
 
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+      utils.showToast("Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return false;
     }
   }

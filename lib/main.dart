@@ -43,30 +43,6 @@ import 'package:rxdart/rxdart.dart';
 
 import 'src/pages/blocMapa/mapa/mapa_bloc.dart';
 
-Future<void> showNotificationWithIconBadge(
-    ReceivedNotification notification) async {
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'icon badge channel', 'icon badge name', 'icon badge description');
-  var iOSPlatformChannelSpecifics = IOSNotificationDetails(badgeNumber: 1);
-  var platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  await flutterLocalNotificationsPlugin.show(0, '${notification.title}',
-      '${notification.body}', platformChannelSpecifics,
-      payload: notification.payload);
-}
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
-// Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
-final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-    BehaviorSubject<ReceivedNotification>();
-
-final BehaviorSubject<String> selectNotificationSubject =
-    BehaviorSubject<String>();
-
-NotificationAppLaunchDetails notificationAppLaunchDetails;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -74,33 +50,9 @@ void main() async {
 
   await prefs.initPrefs();
 
-  notificationAppLaunchDetails =
-      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  final firebase = FirebaseInstance();
 
-  var initializationSettingsAndroid = AndroidInitializationSettings('logo');
-  // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
-  // of the `IOSFlutterLocalNotificationsPlugin` class
-  var initializationSettingsIOS = IOSInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: true,
-      onDidReceiveLocalNotification:
-          (int id, String title, String body, String payload) async {
-        didReceiveLocalNotificationSubject.add(
-          ReceivedNotification(
-              id: id, title: title, body: body, payload: payload),
-        );
-      });
-  var initializationSettings = InitializationSettings(
-      initializationSettingsAndroid, initializationSettingsIOS);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
-    }
-    selectNotificationSubject.add(payload);
-  });
-
+  firebase.initConfig();
   final appleSignInAvailable = await AppleSignInAvailable.check();
   initializeDateFormatting('es_MX').then(
     (_) => runApp(
@@ -120,32 +72,25 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GlobalKey<NavigatorState> navigatorkey =
-      new GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatorkey = new GlobalKey<NavigatorState>();
 
   @override
   void initState() {
-    final pushNotificationProvider = PushNotificationProvider();
-    pushNotificationProvider.initNotification();
-
-    pushNotificationProvider.mensajesPush.listen((event) {
-      //showToast('pruieb', 2, ToastGravity.TOP);
+    PushNotificationService.messagesStream.listen((event) {
+      print('cuando la app esta abierta');
       navigatorkey.currentState.pushNamed('notificationPage', arguments: event);
     });
-
     _requestIOSPermissions();
     _configureDidReceiveLocalNotificationSubject();
     _configureSelectNotificationSubject();
+    super.initState();
     /* final pushNotificationProvider = PushNotificationProvider();
     pushNotificationProvider.initNotification();  */
     super.initState();
   }
 
   void _requestIOSPermissions() {
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
+    flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
           alert: true,
           badge: true,
           sound: true,
@@ -158,20 +103,16 @@ class _MyAppState extends State<MyApp> {
         await showDialog(
           context: context,
           builder: (BuildContext context) => CupertinoAlertDialog(
-            title: receivedNotification.title != null
-                ? Text(receivedNotification.title)
-                : null,
-            content: receivedNotification.body != null
-                ? Text(receivedNotification.body)
-                : null,
+            title: receivedNotification.title != null ? Text(receivedNotification.title) : null,
+            content: receivedNotification.body != null ? Text(receivedNotification.body) : null,
             actions: [
               CupertinoDialogAction(
                 isDefaultAction: true,
                 child: Text('Ok'),
                 onPressed: () async {
+                  print('_configureDidReceiveLocalNotificationSubject');
                   Navigator.of(context, rootNavigator: true).pop();
-                  await navigatorkey.currentState.pushNamed('notificationPage',
-                      arguments: receivedNotification.payload);
+                  await navigatorkey.currentState.pushNamed('onboarding', arguments: receivedNotification.payload);
                 },
               )
             ],
@@ -184,9 +125,9 @@ class _MyAppState extends State<MyApp> {
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen(
       (String payload) async {
-        showToast('pruieb', 2, ToastGravity.TOP);
-        await navigatorkey.currentState
-            .pushNamed('notificationPage', arguments: payload);
+        //esto funciona cuando tocas la notificacion que se genero con la app abierta
+        print('esta te lleva la pantalla seleccionada cuando la app esta abierta $payload');
+        await navigatorkey.currentState.pushNamed('notificationPage', arguments: payload);
       },
     );
   }
@@ -253,21 +194,15 @@ class _MyAppState extends State<MyApp> {
                 'timeline': (BuildContext context) => DeliveryTimeline(),
                 'webView': (BuildContext context) => WebViewExample(),
                 'ticket': (BuildContext context) => Ticket(),
-                'gestionarDirecciones': (BuildContext context) =>
-                    GestionarDirecciones(),
-                'detalleProductoFoto': (BuildContext context) =>
-                    DetalleProductoFoto(),
-                'detallePromociones': (BuildContext context) =>
-                    DetallePromociones(),
+                'gestionarDirecciones': (BuildContext context) => GestionarDirecciones(),
+                'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
+                'detallePromociones': (BuildContext context) => DetallePromociones(),
                 'onboarding': (BuildContext context) => OnboardingPage(),
-                'productosCategoria': (BuildContext context) =>
-                    ProductosCategoria(),
+                'productosCategoria': (BuildContext context) => ProductosCategoria(),
                 /*  'detallePromocionesLocal': (BuildContext context) =>
                     DetallePromocionesLocal(), */
-                'notificationPage': (BuildContext context) =>
-                    NotificationPage(),
-                'pantallaDeliveryOpciones': (BuildContext context) =>
-                    PantallaDeliveryOpciones(),
+                'notificationPage': (BuildContext context) => NotificationPage(),
+                'pantallaDeliveryOpciones': (BuildContext context) => PantallaDeliveryOpciones(),
               },
             ),
           ),

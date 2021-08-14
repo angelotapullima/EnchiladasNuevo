@@ -6,7 +6,6 @@ import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,8 +58,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     );
   }
 
-  Widget _miOrden(
-      Responsive responsive, CarritoBloc carritoBloc, UsuarioBloc usuarioBloc) {
+  Widget _miOrden(Responsive responsive, CarritoBloc carritoBloc, UsuarioBloc usuarioBloc) {
     final sinDatos = SafeArea(
       child: Column(
         children: <Widget>[
@@ -74,10 +72,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               children: <Widget>[
                 Text(
                   'Sus Pedidos',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: responsive.ip(2.6),
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.6), fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -140,14 +135,11 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         });
   }
 
-  Widget _listaPedidos(Responsive responsive, List<Carrito> carritoBloc,
-      UsuarioBloc usuarioBloc) {
+  Widget _listaPedidos(Responsive responsive, List<Carrito> carritoBloc, UsuarioBloc usuarioBloc) {
     double subtotal = 0;
     for (int i = 0; i < carritoBloc.length; i++) {
       if (carritoBloc[i].productoTipo != '1') {
-        subtotal = subtotal +
-            (double.parse(carritoBloc[i].productoPrecio) *
-                double.parse(carritoBloc[i].productoCantidad));
+        subtotal = subtotal + (double.parse(carritoBloc[i].productoPrecio) * double.parse(carritoBloc[i].productoCantidad));
       }
     }
 
@@ -164,10 +156,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               children: <Widget>[
                 Text(
                   'Sus Pedidos',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: responsive.ip(2.6),
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.6), fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -182,8 +171,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                     color: Colors.grey[50]),
                 child: StreamBuilder(
                   stream: usuarioBloc.usuarioStream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<User>> snapshotUser) {
+                  builder: (BuildContext context, AsyncSnapshot<List<Userio>> snapshotUser) {
                     if (snapshotUser.hasData) {
                       if (snapshotUser.data.length > 0) {
                         return ListView(
@@ -264,17 +252,12 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 children: [
                   Text(
                     '${carrito[index].productoNombre}',
-                    style: TextStyle(
-                        fontSize: responsive.ip(2),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
                   Text(
                     'S/.${carrito[index].productoPrecio}',
-                    style: TextStyle(
-                        fontSize: responsive.ip(2),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
+                    style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.bold, color: Colors.red),
                   ),
                   IconButton(
                     icon: Icon(
@@ -282,8 +265,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       size: responsive.ip(4),
                     ),
                     onPressed: () {
-                      utils.deleteProductoCarrito(
-                          context, carrito[index].idProducto);
+                      utils.deleteProductoCarrito(context, carrito[index].idProducto);
                     },
                   ),
                 ],
@@ -298,12 +280,10 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
 
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
     print('carrito ${carrito.productoFoto}');
-    final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
-        double.parse(carrito.productoCantidad));
+    final preciofinal = utils.format(double.parse(carrito.productoPrecio) * double.parse(carrito.productoCantidad));
 
     var observacionProducto = 'Toca para agregar Observación';
-    if (carrito.productoObservacion != null &&
-        carrito.productoObservacion != ' ') {
+    if (carrito.productoObservacion != null && carrito.productoObservacion != ' ') {
       observacionProducto = carrito.productoObservacion;
     }
 
@@ -319,34 +299,29 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
-                          cacheManager: CustomCacheManager(),
                           progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
+                            return Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: CircularProgressIndicator(
+                                      value: downloadProgress.progress,
+                                      backgroundColor: Colors.green,
+                                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                                    ),
                                   ),
-                                ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                          errorWidget: (context, url, error) => Image(
-                              image: AssetImage('assets/carga_fallida.jpg'),
-                              fit: BoxFit.cover),
+                                  Center(
+                                    child: (downloadProgress.progress != null)
+                                        ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
+                                        : Container(),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                          errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                           imageUrl: '${carrito.productoFoto}',
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
@@ -396,16 +371,14 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                               size: responsive.ip(4),
                             ),
                             onPressed: () {
-                              utils.deleteProductoCarrito(
-                                  context, carrito.idProducto);
+                              utils.deleteProductoCarrito(context, carrito.idProducto);
                             },
                           ),
                           SizedBox(
                             height: responsive.hp(2),
                           ),
                           Container(
-                            child: CantidadTab(
-                                carrito: carrito, llamada: this.llamado),
+                            child: CantidadTab(carrito: carrito, llamada: this.llamado),
                           )
                         ],
                       ),
@@ -417,8 +390,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    observacionProductoController.text =
-                        '${carrito.productoObservacion}';
+                    observacionProductoController.text = '${carrito.productoObservacion}';
                     modaldialogoObservacionProducto('${carrito.idProducto}');
                   },
                   child: Row(
@@ -478,9 +450,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 children: <Widget>[
                   Text(
                     'Ingrese la observación del producto',
-                    style: TextStyle(
-                        fontSize: responsive.ip(2.5),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
                   ),
                   TextField(
                     maxLines: 3,
@@ -492,15 +462,13 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                   FlatButton(
                     onPressed: () async {
                       if (observacionProductoController.text.length > 0) {
-                        utils.actualizarObservacion(
-                            context, observacionProductoController.text, id);
+                        utils.actualizarObservacion(context, observacionProductoController.text, id);
 
                         observacionProductoController.text = '';
 
                         Navigator.pop(context);
                       } else {
-                        utils.showToast('El campo no puede quedar vacio', 2,
-                            ToastGravity.TOP);
+                        utils.showToast('El campo no puede quedar vacio', 2, ToastGravity.TOP);
                       }
                     },
                     child: Container(
@@ -508,9 +476,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                         horizontal: responsive.ip(5),
                         vertical: responsive.ip(1),
                       ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.red),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.red),
                       child: Text(
                         'Aceptar',
                         textAlign: TextAlign.center,
@@ -681,8 +647,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
             FlatButton(
               onPressed: () async {
                 Navigator.pop(context);
-                Navigator.pushNamedAndRemoveUntil(
-                    context, 'login', (route) => false);
+                Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
               },
               child: Text('Continuar'),
             ),

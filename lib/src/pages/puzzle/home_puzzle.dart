@@ -4,7 +4,6 @@ import 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/widgets/DowloadPage.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -19,10 +18,8 @@ class _HomePuzzleState extends State<HomePuzzle> {
 
   final ScrollController _scrollController = new ScrollController();
 
-  
-
   @override
-  void dispose() { 
+  void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
@@ -60,8 +57,7 @@ class _HomePuzzleState extends State<HomePuzzle> {
                       ),
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, 'rankingReport',
-                          arguments: '0');
+                      Navigator.pushNamed(context, 'rankingReport', arguments: '0');
                     },
                   ),
                 )
@@ -76,8 +72,7 @@ class _HomePuzzleState extends State<HomePuzzle> {
   Widget _carouselTarjetas(Responsive responsive, PuzzleBloc puzzleBloc) {
     return StreamBuilder(
         stream: puzzleBloc.puzzleStream,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<PuzzleDatum>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<PuzzleDatum>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return _stackTarjetas(context, snapshot.data, responsive);
@@ -91,8 +86,7 @@ class _HomePuzzleState extends State<HomePuzzle> {
         });
   }
 
-  Widget _stackTarjetas(
-      BuildContext context, List<PuzzleDatum> puzzle, Responsive responsive) {
+  Widget _stackTarjetas(BuildContext context, List<PuzzleDatum> puzzle, Responsive responsive) {
     return Stack(
       children: <Widget>[
         _backgroundImage(puzzle, responsive),
@@ -118,35 +112,29 @@ class _HomePuzzleState extends State<HomePuzzle> {
               ),
               child: new Container(
                 child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
                   imageUrl: puzzle[index].imagenRuta,
                   progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                  ),
-                                ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
+                    return Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                              backgroundColor: Colors.green,
+                              valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                             ),
-                          );
-                        },
-                  errorWidget: (context, url, error) => Image(
-                      image: AssetImage('assets/carga_fallida.jpg'),
-                      fit: BoxFit.cover),
+                          ),
+                          Center(
+                            child:
+                                (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
@@ -164,16 +152,12 @@ class _HomePuzzleState extends State<HomePuzzle> {
     );
   }
 
-  Widget _carousel(
-      BuildContext context, List<PuzzleDatum> puzzle, Responsive responsive) {
+  Widget _carousel(BuildContext context, List<PuzzleDatum> puzzle, Responsive responsive) {
     final List<Widget> imageSliders = puzzle
         .map(
           (item) => Container(
-            child: DowloadImagen(
-                idImagen: item.idImagen,
-                devolucion:
-                    cardSlider(context, puzzle, item.imagenRuta, responsive),
-                foto: item.imagenRuta),
+            child:
+                DowloadImagen(idImagen: item.idImagen, devolucion: cardSlider(context, puzzle, item.imagenRuta, responsive), foto: item.imagenRuta),
           ),
         )
         .toList();
@@ -196,15 +180,13 @@ class _HomePuzzleState extends State<HomePuzzle> {
             curve: Curves.ease,
             duration: const Duration(milliseconds: 100),
           );
-          
         },
       ),
       items: imageSliders,
     );
   }
 
-  Widget cardSlider(BuildContext context, List<PuzzleDatum> puzzle,
-      String imagen, Responsive responsive) {
+  Widget cardSlider(BuildContext context, List<PuzzleDatum> puzzle, String imagen, Responsive responsive) {
     return Column(
       children: <Widget>[
         SizedBox(
@@ -215,35 +197,28 @@ class _HomePuzzleState extends State<HomePuzzle> {
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(20)),
               child: CachedNetworkImage(
-                cacheManager: CustomCacheManager(),
                 imageUrl: imagen,
                 progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                  ),
-                                ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                errorWidget: (context, url, error) => Image(
-                    image: AssetImage('assets/carga_fallida.jpg'),
-                    fit: BoxFit.cover),
+                  return Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                            backgroundColor: Colors.green,
+                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                          ),
+                        ),
+                        Center(
+                          child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
+                        )
+                      ],
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(

@@ -8,7 +8,6 @@ import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/widgets/chip_csm.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,11 +16,11 @@ class DetalleObservaciones extends StatefulWidget {
   final String idProductoArgument;
   final String idCategoria;
   //final String cantidadAdicional;
-  const DetalleObservaciones(
-      {Key key,
-      @required this.idProductoArgument,
-      @required this.idCategoria,})
-      : super(key: key);
+  const DetalleObservaciones({
+    Key key,
+    @required this.idProductoArgument,
+    @required this.idCategoria,
+  }) : super(key: key);
 
   @override
   _DetalleObservacionesState createState() => _DetalleObservacionesState();
@@ -86,8 +85,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
     final itemObservacionBloc = ProviderBloc.itemOb(context);
     if (cant == 0) {
-      observacionesProductoBloc.obtenerObservaciones(
-          context, widget.idProductoArgument);
+      observacionesProductoBloc.obtenerObservaciones(context, widget.idProductoArgument);
 
       itemObservacionBloc.obtenerObservacionItem();
     }
@@ -115,20 +113,14 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                 final optionsProductosVariables = List<String>();
 
                 if (snapshot.data[0].fijas[0].productosFijos.length > 0) {
-                  for (var x = 0;
-                      x < snapshot.data[0].fijas[0].productosFijos.length;
-                      x++) {
-                    String texto = snapshot
-                        .data[0].fijas[0].productosFijos[x].nombreProducto;
+                  for (var x = 0; x < snapshot.data[0].fijas[0].productosFijos.length; x++) {
+                    String texto = snapshot.data[0].fijas[0].productosFijos[x].nombreProducto;
                     optionsProductosFijos.add(texto);
                   }
                 }
                 if (snapshot.data[0].variables.length > 0) {
-                  for (var x = 0;
-                      x < snapshot.data[0].variables.length;
-                      x++) {
-                    String texto =
-                        snapshot.data[0].variables[x].nombreVariable;
+                  for (var x = 0; x < snapshot.data[0].variables.length; x++) {
+                    String texto = snapshot.data[0].variables[x].nombreVariable;
                     optionsProductosVariables.add(texto);
                   }
                 }
@@ -142,62 +134,50 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                 if (snapshot.data[0].fijas[0].sabores.length > 0) {
                   validacionSabores = true;
-                  maximoSabores = int.parse(
-                      snapshot.data[0].fijas[0].sabores[0].maximo);
+                  maximoSabores = int.parse(snapshot.data[0].fijas[0].sabores[0].maximo);
 
-                  tituloSabores =
-                      '${snapshot.data[0].fijas[0].sabores[0].tituloTextos} ';
+                  tituloSabores = '${snapshot.data[0].fijas[0].sabores[0].tituloTextos} ';
                 }
 
                 //especialesA
                 if (snapshot.data[0].fijas[0].especialesA.length > 0) {
                   print('hay especiales1');
                   validacionEspeciales1 = true;
-                  maximoespeciales1 = int.parse(
-                      snapshot.data[0].fijas[0].especialesA[0].maximo);
+                  maximoespeciales1 = int.parse(snapshot.data[0].fijas[0].especialesA[0].maximo);
 
-                  tituloEspeciales1 =
-                      '${snapshot.data[0].fijas[0].especialesA[0].tituloTextos}';
+                  tituloEspeciales1 = '${snapshot.data[0].fijas[0].especialesA[0].tituloTextos}';
                 }
 
                 //especialesB
                 if (snapshot.data[0].fijas[0].especialesB.length > 0) {
                   print('hay especiales2');
                   validacionEspeciales2 = true;
-                  maximoespeciales2 = int.parse(
-                      snapshot.data[0].fijas[0].especialesB[0].maximo);
+                  maximoespeciales2 = int.parse(snapshot.data[0].fijas[0].especialesB[0].maximo);
 
-                  tituloEspeciales2 =
-                      '${snapshot.data[0].fijas[0].especialesB[0].tituloTextos}';
+                  tituloEspeciales2 = '${snapshot.data[0].fijas[0].especialesB[0].tituloTextos}';
                 }
 
                 //especialesC
                 if (snapshot.data[0].fijas[0].especialesC.length > 0) {
                   print('hay especiales3');
                   validacionEspeciales3 = true;
-                  maximoespeciales3 = int.parse(
-                      snapshot.data[0].fijas[0].especialesC[0].maximo);
+                  maximoespeciales3 = int.parse(snapshot.data[0].fijas[0].especialesC[0].maximo);
 
-                  tituloEspeciales3 =
-                      '${snapshot.data[0].fijas[0].especialesC[0].tituloTextos}';
+                  tituloEspeciales3 = '${snapshot.data[0].fijas[0].especialesC[0].tituloTextos}';
                 }
 
                 //especialesD
                 if (snapshot.data[0].fijas[0].especialesD.length > 0) {
                   print('hay especiales4');
                   validacionEspeciales4 = true;
-                  maximoespeciales4 = int.parse(
-                      snapshot.data[0].fijas[0].especialesD[0].maximo);
+                  maximoespeciales4 = int.parse(snapshot.data[0].fijas[0].especialesD[0].maximo);
 
-                  tituloEspeciales4 =
-                      '${snapshot.data[0].fijas[0].especialesD[0].tituloTextos}';
+                  tituloEspeciales4 = '${snapshot.data[0].fijas[0].especialesD[0].tituloTextos}';
                 }
 
-                if (snapshot.data[0].fijas[0].acompanhamientos.length >=
-                    1) {
+                if (snapshot.data[0].fijas[0].acompanhamientos.length >= 1) {
                   validacionAcompa = true;
-                  tituloAcom =
-                      '${snapshot.data[0].fijas[0].acompanhamientos[0].tituloTextos}';
+                  tituloAcom = '${snapshot.data[0].fijas[0].acompanhamientos[0].tituloTextos}';
                 }
 
                 fijos = validacionFijos;
@@ -214,8 +194,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                     ListView(addAutomaticKeepAlives: true, children: [
                       StreamBuilder(
                         stream: itemObservacionBloc.itemObservacioStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<ProductosData>> snapshot) {
+                        builder: (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data.length > 0) {
                               return ListView.builder(
@@ -223,20 +202,15 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                 physics: ClampingScrollPhysics(),
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  if ('${snapshot.data[index].productoTipo}' !=
-                                      'adicional') {
-                                    nombredeProducto =
-                                        snapshot.data[index].productoNombre;
+                                  if ('${snapshot.data[index].productoTipo}' != 'adicional') {
+                                    nombredeProducto = snapshot.data[index].productoNombre;
                                   }
 
-                                  return ('${snapshot.data[index].productoTipo}' !=
-                                          'adicional')
+                                  return ('${snapshot.data[index].productoTipo}' != 'adicional')
                                       ? Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 15, right: 15, top: 8),
+                                          padding: EdgeInsets.only(left: 15, right: 15, top: 8),
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
@@ -244,54 +218,37 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                                     width: responsive.ip(18),
                                                     height: responsive.ip(13),
                                                     child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
+                                                      borderRadius: BorderRadius.circular(10),
                                                       child: CachedNetworkImage(
-                                                        cacheManager:
-                                                            CustomCacheManager(),
                                                         progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                  ),
-                                ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            Image(
-                                                                image: AssetImage(
-                                                                    'assets/carga_fallida.jpg'),
-                                                                fit: BoxFit
-                                                                    .cover),
-                                                        imageUrl:
-                                                            '${snapshot.data[index].productoFoto}',
-                                                        imageBuilder: (context,
-                                                                imageProvider) =>
-                                                            Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
-                                                              image:
-                                                                  imageProvider,
+                                                          return Container(
+                                                            width: double.infinity,
+                                                            height: double.infinity,
+                                                            child: Stack(
+                                                              children: [
+                                                                Center(
+                                                                  child: CircularProgressIndicator(
+                                                                    value: downloadProgress.progress,
+                                                                    backgroundColor: Colors.green,
+                                                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                                                                  ),
+                                                                ),
+                                                                Center(
+                                                                  child: (downloadProgress.progress != null)
+                                                                      ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
+                                                                      : Container(),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          );
+                                                        },
+                                                        errorWidget: (context, url, error) =>
+                                                            Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
+                                                        imageUrl: '${snapshot.data[index].productoFoto}',
+                                                        imageBuilder: (context, imageProvider) => Container(
+                                                          decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                              image: imageProvider,
                                                               fit: BoxFit.fill,
                                                             ),
                                                           ),
@@ -304,32 +261,23 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                                   ),
                                                   Expanded(
                                                     child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
                                                         Text(
-                                                          snapshot.data[index]
-                                                              .productoNombre,
+                                                          snapshot.data[index].productoNombre,
                                                           style: TextStyle(
                                                             color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: responsive
-                                                                .ip(1.8),
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: responsive.ip(1.8),
                                                           ),
                                                         ),
                                                         Text(
                                                           'S/. ${snapshot.data[index].productoPrecio}',
                                                           style: TextStyle(
                                                             color: Colors.red,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: responsive
-                                                                .ip(2),
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: responsive.ip(2),
                                                           ),
                                                         ),
                                                       ],
@@ -341,22 +289,16 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                                 height: responsive.hp(.6),
                                               ),
                                               Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
                                                   Text(
                                                     'Observaciones : ',
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            responsive.ip(1.8),
-                                                        fontWeight:
-                                                            FontWeight.w700),
+                                                    style: TextStyle(fontSize: responsive.ip(1.8), fontWeight: FontWeight.w700),
                                                   ),
                                                   Text(
                                                     '${snapshot.data[index].productoObservacion}',
                                                     style: TextStyle(
-                                                      fontSize:
-                                                          responsive.ip(1.7),
+                                                      fontSize: responsive.ip(1.7),
                                                     ),
                                                   ),
                                                 ],
@@ -367,36 +309,23 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                               (snapshot.data.length > 1)
                                                   ? Text(
                                                       'Adicionales',
-                                                      style: TextStyle(
-                                                          fontSize: responsive
-                                                              .ip(1.7),
-                                                          fontWeight:
-                                                              FontWeight.w700),
+                                                      style: TextStyle(fontSize: responsive.ip(1.7), fontWeight: FontWeight.w700),
                                                     )
                                                   : Container()
                                             ],
                                           ),
                                         )
                                       : Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 15.0),
+                                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
                                           child: RichText(
                                             text: TextSpan(children: [
                                               TextSpan(
-                                                text:
-                                                    '${snapshot.data[index].productoNombre}   ',
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w600),
+                                                text: '${snapshot.data[index].productoNombre}   ',
+                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
                                               ),
                                               TextSpan(
-                                                text:
-                                                    'S/.${snapshot.data[index].productoPrecio}',
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontWeight:
-                                                        FontWeight.w600),
+                                                text: 'S/.${snapshot.data[index].productoPrecio}',
+                                                style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
                                               ),
                                             ]),
                                           ),
@@ -423,12 +352,10 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                 onChanged: (val) {
                                   setState(() {
                                     cant++;
-                                    idProductoFijo =
-                                        '${snapshot.data[0].fijas[0].productosFijos[val].idRelacionado}';
+                                    idProductoFijo = '${snapshot.data[0].fijas[0].productosFijos[val].idRelacionado}';
                                     tagFijos = val;
 
-                                    utils.agregarItemObservacionFijos(context,
-                                        idProductoFijo, true, 'producto');
+                                    utils.agregarItemObservacionFijos(context, idProductoFijo, true, 'producto');
                                   });
                                 },
                                 choiceItems: C2Choice.listFrom<int, String>(
@@ -462,16 +389,12 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               onChanged: (val) {
                                 bool paso = false;
 
-                                if (tagsSabores.length >=
-                                    int.parse(snapshot.data[0].fijas[0]
-                                        .sabores[index].maximo)) {
+                                if (tagsSabores.length >= int.parse(snapshot.data[0].fijas[0].sabores[index].maximo)) {
                                   if (val.length > 0) {
                                     for (var i = 0; i < val.length; i++) {
                                       var valor = val[i].toString();
 
-                                      for (var x = 0;
-                                          x < tagsSabores.length;
-                                          x++) {
+                                      for (var x = 0; x < tagsSabores.length; x++) {
                                         var valor2 = tagsSabores[i].toString();
 
                                         if (valor == valor2) {
@@ -489,50 +412,47 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                       tagsSabores = val;
                                     });
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   }
                                 } else {
                                   setState(() {
                                     cant++;
                                     tagsSabores = val;
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   });
                                 }
                               },
                               choiceItems: C2Choice.listFrom<String, String>(
-                                source: snapshot.data[0].fijas[0].sabores[index]
-                                    .nombrecitos,
+                                source: snapshot.data[0].fijas[0].sabores[index].nombrecitos,
                                 value: (i, v) => v,
                                 label: (i, v) => v,
                                 tooltip: (i, v) => v,
@@ -547,17 +467,14 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                         shrinkWrap: true,
                         physics: ClampingScrollPhysics(),
                         addAutomaticKeepAlives: true,
-                        itemCount:
-                            snapshot.data[0].fijas[0].acompanhamientos.length,
+                        itemCount: snapshot.data[0].fijas[0].acompanhamientos.length,
                         itemBuilder: (context, index) {
                           return Content(
-                            title:
-                                '${snapshot.data[0].fijas[0].acompanhamientos[index].tituloTextos} (máximo 1 opción)',
+                            title: '${snapshot.data[0].fijas[0].acompanhamientos[index].tituloTextos} (máximo 1 opción)',
                             child: ChipsChoice<int>.single(
                               value: tagAcompanhamientos,
                               onChanged: (val) {
-                                idAcompanhamiento =
-                                    '${snapshot.data[0].fijas[0].acompanhamientos[0].acompanhamientos[val].nombreTexto}';
+                                idAcompanhamiento = '${snapshot.data[0].fijas[0].acompanhamientos[0].acompanhamientos[val].nombreTexto}';
 
                                 setState(() {
                                   cant++;
@@ -581,15 +498,13 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                 });
                               },
                               choiceItems: C2Choice.listFrom<int, String>(
-                                source: snapshot.data[0].fijas[0]
-                                    .acompanhamientos[index].nombrecitos,
+                                source: snapshot.data[0].fijas[0].acompanhamientos[index].nombrecitos,
                                 value: (i, v) => i,
                                 label: (i, v) => v,
                                 tooltip: (i, v) => v,
                               ),
                               choiceStyle: C2ChoiceStyle(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
+                                borderRadius: const BorderRadius.all(Radius.circular(5)),
                               ),
                               wrapped: true,
                             ),
@@ -611,19 +526,15 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               value: tagsEspeciales1,
                               onChanged: (val) {
                                 bool paso = false;
-                                int lalal = int.parse(snapshot.data[0].fijas[0]
-                                    .especialesA[index].maximo);
+                                int lalal = int.parse(snapshot.data[0].fijas[0].especialesA[index].maximo);
 
                                 if (tagsEspeciales1.length >= lalal) {
                                   if (val.length > 0) {
                                     for (var i = 0; i < val.length; i++) {
                                       var valor = val[i].toString();
 
-                                      for (var x = 0;
-                                          x < tagsEspeciales1.length;
-                                          x++) {
-                                        var valor2 =
-                                            tagsEspeciales1[i].toString();
+                                      for (var x = 0; x < tagsEspeciales1.length; x++) {
+                                        var valor2 = tagsEspeciales1[i].toString();
 
                                         if (valor == valor2) {
                                           paso = true;
@@ -640,50 +551,47 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                       tagsEspeciales1 = val;
                                     });
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   }
                                 } else {
                                   setState(() {
                                     cant++;
                                     tagsEspeciales1 = val;
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   });
                                 }
                               },
                               choiceItems: C2Choice.listFrom<String, String>(
-                                source: snapshot.data[0].fijas[0]
-                                    .especialesA[index].nombrecitos,
+                                source: snapshot.data[0].fijas[0].especialesA[index].nombrecitos,
                                 value: (i, v) => v,
                                 label: (i, v) => v,
                                 tooltip: (i, v) => v,
@@ -709,18 +617,13 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               onChanged: (val) {
                                 bool paso = false;
 
-                                if (tagsEspeciales2.length >=
-                                    int.parse(snapshot.data[0].fijas[0]
-                                        .especialesB[index].maximo)) {
+                                if (tagsEspeciales2.length >= int.parse(snapshot.data[0].fijas[0].especialesB[index].maximo)) {
                                   if (val.length > 0) {
                                     for (var i = 0; i < val.length; i++) {
                                       var valor = val[i].toString();
 
-                                      for (var x = 0;
-                                          x < tagsEspeciales2.length;
-                                          x++) {
-                                        var valor2 =
-                                            tagsEspeciales2[i].toString();
+                                      for (var x = 0; x < tagsEspeciales2.length; x++) {
+                                        var valor2 = tagsEspeciales2[i].toString();
 
                                         if (valor == valor2) {
                                           paso = true;
@@ -737,50 +640,47 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                       tagsEspeciales2 = val;
                                     });
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   }
                                 } else {
                                   setState(() {
                                     cant++;
                                     tagsEspeciales2 = val;
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   });
                                 }
                               },
                               choiceItems: C2Choice.listFrom<String, String>(
-                                source: snapshot.data[0].fijas[0]
-                                    .especialesB[index].nombrecitos,
+                                source: snapshot.data[0].fijas[0].especialesB[index].nombrecitos,
                                 value: (i, v) => v,
                                 label: (i, v) => v,
                                 tooltip: (i, v) => v,
@@ -825,18 +725,14 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                     paso = true;
                                   } */
 
-                                int hhh = int.parse(snapshot.data[0].fijas[0]
-                                    .especialesC[index].maximo);
+                                int hhh = int.parse(snapshot.data[0].fijas[0].especialesC[index].maximo);
                                 if (tagsEspeciales3.length >= hhh) {
                                   if (val.length > 0) {
                                     for (var i = 0; i < val.length; i++) {
                                       var valor = val[i].toString();
 
-                                      for (var x = 0;
-                                          x < tagsEspeciales3.length;
-                                          x++) {
-                                        var valor2 =
-                                            tagsEspeciales3[i].toString();
+                                      for (var x = 0; x < tagsEspeciales3.length; x++) {
+                                        var valor2 = tagsEspeciales3[i].toString();
 
                                         if (valor == valor2) {
                                           paso = true;
@@ -853,70 +749,66 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                       tagsEspeciales3 = val;
                                     });
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   }
                                 } else if (tagsEspeciales3.length > hhh) {
                                   setState(() {
                                     tagsEspeciales3 = val;
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   });
                                 } else {
                                   setState(() {
                                     cant++;
                                     tagsEspeciales3 = val;
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   });
                                 }
                               },
                               choiceItems: C2Choice.listFrom<String, String>(
-                                source: snapshot.data[0].fijas[0]
-                                    .especialesC[index].nombrecitos,
+                                source: snapshot.data[0].fijas[0].especialesC[index].nombrecitos,
                                 value: (i, v) => v,
                                 label: (i, v) => v,
                                 tooltip: (i, v) => v,
@@ -942,18 +834,13 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                               onChanged: (val) {
                                 bool paso = false;
 
-                                if (tagsEspeciales4.length >=
-                                    int.parse(snapshot.data[0].fijas[0]
-                                        .especialesD[index].maximo)) {
+                                if (tagsEspeciales4.length >= int.parse(snapshot.data[0].fijas[0].especialesD[index].maximo)) {
                                   if (val.length > 0) {
                                     for (var i = 0; i < val.length; i++) {
                                       var valor = val[i].toString();
 
-                                      for (var x = 0;
-                                          x < tagsEspeciales4.length;
-                                          x++) {
-                                        var valor2 =
-                                            tagsEspeciales4[i].toString();
+                                      for (var x = 0; x < tagsEspeciales4.length; x++) {
+                                        var valor2 = tagsEspeciales4[i].toString();
 
                                         if (valor == valor2) {
                                           paso = true;
@@ -970,50 +857,47 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                                       tagsEspeciales4 = val;
                                     });
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   }
                                 } else {
                                   setState(() {
                                     cant++;
                                     tagsEspeciales4 = val;
 
-                                    utils
-                                        .agregarObservacionEnProductoObservacion(
-                                            context,
-                                            tituloSabores,
-                                            tagsSabores,
-                                            tituloEspeciales1,
-                                            tagsEspeciales1,
-                                            tituloEspeciales2,
-                                            tagsEspeciales2,
-                                            tituloEspeciales3,
-                                            tagsEspeciales3,
-                                            tituloEspeciales4,
-                                            tagsEspeciales4,
-                                            tagsVariables,
-                                            tituloAcom,
-                                            idAcompanhamiento);
+                                    utils.agregarObservacionEnProductoObservacion(
+                                        context,
+                                        tituloSabores,
+                                        tagsSabores,
+                                        tituloEspeciales1,
+                                        tagsEspeciales1,
+                                        tituloEspeciales2,
+                                        tagsEspeciales2,
+                                        tituloEspeciales3,
+                                        tagsEspeciales3,
+                                        tituloEspeciales4,
+                                        tagsEspeciales4,
+                                        tagsVariables,
+                                        tituloAcom,
+                                        idAcompanhamiento);
                                   });
                                 }
                               },
                               choiceItems: C2Choice.listFrom<String, String>(
-                                source: snapshot.data[0].fijas[0]
-                                    .especialesD[index].nombrecitos,
+                                source: snapshot.data[0].fijas[0].especialesD[index].nombrecitos,
                                 value: (i, v) => v,
                                 label: (i, v) => v,
                                 tooltip: (i, v) => v,
@@ -1026,8 +910,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                       (optionsProductosVariables.length > 0)
                           ? Content(
-                              title:
-                                  'Cremas a elección (máximo ${optionsProductosVariables.length} opciones)',
+                              title: 'Cremas a elección (máximo ${optionsProductosVariables.length} opciones)',
                               child: ChipsChoice<String>.multiple(
                                 value: tagsVariables,
                                 onChanged: (val) => setState(() {
@@ -1066,8 +949,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
 
                       StreamBuilder(
                         stream: adicionalesBloc.adicionalesStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<ItemAdicional>> snapshot) {
+                        builder: (BuildContext context, AsyncSnapshot<List<ItemAdicional>> snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data.length > 0) {
                               return ListView.builder(
@@ -1095,151 +977,135 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                         height: responsive.hp(7),
                       )
                     ]),
-                  Positioned(
-        bottom: 0,
-        left: 0,
-        right: 0,
-        child: Padding(
-          padding: EdgeInsets.all(
-            responsive.wp(6),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            width: double.infinity,
-            height: responsive.hp(5),
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-                side: BorderSide(color: Colors.red),
-              ),
-              color: Colors.red,
-              textColor: Colors.white,
-              child: Text(
-                'Agregar Producto',
-                style: TextStyle(
-                  fontSize: responsive.ip(2),
-                ),
-              ),
-              onPressed: () async {
-                bool pasoSabores = false;
-                bool pasoEspeciales1 = false;
-                bool pasoEspeciales2 = false;
-                bool pasoEspeciales3 = false;
-                bool pasoEspeciales4 = false;
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                          responsive.wp(6),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          width: double.infinity,
+                          height: responsive.hp(5),
+                          child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              side: BorderSide(color: Colors.red),
+                            ),
+                            color: Colors.red,
+                            textColor: Colors.white,
+                            child: Text(
+                              'Agregar Producto',
+                              style: TextStyle(
+                                fontSize: responsive.ip(2),
+                              ),
+                            ),
+                            onPressed: () async {
+                              bool pasoSabores = false;
+                              bool pasoEspeciales1 = false;
+                              bool pasoEspeciales2 = false;
+                              bool pasoEspeciales3 = false;
+                              bool pasoEspeciales4 = false;
 
-                bool pasoAcom = false;
+                              bool pasoAcom = false;
 
-                if (sabores) {
-                  if (tagsSabores.length >= maximoSabores) {
-                    pasoSabores = true;
-                  } else {
-                    pasoSabores = false;
-                  }
-                } else {
-                  pasoSabores = true;
-                }
+                              if (sabores) {
+                                if (tagsSabores.length >= maximoSabores) {
+                                  pasoSabores = true;
+                                } else {
+                                  pasoSabores = false;
+                                }
+                              } else {
+                                pasoSabores = true;
+                              }
 
-                if (especiales1) {
-                  if (tagsEspeciales1.length >= maximoespeciales1) {
-                    pasoEspeciales1 = true;
-                  } else {
-                    pasoEspeciales1 = false;
-                  }
-                } else {
-                  pasoEspeciales1 = true;
-                }
+                              if (especiales1) {
+                                if (tagsEspeciales1.length >= maximoespeciales1) {
+                                  pasoEspeciales1 = true;
+                                } else {
+                                  pasoEspeciales1 = false;
+                                }
+                              } else {
+                                pasoEspeciales1 = true;
+                              }
 
-                if (especiales2) {
-                  if (tagsEspeciales2.length >= maximoespeciales2) {
-                    pasoEspeciales2 = true;
-                  } else {
-                    pasoEspeciales2 = false;
-                  }
-                } else {
-                  pasoEspeciales2 = true;
-                }
+                              if (especiales2) {
+                                if (tagsEspeciales2.length >= maximoespeciales2) {
+                                  pasoEspeciales2 = true;
+                                } else {
+                                  pasoEspeciales2 = false;
+                                }
+                              } else {
+                                pasoEspeciales2 = true;
+                              }
 
-                if (especiales3) {
-                  if (tagsEspeciales3.length >= maximoespeciales3) {
-                    pasoEspeciales3 = true;
-                  } else {
-                    pasoEspeciales3 = false;
-                  }
-                } else {
-                  pasoEspeciales3 = true;
-                }
+                              if (especiales3) {
+                                if (tagsEspeciales3.length >= maximoespeciales3) {
+                                  pasoEspeciales3 = true;
+                                } else {
+                                  pasoEspeciales3 = false;
+                                }
+                              } else {
+                                pasoEspeciales3 = true;
+                              }
 
-                if (especiales4) {
-                  if (tagsEspeciales4.length >= maximoespeciales4) {
-                    pasoEspeciales4 = true;
-                  } else {
-                    pasoEspeciales4 = false;
-                  }
-                } else {
-                  pasoEspeciales4 = true;
-                }
+                              if (especiales4) {
+                                if (tagsEspeciales4.length >= maximoespeciales4) {
+                                  pasoEspeciales4 = true;
+                                } else {
+                                  pasoEspeciales4 = false;
+                                }
+                              } else {
+                                pasoEspeciales4 = true;
+                              }
 
-                if (acompanhamientosBoolVariable) {
-                  if (tagAcompanhamientos != null) {
-                    pasoAcom = true;
-                  } else {
-                    pasoAcom = false;
-                  }
-                } else {
-                  pasoAcom = true;
-                }
+                              if (acompanhamientosBoolVariable) {
+                                if (tagAcompanhamientos != null) {
+                                  pasoAcom = true;
+                                } else {
+                                  pasoAcom = false;
+                                }
+                              } else {
+                                pasoAcom = true;
+                              }
 
-                if (pasoSabores) {
-                  if (pasoAcom) {
-                    if (pasoEspeciales1) {
-                      if (pasoEspeciales2) {
-                        if (pasoEspeciales3) {
-                          if (pasoEspeciales4) {
-                            utils.agregarProductosAlCarrito(context);
+                              if (pasoSabores) {
+                                if (pasoAcom) {
+                                  if (pasoEspeciales1) {
+                                    if (pasoEspeciales2) {
+                                      if (pasoEspeciales3) {
+                                        if (pasoEspeciales4) {
+                                          utils.agregarProductosAlCarrito(context);
 
-                            Navigator.pop(context);
-                          } else {
-                            utils.showToast(
-                                'debe elegir como mínimo $maximoespeciales4 $tituloEspeciales4',
-                                2,
-                                ToastGravity.TOP);
-                          }
-                        } else {
-                          utils.showToast(
-                              'debe elegir como mínimo $maximoespeciales3 $tituloEspeciales3',
-                              2,
-                              ToastGravity.TOP);
-                        }
-                      } else {
-                        utils.showToast(
-                            'debe elegir como mínimo $maximoespeciales2 $tituloEspeciales2',
-                            2,
-                            ToastGravity.TOP);
-                      }
-                    } else {
-                      utils.showToast(
-                          'debe elegir como mínimo $maximoespeciales1 $tituloEspeciales1',
-                          2,
-                          ToastGravity.TOP);
-                    }
-                  } else {
-                    utils.showToast('debe elegir como mínimo 1 $tituloAcom',
-                        2, ToastGravity.TOP);
-                  }
-                } else {
-                  utils.showToast(
-                      'debe elegir como mínimo $maximoSabores $tituloSabores',
-                      2,
-                      ToastGravity.TOP);
-                }
-              },
-            ),
-          ),
-        ),
-      )
-        ],
+                                          Navigator.pop(context);
+                                        } else {
+                                          utils.showToast('debe elegir como mínimo $maximoespeciales4 $tituloEspeciales4', 2, ToastGravity.TOP);
+                                        }
+                                      } else {
+                                        utils.showToast('debe elegir como mínimo $maximoespeciales3 $tituloEspeciales3', 2, ToastGravity.TOP);
+                                      }
+                                    } else {
+                                      utils.showToast('debe elegir como mínimo $maximoespeciales2 $tituloEspeciales2', 2, ToastGravity.TOP);
+                                    }
+                                  } else {
+                                    utils.showToast('debe elegir como mínimo $maximoespeciales1 $tituloEspeciales1', 2, ToastGravity.TOP);
+                                  }
+                                } else {
+                                  utils.showToast('debe elegir como mínimo 1 $tituloAcom', 2, ToastGravity.TOP);
+                                }
+                              } else {
+                                utils.showToast('debe elegir como mínimo $maximoSabores $tituloSabores', 2, ToastGravity.TOP);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 );
               } else {
                 return Center(
@@ -1282,8 +1148,7 @@ class AdicionalesItem extends StatelessWidget {
             color: Colors.blueGrey[50],
             child: Text(
               lista[0].titulo,
-              style: const TextStyle(
-                  color: Colors.blueGrey, fontWeight: FontWeight.w500),
+              style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.w500),
             ),
           );
         }
@@ -1294,18 +1159,15 @@ class AdicionalesItem extends StatelessWidget {
             text: TextSpan(children: [
               TextSpan(
                 text: '${lista[index].adicionalesNombre}   ',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
               ),
               TextSpan(
                 text: 'S/.${lista[index].adicionalesPrecio}',
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
               ),
             ]),
           ),
-          value:
-              ('${lista[index].adicionalSeleccionado}' == '0') ? false : true,
+          value: ('${lista[index].adicionalSeleccionado}' == '0') ? false : true,
           onChanged: (bool value) {
             print('${lista[index].adicionalesNombre}');
             print('ctm $value');
@@ -1317,12 +1179,7 @@ class AdicionalesItem extends StatelessWidget {
               item,
             );
 
-            utils.agregarItemObservacion(
-                context,
-                '${lista[index].idProductoAdicional}',
-                value,
-                'adicional',
-                'adicional de $nombreProductoPrincipal');
+            utils.agregarItemObservacion(context, '${lista[index].idProductoAdicional}', value, 'adicional', 'adicional de $nombreProductoPrincipal');
           },
         );
       },

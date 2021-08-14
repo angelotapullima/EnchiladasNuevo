@@ -19,8 +19,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> { 
-  List<Widget> pageList = List<Widget>();
+class _HomePageState extends State<HomePage> {
+  List<Widget> pageList = [];
 
   @override
   void initState() {
@@ -40,10 +40,8 @@ class _HomePageState extends State<HomePage> {
     carritoBloc.obtenerCarrito();
 
     final bottomBloc = ProviderBloc.bottom(context);
-    if(bottomBloc.page==null){
 
     bottomBloc.changePage(0);
-    } 
 
     return Scaffold(
       body: StreamBuilder(
@@ -80,8 +78,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget bottonNaviga(
-      Responsive responsive, int cantidad, BottomNaviBloc bottomBloc) {
+  Widget bottonNaviga(Responsive responsive, int cantidad, BottomNaviBloc bottomBloc) {
     return StreamBuilder(
       stream: bottomBloc.selectPageStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -109,12 +106,11 @@ class _HomePageState extends State<HomePage> {
               label: 'Favoritos',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.near_me,
-                size: responsive.ip(3),
-              ),
-              label:'Categorías'
-            ),
+                icon: Icon(
+                  Icons.near_me,
+                  size: responsive.ip(3),
+                ),
+                label: 'Categorías'),
             BottomNavigationBarItem(
               icon: (cantidad != 0)
                   ? Stack(
@@ -129,14 +125,12 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             child: Text(
                               cantidad.toString(),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: responsive.ip(1)),
+                              style: TextStyle(color: Colors.white, fontSize: responsive.ip(1)),
                             ),
                             alignment: Alignment.center,
                             width: responsive.ip(1.6),
                             height: responsive.ip(1.6),
-                            decoration: BoxDecoration(
-                                color: Colors.green, shape: BoxShape.circle),
+                            decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
                           ),
                           //child: Icon(Icons.brightness_1, size: 8,color: Colors.redAccent,  )
                         )
@@ -146,14 +140,14 @@ class _HomePageState extends State<HomePage> {
                       Icons.shopping_cart,
                       size: responsive.ip(3),
                     ),
-              label:'Carrito',
+              label: 'Carrito',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.person,
                 size: responsive.ip(3),
               ),
-              label:'Cuenta',
+              label: 'Cuenta',
             )
           ],
           currentIndex: bottomBloc.page,

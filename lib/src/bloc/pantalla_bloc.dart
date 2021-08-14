@@ -15,7 +15,7 @@ class PantallaBloc {
   final _estadoVarDesicion = new BehaviorSubject<bool>();
   final _estadoCafeDesicion = new BehaviorSubject<bool>();
 
-  Stream<List<PantallaModel>> get pantallasStream =>_pantallasController.stream;
+  Stream<List<PantallaModel>> get pantallasStream => _pantallasController.stream;
   Stream<bool> get estadoVarStream => _estadoVarDesicion.stream;
   Stream<bool> get estadoCafeStream => _estadoCafeDesicion.stream;
 
@@ -40,13 +40,11 @@ class PantallaBloc {
       pantalla.pantallaFoto = listPantallas[i].pantallaFoto;
       pantalla.pantallaEstado = listPantallas[i].pantallaEstado;
       pantalla.pantallCategoria = listPantallas[i].pantallCategoria;
-     
 
       if (pantalla.idPantalla == '1') {
         //Categorias
 
-        var listaCategorias =
-            await categoriasDatabase.obtenerCategoriasEnchiladas();
+        var listaCategorias = await categoriasDatabase.obtenerCategoriasEnchiladas();
 
         if (listaCategorias.length > 10) {
           for (int x = 0; x < 10; x++) {
@@ -74,8 +72,7 @@ class PantallaBloc {
       } else if (pantalla.idPantalla == '4') {
         //cafe
 
-        final listaCategorias =
-            await categoriasDatabase.obtenerCategoriasPorTipo('3');
+        final listaCategorias = await categoriasDatabase.obtenerCategoriasPorTipo('3');
 
         if (listaCategorias.length > 10) {
           for (int x = 0; x < 10; x++) {
@@ -128,11 +125,10 @@ class PantallaBloc {
             listItemPantalla.add(item);
           }
         }
-      }else if (pantalla.idPantalla == '3') {
+      } else if (pantalla.idPantalla == '3') {
         //puzzle
 
-        final listaPuzzle = await puzzleDatabase
-            .obtenerPuzzle(); //puzzle.obtenerCategoriasTodos();
+        final listaPuzzle = await puzzleDatabase.obtenerPuzzle(); //puzzle.obtenerCategoriasTodos();
 
         if (listaPuzzle.length > 10) {
           for (int x = 0; x < 10; x++) {
@@ -156,9 +152,8 @@ class PantallaBloc {
         }
       } else {
         //resto
- 
-        final listaProductos = await productosDatabase
-            .obtenerProductosPorCategoriaDelivery(pantalla.pantallCategoria);
+
+        final listaProductos = await productosDatabase.obtenerProductosPorCategoriaDelivery(pantalla.pantallCategoria);
 
         if (listaProductos.length > 10) {
           for (int x = 0; x < 10; x++) {
@@ -178,7 +173,7 @@ class PantallaBloc {
           for (int x = 0; x < listaProductos.length; x++) {
             ItemPantalla item = ItemPantalla();
 
-             item.idProducto = listaProductos[x].idProducto;
+            item.idProducto = listaProductos[x].idProducto;
             item.idCategoria = listaProductos[x].idCategoria;
             item.nombreItem = listaProductos[x].productoNombre;
             item.fotoItem = listaProductos[x].productoFoto;
@@ -230,17 +225,9 @@ class PantallaBloc {
   }
 }
 
-
-
-class MostarInicioDelivery{
-
-
+class MostarInicioDelivery {
   bool market;
   bool cafe;
 
-  MostarInicioDelivery({
-
-    this.market,
-    this.cafe
-  });
+  MostarInicioDelivery({this.market, this.cafe});
 }

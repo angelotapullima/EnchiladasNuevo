@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,12 +7,8 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -21,12 +16,7 @@ class ProductoFotoLocal extends StatefulWidget {
   final String numeroItem;
   final String idCategoria;
   final String cantidadItems;
-  ProductoFotoLocal(
-      {Key key,
-      @required this.numeroItem,
-      @required this.idCategoria,
-      @required this.cantidadItems})
-      : super(key: key);
+  ProductoFotoLocal({Key key, @required this.numeroItem, @required this.idCategoria, @required this.cantidadItems}) : super(key: key);
 
   @override
   _ProductoFotoLocalState createState() => _ProductoFotoLocalState();
@@ -35,18 +25,16 @@ class ProductoFotoLocal extends StatefulWidget {
 class _ProductoFotoLocalState extends State<ProductoFotoLocal> {
   @override
   Widget build(BuildContext context) {
-    final _pageController =
-        PageController(initialPage: int.parse(widget.numeroItem));
+    final _pageController = PageController(initialPage: int.parse(widget.numeroItem));
 
     final productoBloc = ProviderBloc.prod(context);
     final contadorProductosFotoLocal = ProviderBloc.contadorLocal(context);
-    productoBloc
-        .obtenerProductosLocalEnchiladasPorCategoria(widget.idCategoria);
+    productoBloc.obtenerProductosLocalEnchiladasPorCategoria(widget.idCategoria);
     contadorProductosFotoLocal.changeContador(int.parse(widget.numeroItem));
 
     final responsive = Responsive.of(context);
     return Material(
-          child: StreamBuilder(
+      child: StreamBuilder(
           stream: contadorProductosFotoLocal.selectContadorStream,
           builder: (context, snapshotContador) {
             if (snapshotContador.hasData) {
@@ -72,23 +60,16 @@ class _ProductoFotoLocalState extends State<ProductoFotoLocal> {
                           child: Row(
                             children: [
                               Text(
-                                (contadorProductosFotoLocal.pageContador + 1)
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
+                                (contadorProductosFotoLocal.pageContador + 1).toString(),
+                                style: TextStyle(fontSize: responsive.ip(1.5), color: Colors.black),
                               ),
                               Text(
                                 ' / ',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
+                                style: TextStyle(fontSize: responsive.ip(1.5), color: Colors.black),
                               ),
                               Text(
                                 '${widget.cantidadItems}',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
+                                style: TextStyle(fontSize: responsive.ip(1.5), color: Colors.black),
                               ),
                             ],
                           ),
@@ -97,8 +78,7 @@ class _ProductoFotoLocalState extends State<ProductoFotoLocal> {
                     ),
                     body: StreamBuilder(
                         stream: productoBloc.productosEnchiladasStream,
-                        builder: (context,
-                            AsyncSnapshot<List<ProductosData>> snapshot) {
+                        builder: (context, AsyncSnapshot<List<ProductosData>> snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data.length > 0) {
                               return PageView.builder(
@@ -111,8 +91,7 @@ class _ProductoFotoLocalState extends State<ProductoFotoLocal> {
                                     );
                                   },
                                   onPageChanged: (int index) {
-                                    contadorProductosFotoLocal
-                                        .changeContador(index);
+                                    contadorProductosFotoLocal.changeContador(index);
                                   });
                             } else {
                               return Center(
@@ -142,9 +121,7 @@ class _ProductoFotoLocalState extends State<ProductoFotoLocal> {
 class DetalleProductoFotoLocal extends StatefulWidget {
   final ProductosData productosData;
   final bool mostrarback;
-  const DetalleProductoFotoLocal(
-      {Key key, @required this.productosData, @required this.mostrarback})
-      : super(key: key);
+  const DetalleProductoFotoLocal({Key key, @required this.productosData, @required this.mostrarback}) : super(key: key);
 
   @override
   _DetalleProductoFotoState createState() => _DetalleProductoFotoState();
@@ -193,12 +170,11 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                     child: CircleContainer(
                         radius: responsive.ip(2.5),
                         color: Colors.transparent,
-                        widget: Icon(Icons
-                            .share) //Icon(Icons.arrow_back, color: Colors.black),
+                        widget: Icon(Icons.share) //Icon(Icons.arrow_back, color: Colors.black),
                         ),
                     onTap: () async {
-                      await takeScreenshotandShare(
-                          widget.productosData.idProducto);
+                      /*  await takeScreenshotandShare(
+                          widget.productosData.idProducto); */
                       //_logoScreen.value = false;
                     },
                   ),
@@ -215,12 +191,11 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                     child: CircleContainer(
                         radius: responsive.ip(2.5),
                         color: Colors.transparent,
-                        widget: Icon(Icons
-                            .share) //Icon(Icons.arrow_back, color: Colors.black),
+                        widget: Icon(Icons.share) //Icon(Icons.arrow_back, color: Colors.black),
                         ),
                     onTap: () async {
-                      await takeScreenshotandShare(
-                          widget.productosData.idProducto);
+                      /*    await takeScreenshotandShare(
+                          widget.productosData.idProducto); */
                       //_logoScreen.value = false;
                     },
                   ),
@@ -248,7 +223,6 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                           child: PhotoView(
                             imageProvider: CachedNetworkImageProvider(
                               '${widget.productosData.productoFoto}',
-                              cacheManager: CustomCacheManager(),
                             ),
                           ),
                         ),
@@ -269,10 +243,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                                     Expanded(
                                       child: Text(
                                         '${widget.productosData.productoNombre}',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: responsive.ip(3),
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     SizedBox(
@@ -280,10 +251,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                                     ),
                                     Text(
                                       'S/. ${widget.productosData.productoPrecio}',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: responsive.ip(3),
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.red, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -330,7 +298,6 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                         child: PhotoView(
                           imageProvider: CachedNetworkImageProvider(
                             '${widget.productosData.productoFoto}',
-                            cacheManager: CustomCacheManager(),
                           ),
                         ),
                       ),
@@ -343,8 +310,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                           left: 0,
                           child: Container(
                             color: Colors.black.withOpacity(.6),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: responsive.wp(5)),
+                            padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -353,10 +319,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                                     Expanded(
                                       child: Text(
                                         '${widget.productosData.productoNombre}',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: responsive.ip(3),
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     SizedBox(
@@ -364,10 +327,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
                                     ),
                                     Text(
                                       'S/. ${widget.productosData.productoPrecio}',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: responsive.ip(3),
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.red, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -395,7 +355,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
           }),
     );
   }
-
+/* 
   takeScreenshotandShare(String nombre) async {
     var now = DateTime.now();
     nombre = now.microsecond.toString();
@@ -424,4 +384,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFotoLocal> {
       print(onError);
     });
   }
+
+ */
+
 }

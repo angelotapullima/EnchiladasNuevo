@@ -5,7 +5,6 @@ import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
 import 'package:enchiladasapp/src/search/search_local.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -57,10 +56,7 @@ class CategoriasLocal extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'Categorías',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: responsive.ip(2.8),
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.8), fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   icon: Icon(
@@ -101,8 +97,7 @@ class CategoriasLocal extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.length > 0) {
-                        return _conte(anchoCategorias, anchoProductos,
-                            snapshot.data, context);
+                        return _conte(anchoCategorias, anchoProductos, snapshot.data, context);
                       } else {
                         return Center(
                           child: Text('No hay datos de categorias'),
@@ -123,8 +118,7 @@ class CategoriasLocal extends StatelessWidget {
     );
   }
 
-  Widget _conte(double anchoCategorias, double anchoProductos,
-      List<CategoriaData> categorias, BuildContext context) {
+  Widget _conte(double anchoCategorias, double anchoProductos, List<CategoriaData> categorias, BuildContext context) {
     final bottomBloc = ProviderBloc.bottom(context);
     final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
     enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
@@ -162,8 +156,7 @@ class CategoriasProducto extends StatefulWidget {
   final double ancho;
   final List<CategoriaData> data;
 
-  const CategoriasProducto({Key key, @required this.ancho, @required this.data})
-      : super(key: key);
+  const CategoriasProducto({Key key, @required this.ancho, @required this.data}) : super(key: key);
 
   @override
   _CategoriasProductoState createState() => _CategoriasProductoState();
@@ -204,9 +197,7 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                 width: size.width * 0.25,
                 decoration: BoxDecoration(
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-                  color: (categoria.idCategoria == snapshot.data)
-                      ? Colors.red
-                      : Colors.white,
+                  color: (categoria.idCategoria == snapshot.data) ? Colors.red : Colors.white,
                   border: Border.all(color: Colors.grey[100]),
                   borderRadius: BorderRadius.circular(5),
                 ),
@@ -215,8 +206,7 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                     SizedBox(width: 4),
                     Expanded(
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
@@ -227,10 +217,7 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                                 '${categoria.categoriaIcono}',
                                 semanticsLabel: 'A shark?!',
                                 placeholderBuilder: (BuildContext context) =>
-                                    Container(
-                                        padding: const EdgeInsets.all(30.0),
-                                        child:
-                                            const CircularProgressIndicator()),
+                                    Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -262,8 +249,7 @@ class ProductosIdPage extends StatefulWidget {
   final double ancho;
   final String index;
 
-  const ProductosIdPage({Key key, @required this.ancho, @required this.index})
-      : super(key: key);
+  const ProductosIdPage({Key key, @required this.ancho, @required this.index}) : super(key: key);
 
   @override
   _ProductosIdPageState createState() => _ProductosIdPageState();
@@ -283,8 +269,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 
-  Widget _listaProductosId(
-      ProductosBloc productosIdBloc, Responsive responsive) {
+  Widget _listaProductosId(ProductosBloc productosIdBloc, Responsive responsive) {
     return Container(
       color: Colors.transparent,
       width: this.widget.ancho,
@@ -298,8 +283,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
               return ListView.builder(
                 itemCount: productos.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return _itemPedido(
-                      context, productos[index], productos.length.toString());
+                  return _itemPedido(context, productos[index], productos.length.toString());
                 },
               );
             }
@@ -316,8 +300,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 
-  Widget _itemPedido(
-      BuildContext context, ProductosData productosData, String cantidad) {
+  Widget _itemPedido(BuildContext context, ProductosData productosData, String cantidad) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
@@ -342,34 +325,29 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
-                    cacheManager: CustomCacheManager(),
                     progressIndicatorBuilder: (_, url, downloadProgress) {
                       return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                        width: double.infinity,
+                        height: double.infinity,
                         child: Stack(
                           children: [
                             Center(
                               child: CircularProgressIndicator(
                                 value: downloadProgress.progress,
                                 backgroundColor: Colors.green,
-                                valueColor:
-                                    new AlwaysStoppedAnimation<Color>(Colors.red),
+                                valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                               ),
                             ),
                             Center(
                               child: (downloadProgress.progress != null)
-                                  ? Text(
-                                      '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                  ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
                                   : Container(),
                             )
                           ],
                         ),
                       );
                     },
-                    errorWidget: (context, url, error) => Image(
-                        image: AssetImage('assets/carga_fallida.jpg'),
-                        fit: BoxFit.cover),
+                    errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                     imageUrl: '${productosData.productoFoto}',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
@@ -395,10 +373,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     ),
                     child: Text(
                       '${productosData.productoNombre}',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: responsive.ip(2),
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.white, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -414,16 +389,12 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
-              return ProductoFotoLocal(
-                  cantidadItems: cantidad,
-                  idCategoria: productosData.idCategoria,
-                  numeroItem: productosData.numeroitem);
+              return ProductoFotoLocal(cantidadItems: cantidad, idCategoria: productosData.idCategoria, numeroItem: productosData.numeroitem);
               /*  return DetalleProductoFotoLocal(
                 productosData: productosData,
                 mostrarback: true, */
             },
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: child,

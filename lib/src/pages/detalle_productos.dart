@@ -14,7 +14,6 @@ import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:enchiladasapp/src/widgets/cantidad_producto.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,12 +26,7 @@ class SliderDetalleProductos extends StatefulWidget {
   final String numeroItem;
   final String idCategoria;
   final String cantidadItems;
-  const SliderDetalleProductos(
-      {Key key,
-      @required this.numeroItem,
-      @required this.idCategoria,
-      @required this.cantidadItems})
-      : super(key: key);
+  const SliderDetalleProductos({Key key, @required this.numeroItem, @required this.idCategoria, @required this.cantidadItems}) : super(key: key);
 
   @override
   _SliderDetalleProductosState createState() => _SliderDetalleProductosState();
@@ -41,13 +35,11 @@ class SliderDetalleProductos extends StatefulWidget {
 class _SliderDetalleProductosState extends State<SliderDetalleProductos> {
   @override
   Widget build(BuildContext context) {
-    final _pageController =
-        PageController(initialPage: int.parse(widget.numeroItem));
+    final _pageController = PageController(initialPage: int.parse(widget.numeroItem));
 
     final productoBloc = ProviderBloc.prod(context);
     final contadorProductosFotoLocal = ProviderBloc.contadorLocal(context);
-    productoBloc
-        .obtenerProductosdeliveryEnchiladasPorCategoria(widget.idCategoria);
+    productoBloc.obtenerProductosdeliveryEnchiladasPorCategoria(widget.idCategoria);
     contadorProductosFotoLocal.changeContador(int.parse(widget.numeroItem));
 
     final responsive = Responsive.of(context);
@@ -101,10 +93,7 @@ class _SliderDetalleProductosState extends State<SliderDetalleProductos> {
                       actions: [
                         Container(
                           height: responsive.hp(1),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.wp(2),
-                            vertical: responsive.hp(1)
-                          ),
+                          padding: EdgeInsets.symmetric(horizontal: responsive.wp(2), vertical: responsive.hp(1)),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             color: Colors.grey[300],
@@ -117,23 +106,16 @@ class _SliderDetalleProductosState extends State<SliderDetalleProductos> {
                           child: Row(
                             children: [
                               Text(
-                                (contadorProductosFotoLocal.pageContador + 1)
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
+                                (contadorProductosFotoLocal.pageContador + 1).toString(),
+                                style: TextStyle(fontSize: responsive.ip(1.5), color: Colors.black),
                               ),
                               Text(
                                 ' / ',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
+                                style: TextStyle(fontSize: responsive.ip(1.5), color: Colors.black),
                               ),
                               Text(
                                 '${widget.cantidadItems}',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(1.5),
-                                    color: Colors.black),
+                                style: TextStyle(fontSize: responsive.ip(1.5), color: Colors.black),
                               ),
                             ],
                           ),
@@ -160,9 +142,7 @@ class DetalleProductitoss extends StatefulWidget {
   final ProductosData productosData;
   final bool mostrarback;
 
-  const DetalleProductitoss(
-      {Key key, @required this.productosData, @required this.mostrarback})
-      : super(key: key);
+  const DetalleProductitoss({Key key, @required this.productosData, @required this.mostrarback}) : super(key: key);
   @override
   _DetalleProducto createState() => _DetalleProducto();
 }
@@ -220,8 +200,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
             _crearAppbar(responsive, widget.mostrarback),
             TranslateAnimation(
               duration: const Duration(milliseconds: 400),
-              child: _contenido(
-                  widget.productosData, responsive, context, productosIdBloc),
+              child: _contenido(widget.productosData, responsive, context, productosIdBloc),
             ),
           ]),
           panelBuilder: (sc) {
@@ -278,8 +257,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     ));
   }
 
-  Widget botonesBajos(Responsive responsive, ProductosData productosData,
-      ProductosBloc productosBloc) {
+  Widget botonesBajos(Responsive responsive, ProductosData productosData, ProductosBloc productosBloc) {
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: responsive.hp(1),
@@ -359,16 +337,12 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                         await adicionalesDatabase.updateAdicionalesEnFalseDb();
 
                         //await utils.agregarAdicionalesDeProducto(productosData.productoAdicionalOpciones);
-                        final itemObservacionDatabase =
-                            ItemObservacionDatabase();
+                        final itemObservacionDatabase = ItemObservacionDatabase();
                         itemObservacionDatabase.deleteItemObservacion();
 
-                        agregarItemObservacion(context,
-                            productosData.idProducto, true, 'producto', '');
+                        agregarItemObservacion(context, productosData.idProducto, true, 'producto', '');
 
-                        Navigator.of(context).push(_createRoute(
-                            productosData.idProducto,
-                            productosData.productoAdicionalOpciones));
+                        Navigator.of(context).push(_createRoute(productosData.idProducto, productosData.productoAdicionalOpciones));
                         /* setState(() {
                             mostrar =true;
                             
@@ -396,8 +370,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                         ),
                       ),
                       onTap: () {
-                        utils.showToast(
-                            '${snapshot.data.mensaje}', 2, ToastGravity.TOP);
+                        utils.showToast('${snapshot.data.mensaje}', 2, ToastGravity.TOP);
                         //utils.agregarCarrito(productosData, context, "1");
                       },
                     );
@@ -422,10 +395,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       ),
                     ),
                     onTap: () {
-                      utils.showToast(
-                          'En estos momentos el producto esta deshabilitado',
-                          2,
-                          ToastGravity.TOP);
+                      utils.showToast('En estos momentos el producto esta deshabilitado', 2, ToastGravity.TOP);
                       //utils.agregarCarrito(productosData, context, "1");
                     },
                   );
@@ -439,8 +409,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
   Route _createRoute(String idProducto, String adicionalObservacio) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) {
-        return DetalleObservaciones(
-            idProductoArgument: idProducto, idCategoria: adicionalObservacio);
+        return DetalleObservaciones(idProductoArgument: idProducto, idCategoria: adicionalObservacio);
       },
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, 1.0);
@@ -459,8 +428,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     );
   }
 
-  Widget _contenido(ProductosData productosData, Responsive responsive,
-      BuildContext context, ProductosBloc productosBloc) {
+  Widget _contenido(ProductosData productosData, Responsive responsive, BuildContext context, ProductosBloc productosBloc) {
     final precioProdcuto = utils.format(
       double.parse(productosData.productoPrecio),
     );
@@ -473,9 +441,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
         minChildSize: 0.7,
         builder: (context, controller) {
           return Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadiusDirectional.circular(20),
-                color: Colors.white),
+            decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(20), color: Colors.white),
             padding: EdgeInsets.symmetric(
               horizontal: responsive.wp(5),
             ),
@@ -492,9 +458,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       Flexible(
                         child: Text(
                           productosData.productoNombre,
-                          style: TextStyle(
-                              fontSize: responsive.ip(3),
-                              fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: responsive.ip(3), fontWeight: FontWeight.w600),
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -503,10 +467,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       ),
                       Text(
                         'S/ $precioProdcuto',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: responsive.ip(4),
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.red, fontSize: responsive.ip(4), fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
@@ -638,8 +599,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     );
   }
 
-  Widget panelRojoMonto(
-      Responsive responsive, double total, String cantidadPedidos) {
+  Widget panelRojoMonto(Responsive responsive, double total, String cantidadPedidos) {
     String montoFinalex = utils.format(total);
     return Container(
       height: responsive.hp(8),
@@ -673,8 +633,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
               Expanded(
                 child: Text(
                   'Monto S/$montoFinalex',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: responsive.ip(3)),
+                  style: TextStyle(color: Colors.white, fontSize: responsive.ip(3)),
                 ),
               ),
               Stack(children: <Widget>[
@@ -699,8 +658,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       alignment: Alignment.center,
                       width: responsive.ip(1.8),
                       height: responsive.ip(1.8),
-                      decoration: BoxDecoration(
-                          color: Colors.green, shape: BoxShape.circle),
+                      decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
                     ),
                   ),
                 )
@@ -719,9 +677,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     int cant = 0;
     for (int i = 0; i < carrito.length; i++) {
       if (carrito[i].productoTipo != '1') {
-        subtotal = subtotal +
-            (double.parse(carrito[i].productoPrecio) *
-                double.parse(carrito[i].productoCantidad));
+        subtotal = subtotal + (double.parse(carrito[i].productoPrecio) * double.parse(carrito[i].productoCantidad));
       } else {
         estadoDelivery = true;
         valorDelivery = double.parse(carrito[i].productoPrecio);
@@ -812,17 +768,12 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                 children: [
                   Text(
                     '${carrito[index].productoNombre}',
-                    style: TextStyle(
-                        fontSize: responsive.ip(2),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
                   Text(
                     'S/.${carrito[index].productoPrecio}',
-                    style: TextStyle(
-                        fontSize: responsive.ip(2),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
+                    style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.bold, color: Colors.red),
                   ),
                   IconButton(
                     icon: Icon(
@@ -830,8 +781,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       size: responsive.ip(4),
                     ),
                     onPressed: () {
-                      utils.deleteProductoCarrito(
-                          context, carrito[index].idProducto);
+                      utils.deleteProductoCarrito(context, carrito[index].idProducto);
                     },
                   ),
                 ],
@@ -848,11 +798,9 @@ class _DetalleProducto extends State<DetalleProductitoss> {
   }
 
   Widget _itemPedido(Responsive responsive, Carrito carrito) {
-    final preciofinal = utils.format(double.parse(carrito.productoPrecio) *
-        double.parse(carrito.productoCantidad));
+    final preciofinal = utils.format(double.parse(carrito.productoPrecio) * double.parse(carrito.productoCantidad));
     var observacionProducto = 'Toca para agregar una observación';
-    if (carrito.productoObservacion != null &&
-        carrito.productoObservacion != ' ') {
+    if (carrito.productoObservacion != null && carrito.productoObservacion != ' ') {
       observacionProducto = carrito.productoObservacion;
     }
 
@@ -871,35 +819,29 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
-                          cacheManager: CustomCacheManager(),
                           progressIndicatorBuilder: (_, url, downloadProgress) {
                             return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                              width: double.infinity,
+                              height: double.infinity,
                               child: Stack(
                                 children: [
                                   Center(
                                     child: CircularProgressIndicator(
                                       value: downloadProgress.progress,
                                       backgroundColor: Colors.green,
-                                      valueColor:
-                                          new AlwaysStoppedAnimation<Color>(
-                                              Colors.red),
+                                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                                     ),
                                   ),
                                   Center(
                                     child: (downloadProgress.progress != null)
-                                        ? Text(
-                                            '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                        ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
                                         : Container(),
                                   )
                                 ],
                               ),
                             );
                           },
-                          errorWidget: (context, url, error) => Image(
-                              image: AssetImage('assets/carga_fallida.jpg'),
-                              fit: BoxFit.cover),
+                          errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                           imageUrl: '${carrito.productoFoto}',
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
@@ -949,13 +891,11 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                               size: responsive.ip(3),
                             ),
                             onPressed: () {
-                              utils.deleteProductoCarrito(
-                                  context, carrito.idProducto);
+                              utils.deleteProductoCarrito(context, carrito.idProducto);
                             },
                           ),
                           Container(
-                            child: CantidadTab(
-                                carrito: carrito, llamada: this.llamado),
+                            child: CantidadTab(carrito: carrito, llamada: this.llamado),
                           )
                         ],
                       ),
@@ -990,8 +930,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                     ],
                   ),
                   onTap: () {
-                    observacionProductoController.text =
-                        '${carrito.productoObservacion}';
+                    observacionProductoController.text = '${carrito.productoObservacion}';
                     dialogoObservacionProducto('${carrito.idProducto}');
                   },
                 )
@@ -1001,8 +940,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     );
   }
 
-  Widget _resumenPedido(
-      Responsive responsive, double subtotal, double valorDelivery) {
+  Widget _resumenPedido(Responsive responsive, double subtotal, double valorDelivery) {
     final subtotal2 = utils.format(subtotal);
     final valorDelivery2 = utils.format(valorDelivery);
     final totalex = utils.format(subtotal + valorDelivery);
@@ -1126,8 +1064,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                 width: double.infinity,
                 height: responsive.hp(5),
                 child: RaisedButton(
-                    color:
-                        (preferences.rol == '5') ? Colors.white : Colors.grey,
+                    color: (preferences.rol == '5') ? Colors.white : Colors.grey,
                     textColor: Colors.red,
                     child: Text(
                       'Ordenar Pedido',
@@ -1148,8 +1085,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                         /* utils.showToast(
                             'No tiene permisos', 2, ToastGravity.TOP); */
                       } else {
-                        utils.showToast(
-                            'No tiene permisos', 2, ToastGravity.TOP);
+                        utils.showToast('No tiene permisos', 2, ToastGravity.TOP);
                       }
                     }),
               ),
@@ -1190,8 +1126,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
               FlatButton(
                 onPressed: () async {
                   Navigator.pop(context);
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, 'login', (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
                 },
                 child: Text('Continuar'),
               ),
@@ -1234,7 +1169,6 @@ class _DetalleProducto extends State<DetalleProductitoss> {
           tag: '${carrito.idProducto}',
           child: ClipRRect(
             child: CachedNetworkImage(
-              cacheManager: CustomCacheManager(),
               progressIndicatorBuilder: (_, url, downloadProgress) {
                 return Container(
                   width: double.infinity,
@@ -1245,23 +1179,17 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                         child: CircularProgressIndicator(
                           value: downloadProgress.progress,
                           backgroundColor: Colors.green,
-                          valueColor:
-                              new AlwaysStoppedAnimation<Color>(Colors.red),
+                          valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                         ),
                       ),
                       Center(
-                        child: (downloadProgress.progress != null)
-                            ? Text(
-                                '${(downloadProgress.progress * 100).toInt().toString()}%')
-                            : Container(),
+                        child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                       )
                     ],
                   ),
                 );
               },
-              errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+              errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
               imageUrl: '${carrito.productoFoto}',
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
@@ -1309,8 +1237,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                   child: Text('Cancelar')),
               FlatButton(
                 onPressed: () async {
-                  utils.actualizarObservacion(
-                      context, observacionProductoController.text, id);
+                  utils.actualizarObservacion(context, observacionProductoController.text, id);
 
                   observacionProductoController.text = '';
 

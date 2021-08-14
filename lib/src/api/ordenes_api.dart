@@ -30,7 +30,7 @@ class OrdenesApi {
 
       int estadoDelivery = 0;
       final List<Carrito> productos = await productoDatabase.obtenerCarritoDB();
-      final List<User> user = await userDatabase.obtenerUsUario();
+      final List<Userio> user = await userDatabase.obtenerUsUario();
       final direccion = await direccionDatabase.obtenerDireccionesConZonas();
       final carritoDatabase = CarritoDatabase();
       final del = await carritoDatabase.obtenerDeliveryRapido();
@@ -57,9 +57,7 @@ class OrdenesApi {
         carri.productoTupper = productos[i].productoTupper;
         productsList.add(carri);
 
-        if (productos[i].idCategoria != '58' &&
-            productos[i].idCategoria != '86' &&
-            productos[i].idCategoria != '16') {
+        if (productos[i].idCategoria != '58' && productos[i].idCategoria != '86' && productos[i].idCategoria != '16') {
           cantidadDeProductos = cantidadDeProductos + int.parse(productos[i].productoCantidad);
         }
         //cantidadDeProductos =cantidadDeProductos + int.parse(productos[i].productoCantidad);
@@ -73,8 +71,7 @@ class OrdenesApi {
       if (cantidadDeTupers > 0) {
         final tupperProduct = await pDatabase.consultarPorId(prefs.idTupper);
         Carrito carritoCompletoTupper = Carrito();
-        carritoCompletoTupper.idProducto =
-            int.parse(tupperProduct[0].idProducto);
+        carritoCompletoTupper.idProducto = int.parse(tupperProduct[0].idProducto);
         carritoCompletoTupper.productoCantidad = cantidadDeTupers.toString();
         carritoCompletoTupper.productoObservacion = '';
         productsList.add(carritoCompletoTupper);
@@ -90,8 +87,7 @@ class OrdenesApi {
       productsList.add(carrito3);
 
       for (int x = 0; x < productsList.length; x++) {
-        productitos +=
-            "${productsList[x].idProducto}.${productsList[x].productoCantidad}.${productsList[x].productoObservacion}";
+        productitos += "${productsList[x].idProducto}.${productsList[x].productoCantidad}.${productsList[x].productoObservacion}";
 
         if (x != productsList.length - 1) {
           productitos += "|";
@@ -121,7 +117,7 @@ class OrdenesApi {
 
       //print('productitos $productitos');
 
-      final response = await http.post(url, body: {
+      final response = await http.post((Uri.parse(url)), body: {
         'app': 'true',
         'tn': user[0].token,
         'id_user': user[0].cU,
@@ -151,33 +147,22 @@ class OrdenesApi {
 
       //print(decodedData['result']['code']);
       if (decodedData['result']['code'] == 1) {
-        PedidoServer pedidosServer =
-            PedidoServer.fromJson2(decodedData['result']['pedido']);
+        PedidoServer pedidosServer = PedidoServer.fromJson2(decodedData['result']['pedido']);
         await pedidoDatabase.insertarPedido(pedidosServer);
 
         //print(pedidoInsertado);
 
-        for (int i = 0;
-            i < decodedData['result']['pedido']['productos'].length;
-            i++) {
+        for (int i = 0; i < decodedData['result']['pedido']['productos'].length; i++) {
           ProductoServer productoServer = new ProductoServer();
 
-          productoServer.idDetallePedido = decodedData['result']['pedido']
-              ['productos'][i]['id_detalle_pedido'];
-          productoServer.idPedido =
-              decodedData['result']['pedido']['productos'][i]['id_pedido'];
-          productoServer.idProducto =
-              decodedData['result']['pedido']['productos'][i]['id_producto'];
-          productoServer.detalleCantidad = decodedData['result']['pedido']
-              ['productos'][i]['detalle_cantidad'];
-          productoServer.detallePrecioUnit = decodedData['result']['pedido']
-              ['productos'][i]['detalle_precio_unit'];
-          productoServer.detallePrecioTotal = decodedData['result']['pedido']
-              ['productos'][i]['detalle_precio_total'];
-          productoServer.detalleObservacion = decodedData['result']['pedido']
-              ['productos'][i]['detalle_observacion'];
-          productoServer.productoNombre = decodedData['result']['pedido']
-              ['productos'][i]['producto_nombre'];
+          productoServer.idDetallePedido = decodedData['result']['pedido']['productos'][i]['id_detalle_pedido'];
+          productoServer.idPedido = decodedData['result']['pedido']['productos'][i]['id_pedido'];
+          productoServer.idProducto = decodedData['result']['pedido']['productos'][i]['id_producto'];
+          productoServer.detalleCantidad = decodedData['result']['pedido']['productos'][i]['detalle_cantidad'];
+          productoServer.detallePrecioUnit = decodedData['result']['pedido']['productos'][i]['detalle_precio_unit'];
+          productoServer.detallePrecioTotal = decodedData['result']['pedido']['productos'][i]['detalle_precio_total'];
+          productoServer.detalleObservacion = decodedData['result']['pedido']['productos'][i]['detalle_observacion'];
+          productoServer.productoNombre = decodedData['result']['pedido']['productos'][i]['producto_nombre'];
 
           await pedidoDatabase.insertarDetallePedido(productoServer);
         }
@@ -194,26 +179,17 @@ class OrdenesApi {
         return linkcito;
       } else if (decodedData['result']['code'] == 8) {
         final carritoDatabase = CarritoDatabase();
-        for (int i = 0;
-            i < decodedData['result']['pedido']['productos'].length;
-            i++) {
+        for (int i = 0; i < decodedData['result']['pedido']['productos'].length; i++) {
           Carrito carrito = new Carrito();
-          carrito.idProducto = int.parse(
-              decodedData['result']['pedido']['productos'][i]['id_producto']);
-          carrito.productoNombre = decodedData['result']['pedido']['productos']
-              [i]['producto_nombre'];
-          carrito.productoCantidad = decodedData['result']['pedido']
-              ['productos'][i]['detalle_cantidad'];
-          carrito.productoPrecio = decodedData['result']['pedido']['productos']
-              [i]['detalle_precio_unit'];
-          carrito.productoObservacion = decodedData['result']['pedido']
-              ['productos'][i]['detalle_observacion'];
-          carrito.idCategoria =
-              decodedData['result']['pedido']['productos'][i]['id_categoria'];
+          carrito.idProducto = int.parse(decodedData['result']['pedido']['productos'][i]['id_producto']);
+          carrito.productoNombre = decodedData['result']['pedido']['productos'][i]['producto_nombre'];
+          carrito.productoCantidad = decodedData['result']['pedido']['productos'][i]['detalle_cantidad'];
+          carrito.productoPrecio = decodedData['result']['pedido']['productos'][i]['detalle_precio_unit'];
+          carrito.productoObservacion = decodedData['result']['pedido']['productos'][i]['detalle_observacion'];
+          carrito.idCategoria = decodedData['result']['pedido']['productos'][i]['id_categoria'];
           carrito.productoTipo = '0';
 
-          final carritoProduct = await carritoDatabase
-              .consultarCarritoPorId(carrito.idProducto.toString());
+          final carritoProduct = await carritoDatabase.consultarCarritoPorId(carrito.idProducto.toString());
 
           if (carritoProduct.length > 0) {
             carrito.productoTupper = carritoProduct[0].productoTupper;
@@ -246,8 +222,7 @@ class OrdenesApi {
       }
     } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+      utils.showToast("Problemas con la conexión a internet", 2, ToastGravity.TOP);
       String link = "";
       Link linkcito = Link();
       linkcito.resp = 2;
@@ -262,9 +237,9 @@ class OrdenesApi {
       final list = List<PedidoServer>();
 
       final url = '$_url/api/pedido/consultar_pedido';
-      final List<User> user = await userDatabase.obtenerUsUario();
+      final List<Userio> user = await userDatabase.obtenerUsUario();
 
-      final response = await http.post(url, body: {
+      final response = await http.post((Uri.parse(url)), body: {
         'app': 'true',
         'tn': user[0].token,
         'id_pedido': idPedido,
@@ -283,11 +258,10 @@ class OrdenesApi {
           await pedidoDatabase.deletePedidoPorIdPedido(cantidadPedidos[x]['id_pedido']);
           await pedidoDatabase.deleteDetallePedidoPorIdPedido(cantidadPedidos[x]['id_pedido']);
 
-          PedidoServer pedidos = PedidoServer(); 
+          PedidoServer pedidos = PedidoServer();
 
           pedidos.idPedido = cantidadPedidos[x]['id_pedido'];
-          pedidos.pedidoTipoComprobante =
-              cantidadPedidos[x]['pedido_tipo_comprobante'];
+          pedidos.pedidoTipoComprobante = cantidadPedidos[x]['pedido_tipo_comprobante'];
           pedidos.pedidoCodPersona = cantidadPedidos[x]['pedido_cod_persona'];
           pedidos.pedidoFecha = cantidadPedidos[x]['pedido_fecha'];
           pedidos.pedidoHora = cantidadPedidos[x]['pedido_hora'];
@@ -303,8 +277,7 @@ class OrdenesApi {
           pedidos.pedidoEstadoPago = cantidadPedidos[x]['pedido_estado_pago'];
           pedidos.pedidoEstado = cantidadPedidos[x]['pedido_estado'];
           pedidos.pedidoCodigo = cantidadPedidos[x]['pedido_codigo'];
-          pedidos.pedidoLink =
-              cantidadPedidos[x]['informacion_pago'][0]['link_pago'];
+          pedidos.pedidoLink = cantidadPedidos[x]['informacion_pago'][0]['link_pago'];
 
           await pedidoDatabase.insertarPedido(pedidos);
 
@@ -342,12 +315,12 @@ class OrdenesApi {
       final list = List<PedidoServer>();
 
       final url = '$_url/api/pedido/historial_pedidos';
-      final List<User> user = await userDatabase.obtenerUsUario();
+      final List<Userio> user = await userDatabase.obtenerUsUario();
       /* 
       print('token ${user[0].token}');
       print('CU ${user[0].cU}'); */
 
-      final response = await http.post(url, body: {
+      final response = await http.post((Uri.parse(url)), body: {
         'app': 'true',
         'tn': user[0].token,
         'id_user': user[0].cU,
@@ -363,13 +336,11 @@ class OrdenesApi {
         for (int x = 0; x < cantidadPedidos.length; x++) {
           //obtener el pedido si existe para actualizarlo o crear uno nuevo
 
-          final pedidoList = await pedidoDatabase
-              .obtenerPedidoPorId(cantidadPedidos[x]['id_pedido']);
+          final pedidoList = await pedidoDatabase.obtenerPedidoPorId(cantidadPedidos[x]['id_pedido']);
           PedidoServer pedidos = PedidoServer();
 
           pedidos.idPedido = cantidadPedidos[x]['id_pedido'];
-          pedidos.pedidoTipoComprobante =
-              cantidadPedidos[x]['pedido_tipo_comprobante'];
+          pedidos.pedidoTipoComprobante = cantidadPedidos[x]['pedido_tipo_comprobante'];
           pedidos.pedidoCodPersona = cantidadPedidos[x]['pedido_cod_persona'];
           pedidos.pedidoFecha = cantidadPedidos[x]['pedido_fecha'];
           pedidos.pedidoHora = cantidadPedidos[x]['pedido_hora'];
@@ -397,22 +368,14 @@ class OrdenesApi {
           for (int i = 0; i < cantidadPedidos[x]['productos'].length; i++) {
             ProductoServer productoServer = new ProductoServer();
 
-            productoServer.idDetallePedido =
-                cantidadPedidos[x]['productos'][i]['id_detalle_pedido'];
-            productoServer.idPedido =
-                cantidadPedidos[x]['productos'][i]['id_pedido'];
-            productoServer.idProducto =
-                cantidadPedidos[x]['productos'][i]['id_producto'];
-            productoServer.detalleCantidad =
-                cantidadPedidos[x]['productos'][i]['detalle_cantidad'];
-            productoServer.detallePrecioUnit =
-                cantidadPedidos[x]['productos'][i]['detalle_precio_unit'];
-            productoServer.detallePrecioTotal =
-                cantidadPedidos[x]['productos'][i]['detalle_precio_total'];
-            productoServer.detalleObservacion =
-                cantidadPedidos[x]['productos'][i]['detalle_observacion'];
-            productoServer.productoNombre =
-                cantidadPedidos[x]['productos'][i]['producto_nombre'];
+            productoServer.idDetallePedido = cantidadPedidos[x]['productos'][i]['id_detalle_pedido'];
+            productoServer.idPedido = cantidadPedidos[x]['productos'][i]['id_pedido'];
+            productoServer.idProducto = cantidadPedidos[x]['productos'][i]['id_producto'];
+            productoServer.detalleCantidad = cantidadPedidos[x]['productos'][i]['detalle_cantidad'];
+            productoServer.detallePrecioUnit = cantidadPedidos[x]['productos'][i]['detalle_precio_unit'];
+            productoServer.detallePrecioTotal = cantidadPedidos[x]['productos'][i]['detalle_precio_total'];
+            productoServer.detalleObservacion = cantidadPedidos[x]['productos'][i]['detalle_observacion'];
+            productoServer.productoNombre = cantidadPedidos[x]['productos'][i]['producto_nombre'];
 
             await pedidoDatabase.insertarDetallePedido(productoServer);
           }
@@ -435,9 +398,9 @@ class OrdenesApi {
     try {
       final url = '$_url/api/pedido/reintentar_pago_online';
 
-      final List<User> user = await userDatabase.obtenerUsUario();
+      final List<Userio> user = await userDatabase.obtenerUsUario();
 
-      final response = await http.post(url, body: {
+      final response = await http.post((Uri.parse(url)), body: {
         'app': 'true',
         'tn': user[0].token,
         'id_pedido': idPedido,
@@ -446,31 +409,20 @@ class OrdenesApi {
       final decodedData = json.decode(response.body);
 
       if (decodedData['result']['code'] == 1) {
-        PedidoServer pedidosServer =
-            PedidoServer.fromJson2(decodedData['result']['data'][0]);
+        PedidoServer pedidosServer = PedidoServer.fromJson2(decodedData['result']['data'][0]);
         await pedidoDatabase.insertarPedido(pedidosServer);
 
-        for (int i = 0;
-            i < decodedData['result']['data'][0]['productos'].length;
-            i++) {
+        for (int i = 0; i < decodedData['result']['data'][0]['productos'].length; i++) {
           ProductoServer productoServer = new ProductoServer();
 
-          productoServer.idDetallePedido = decodedData['result']['data'][0]
-              ['productos'][i]['id_detalle_pedido'];
-          productoServer.idPedido =
-              decodedData['result']['data'][0]['productos'][i]['id_pedido'];
-          productoServer.idProducto =
-              decodedData['result']['data'][0]['productos'][i]['id_producto'];
-          productoServer.detalleCantidad = decodedData['result']['data'][0]
-              ['productos'][i]['detalle_cantidad'];
-          productoServer.detallePrecioUnit = decodedData['result']['data'][0]
-              ['productos'][i]['detalle_precio_unit'];
-          productoServer.detallePrecioTotal = decodedData['result']['data'][0]
-              ['productos'][i]['detalle_precio_total'];
-          productoServer.detalleObservacion = decodedData['result']['data'][0]
-              ['productos'][i]['detalle_observacion'];
-          productoServer.productoNombre = decodedData['result']['data'][0]
-              ['productos'][i]['producto_nombre'];
+          productoServer.idDetallePedido = decodedData['result']['data'][0]['productos'][i]['id_detalle_pedido'];
+          productoServer.idPedido = decodedData['result']['data'][0]['productos'][i]['id_pedido'];
+          productoServer.idProducto = decodedData['result']['data'][0]['productos'][i]['id_producto'];
+          productoServer.detalleCantidad = decodedData['result']['data'][0]['productos'][i]['detalle_cantidad'];
+          productoServer.detallePrecioUnit = decodedData['result']['data'][0]['productos'][i]['detalle_precio_unit'];
+          productoServer.detallePrecioTotal = decodedData['result']['data'][0]['productos'][i]['detalle_precio_total'];
+          productoServer.detalleObservacion = decodedData['result']['data'][0]['productos'][i]['detalle_observacion'];
+          productoServer.productoNombre = decodedData['result']['data'][0]['productos'][i]['producto_nombre'];
 
           await pedidoDatabase.insertarDetallePedido(productoServer);
         }
@@ -480,8 +432,7 @@ class OrdenesApi {
         Link linkcito = Link();
         linkcito.resp = 1;
         linkcito.link = link;
-        linkcito.idPedido =
-            idPedido; // decodedData['result']['data']['id_pedido'];
+        linkcito.idPedido = idPedido; // decodedData['result']['data']['id_pedido'];
 
         //list.add(pedidosServer);
 
@@ -495,8 +446,7 @@ class OrdenesApi {
       }
     } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+      utils.showToast("Problemas con la conexión a internet", 2, ToastGravity.TOP);
       String link = "";
       Link linkcito = Link();
       linkcito.resp = 2;
@@ -510,9 +460,9 @@ class OrdenesApi {
     try {
       final url = '$_url/api/pedido/cancelar_pedido';
 
-      final List<User> user = await userDatabase.obtenerUsUario();
+      final List<Userio> user = await userDatabase.obtenerUsUario();
 
-      final response = await http.post(url, body: {
+      final response = await http.post((Uri.parse(url)), body: {
         'app': 'true',
         'tn': user[0].token,
         'id_pedido': idPedido,
@@ -527,20 +477,18 @@ class OrdenesApi {
       }
     } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+      utils.showToast("Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return 2;
     }
   }
 
-  Future<int> cambiarPagoEfectivo(
-      String idPedido, String monto, String vuelto) async {
+  Future<int> cambiarPagoEfectivo(String idPedido, String monto, String vuelto) async {
     try {
       final url = '$_url/api/pedido/cambiar_metodo_pago';
 
-      final List<User> user = await userDatabase.obtenerUsUario();
+      final List<Userio> user = await userDatabase.obtenerUsUario();
 
-      final response = await http.post(url, body: {
+      final response = await http.post((Uri.parse(url)), body: {
         'app': 'true',
         'tn': user[0].token,
         'id_pedido': idPedido,
@@ -558,21 +506,19 @@ class OrdenesApi {
       }
     } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+      utils.showToast("Problemas con la conexión a internet", 2, ToastGravity.TOP);
 
       return 2;
     }
   }
 
-  Future<int> valorarPedido(
-      String idPedido, String valoracion, String comentario) async {
+  Future<int> valorarPedido(String idPedido, String valoracion, String comentario) async {
     try {
       final url = '$_url/api/pedido/valorar_pedido';
 
-      final List<User> user = await userDatabase.obtenerUsUario();
+      final List<Userio> user = await userDatabase.obtenerUsUario();
 
-      final response = await http.post(url, body: {
+      final response = await http.post((Uri.parse(url)), body: {
         'app': 'true',
         'tn': user[0].token,
         'id_pedido': idPedido,
@@ -585,8 +531,7 @@ class OrdenesApi {
       return int.parse(code);
     } catch (error) {
       //print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(
-          "Problemas con la conexión a internet", 2, ToastGravity.TOP);
+      utils.showToast("Problemas con la conexión a internet", 2, ToastGravity.TOP);
 
       return 2;
     }
