@@ -79,8 +79,7 @@ class _DetallePagoState extends State<DetallePago> {
     setState(() {});
   }
 
-  void _tipoPagoRadioValue(
-      BuildContext context, int value, Responsive responsive, double precio) {
+  void _tipoPagoRadioValue(BuildContext context, int value, Responsive responsive, double precio) {
     setState(() {
       _tipoPagoValue = value;
 
@@ -96,7 +95,7 @@ class _DetallePagoState extends State<DetallePago> {
       }
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = new Responsive.of(context);
@@ -133,8 +132,7 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _contenidoSuperior(
-      BuildContext context, Responsive responsive, UsuarioBloc usuarioBloc) {
+  Widget _contenidoSuperior(BuildContext context, Responsive responsive, UsuarioBloc usuarioBloc) {
     final direccionBloc = ProviderBloc.dire(context);
     direccionBloc.obtenerDireccionesConZonas();
 
@@ -148,29 +146,21 @@ class _DetallePagoState extends State<DetallePago> {
 
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
-            return _contenido(context, responsive, usuarioBloc, snapshot.data,
-                carritoCompletoBloc);
+            return _contenido(context, responsive, usuarioBloc, snapshot.data, carritoCompletoBloc);
           } else {
-            return _contenido(
-                context, responsive, usuarioBloc, list, carritoCompletoBloc);
+            return _contenido(context, responsive, usuarioBloc, list, carritoCompletoBloc);
           }
         } else {
-          return _contenido(
-              context, responsive, usuarioBloc, list, carritoCompletoBloc);
+          return _contenido(context, responsive, usuarioBloc, list, carritoCompletoBloc);
         }
       },
     );
   }
 
   Widget _contenido(
-      BuildContext context,
-      Responsive responsive,
-      UsuarioBloc usuarioBloc,
-      List<Direccion> listDireccion,
-      CarritoCompletoBloc carritoCompleto) {
+      BuildContext context, Responsive responsive, UsuarioBloc usuarioBloc, List<Direccion> listDireccion, CarritoCompletoBloc carritoCompleto) {
     final propinasBloc = ProviderBloc.propina(context);
     propinasBloc.obtenerPropinas();
-
 
     String direpe = '';
     String refepe = '';
@@ -187,151 +177,142 @@ class _DetallePagoState extends State<DetallePago> {
     final date = DateFormat("dd.MM.yyyy").format(DateTime.now());
 
     return SafeArea(
-          child: Container(
-            margin: EdgeInsets.only(
-              top: responsive.hp(1),
+      child: Container(
+        margin: EdgeInsets.only(
+          top: responsive.hp(1),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(13),
+          border: Border.all(
+            color: Colors.grey[200],
+          ),
+        ),
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Text(
+              'Resumen de Orden',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.red, fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
             ),
-            padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(13),
-              border: Border.all(
-                color: Colors.grey[200],
+            SizedBox(
+              height: responsive.hp(1),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: Container(
+                height: responsive.hp(6),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      date.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: responsive.ip(2),
+                      ),
+                    ),
+                    Image.asset('assets/logo_enchilada.png'),
+                  ],
+                ),
               ),
             ),
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: <Widget>[
-                Text(
-                  'Resumen de Orden',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: responsive.ip(2.5),
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: responsive.hp(1),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5),
-                  ),
-                  child: Container(
-                    height: responsive.hp(6),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          date.toString(),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: responsive.ip(2),
-                          ),
-                        ),
-                        Image.asset('assets/logo_enchilada.png'),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: responsive.hp(2),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5),
-                  ),
-                  child: Text(
-                    'Productos',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: responsive.ip(2.5),
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: responsive.hp(2),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5),
-                  ),
-                  child: _listaProductos(context, responsive),
-                ),
-                Divider(),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5),
-                  ),
-                  color: Colors.grey[200],
-                  child: Column(
-                    children: <Widget>[
-                      _numeroTelefono(usuarioBloc, context, responsive),
-                      
-                      Divider(),
-                      _direccion(direpe, refepe, distritope, responsive),
-                      
-                      Divider(),
-                    ],
-                  ),
-                ),
-                Divider(),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '¿Desea agregar propina?',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: responsive.ip(2),
-                            ),
-                          ),
-                          Spacer(),
-                        ],
-                      ),
-                      PropinaPage()
-                    ],
-                  ),
-                ),
-                Divider(),
-                (listDireccion.length > 0)
-                    ? Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(5),
-                        ),
-                        child: _deliveryRapido(responsive, datoLlegadaDelivery),
-                      )
-                    : Container(),
-                Divider(),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5),
-                  ),
-                  child: _tipoComprobante(context, responsive),
-                ),
-                Divider(),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5),
-                  ),
-                  child: _tipoPago(responsive),
-                ),
-                Divider(),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(5),
-                  ),
-                  child: _pagarCarrito(context, responsive),
-                )
-              ],
+            SizedBox(
+              height: responsive.hp(2),
             ),
-          ),
-        );
-      
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: Text(
+                'Productos',
+                style: TextStyle(color: Colors.black, fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: responsive.hp(2),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: _listaProductos(context, responsive),
+            ),
+            Divider(),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              color: Colors.grey[200],
+              child: Column(
+                children: <Widget>[
+                  _numeroTelefono(usuarioBloc, context, responsive),
+                  Divider(),
+                  _direccion(direpe, refepe, distritope, responsive),
+                  Divider(),
+                ],
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        '¿Desea agregar propina?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsive.ip(2),
+                        ),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                  PropinaPage()
+                ],
+              ),
+            ),
+            Divider(),
+            (listDireccion.length > 0)
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: responsive.wp(5),
+                    ),
+                    child: _deliveryRapido(responsive, datoLlegadaDelivery),
+                  )
+                : Container(),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: _tipoComprobante(context, responsive),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: _tipoPago(responsive),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5),
+              ),
+              child: _pagarCarrito(context, responsive),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _listaProductos(BuildContext context, Responsive responsive) {
@@ -340,15 +321,12 @@ class _DetallePagoState extends State<DetallePago> {
 
     return StreamBuilder(
       stream: carritoCompletoBloc.carritoCompletoStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<List<CarritoCompleto>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<CarritoCompleto>> snapshot) {
         if (snapshot.hasData) {
           double precioTotal = 0.0;
           for (int x = 0; x < snapshot.data.length; x++) {
             if (snapshot.data[x].precio != '') {
-              precioTotal = precioTotal +
-                  (double.parse(snapshot.data[x].precio) *
-                      double.parse(snapshot.data[x].cantidad));
+              precioTotal = precioTotal + (double.parse(snapshot.data[x].precio) * double.parse(snapshot.data[x].cantidad));
             }
           }
           String precioTotalFinal = utils.format(precioTotal);
@@ -364,10 +342,7 @@ class _DetallePagoState extends State<DetallePago> {
                 Expanded(
                   child: Text(
                     'Total',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: responsive.ip(2),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.red, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
@@ -375,10 +350,7 @@ class _DetallePagoState extends State<DetallePago> {
                 ),
                 Text(
                   'S/.$precioTotalFinal',
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: responsive.ip(2),
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.red, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -408,8 +380,7 @@ class _DetallePagoState extends State<DetallePago> {
     String precioFinal;
     if (carrito.precio != '') {
       estado = 1;
-      double precio =
-          double.parse(carrito.cantidad) * double.parse(carrito.precio);
+      double precio = double.parse(carrito.cantidad) * double.parse(carrito.precio);
 
       precioFinal = utils.format(precio);
       if (int.parse(carrito.cantidad) > 1) {
@@ -460,11 +431,10 @@ class _DetallePagoState extends State<DetallePago> {
     );
   }
 
-  Widget _numeroTelefono(
-      UsuarioBloc usuarioBloc, BuildContext context, Responsive responsive) {
+  Widget _numeroTelefono(UsuarioBloc usuarioBloc, BuildContext context, Responsive responsive) {
     return StreamBuilder(
         stream: usuarioBloc.usuarioStream,
-        builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<Userio>> snapshot) {
           String telefono = '-';
           String agregar = 'Agregar';
           if (snapshot.hasData) {
@@ -487,57 +457,51 @@ class _DetallePagoState extends State<DetallePago> {
   }
 
   Widget _telefono(String telefono, String agregar, Responsive responsive) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Número de Teléfono',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: responsive.ip(2),
-                ),
-              ),
-              FlatButton(
-                child: Text(
-                  '$agregar',
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(1.8)),
-                ),
-                onPressed: () {
-                  modaltelefono(responsive);
-                },
-              ),
-            ],
-          ),
-          Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-            Text(
-              '+51 ',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: responsive.ip(2.1),
-              ),
+          Text(
+            'Número de Teléfono',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: responsive.ip(2),
             ),
-            Text(
-              '$telefono',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: responsive.ip(2.1),
-              ),
-            )
-          ])
-        ]);
+          ),
+          FlatButton(
+            child: Text(
+              '$agregar',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: responsive.ip(1.8)),
+            ),
+            onPressed: () {
+              modaltelefono(responsive);
+            },
+          ),
+        ],
+      ),
+      Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+        Text(
+          '+51 ',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: responsive.ip(2.1),
+          ),
+        ),
+        Text(
+          '$telefono',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: responsive.ip(2.1),
+          ),
+        )
+      ])
+    ]);
   }
 
-  Widget _direccion(String addres, String referencia, String nombreDistrito,
-      Responsive responsive) {
+  Widget _direccion(String addres, String referencia, String nombreDistrito, Responsive responsive) {
     String addresito;
     String agg;
     String ref;
@@ -554,52 +518,35 @@ class _DetallePagoState extends State<DetallePago> {
     } else {
       ref = referencia;
     }
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('Dirección de envío',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2))),
-              FlatButton(
-                child: Text('$agg',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsive.ip(1.8))),
-                onPressed: () {
-                  setState(() {});
-                  Navigator.pushNamed(context, 'gestionarDirecciones');
-                },
-              ),
-            ],
+          Text('Dirección de envío', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(2))),
+          FlatButton(
+            child: Text('$agg', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: responsive.ip(1.8))),
+            onPressed: () {
+              setState(() {});
+              Navigator.pushNamed(context, 'gestionarDirecciones');
+            },
           ),
-          Text(
-            '$addresito',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: responsive.ip(2)),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Row(children: <Widget>[
-            Text('Referencia : ',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsive.ip(1.7))),
-            Text(
-              '$ref',
-              style: TextStyle(fontSize: responsive.ip(1.7)),
-            ),
-          ])
-        ]);
+        ],
+      ),
+      Text(
+        '$addresito',
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(2)),
+      ),
+      SizedBox(
+        height: 5,
+      ),
+      Row(children: <Widget>[
+        Text('Referencia : ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(1.7))),
+        Text(
+          '$ref',
+          style: TextStyle(fontSize: responsive.ip(1.7)),
+        ),
+      ])
+    ]);
   }
 
   Widget _tipoComprobante(BuildContext context, Responsive responsive) {
@@ -678,9 +625,7 @@ class _DetallePagoState extends State<DetallePago> {
                       ),
                       Text(
                         '$ruc',
-                        style: new TextStyle(
-                            fontSize: responsive.ip(1.8),
-                            fontWeight: FontWeight.bold),
+                        style: new TextStyle(fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
@@ -688,8 +633,7 @@ class _DetallePagoState extends State<DetallePago> {
               )
             : Text(
                 '$errorRuc',
-                style: new TextStyle(
-                    fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
+                style: new TextStyle(fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
               )
       ],
     );
@@ -732,8 +676,7 @@ class _DetallePagoState extends State<DetallePago> {
                         value: 2,
                         groupValue: _tipoPagoValue,
                         onChanged: (valor) {
-                          _tipoPagoRadioValue(
-                              context, valor, responsive, precioAPagar);
+                          _tipoPagoRadioValue(context, valor, responsive, precioAPagar);
                         },
                       ),
                       Text(
@@ -755,8 +698,7 @@ class _DetallePagoState extends State<DetallePago> {
                         value: 0,
                         groupValue: _tipoPagoValue,
                         onChanged: (valor) {
-                          _tipoPagoRadioValue(
-                              context, valor, responsive, precioAPagar);
+                          _tipoPagoRadioValue(context, valor, responsive, precioAPagar);
                         },
                       ),
                       Text(
@@ -778,8 +720,7 @@ class _DetallePagoState extends State<DetallePago> {
                         value: 1,
                         groupValue: _tipoPagoValue,
                         onChanged: (valor) {
-                          _tipoPagoRadioValue(
-                              context, valor, responsive, precioAPagar);
+                          _tipoPagoRadioValue(context, valor, responsive, precioAPagar);
                         },
                       ),
                       Text(
@@ -800,9 +741,7 @@ class _DetallePagoState extends State<DetallePago> {
                 ? Container(
                     child: Text(
                       'El monto de pago debe ser superior al precio de la orden',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.8),
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
                     ),
                   )
                 : Column(
@@ -818,9 +757,7 @@ class _DetallePagoState extends State<DetallePago> {
                           Expanded(
                             child: Text(
                               '$montoPago',
-                              style: TextStyle(
-                                  fontSize: responsive.ip(1.8),
-                                  fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
                             ),
                           )
                         ],
@@ -835,9 +772,7 @@ class _DetallePagoState extends State<DetallePago> {
                           ),
                           Text(
                             '$vuelto2',
-                            style: TextStyle(
-                                fontSize: responsive.ip(1.8),
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
@@ -900,8 +835,7 @@ class _DetallePagoState extends State<DetallePago> {
               children: <Widget>[
                 Text(
                   'Existen pedidos pendientes, por favor revise su historial de pedidos',
-                  style: TextStyle(
-                      fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: responsive.hp(2),
@@ -1036,9 +970,7 @@ class _DetallePagoState extends State<DetallePago> {
                     children: <Widget>[
                       Text(
                         'Ingrese el monto con el que pagará',
-                        style: TextStyle(
-                            fontSize: responsive.ip(2),
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: responsive.hp(2),
@@ -1070,8 +1002,7 @@ class _DetallePagoState extends State<DetallePago> {
                                 keyboardType: TextInputType.number,
                                 onChanged: (val) {
                                   if (val.length > 0) {
-                                    nuevoMetodoPagoBloc.validarPago2(
-                                        val, '$precio');
+                                    nuevoMetodoPagoBloc.validarPago2(val, '$precio');
                                   } else {
                                     reset();
 
@@ -1121,14 +1052,10 @@ class _DetallePagoState extends State<DetallePago> {
                         children: [
                           FlatButton(
                             onPressed: () async {
-                              if (double.parse(montoPagoController.text) >
-                                  double.parse('$precio')) {
+                              if (double.parse(montoPagoController.text) > double.parse('$precio')) {
                                 Navigator.pop(context);
                               } else {
-                                utils.showToast(
-                                    'El monto de pago debe ser mayor al costo del pedido',
-                                    2,
-                                    ToastGravity.TOP);
+                                utils.showToast('El monto de pago debe ser mayor al costo del pedido', 2, ToastGravity.TOP);
                               }
                             },
                             child: Container(
@@ -1136,9 +1063,7 @@ class _DetallePagoState extends State<DetallePago> {
                                 horizontal: responsive.ip(3),
                                 vertical: responsive.ip(1),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.red),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.red),
                               child: Text(
                                 'Confirmar',
                                 textAlign: TextAlign.center,
@@ -1161,9 +1086,7 @@ class _DetallePagoState extends State<DetallePago> {
                                 horizontal: responsive.ip(3),
                                 vertical: responsive.ip(1),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.red),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.red),
                               child: Text(
                                 'Cancelar',
                                 textAlign: TextAlign.center,
@@ -1231,22 +1154,17 @@ class _DetallePagoState extends State<DetallePago> {
                     children: <Widget>[
                       Text(
                         'Ingrese su número de Teléfono',
-                        style: TextStyle(
-                            fontSize: responsive.ip(2.5),
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
                       ),
                       Container(
                         height: responsive.hp(10),
-
                         child: Row(
                           children: <Widget>[
                             Container(
                               width: responsive.wp(12),
                               child: Text(
                                 '+51',
-                                style: TextStyle(
-                                    fontSize: responsive.ip(2.5),
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
                               ),
                             ),
                             SizedBox(
@@ -1259,9 +1177,7 @@ class _DetallePagoState extends State<DetallePago> {
                                 top: responsive.hp(2.5),
                               ),
                               child: TextField(
-                                style: TextStyle(
-                                    fontSize: responsive.ip(2.5),
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
                                 controller: telefonoController,
                                 maxLength: 9,
                                 keyboardType: TextInputType.number,
@@ -1288,15 +1204,11 @@ class _DetallePagoState extends State<DetallePago> {
                       FlatButton(
                         onPressed: () async {
                           if (telefonoController.text.length > 6) {
-                            utils.agregarTelefono(
-                                context, telefonoController.text);
+                            utils.agregarTelefono(context, telefonoController.text);
 
                             Navigator.pop(context);
                           } else {
-                            utils.showToast(
-                                'el campo Teléfono debe tener 6 dígitos por lo menos',
-                                2,
-                                ToastGravity.TOP);
+                            utils.showToast('el campo Teléfono debe tener 6 dígitos por lo menos', 2, ToastGravity.TOP);
                           }
                         },
                         child: Container(
@@ -1304,9 +1216,7 @@ class _DetallePagoState extends State<DetallePago> {
                             horizontal: responsive.ip(5),
                             vertical: responsive.ip(1),
                           ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.red),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.red),
                           child: Text(
                             'Confirmar',
                             textAlign: TextAlign.center,
@@ -1359,9 +1269,7 @@ class _DetallePagoState extends State<DetallePago> {
                 children: <Widget>[
                   Text(
                     'Ingrese su número de RUC',
-                    style: TextStyle(
-                        fontSize: responsive.ip(2.5),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
                   ),
                   TextField(
                     controller: comprobanteController,
@@ -1384,16 +1292,12 @@ class _DetallePagoState extends State<DetallePago> {
 
                               setState(() {});
                             } else {
-                              utils.showToast(
-                                  'El número de ruc debe contar con 11 dígitos',
-                                  2,
-                                  ToastGravity.TOP);
+                              utils.showToast('El número de ruc debe contar con 11 dígitos', 2, ToastGravity.TOP);
                             }
                             //Navigator.pop(context);
 
                           } else {
-                            utils.showToast('el campo no debe estar vacio', 2,
-                                ToastGravity.TOP);
+                            utils.showToast('el campo no debe estar vacio', 2, ToastGravity.TOP);
                           }
                         },
                         child: Container(
@@ -1401,15 +1305,11 @@ class _DetallePagoState extends State<DetallePago> {
                             horizontal: responsive.ip(3),
                             vertical: responsive.ip(1),
                           ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.red),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.red),
                           child: Text(
                             'Confirmar',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(2)),
+                            style: TextStyle(color: Colors.white, fontSize: responsive.ip(2)),
                           ),
                         ),
                       ),
@@ -1426,15 +1326,11 @@ class _DetallePagoState extends State<DetallePago> {
                             horizontal: responsive.ip(3),
                             vertical: responsive.ip(1),
                           ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.red),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.red),
                           child: Text(
                             'Cancelar',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(2)),
+                            style: TextStyle(color: Colors.white, fontSize: responsive.ip(2)),
                           ),
                         ),
                       ),
@@ -1486,9 +1382,7 @@ class _DetallePagoState extends State<DetallePago> {
       if (direccion.length > 0) {
         if (user[0].telefono != "" && user[0].telefono != null) {
           if (_comprobanteValue == 1 || _comprobanteValue == 0) {
-            if (_tipoPagoValue == 1 ||
-                _tipoPagoValue == 0 ||
-                _tipoPagoValue == 2) {
+            if (_tipoPagoValue == 1 || _tipoPagoValue == 0 || _tipoPagoValue == 2) {
               PedidoServer pedido = new PedidoServer();
               if (_comprobanteValue == 0) {
                 //selecciona Boleta
@@ -1539,28 +1433,22 @@ class _DetallePagoState extends State<DetallePago> {
                     if (res.resp == 1) {
                       if (res.link != "") {
                         Navigator.pop(context);
-                        ArgumentsDetallePago argumentsDetallePago =
-                            ArgumentsDetallePago();
+                        ArgumentsDetallePago argumentsDetallePago = ArgumentsDetallePago();
                         argumentsDetallePago.link = res.link;
                         argumentsDetallePago.idPedido = res.idPedido;
-                        Navigator.pushNamed(context, 'webView',
-                            arguments: argumentsDetallePago);
+                        Navigator.pushNamed(context, 'webView', arguments: argumentsDetallePago);
                       } else {
                         Navigator.pop(context);
                         ArgumentsWebview argumentsWebview = ArgumentsWebview();
                         argumentsWebview.idPedido = res.idPedido;
                         argumentsWebview.codigo = '1';
 
-                        Navigator.pushNamed(context, 'ticket',
-                            arguments: argumentsWebview);
+                        Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
                         //Navigator.pop(context);
                         //pedidoCorrecto();
                       }
                     } else if (res.resp == 8) {
-                      utils.showToast(
-                          'Estamos actualizando los datos de los productos, intentelo más tarde',
-                          2,
-                          ToastGravity.TOP);
+                      utils.showToast('Estamos actualizando los datos de los productos, intentelo más tarde', 2, ToastGravity.TOP);
                       //OCURRIO UNA ACTUALIZACION DE PRODUCTOS
                       final categoriasApi = CategoriasApi();
                       categoriasApi.obtenerAmbos(context);
@@ -1568,42 +1456,30 @@ class _DetallePagoState extends State<DetallePago> {
                     } else if (res.resp == 19) {
                       Navigator.pop(context);
                     } else {
-                      utils.showToast('Ocurrio un error, intentelo más tarde',
-                          2, ToastGravity.TOP);
+                      utils.showToast('Ocurrio un error, intentelo más tarde', 2, ToastGravity.TOP);
                       //Ocurrio un error
                       Navigator.pop(context);
                     }
                   } else {
-                    utils.showToast(
-                        'El monto máximo por pedido en efectivo o POS es de 100 soles',
-                        4,
-                        ToastGravity.TOP);
+                    utils.showToast('El monto máximo por pedido en efectivo o POS es de 100 soles', 4, ToastGravity.TOP);
                   }
                 } else {
-                  utils.showToast('Debe ingresar un Comprobante de pago válido',
-                      2, ToastGravity.TOP);
+                  utils.showToast('Debe ingresar un Comprobante de pago válido', 2, ToastGravity.TOP);
                 }
               } else {
-                utils.showToast(
-                    'El monto de pago debe ser mayor al monto del pedido ',
-                    2,
-                    ToastGravity.TOP);
+                utils.showToast('El monto de pago debe ser mayor al monto del pedido ', 2, ToastGravity.TOP);
               }
             } else {
-              utils.showToast(
-                  'Debe seleccionar un Tipo de  pago ', 2, ToastGravity.TOP);
+              utils.showToast('Debe seleccionar un Tipo de  pago ', 2, ToastGravity.TOP);
             }
           } else {
-            utils.showToast('Debe seleccionar un comprobante de  pago ', 2,
-                ToastGravity.TOP);
+            utils.showToast('Debe seleccionar un comprobante de  pago ', 2, ToastGravity.TOP);
           }
         } else {
-          utils.showToast(
-              'Ingrese un número de teléfono de entrega', 2, ToastGravity.TOP);
+          utils.showToast('Ingrese un número de teléfono de entrega', 2, ToastGravity.TOP);
         }
       } else {
-        utils.showToast(
-            'Ingrese una dirección de entrega', 2, ToastGravity.TOP);
+        utils.showToast('Ingrese una dirección de entrega', 2, ToastGravity.TOP);
       }
     }
   }
@@ -1614,8 +1490,7 @@ class _DetallePagoState extends State<DetallePago> {
         barrierDismissible: true,
         builder: (contextd) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             title: Text('Su pedido fue ingresado Correctamente'),
             actions: <Widget>[
               FlatButton(
@@ -1643,16 +1518,11 @@ class _DetallePagoState extends State<DetallePago> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('Zona de entrega',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsive.ip(2))),
+            Text('Zona de entrega', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(2))),
             FlatButton(
               child: Text(
                 'Agregar',
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 Navigator.pushNamed(context, 'selZona', arguments: 'pago');
@@ -1662,10 +1532,7 @@ class _DetallePagoState extends State<DetallePago> {
         ),
         Text(
           'Elegir Zona',
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: responsive.ip(2)),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(2)),
         ),
       ],
     );
@@ -1686,16 +1553,11 @@ class _DetallePagoState extends State<DetallePago> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('Zona de entrega',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsive.ip(2))),
+            Text('Zona de entrega', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(2))),
             FlatButton(
               child: Text(
                 '$agregar',
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 Navigator.pushNamed(context, 'selZona', arguments: 'pago');

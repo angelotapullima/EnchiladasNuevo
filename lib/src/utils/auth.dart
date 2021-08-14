@@ -19,28 +19,25 @@ class Auth {
   String email;
   String imageUrl; */
 
-  Future<FirebaseUser> get user async {
+  User get user {
     //metodo asyncrono que devuelve los datos de firebase
-    return (await _firebaseAuth.currentUser());
+    return (_firebaseAuth.currentUser);
   }
 
   //Auth von Google
-  Future<FirebaseUser> signInWithGoogle(BuildContext context) async {
+  Future<User> signInWithGoogle(BuildContext context) async {
     ProgressDialog progressDialog = ProgressDialog(context);
     try {
       progressDialog.show();
 
-      final GoogleSignInAccount googleSignInAccount =
-          await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+      final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      final FirebaseUser user =
-          (await _firebaseAuth.signInWithCredential(credential)).user;
+      final User user = (await _firebaseAuth.signInWithCredential(credential)).user;
       //print(user.providerData[1].email);
       // print(user.providerData[0].email);
       //assert(user.email != null);
@@ -48,7 +45,7 @@ class Auth {
       //assert(!user.isAnonymous);
       //assert(await user.getIdToken() != null);
 
-      final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+      final User currentUser = _firebaseAuth.currentUser;
       assert(user.uid == currentUser.uid);
 
       print('firebase client ${user.displayName}');
@@ -63,12 +60,11 @@ class Auth {
     }
   }
 
-  Future<FirebaseUser> facebook(BuildContext context) async {
+  Future<User> facebook(BuildContext context) async {
     ProgressDialog progressDialog = new ProgressDialog(context);
     try {
       progressDialog.show();
       final LoginResult result = await FacebookAuth.instance.login();
-      
 
       if (result.status == 200) {
         print('Facebook Login OK');
@@ -76,11 +72,9 @@ class Auth {
         final userData = await FacebookAuth.instance.getUserData();
         print(userData);
 
-        final AuthCredential credential = FacebookAuthProvider.getCredential(
-            accessToken: result.accessToken.token);
+        final AuthCredential credential = FacebookAuthProvider.credential(result.accessToken.token);
 
-        final FirebaseUser user =
-            (await _firebaseAuth.signInWithCredential(credential)).user;
+        final User user = (await _firebaseAuth.signInWithCredential(credential)).user;
         /* print(user.providerData[1].email);
             print(user.providerData[0].email); */
         //assert(user.email != null);
@@ -88,7 +82,7 @@ class Auth {
         assert(!user.isAnonymous);
         assert(await user.getIdToken() != null); */
 
-        final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+        final User currentUser = _firebaseAuth.currentUser;
         print(currentUser.email);
         /* assert(user.uid == currentUser.uid); */
 
@@ -115,9 +109,7 @@ class Auth {
     }
   }
 
-  Future<FirebaseUser> signInWithApple(BuildContext context) async {
-    
-
+  Future<User> signInWithApple(BuildContext context) async {
     ProgressDialog progressDialog = ProgressDialog(context);
     progressDialog.show();
     // 1. perform the sign-in request
@@ -129,27 +121,22 @@ class Auth {
       case AuthorizationStatus.authorized:
         print(result.credential.fullName.familyName);
         // Store user ID
-        await FlutterSecureStorage()
-            .write(key: "userId", value: result.credential.user);
+        await FlutterSecureStorage().write(key: "userId", value: result.credential.user);
 
         final appleIdCredential = result.credential;
-        final oAuthProvider = OAuthProvider(providerId: 'apple.com');
-        final credential = oAuthProvider.getCredential(
+        final oAuthProvider = OAuthProvider('apple.com');
+        final credential = oAuthProvider.credential(
           idToken: String.fromCharCodes(appleIdCredential.identityToken),
-          accessToken:
-              String.fromCharCodes(appleIdCredential.authorizationCode),
+          accessToken: String.fromCharCodes(appleIdCredential.authorizationCode),
         );
         final authResult = await _firebaseAuth.signInWithCredential(credential);
         final firebaseUser = authResult.user;
-        if (result.credential.fullName.familyName != null &&
-            result.credential.fullName.familyName != "") {
-          final updateUser = UserUpdateInfo();
-          updateUser.displayName =
-              '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
-          await firebaseUser.updateProfile(updateUser);
+        if (result.credential.fullName.familyName != null && result.credential.fullName.familyName != "") {
+          //updateUser.displayName = '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
+          await _firebaseAuth.currentUser.updateDisplayName('${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}');
 
-          final FirebaseUser f = await _firebaseAuth.currentUser();
-          return f ;
+          final User f = _firebaseAuth.currentUser;
+          return f;
         }
 
         progressDialog.dismiss();

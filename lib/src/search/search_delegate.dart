@@ -3,12 +3,9 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
-
-
 
 class DataSearch extends SearchDelegate {
   DataSearch({
@@ -38,8 +35,7 @@ class DataSearch extends SearchDelegate {
   Widget buildLeading(BuildContext context) {
     // Icono a la Izquierda del AppBar
     return IconButton(
-      icon: AnimatedIcon(
-          icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+      icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
       onPressed: () {
         close(context, null);
       },
@@ -60,11 +56,10 @@ class DataSearch extends SearchDelegate {
     final productosBloc = ProviderBloc.prod(context);
     productosBloc.obtenerProductoPorQueryDelivery('$query');
     final responsive = Responsive.of(context);
-    
+
     return StreamBuilder(
         stream: productosBloc.productosQueryStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ProductosData>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return ListView.builder(
@@ -86,9 +81,7 @@ class DataSearch extends SearchDelegate {
               ));
             }
           } else {
-           return Center(
-              child: CupertinoActivityIndicator()
-            );
+            return Center(child: CupertinoActivityIndicator());
           }
         });
   }
@@ -106,19 +99,17 @@ class DataSearch extends SearchDelegate {
     final productosBloc = ProviderBloc.prod(context);
     productosBloc.obtenerProductoPorQueryDelivery('$query');
     final responsive = Responsive.of(context);
-    
+
     return StreamBuilder(
         stream: productosBloc.productosQueryStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ProductosData>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) =>
-                      _itemPedido(context, snapshot.data[i]));
+                  itemBuilder: (context, i) => _itemPedido(context, snapshot.data[i]));
             } else {
               return Center(
                 child: Text(
@@ -130,9 +121,7 @@ class DataSearch extends SearchDelegate {
               );
             }
           } else {
-            return Center(
-              child: CupertinoActivityIndicator()
-            );
+            return Center(child: CupertinoActivityIndicator());
           }
         });
   }
@@ -164,33 +153,29 @@ class DataSearch extends SearchDelegate {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(13),
                     child: CachedNetworkImage(
-                      cacheManager: CustomCacheManager(),
-                     progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                  ),
+                      progressIndicatorBuilder: (_, url, downloadProgress) {
+                        return Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  backgroundColor: Colors.green,
+                                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                                 ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },errorWidget: (context, url, error) => Image(
-                      image: AssetImage('assets/carga_fallida.jpg'),
-                      fit: BoxFit.cover),
+                              ),
+                              Center(
+                                child: (downloadProgress.progress != null)
+                                    ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
+                                    : Container(),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                       imageUrl: productosData.productoFoto,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
@@ -201,9 +186,10 @@ class DataSearch extends SearchDelegate {
                         ),
                       ),
                     ),
-                  ),('${productosData.productoNuevo}' == '1')
+                  ),
+                  ('${productosData.productoNuevo}' == '1')
                       ? Positioned(
-                        bottom: 0,
+                          bottom: 0,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: responsive.wp(3),
@@ -223,24 +209,23 @@ class DataSearch extends SearchDelegate {
                           ),
                         )
                       : Container(),
-
-
-                      ('${productosData.productoDestacado}' != '0')
+                  ('${productosData.productoDestacado}' != '0')
                       ? Positioned(
-                          
                           //right: 0,
                           //left: 0,
-                          child:  Container(
-                            transform: Matrix4.translationValues(
-                                -responsive.wp(16), 0, 0),
+                          child: Container(
+                            transform: Matrix4.translationValues(-responsive.wp(16), 0, 0),
                             height: responsive.ip(4),
                             child: SvgPicture.asset('assets/medalla.svg'),
-                          ), 
-                        ):Container()
+                          ),
+                        )
+                      : Container()
                 ],
               ),
             ),
-            SizedBox(width: responsive.wp(2),),
+            SizedBox(
+              width: responsive.wp(2),
+            ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -279,10 +264,12 @@ class DataSearch extends SearchDelegate {
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
-                return DetalleProductitoss2(productosData: productosData,mostrarback: true,);
+                return DetalleProductitoss2(
+                  productosData: productosData,
+                  mostrarback: true,
+                );
               },
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: animation,
                   child: child,

@@ -1,6 +1,5 @@
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -59,10 +58,7 @@ class CategoriasPage extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'Categorías',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: responsive.ip(2.8),
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.8), fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   icon: Icon(
@@ -103,8 +99,7 @@ class CategoriasPage extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.length > 0) {
-                        return _conte(anchoCategorias, anchoProductos,
-                            snapshot.data, context);
+                        return _conte(anchoCategorias, anchoProductos, snapshot.data, context);
                       } else {
                         return Center(
                           child: Text('No hay datos de categorias'),
@@ -125,8 +120,7 @@ class CategoriasPage extends StatelessWidget {
     );
   }
 
-  Widget _conte(double anchoCategorias, double anchoProductos,
-      List<CategoriaData> categorias, BuildContext context) {
+  Widget _conte(double anchoCategorias, double anchoProductos, List<CategoriaData> categorias, BuildContext context) {
     final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
     enchiladasNaviBloc.changeIndexPage(categorias[0].idCategoria);
 
@@ -159,8 +153,7 @@ class CategoriasProducto extends StatefulWidget {
   final double ancho;
   final List<CategoriaData> data;
 
-  const CategoriasProducto({Key key, @required this.ancho, @required this.data})
-      : super(key: key);
+  const CategoriasProducto({Key key, @required this.ancho, @required this.data}) : super(key: key);
 
   @override
   _CategoriasProductoState createState() => _CategoriasProductoState();
@@ -201,9 +194,7 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                 width: size.width * 0.25,
                 decoration: BoxDecoration(
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-                  color: (categoria.idCategoria == snapshot.data)
-                      ? Colors.red
-                      : Colors.white,
+                  color: (categoria.idCategoria == snapshot.data) ? Colors.red : Colors.white,
                   border: Border.all(color: Colors.grey[100]),
                   borderRadius: BorderRadius.circular(5),
                 ),
@@ -212,22 +203,18 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                     SizedBox(width: 4),
                     Expanded(
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
                             Container(
                               height: responsive.ip(6),
                               width: responsive.ip(6),
-                             child: SvgPicture.network(
+                              child: SvgPicture.network(
                                 '${categoria.categoriaIcono}',
                                 semanticsLabel: 'A shark?!',
                                 placeholderBuilder: (BuildContext context) =>
-                                    Container(
-                                        padding: const EdgeInsets.all(30.0),
-                                        child:
-                                            const CircularProgressIndicator()),
+                                    Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -259,8 +246,7 @@ class ProductosIdPage extends StatefulWidget {
   final double ancho;
   final String index;
 
-  const ProductosIdPage({Key key, @required this.ancho, @required this.index})
-      : super(key: key);
+  const ProductosIdPage({Key key, @required this.ancho, @required this.index}) : super(key: key);
 
   @override
   _ProductosIdPageState createState() => _ProductosIdPageState();
@@ -273,23 +259,20 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     final productosIdBloc = ProviderBloc.prod(context);
 
     productosIdBloc.cargandoProductosFalse();
-    productosIdBloc
-        .obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
+    productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(widget.index);
 
     return Scaffold(
       body: _listaProductosId(productosIdBloc, responsive),
     );
   }
 
-  Widget _listaProductosId(
-      ProductosBloc productosIdBloc, Responsive responsive) {
+  Widget _listaProductosId(ProductosBloc productosIdBloc, Responsive responsive) {
     return Container(
       color: Colors.transparent,
       width: this.widget.ancho,
       child: StreamBuilder(
         stream: productosIdBloc.productosEnchiladasStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ProductosData>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               final productos = snapshot.data;
@@ -318,8 +301,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 
-  Widget _itemPedido(
-      BuildContext context, ProductosData productosData, String cantidadItems) {
+  Widget _itemPedido(BuildContext context, ProductosData productosData, String cantidadItems) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
@@ -343,25 +325,22 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: CachedNetworkImage(
-                        cacheManager: CustomCacheManager(),
                         progressIndicatorBuilder: (_, url, downloadProgress) {
                           return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                            width: double.infinity,
+                            height: double.infinity,
                             child: Stack(
                               children: [
                                 Center(
                                   child: CircularProgressIndicator(
                                     value: downloadProgress.progress,
                                     backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
+                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                                   ),
                                 ),
                                 Center(
                                   child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                      ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
                                       : Container(),
                                 )
                               ],
@@ -371,9 +350,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                         /*  placeholder: (context, url) => Image(
                         image: AssetImage('assets/jar-loading.gif'),
                         fit: BoxFit.cover), */
-                        errorWidget: (context, url, error) => Image(
-                            image: AssetImage('assets/carga_fallida.jpg'),
-                            fit: BoxFit.cover),
+                        errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                         imageUrl: '${productosData.productoFoto}',
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
@@ -399,13 +376,10 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      utils.quitarFavoritos(
-                                          context, productosData);
+                                      utils.quitarFavoritos(context, productosData);
                                     });
                                   },
-                                  child: Icon(FontAwesomeIcons.solidHeart,
-                                      color: Colors.red,
-                                      size: responsive.ip(3)),
+                                  child: Icon(FontAwesomeIcons.solidHeart, color: Colors.red, size: responsive.ip(3)),
                                 ),
                               ),
                             )
@@ -420,8 +394,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      utils.agregarFavoritos(
-                                          context, productosData);
+                                      utils.agregarFavoritos(context, productosData);
                                     });
                                   },
                                   child: Icon(
@@ -463,8 +436,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                             //right: 0,
                             //left: 0,
                             child: Container(
-                              transform: Matrix4.translationValues(
-                                  -responsive.wp(13), 0, 0),
+                              transform: Matrix4.translationValues(-responsive.wp(13), 0, 0),
                               height: responsive.ip(3),
                               child: SvgPicture.asset('assets/medalla.svg'),
                             ),
@@ -485,10 +457,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                   Text(
                     productosData.productoNombre,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: responsive.ip(1.8),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.black, fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'S/ ${productosData.productoPrecio}',
@@ -513,12 +482,9 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
             pageBuilder: (context, animation, secondaryAnimation) {
               //return DetalleProductitos(productosData: productosData);
               return SliderDetalleProductos(
-                  numeroItem: productosData.numeroitem,
-                  idCategoria: productosData.idCategoria,
-                  cantidadItems: cantidadItems);
+                  numeroItem: productosData.numeroitem, idCategoria: productosData.idCategoria, cantidadItems: cantidadItems);
             },
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: child,

@@ -6,7 +6,6 @@ import 'package:enchiladasapp/src/pages/puzzle/ranking/ranking_tres.dart';
 import 'package:enchiladasapp/src/pages/puzzle/ranking/ranking_uno.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,8 +21,7 @@ class RankingPage extends StatelessWidget {
     return Scaffold(
       body: StreamBuilder(
         stream: puzzleBloc.puzzleTiempoStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<RankingPuzzle>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<RankingPuzzle>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               if (snapshot.data.length == 1) {
@@ -61,8 +59,7 @@ class Mayor3 extends StatelessWidget {
     return Scaffold(body: contenidoRankingMayora3(context, responsive, list));
   }
 
-  Widget contenidoRankingMayora3(
-      BuildContext context, Responsive responsive, List<RankingPuzzle> data) {
+  Widget contenidoRankingMayora3(BuildContext context, Responsive responsive, List<RankingPuzzle> data) {
     final List<RankingPuzzle> list3primeros = [];
     final List<RankingPuzzle> listrestantes = [];
 
@@ -104,11 +101,10 @@ class Mayor3 extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100.0),
         child: CachedNetworkImage(
-          cacheManager: CustomCacheManager(),
           progressIndicatorBuilder: (_, url, downloadProgress) {
             return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+              width: double.infinity,
+              height: double.infinity,
               child: Stack(
                 children: [
                   Center(
@@ -119,17 +115,13 @@ class Mayor3 extends StatelessWidget {
                     ),
                   ),
                   Center(
-                    child: (downloadProgress.progress != null)
-                        ? Text(
-                            '${(downloadProgress.progress * 100).toInt().toString()}%')
-                        : Container(),
+                    child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                   )
                 ],
               ),
             );
           },
-          errorWidget: (context, url, error) => Image(
-              image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
+          errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
           imageUrl: '$foto',
           imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
@@ -153,11 +145,10 @@ class Mayor3 extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
           child: CachedNetworkImage(
-            cacheManager: CustomCacheManager(),
             progressIndicatorBuilder: (_, url, downloadProgress) {
               return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                width: double.infinity,
+                height: double.infinity,
                 child: Stack(
                   children: [
                     Center(
@@ -168,10 +159,7 @@ class Mayor3 extends StatelessWidget {
                       ),
                     ),
                     Center(
-                      child: (downloadProgress.progress != null)
-                          ? Text(
-                              '${(downloadProgress.progress * 100).toInt().toString()}%')
-                          : Container(),
+                      child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                     )
                   ],
                 ),
@@ -209,16 +197,14 @@ class Mayor3 extends StatelessWidget {
 
                           textAlign: TextAlign.center,
                           //overflow:TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '${list[0].personName}',
 
                           textAlign: TextAlign.center,
                           //overflow:TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -234,15 +220,13 @@ class Mayor3 extends StatelessWidget {
 
                           textAlign: TextAlign.center,
                           //overflow:TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '${list[1].personName}',
                           textAlign: TextAlign.center,
                           //overflow:TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -258,15 +242,13 @@ class Mayor3 extends StatelessWidget {
 
                           textAlign: TextAlign.center,
                           //overflow:TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '${list[2].personName}',
                           textAlign: TextAlign.center,
                           //overflow:TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -321,8 +303,7 @@ class Mayor3 extends StatelessWidget {
         child: Row(children: <Widget>[
           Text(
             '$index',
-            style: TextStyle(
-                fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
           ),
           SizedBox(
             width: responsive.wp(2),
@@ -333,34 +314,27 @@ class Mayor3 extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(100.0),
               child: CachedNetworkImage(
-                cacheManager: CustomCacheManager(),
                 progressIndicatorBuilder: (_, url, downloadProgress) {
                   return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                    width: double.infinity,
+                    height: double.infinity,
                     child: Stack(
                       children: [
                         Center(
                           child: CircularProgressIndicator(
                             value: downloadProgress.progress,
                             backgroundColor: Colors.green,
-                            valueColor:
-                                new AlwaysStoppedAnimation<Color>(Colors.red),
+                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                           ),
                         ),
                         Center(
-                          child: (downloadProgress.progress != null)
-                              ? Text(
-                                  '${(downloadProgress.progress * 100).toInt().toString()}%')
-                              : Container(),
+                          child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                         )
                       ],
                     ),
                   );
                 },
-                errorWidget: (context, url, error) => Image(
-                    image: AssetImage('assets/carga_fallida.jpg'),
-                    fit: BoxFit.cover),
+                errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                 imageUrl: '${ranking.userImage}',
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(

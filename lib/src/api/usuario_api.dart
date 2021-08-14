@@ -3,7 +3,7 @@ import 'package:enchiladasapp/src/database/usuario_database.dart';
 import 'package:enchiladasapp/src/models/ruc_model.dart';
 import 'package:enchiladasapp/src/models/user.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
-import 'package:fluttertoast/fluttertoast.dart'; 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 
@@ -13,13 +13,13 @@ class UsuarioApi {
 
   final prefs = new Preferences();
 
-  Future<List<Ruc>> consultarRuc( String numero) async {
+  Future<List<Ruc>> consultarRuc(String numero) async {
     try {
       final list = List<Ruc>();
       Ruc rucs = new Ruc();
 
       final url = 'https://api.sunat.cloud/ruc/$numero';
-      final resp = await http.get(url);
+      final resp = await http.get((Uri.parse(url)));
       if (resp.body != "") {
         final decodedData = json.decode(resp.body);
 
@@ -34,12 +34,12 @@ class UsuarioApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(  "Problemas con la conexión a internet",2,ToastGravity.TOP);
+      utils.showToast("Problemas con la conexión a internet", 2, ToastGravity.TOP);
       return [];
     }
   }
 
-  Future<bool> login( User user) async {
+  Future<bool> login(Userio user) async {
     try {
       final url = '$_url/api/Login/singInApp';
       String idRel, pName, uEmail, foto;
@@ -67,18 +67,11 @@ class UsuarioApi {
       } else {
         foto = user.foto;
       }
-      final resp = await http.post(url, body: {
-        'id_rel': idRel,
-        'person_name': pName,
-        'app': 'true',
-        'user_image': foto,
-        'user_email': uEmail
-      });
-      
+      final resp =
+          await http.post((Uri.parse(url)), body: {'id_rel': idRel, 'person_name': pName, 'app': 'true', 'user_image': foto, 'user_email': uEmail});
 
       final decodedData = json.decode(resp.body);
       final code = decodedData['result']['code'];
-
 
       if (code == 1) {
         final usuarioDatabase = UsuarioDatabase();
@@ -98,8 +91,8 @@ class UsuarioApi {
         String dni = "";
         String telefono = "";
         int direccion = 0;
-        String idZona='';
-        User user = new User();
+        String idZona = '';
+        Userio user = new Userio();
 
         user.cU = idUser;
         user.idRel = idRel;
@@ -109,7 +102,7 @@ class UsuarioApi {
         user.userEmail = uEmail;
         user.dni = dni;
         user.idDireccion = direccion;
-        user.idZona=idZona;
+        user.idZona = idZona;
         user.token = token;
         user.telefono = telefono;
         user.cP = idPerson;
@@ -129,7 +122,7 @@ class UsuarioApi {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      utils.showToast(  "problemas con la conexión a internet",2,ToastGravity.TOP);
+      utils.showToast("problemas con la conexión a internet", 2, ToastGravity.TOP);
       return false;
     }
     //return true;

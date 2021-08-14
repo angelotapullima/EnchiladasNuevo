@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/material.dart';
 
 class RankingDos extends StatelessWidget {
@@ -28,43 +27,40 @@ class RankingDos extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         list[0].personName,
-                        style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
+                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(2)),
                       ),
-                      SizedBox(height: responsive.hp(1),),
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
                       Container(
-                            height: responsive.ip(15),
-                            width: responsive.ip(15),
+                        height: responsive.ip(15),
+                        width: responsive.ip(15),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100.0),
                           child: CachedNetworkImage(
-                            cacheManager: CustomCacheManager(),
                             progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                  ),
+                              return Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                child: Stack(
+                                  children: [
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        backgroundColor: Colors.green,
+                                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: (downloadProgress.progress != null)
+                                          ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
+                                          : Container(),
+                                    )
+                                  ],
                                 ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                                errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                              );
+                            },
+                            errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                             imageUrl: '$imagen1',
                             //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
                             imageBuilder: (context, imageProvider) => Container(
@@ -77,10 +73,12 @@ class RankingDos extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: responsive.hp(1),),
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
                       Text(
                         list[0].puzzleTiempo,
-                        style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
+                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(2)),
                       ),
                     ],
                   ),
@@ -91,43 +89,40 @@ class RankingDos extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         list[1].personName,
-                        style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
+                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(2)),
                       ),
-                      SizedBox(height: responsive.hp(1),),
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
                       Container(
-                            height: responsive.ip(15),
-                            width: responsive.ip(15),
+                        height: responsive.ip(15),
+                        width: responsive.ip(15),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100.0),
                           child: CachedNetworkImage(
-                            cacheManager: CustomCacheManager(),
                             progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                  ),
+                              return Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                child: Stack(
+                                  children: [
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        backgroundColor: Colors.green,
+                                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: (downloadProgress.progress != null)
+                                          ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
+                                          : Container(),
+                                    )
+                                  ],
                                 ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                                errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                              );
+                            },
+                            errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                             //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
                             imageUrl: '$imagen2',
                             imageBuilder: (context, imageProvider) => Container(
@@ -141,10 +136,12 @@ class RankingDos extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: responsive.hp(1),),
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
                       Text(
                         list[1].puzzleTiempo,
-                        style: TextStyle(color: Colors.white,fontSize: responsive.ip(2)),
+                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(2)),
                       ),
                     ],
                   ),

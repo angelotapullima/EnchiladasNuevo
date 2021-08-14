@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/page_view_indicators.dart';
 
@@ -50,36 +49,28 @@ class OnboardingPage extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: CachedNetworkImage(
-              cacheManager: CustomCacheManager(),
-             progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
+              progressIndicatorBuilder: (_, url, downloadProgress) {
+                return Container(
                   width: double.infinity,
                   height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                  ),
-                                ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-              errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
-              imageUrl:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTZMIdLgIaSPfiyocXpPCv-NKMO67P1G9gsvg&usqp=CAU',
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                          backgroundColor: Colors.green,
+                          valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                        ),
+                      ),
+                      Center(
+                        child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
+                      )
+                    ],
+                  ),
+                );
+              },
+              errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
+              imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTZMIdLgIaSPfiyocXpPCv-NKMO67P1G9gsvg&usqp=CAU',
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(

@@ -5,9 +5,9 @@ import 'package:rxdart/rxdart.dart';
 class UsuarioBloc {
   final usuarioDatabase = UsuarioDatabase();
 
-  final _usuaroController = new BehaviorSubject<List<User>>();
+  final _usuaroController = new BehaviorSubject<List<Userio>>();
 
-  Stream<List<User>> get usuarioStream => _usuaroController.stream;
+  Stream<List<Userio>> get usuarioStream => _usuaroController.stream;
 
   dispose() {
     _usuaroController?.close();

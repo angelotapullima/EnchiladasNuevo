@@ -41,8 +41,7 @@ class _LoginPageState extends State<LoginPage> {
         break;
 
       case CredentialStatus.error:
-        print(
-            "getCredentialState returned an error: ${credentialState.error.localizedDescription}");
+        print("getCredentialState returned an error: ${credentialState.error.localizedDescription}");
         break;
 
       case CredentialStatus.revoked:
@@ -62,17 +61,16 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoggedIn = false;
 
   LoginBloc loginBloc;
-  User usuario = new User();
+  Userio usuario = new Userio();
 
-  void goto(
-      BuildContext context, FirebaseUser user, LoginBloc loginBloc) async {
+  void goto(BuildContext context, User user, LoginBloc loginBloc) async {
     ProgressDialog progressDialog = new ProgressDialog(context);
     progressDialog.show();
     String email;
     if (user != null) {
       usuario.personName = user.displayName;
       usuario.idRel = user.uid;
-      usuario.foto = user.photoUrl;
+      usuario.foto = user.photoURL;
 
       final listaDecuentas = user.providerData.length;
 
@@ -85,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
       usuario.userEmail = email;
 
       final correcto = await loginBloc.login(usuario);
-      if (correcto) { 
+      if (correcto) {
         progressDialog.dismiss();
         //Navigator.pushReplacementNamed(context, '/');
         Navigator.pushReplacementNamed(context, 'desicion');
@@ -124,10 +122,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _columDatos(
-      BuildContext context, Responsive responsive, LoginBloc loginBloc) {
-    final appleSignInAvailable =
-        Provider.of<AppleSignInAvailable>(context, listen: false);
+  Widget _columDatos(BuildContext context, Responsive responsive, LoginBloc loginBloc) {
+    final appleSignInAvailable = Provider.of<AppleSignInAvailable>(context, listen: false);
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: responsive.ip(5)),
@@ -150,11 +146,7 @@ class _LoginPageState extends State<LoginPage> {
               height: responsive.ip(1.8),
             ),
             Text('BIENVENIDO A \n LA CASA DE LAS ENCHILADAS',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: responsive.ip(2.7),
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center),
+                style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.7), fontWeight: FontWeight.bold), textAlign: TextAlign.center),
             SizedBox(
               height: responsive.ip(2),
             ),
@@ -182,17 +174,14 @@ class _LoginPageState extends State<LoginPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                        
                           Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 1, left: 6, right: 2),
+                            padding: const EdgeInsets.only(bottom: 1, left: 6, right: 2),
                             child: SizedBox(
                               height: responsive.ip(2.5),
                               child: AspectRatio(
                                 aspectRatio: 25 / 31,
                                 child: CustomPaint(
-                                  painter:
-                                      _AppleLogoPainter(color: Colors.black),
+                                  painter: _AppleLogoPainter(color: Colors.black),
                                 ),
                               ),
                             ),
@@ -203,16 +192,13 @@ class _LoginPageState extends State<LoginPage> {
                           Text(
                             'Continuar con Apple',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: responsive.ip(2)),
+                            style: TextStyle(color: Colors.black, fontSize: responsive.ip(2)),
                           ),
                         ],
                       ),
                     ),
                     onTap: () async {
-                      final user =
-                          await Auth.instance.signInWithApple(context);
+                      final user = await Auth.instance.signInWithApple(context);
                       goto(context, user, loginBloc);
                     },
                   )
@@ -220,8 +206,6 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: responsive.ip(1),
             ),
-            
-            
             InkWell(
               child: Container(
                 padding: EdgeInsets.all(
@@ -232,10 +216,8 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Row(
-
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                   
                     Image.asset(
                       'assets/google.png',
                       width: responsive.ip(3),
@@ -245,9 +227,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Text(
                       'Acceder con Google',
-                            textAlign: TextAlign.center,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Roboto',fontSize: responsive.ip(2),
+                        fontFamily: 'Roboto',
+                        fontSize: responsive.ip(2),
                         color: Color.fromRGBO(68, 68, 76, .8),
                       ),
                     ),
@@ -264,7 +247,8 @@ class _LoginPageState extends State<LoginPage> {
                 final user = await Auth.instance.signInWithGoogle(context);
                 goto(context, user, loginBloc);
               },
-            ),SizedBox(
+            ),
+            SizedBox(
               height: responsive.ip(1),
             ),
             InkWell(
@@ -277,9 +261,8 @@ class _LoginPageState extends State<LoginPage> {
                   responsive.ip(1),
                 ),
                 child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    
                     Icon(
                       FontAwesomeIcons.facebook,
                       color: Colors.white,
@@ -290,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Text(
                       'Acceder con Facebook',
-                            textAlign: TextAlign.center,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: responsive.ip(2),
@@ -304,7 +287,6 @@ class _LoginPageState extends State<LoginPage> {
                 goto(context, user, loginBloc);
               },
             ),
-            
             SizedBox(
               height: responsive.ip(1),
             ),
@@ -312,9 +294,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Container(),
             ),
             CupertinoButton(
-              child: Text('Iniciar sesión luego',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: responsive.ip(2))),
+              child: Text('Iniciar sesión luego', style: TextStyle(color: Colors.white, fontSize: responsive.ip(2))),
               onPressed: () {
                 Navigator.pushReplacementNamed(context, 'desicion');
               },
@@ -370,39 +350,24 @@ class _AppleLogoPainter extends CustomPainter {
   static Path _getApplePath(double w, double h) {
     return Path()
       ..moveTo(w * .50779, h * .28732)
-      ..cubicTo(
-          w * .4593, h * .28732, w * .38424, h * .24241, w * .30519, h * .24404)
-      ..cubicTo(
-          w * .2009, h * .24512, w * .10525, h * .29328, w * .05145, h * .36957)
-      ..cubicTo(w * -.05683, h * .5227, w * .02355, h * .74888, w * .12916,
-          h * .87333)
-      ..cubicTo(w * .18097, h * .93394, w * .24209, h * 1.00211, w * .32313,
-          h * .99995)
-      ..cubicTo(w * .40084, h * .99724, w * .43007, h * .95883, w * .52439,
-          h * .95883)
-      ..cubicTo(w * .61805, h * .95883, w * .64462, h * .99995, w * .72699,
-          h * .99833)
-      ..cubicTo(
-          w * .81069, h * .99724, w * .86383, h * .93664, w * .91498, h * .8755)
-      ..cubicTo(
-          w * .97409, h * .80515, w * .99867, h * .73698, w * 1, h * .73319)
-      ..cubicTo(w * .99801, h * .73265, w * .83726, h * .68233, w * .83526,
-          h * .53082)
-      ..cubicTo(
-          w * .83394, h * .4042, w * .96214, h * .3436, w * .96812, h * .34089)
-      ..cubicTo(
-          w * .89505, h * .25378, w * .78279, h * .24404, w * .7436, h * .24187)
-      ..cubicTo(
-          w * .6413, h * .23538, w * .55561, h * .28732, w * .50779, h * .28732)
+      ..cubicTo(w * .4593, h * .28732, w * .38424, h * .24241, w * .30519, h * .24404)
+      ..cubicTo(w * .2009, h * .24512, w * .10525, h * .29328, w * .05145, h * .36957)
+      ..cubicTo(w * -.05683, h * .5227, w * .02355, h * .74888, w * .12916, h * .87333)
+      ..cubicTo(w * .18097, h * .93394, w * .24209, h * 1.00211, w * .32313, h * .99995)
+      ..cubicTo(w * .40084, h * .99724, w * .43007, h * .95883, w * .52439, h * .95883)
+      ..cubicTo(w * .61805, h * .95883, w * .64462, h * .99995, w * .72699, h * .99833)
+      ..cubicTo(w * .81069, h * .99724, w * .86383, h * .93664, w * .91498, h * .8755)
+      ..cubicTo(w * .97409, h * .80515, w * .99867, h * .73698, w * 1, h * .73319)
+      ..cubicTo(w * .99801, h * .73265, w * .83726, h * .68233, w * .83526, h * .53082)
+      ..cubicTo(w * .83394, h * .4042, w * .96214, h * .3436, w * .96812, h * .34089)
+      ..cubicTo(w * .89505, h * .25378, w * .78279, h * .24404, w * .7436, h * .24187)
+      ..cubicTo(w * .6413, h * .23538, w * .55561, h * .28732, w * .50779, h * .28732)
       ..close()
       ..moveTo(w * .68049, h * .15962)
       ..cubicTo(w * .72367, h * .11742, w * .75223, h * .05844, w * .74426, 0)
-      ..cubicTo(w * .68249, h * .00216, w * .60809, h * .03355, w * .56359,
-          h * .07575)
-      ..cubicTo(w * .52373, h * .11309, w * .48919, h * .17315, w * .49849,
-          h * .23051)
-      ..cubicTo(w * .56691, h * .23484, w * .63732, h * .20183, w * .68049,
-          h * .15962)
+      ..cubicTo(w * .68249, h * .00216, w * .60809, h * .03355, w * .56359, h * .07575)
+      ..cubicTo(w * .52373, h * .11309, w * .48919, h * .17315, w * .49849, h * .23051)
+      ..cubicTo(w * .56691, h * .23484, w * .63732, h * .20183, w * .68049, h * .15962)
       ..close();
   }
 

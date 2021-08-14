@@ -5,11 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -27,8 +23,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
 
   @override
   Widget build(BuildContext context) {
-    final ProductosData productosData =
-        ModalRoute.of(context).settings.arguments;
+    final ProductosData productosData = ModalRoute.of(context).settings.arguments;
 
     final responsive = Responsive.of(context);
 
@@ -39,13 +34,10 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
         actions: [
           GestureDetector(
             child: CircleContainer(
-                radius: responsive.ip(2.5),
-                color: Colors.transparent,
-                widget: Icon(
-                    Icons.share) //Icon(Icons.arrow_back, color: Colors.black),
+                radius: responsive.ip(2.5), color: Colors.transparent, widget: Icon(Icons.share) //Icon(Icons.arrow_back, color: Colors.black),
                 ),
             onTap: () async {
-              await takeScreenshotandShare(productosData.idProducto);
+              /*   await takeScreenshotandShare(productosData.idProducto); */
               //_logoScreen.value = false;
             },
           ),
@@ -73,8 +65,6 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                           child: PhotoView(
                             imageProvider: CachedNetworkImageProvider(
                               '${productosData.productoFoto}',
-                              cacheManager: CustomCacheManager(),
-                              
                             ),
                           ),
                         ),
@@ -95,10 +85,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     Expanded(
                                       child: Text(
                                         '${productosData.productoNombre}',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: responsive.ip(3),
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     SizedBox(
@@ -106,10 +93,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     ),
                                     Text(
                                       'S/. ${productosData.productoPrecio}',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: responsive.ip(3),
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.red, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -158,7 +142,6 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                           child: PhotoView(
                             imageProvider: CachedNetworkImageProvider(
                               '${productosData.productoFoto}',
-                              cacheManager: CustomCacheManager(),
                             ),
                           ),
                         ),
@@ -183,10 +166,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     Expanded(
                                       child: Text(
                                         '${productosData.productoNombre}',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: responsive.ip(3),
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     SizedBox(
@@ -194,10 +174,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     ),
                                     Text(
                                       'S/. ${productosData.productoPrecio}',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: responsive.ip(3),
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.red, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -253,7 +230,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
           }),
     );
   }
-
+/* 
   takeScreenshotandShare(String nombre) async {
     var now = DateTime.now();
     nombre = now.microsecond.toString();
@@ -282,4 +259,6 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
       print(onError);
     });
   }
+
+ */
 }

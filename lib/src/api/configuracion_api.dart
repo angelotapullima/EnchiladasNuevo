@@ -27,7 +27,7 @@ class ConfiguracionApi {
   Future<bool> configuracion() async {
     try {
       final url = '$_url/api/categoria/configuracion';
-      final resp = await http.post(url, body: {'numero': '1'});
+      final resp = await http.post((Uri.parse(url)), body: {'numero': '1'});
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       if (decodedData['result']['code'] == 1) {
         for (int z = 0; z < decodedData['result']['data']['bolsa'].length; z++) {

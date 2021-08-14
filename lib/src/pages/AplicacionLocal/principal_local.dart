@@ -8,7 +8,6 @@ import 'package:enchiladasapp/src/pages/AplicacionLocal/detalle_promociones_loca
 import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
 import 'package:enchiladasapp/src/search/search_local.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
@@ -36,15 +35,13 @@ class PrincipalLocal extends StatelessWidget {
     final categoriasBloc = ProviderBloc.cat(context);
     pantallasBloc.obtenerPantallasLocal();
     categoriasBloc.obtenerCategoriasPromociones();
-    
 
     return Scaffold(
       body: _inicio(context, responsive, _refreshController),
     );
   }
 
-  Widget _inicio(BuildContext context, Responsive responsive,
-      RefreshController refreshController) {
+  Widget _inicio(BuildContext context, Responsive responsive, RefreshController refreshController) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -71,17 +68,12 @@ class PrincipalLocal extends StatelessWidget {
                       Expanded(
                         child: Text(
                           'Bienvenido',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: responsive.ip(3),
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          showSearch(
-                              context: context,
-                              delegate: SearchLocal(hintText: 'Buscar'));
+                          showSearch(context: context, delegate: SearchLocal(hintText: 'Buscar'));
                         },
                         child: Icon(
                           Icons.search,
@@ -131,13 +123,10 @@ class PrincipalLocal extends StatelessWidget {
                       transitionDuration: const Duration(milliseconds: 400),
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return DetallePromocionesLocal(
-                            categoriaNombre:
-                                "${promociones[index].categoriaNombre}",
-                            idcategoria: '${promociones[index].idCategoria}');
+                            categoriaNombre: "${promociones[index].categoriaNombre}", idcategoria: '${promociones[index].idCategoria}');
                         //return DetalleProductitos(productosData: productosData);
                       },
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
                         return FadeTransition(
                           opacity: animation,
                           child: child,
@@ -151,34 +140,29 @@ class PrincipalLocal extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
-                    cacheManager: CustomCacheManager(),
                     progressIndicatorBuilder: (_, url, downloadProgress) {
                       return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                        width: double.infinity,
+                        height: double.infinity,
                         child: Stack(
                           children: [
                             Center(
                               child: CircularProgressIndicator(
                                 value: downloadProgress.progress,
                                 backgroundColor: Colors.green,
-                                valueColor:
-                                    new AlwaysStoppedAnimation<Color>(Colors.red),
+                                valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                               ),
                             ),
                             Center(
                               child: (downloadProgress.progress != null)
-                                  ? Text(
-                                      '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                  ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
                                   : Container(),
                             )
                           ],
                         ),
                       );
                     },
-                    errorWidget: (context, url, error) => Image(
-                        image: AssetImage('assets/carga_fallida.jpg'),
-                        fit: BoxFit.cover),
+                    errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                     imageUrl: '${promociones[index].categoriaBanner}',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
@@ -199,8 +183,7 @@ class PrincipalLocal extends StatelessWidget {
     );
   }
 
-  _buildCircleIndicator(
-      Responsive responsive, List<CategoriaData> promociones) {
+  _buildCircleIndicator(Responsive responsive, List<CategoriaData> promociones) {
     return Positioned(
       left: 0.0,
       right: 0.0,
@@ -214,8 +197,7 @@ class PrincipalLocal extends StatelessWidget {
     );
   }
 
-  Widget _contenido(BuildContext context, Responsive responsive,
-      RefreshController refreshController) {
+  Widget _contenido(BuildContext context, Responsive responsive, RefreshController refreshController) {
     final pantallasBloc = ProviderBloc.pantallaLocal(context);
     final categoriasBloc = ProviderBloc.cat(context);
     pantallasBloc.obtenerPantallasLocal();
@@ -224,17 +206,13 @@ class PrincipalLocal extends StatelessWidget {
     return Container(
       child: StreamBuilder(
         stream: pantallasBloc.pantallasLocalStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<CategoriaData>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<CategoriaData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return SmartRefresher(
                 enablePullDown: true,
                 footer: null,
-                header: WaterDropHeader(
-                    refresh: CircularProgressIndicator(),
-                    complete: Text('Completado'),
-                    waterDropColor: Colors.red),
+                header: WaterDropHeader(refresh: CircularProgressIndicator(), complete: Text('Completado'), waterDropColor: Colors.red),
                 controller: refreshController,
                 onRefresh: () {
                   _onRefresh(context);
@@ -248,22 +226,17 @@ class PrincipalLocal extends StatelessWidget {
                         return Column(
                           children: [
                             StreamBuilder(
-                                stream:
-                                    categoriasBloc.categoriasPromociionesStream,
-                                builder: (context,
-                                    AsyncSnapshot<List<CategoriaData>> cat) {
+                                stream: categoriasBloc.categoriasPromociionesStream,
+                                builder: (context, AsyncSnapshot<List<CategoriaData>> cat) {
                                   if (cat.hasData) {
                                     if (cat.data.length > 0) {
                                       return Container(
-                                        margin: EdgeInsets.only(
-                                            top: responsive.hp(1)),
+                                        margin: EdgeInsets.only(top: responsive.hp(1)),
                                         height: responsive.hp(25),
                                         child: Stack(
                                           children: <Widget>[
-                                            _buildPageView(
-                                                responsive, cat.data),
-                                            _buildCircleIndicator(
-                                                responsive, cat.data),
+                                            _buildPageView(responsive, cat.data),
+                                            _buildCircleIndicator(responsive, cat.data),
                                           ],
                                         ),
                                       );
@@ -304,8 +277,7 @@ class PrincipalLocal extends StatelessWidget {
     );
   }
 
-  Widget _cart(BuildContext context, Responsive responsive,
-      CategoriaData categoriaData) {
+  Widget _cart(BuildContext context, Responsive responsive, CategoriaData categoriaData) {
     double altoList = 35.0;
     double altoCard = 30.0;
     double anchoCard = 35.0;
@@ -325,19 +297,13 @@ class PrincipalLocal extends StatelessWidget {
                   child: Text(
                     '${categoriaData.categoriaNombre}',
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: responsive.ip(2.5),
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.red, fontWeight: FontWeight.bold),
                   ),
                 ),
                 GestureDetector(
                   onTap: () {
-                    Arguments arg = new Arguments(
-                        "${categoriaData.categoriaNombre}",
-                        '${categoriaData.idCategoria}');
-                    Navigator.pushNamed(context, 'productosCategoria',
-                        arguments: arg);
+                    Arguments arg = new Arguments("${categoriaData.categoriaNombre}", '${categoriaData.idCategoria}');
+                    Navigator.pushNamed(context, 'productosCategoria', arguments: arg);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(
@@ -352,9 +318,7 @@ class PrincipalLocal extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           'Ver más',
-                          style: TextStyle(
-                              fontSize: responsive.ip(1.7),
-                              color: Colors.white),
+                          style: TextStyle(fontSize: responsive.ip(1.7), color: Colors.white),
                         ),
                         Icon(
                           Icons.arrow_forward_ios,
@@ -381,24 +345,19 @@ class PrincipalLocal extends StatelessWidget {
                   return GestureDetector(
                     onTap: () {
                       ProductosData productosData = ProductosData();
-                      productosData.idProducto =
-                          categoriaData.productos[i].idProducto;
+                      productosData.idProducto = categoriaData.productos[i].idProducto;
 
                       Navigator.push(
                         context,
                         PageRouteBuilder(
                           transitionDuration: const Duration(milliseconds: 100),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
+                          pageBuilder: (context, animation, secondaryAnimation) {
                             return ProductoFotoLocal(
-                                cantidadItems:
-                                    categoriaData.productos.length.toString(),
+                                cantidadItems: categoriaData.productos.length.toString(),
                                 idCategoria: categoriaData.idCategoria,
-                                numeroItem:
-                                    categoriaData.productos[i].numeroitem);
+                                numeroItem: categoriaData.productos[i].numeroitem);
                           },
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
                             return FadeTransition(
                               opacity: animation,
                               child: child,
@@ -424,42 +383,31 @@ class PrincipalLocal extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
-                                cacheManager: CustomCacheManager(),
-                                progressIndicatorBuilder:
-                                    (_, url, downloadProgress) {
+                                progressIndicatorBuilder: (_, url, downloadProgress) {
                                   return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                                    width: double.infinity,
+                                    height: double.infinity,
                                     child: Stack(
                                       children: [
                                         Center(
                                           child: CircularProgressIndicator(
                                             value: downloadProgress.progress,
                                             backgroundColor: Colors.green,
-                                            valueColor:
-                                                new AlwaysStoppedAnimation<Color>(
-                                                    Colors.red),
+                                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                                           ),
                                         ),
                                         Center(
-                                          child: (downloadProgress.progress !=
-                                                  null)
-                                              ? Text(
-                                                  '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                          child: (downloadProgress.progress != null)
+                                              ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
                                               : Container(),
                                         )
                                       ],
                                     ),
                                   );
                                 },
-                                errorWidget: (context, url, error) => Image(
-                                    image:
-                                        AssetImage('assets/carga_fallida.jpg'),
-                                    fit: BoxFit.cover),
-                                imageUrl:
-                                    '${categoriaData.productos[i].productoFoto}',
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
+                                errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
+                                imageUrl: '${categoriaData.productos[i].productoFoto}',
+                                imageBuilder: (context, imageProvider) => Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: imageProvider,
@@ -484,10 +432,7 @@ class PrincipalLocal extends StatelessWidget {
                               ),
                               child: Text(
                                 '${categoriaData.productos[i].productoNombre}',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: responsive.ip(2),
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -515,8 +460,7 @@ class VarLocal extends StatelessWidget {
 
     return StreamBuilder(
         stream: pantallasBloc.varLocalStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<CategoriaData>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<CategoriaData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return Column(
@@ -531,35 +475,30 @@ class VarLocal extends StatelessWidget {
                           child: Text(
                             'Var 247',
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: responsive.ip(2.5),
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.red, fontWeight: FontWeight.bold),
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 400),
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return CategoriasPorTipoLocal(
-                          nombreCategoriaTipo: 'Var 247',idCategoriaTipo: '4',
-                             );
-                        //return DetalleProductitos(productosData: productosData);
-                      },
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-
-                
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: const Duration(milliseconds: 400),
+                                pageBuilder: (context, animation, secondaryAnimation) {
+                                  return CategoriasPorTipoLocal(
+                                    nombreCategoriaTipo: 'Var 247',
+                                    idCategoriaTipo: '4',
+                                  );
+                                  //return DetalleProductitos(productosData: productosData);
+                                },
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -574,9 +513,7 @@ class VarLocal extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   'Ver más',
-                                  style: TextStyle(
-                                      fontSize: responsive.ip(1.7),
-                                      color: Colors.white),
+                                  style: TextStyle(fontSize: responsive.ip(1.7), color: Colors.white),
                                 ),
                                 Icon(
                                   Icons.arrow_forward_ios,
@@ -590,7 +527,9 @@ class VarLocal extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: responsive.hp(1),),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
                   Container(
                     height: responsive.hp(20),
                     child: ListView.builder(
@@ -600,11 +539,8 @@ class VarLocal extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            Arguments arg = new Arguments(
-                                "${snapshot.data[index].categoriaNombre}",
-                                '${snapshot.data[index].idCategoria}');
-                            Navigator.pushNamed(context, 'productosCategoria',
-                                arguments: arg);
+                            Arguments arg = new Arguments("${snapshot.data[index].categoriaNombre}", '${snapshot.data[index].idCategoria}');
+                            Navigator.pushNamed(context, 'productosCategoria', arguments: arg);
                           },
                           child: Container(
                             width: responsive.ip(18),
@@ -623,45 +559,31 @@ class VarLocal extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: CachedNetworkImage(
-                                      cacheManager: CustomCacheManager(),
-                                      progressIndicatorBuilder:
-                                          (_, url, downloadProgress) {
+                                      progressIndicatorBuilder: (_, url, downloadProgress) {
                                         return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                                          width: double.infinity,
+                                          height: double.infinity,
                                           child: Stack(
                                             children: [
                                               Center(
                                                 child: CircularProgressIndicator(
-                                                  value:
-                                                      downloadProgress.progress,
+                                                  value: downloadProgress.progress,
                                                   backgroundColor: Colors.green,
-                                                  valueColor:
-                                                      new AlwaysStoppedAnimation<
-                                                          Color>(Colors.red),
+                                                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                                                 ),
                                               ),
                                               Center(
-                                                child: (downloadProgress
-                                                            .progress !=
-                                                        null)
-                                                    ? Text(
-                                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                                child: (downloadProgress.progress != null)
+                                                    ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
                                                     : Container(),
                                               )
                                             ],
                                           ),
                                         );
                                       },
-                                      errorWidget: (context, url, error) =>
-                                          Image(
-                                              image: AssetImage(
-                                                  'assets/carga_fallida.jpg'),
-                                              fit: BoxFit.cover),
-                                      imageUrl:
-                                          '${snapshot.data[index].categoriaFoto}',
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
+                                      errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
+                                      imageUrl: '${snapshot.data[index].categoriaFoto}',
+                                      imageBuilder: (context, imageProvider) => Container(
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                             image: imageProvider,
@@ -686,10 +608,7 @@ class VarLocal extends StatelessWidget {
                                     ),
                                     child: Text(
                                       '${snapshot.data[index].categoriaNombre}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: responsive.ip(2),
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.white, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -723,8 +642,7 @@ class CafeLocal extends StatelessWidget {
     pantallasBloc.obtenerCafe247Local();
     return StreamBuilder(
         stream: pantallasBloc.cafeLocalStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<CategoriaData>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<CategoriaData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return Column(
@@ -739,33 +657,30 @@ class CafeLocal extends StatelessWidget {
                           child: Text(
                             'Café 247',
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: responsive.ip(2.5),
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.red, fontWeight: FontWeight.bold),
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 400),
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return CategoriasPorTipoLocal(
-                          nombreCategoriaTipo: 'Café 247',idCategoriaTipo: '3',
-                             );
-                        //return DetalleProductitos(productosData: productosData);
-                      },
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: const Duration(milliseconds: 400),
+                                pageBuilder: (context, animation, secondaryAnimation) {
+                                  return CategoriasPorTipoLocal(
+                                    nombreCategoriaTipo: 'Café 247',
+                                    idCategoriaTipo: '3',
+                                  );
+                                  //return DetalleProductitos(productosData: productosData);
+                                },
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -780,9 +695,7 @@ class CafeLocal extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   'Ver más',
-                                  style: TextStyle(
-                                      fontSize: responsive.ip(1.7),
-                                      color: Colors.white),
+                                  style: TextStyle(fontSize: responsive.ip(1.7), color: Colors.white),
                                 ),
                                 Icon(
                                   Icons.arrow_forward_ios,
@@ -796,8 +709,9 @@ class CafeLocal extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  SizedBox(height: responsive.hp(1),),
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
                   Container(
                     height: responsive.hp(20),
                     child: ListView.builder(
@@ -807,11 +721,8 @@ class CafeLocal extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            Arguments arg = new Arguments(
-                                "${snapshot.data[index].categoriaNombre}",
-                                '${snapshot.data[index].idCategoria}');
-                            Navigator.pushNamed(context, 'productosCategoria',
-                                arguments: arg);
+                            Arguments arg = new Arguments("${snapshot.data[index].categoriaNombre}", '${snapshot.data[index].idCategoria}');
+                            Navigator.pushNamed(context, 'productosCategoria', arguments: arg);
                           },
                           child: Container(
                             width: responsive.ip(18),
@@ -830,45 +741,31 @@ class CafeLocal extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: CachedNetworkImage(
-                                      cacheManager: CustomCacheManager(),
-                                      progressIndicatorBuilder:
-                                          (_, url, downloadProgress) {
+                                      progressIndicatorBuilder: (_, url, downloadProgress) {
                                         return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                                          width: double.infinity,
+                                          height: double.infinity,
                                           child: Stack(
                                             children: [
                                               Center(
                                                 child: CircularProgressIndicator(
-                                                  value:
-                                                      downloadProgress.progress,
+                                                  value: downloadProgress.progress,
                                                   backgroundColor: Colors.green,
-                                                  valueColor:
-                                                      new AlwaysStoppedAnimation<
-                                                          Color>(Colors.red),
+                                                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                                                 ),
                                               ),
                                               Center(
-                                                child: (downloadProgress
-                                                            .progress !=
-                                                        null)
-                                                    ? Text(
-                                                        '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                                child: (downloadProgress.progress != null)
+                                                    ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
                                                     : Container(),
                                               )
                                             ],
                                           ),
                                         );
                                       },
-                                      errorWidget: (context, url, error) =>
-                                          Image(
-                                              image: AssetImage(
-                                                  'assets/carga_fallida.jpg'),
-                                              fit: BoxFit.cover),
-                                      imageUrl:
-                                          '${snapshot.data[index].categoriaFoto}',
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
+                                      errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
+                                      imageUrl: '${snapshot.data[index].categoriaFoto}',
+                                      imageBuilder: (context, imageProvider) => Container(
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                             image: imageProvider,
@@ -893,10 +790,7 @@ class CafeLocal extends StatelessWidget {
                                     ),
                                     child: Text(
                                       '${snapshot.data[index].categoriaNombre}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: responsive.ip(2),
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.white, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -943,10 +837,7 @@ class CartaPrincipal extends StatelessWidget {
                 child: Text(
                   'Carta Principal',
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: responsive.ip(2.5),
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.red, fontWeight: FontWeight.bold),
                 ),
               ),
               GestureDetector(
@@ -967,8 +858,7 @@ class CartaPrincipal extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         'Ver más',
-                        style: TextStyle(
-                            fontSize: responsive.ip(1.7), color: Colors.white),
+                        style: TextStyle(fontSize: responsive.ip(1.7), color: Colors.white),
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
@@ -996,11 +886,8 @@ class CartaPrincipal extends StatelessWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Arguments arg = new Arguments(
-                        "${categoria[index].categoriaNombre}",
-                        '${categoria[index].idCategoria}');
-                    Navigator.pushNamed(context, 'productosCategoria',
-                        arguments: arg);
+                    Arguments arg = new Arguments("${categoria[index].categoriaNombre}", '${categoria[index].idCategoria}');
+                    Navigator.pushNamed(context, 'productosCategoria', arguments: arg);
                   },
                   child: Container(
                     width: responsive.ip(18),
@@ -1019,39 +906,31 @@ class CartaPrincipal extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: CachedNetworkImage(
-                              cacheManager: CustomCacheManager(),
-                              progressIndicatorBuilder:
-                                  (_, url, downloadProgress) {
+                              progressIndicatorBuilder: (_, url, downloadProgress) {
                                 return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                                  width: double.infinity,
+                                  height: double.infinity,
                                   child: Stack(
                                     children: [
                                       Center(
                                         child: CircularProgressIndicator(
                                           value: downloadProgress.progress,
                                           backgroundColor: Colors.green,
-                                          valueColor:
-                                              new AlwaysStoppedAnimation<Color>(
-                                                  Colors.red),
+                                          valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                                         ),
                                       ),
                                       Center(
                                         child: (downloadProgress.progress != null)
-                                            ? Text(
-                                                '${(downloadProgress.progress * 100).toInt().toString()}%')
+                                            ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
                                             : Container(),
                                       )
                                     ],
                                   ),
                                 );
                               },
-                              errorWidget: (context, url, error) => Image(
-                                  image: AssetImage('assets/carga_fallida.jpg'),
-                                  fit: BoxFit.cover),
+                              errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                               imageUrl: '${categoria[index].categoriaFoto}',
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
+                              imageBuilder: (context, imageProvider) => Container(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: imageProvider,
@@ -1076,10 +955,7 @@ class CartaPrincipal extends StatelessWidget {
                             ),
                             child: Text(
                               '${categoria[index].categoriaNombre}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: responsive.ip(2),
-                                  fontWeight: FontWeight.bold),
+                              style: TextStyle(color: Colors.white, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
                           ),

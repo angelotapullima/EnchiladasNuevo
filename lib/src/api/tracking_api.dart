@@ -57,18 +57,19 @@ class TrackingApi {
     }
   }
 
-   */Future<List<TrackingData>> trackingRepartidor( String idPedido) async {
+   */
+  Future<List<TrackingData>> trackingRepartidor(String idPedido) async {
     try {
       final url = '$_url/api/pedido/tracking_pedido';
       final list = List<TrackingData>();
 
-      final resp = await http.post(url, body: {'tn': prefs.token, 'app': 'true', 'id_pedido': idPedido});
+      final resp = await http.post((Uri.parse(url)), body: {'tn': prefs.token, 'app': 'true', 'id_pedido': idPedido});
       final decodedData = json.decode(resp.body);
       print(decodedData);
       final code = decodedData['result']['code'];
 
       //print(resp.body);
-      if (code == 1) { 
+      if (code == 1) {
         var data = decodedData['result']['data'][0];
 
         //TrackingData trackingData =   TrackingData.fromJson(data);
@@ -85,8 +86,6 @@ class TrackingApi {
         trackingData.trackingX = data['punto_x'];
         trackingData.trackingY = data['punto_y'];
 
-      
- 
         list.add(trackingData);
         return list;
       } else {

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/material.dart';
 
 class RankingUno extends StatelessWidget {
@@ -31,7 +30,9 @@ class RankingUno extends StatelessWidget {
                       fontSize: responsive.ip(2.5),
                     ),
                   ),
-                  SizedBox(height: responsive.hp(2),),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
                   //Text('list[0].personName',style: TextStyle(color:Colors.white,fontSize: responsive.ip(2)),),
                   Container(
                     height: responsive.ip(18),
@@ -39,35 +40,30 @@ class RankingUno extends StatelessWidget {
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100.0),
                         child: CachedNetworkImage(
-                          cacheManager: CustomCacheManager(),
                           progressIndicatorBuilder: (_, url, downloadProgress) {
-                          return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    backgroundColor: Colors.green,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
+                            return Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: CircularProgressIndicator(
+                                      value: downloadProgress.progress,
+                                      backgroundColor: Colors.green,
+                                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                                    ),
                                   ),
-                                ),
-                                Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text(
-                                          '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                              
-                              errorWidget: (context, url, error) => Image(
-                  image: AssetImage('assets/carga_fallida.jpg'),
-                  fit: BoxFit.cover),
+                                  Center(
+                                    child: (downloadProgress.progress != null)
+                                        ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
+                                        : Container(),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+
+                          errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                           imageUrl: '$imagen1',
                           //imageUrl: 'https://bolavip.com/__export/1595979644143/sites/bolavip/img/2020/07/28/chavo_crop1595979643620.jpg_1902800913.jpg',
                           imageBuilder: (context, imageProvider) => Container(
@@ -80,7 +76,9 @@ class RankingUno extends StatelessWidget {
                           ),
                         )),
                   ),
-                  SizedBox(height: responsive.hp(2),),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
                   Text(
                     list[0].puzzleTiempo,
                     style: TextStyle(

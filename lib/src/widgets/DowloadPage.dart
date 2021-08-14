@@ -1,6 +1,5 @@
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -10,13 +9,7 @@ class DowloadImagen extends StatefulWidget {
   final Widget devolucion;
   final Widget cargando;
 
-  DowloadImagen(
-      {Key key,
-      @required this.foto,
-      @required this.devolucion,
-      this.cargando,
-      @required this.idImagen})
-      : super(key: key);
+  DowloadImagen({Key key, @required this.foto, @required this.devolucion, this.cargando, @required this.idImagen}) : super(key: key);
 
   @override
   _DescargaImagenState createState() => _DescargaImagenState();
@@ -27,8 +20,7 @@ class _DescargaImagenState extends State<DowloadImagen> {
 
   _downloadFile() {
     setState(() {
-      fileStream =
-          CustomCacheManager().getFileStream(widget.foto, withProgress: true);
+      fileStream = DefaultCacheManager().getFileStream(widget.foto, withProgress: true);
     });
   }
 
@@ -54,19 +46,12 @@ class DownloadPage extends StatelessWidget {
   final Widget devolucion;
   final Widget cargando;
 
-  const DownloadPage(
-      {Key key,
-      this.fileStream,
-      this.foto,
-      @required this.devolucion,
-      this.cargando,
-      this.idImagen})
-      : super(key: key);
+  const DownloadPage({Key key, this.fileStream, this.foto, @required this.devolucion, this.cargando, this.idImagen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<FileResponse>(
-      stream: CustomCacheManager().getFileStream(foto, withProgress: true),
+      stream: DefaultCacheManager().getFileStream(foto, withProgress: true),
       builder: (context, snapshot) {
         Widget body;
 
@@ -138,9 +123,7 @@ class FileInfoWidget extends StatelessWidget {
   final String idImagen;
   final Widget devolucion;
 
-  const FileInfoWidget(
-      {Key key, this.fileInfo, this.foto, this.devolucion, this.idImagen})
-      : super(key: key);
+  const FileInfoWidget({Key key, this.fileInfo, this.foto, this.devolucion, this.idImagen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -164,8 +147,7 @@ class FileInfoWidget extends StatelessWidget {
     //Text(title)
   }
 
-  Widget _button(
-      BuildContext context, Responsive responsive, String path2, String idImg) {
+  Widget _button(BuildContext context, Responsive responsive, String path2, String idImg) {
     return Positioned(
         bottom: responsive.hp(2),
         left: responsive.wp(3),

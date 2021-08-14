@@ -1,4 +1,3 @@
-  
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
@@ -7,17 +6,14 @@ import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart'; 
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CategoriasPorTipo extends StatefulWidget {
-  const CategoriasPorTipo(
-      {Key key, @required this.tipo, @required this.nombreTipo})
-      : super(key: key);
+  const CategoriasPorTipo({Key key, @required this.tipo, @required this.nombreTipo}) : super(key: key);
   final String tipo;
   final String nombreTipo;
   @override
@@ -69,10 +65,7 @@ class _MarketPageState extends State<CategoriasPorTipo> {
             title: Text(
               /*  (widget.tipo == '2') ? 'Market 247' : 'Café 247', */
               widget.nombreTipo,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: responsive.ip(2.8),
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.8), fontWeight: FontWeight.bold),
             ),
             actions: <Widget>[
               IconButton(
@@ -112,8 +105,7 @@ class _MarketPageState extends State<CategoriasPorTipo> {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data.length > 0) {
-                          return _conte(context, anchoCategorias,
-                              anchoProductos, snapshot.data);
+                          return _conte(context, anchoCategorias, anchoProductos, snapshot.data);
                         } else {
                           return Center(
                             child: Text('No hay datos de categorias'),
@@ -133,8 +125,7 @@ class _MarketPageState extends State<CategoriasPorTipo> {
     );
   }
 
-  Widget _conte(BuildContext context, double anchoCategorias,
-      double anchoProductos, List<CategoriaData> categorias) {
+  Widget _conte(BuildContext context, double anchoCategorias, double anchoProductos, List<CategoriaData> categorias) {
     final marketBloc = ProviderBloc.market(context);
     marketBloc.changeIndexPage(categorias[0].idCategoria);
 
@@ -168,8 +159,7 @@ class CategoriasProducto extends StatefulWidget {
   final double ancho;
   final List<CategoriaData> data;
 
-  const CategoriasProducto({Key key, @required this.ancho, @required this.data})
-      : super(key: key);
+  const CategoriasProducto({Key key, @required this.ancho, @required this.data}) : super(key: key);
 
   @override
   _CategoriasProductoState createState() => _CategoriasProductoState();
@@ -216,9 +206,7 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                 width: size.width * 0.25,
                 decoration: BoxDecoration(
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-                  color: (categoria.idCategoria == snapshot.data)
-                      ? Colors.red
-                      : Colors.white,
+                  color: (categoria.idCategoria == snapshot.data) ? Colors.red : Colors.white,
                   border: Border.all(color: Colors.grey[100]),
                   borderRadius: BorderRadius.circular(5),
                 ),
@@ -227,8 +215,7 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                     SizedBox(width: 4),
                     Expanded(
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
@@ -239,21 +226,15 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
                                 '${categoria.categoriaIcono}',
                                 semanticsLabel: 'A shark?!',
                                 placeholderBuilder: (BuildContext context) =>
-                                    Container(
-                                        padding: const EdgeInsets.all(30.0),
-                                        child:
-                                            const CircularProgressIndicator()),
+                                    Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
                                 fit: BoxFit.cover,
                               ),
-                            ), 
+                            ),
                             SizedBox(
                               height: responsive.hp(1),
                             ),
                             Text(categoria.categoriaNombre,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: responsive.ip(1.3)),
-                                textAlign: TextAlign.center),
+                                style: TextStyle(color: Colors.black, fontSize: responsive.ip(1.3)), textAlign: TextAlign.center),
                           ],
                         ),
                       ),
@@ -277,8 +258,7 @@ class ProductosIdPage extends StatefulWidget {
   final double ancho;
   final String index;
 
-  const ProductosIdPage({Key key, @required this.ancho, @required this.index})
-      : super(key: key);
+  const ProductosIdPage({Key key, @required this.ancho, @required this.index}) : super(key: key);
 
   @override
   _ProductosIdPageState createState() => _ProductosIdPageState();
@@ -310,8 +290,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
               return ListView.builder(
                 itemCount: productos.length,
                 itemBuilder: (BuildContext context, int indexed) {
-                  return _itemPedido(
-                      context, productos[indexed], productos.length.toString());
+                  return _itemPedido(context, productos[indexed], productos.length.toString());
                 },
               );
             }
@@ -328,8 +307,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 
-  Widget _itemPedido(
-      BuildContext context, ProductosData productosData, String cantidadItems) {
+  Widget _itemPedido(BuildContext context, ProductosData productosData, String cantidadItems) {
     final Responsive responsive = new Responsive.of(context);
 
     return GestureDetector(
@@ -349,34 +327,28 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager(),
                   progressIndicatorBuilder: (_, url, downloadProgress) {
                     return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                      width: double.infinity,
+                      height: double.infinity,
                       child: Stack(
                         children: [
                           Center(
                             child: CircularProgressIndicator(
                               value: downloadProgress.progress,
                               backgroundColor: Colors.green,
-                              valueColor:
-                                  new AlwaysStoppedAnimation<Color>(Colors.red),
+                              valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                             ),
                           ),
                           Center(
-                            child: (downloadProgress.progress != null)
-                                ? Text(
-                                    '${(downloadProgress.progress * 100).toInt().toString()}%')
-                                : Container(),
+                            child:
+                                (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                           )
                         ],
                       ),
                     );
                   },
-                  errorWidget: (context, url, error) => Image(
-                      image: AssetImage('assets/carga_fallida.jpg'),
-                      fit: BoxFit.cover),
+                  errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                   imageUrl: '${productosData.productoFoto}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
@@ -399,10 +371,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                   Text(
                     productosData.productoNombre,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: responsive.ip(1.8),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.black, fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'S/ ${productosData.productoPrecio}',
@@ -452,14 +421,11 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
                 return SliderDetalleProductos(
-                    numeroItem: productosData.numeroitem,
-                    idCategoria: productosData.idCategoria,
-                    cantidadItems: cantidadItems);
+                    numeroItem: productosData.numeroitem, idCategoria: productosData.idCategoria, cantidadItems: cantidadItems);
 
                 //return DetalleProductitos(productosData: productosData);
               },
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
                   opacity: animation,
                   child: child,

@@ -1,4 +1,4 @@
-class User {
+class Userio {
   String cU;
   String idRel;
   String personName;
@@ -11,11 +11,11 @@ class User {
   String telefono;
   String cP;
 
-  User({
+  Userio({
     this.cU,
     this.idRel,
     this.personName,
-    this.idDireccion, 
+    this.idDireccion,
     this.idZona,
     this.userEmail,
     this.foto,
@@ -25,7 +25,7 @@ class User {
     this.cP,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory Userio.fromJson(Map<String, dynamic> json) => Userio(
         cU: json["c_u"],
         idRel: json["idRel"],
         personName: json["nombre"],
@@ -43,7 +43,7 @@ class User {
         "c_u": cU,
         "idRel": idRel,
         "nombre": personName,
-        "direccion": idDireccion, 
+        "direccion": idDireccion,
         "id_zona": idZona,
         "email": userEmail,
         "foto": foto,

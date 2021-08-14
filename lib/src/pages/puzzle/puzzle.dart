@@ -2,9 +2,9 @@ import 'package:enchiladasapp/src/api/puzzle_api.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 import 'dart:io';
@@ -49,7 +49,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
   }
 
   Future getImage(String path) async {
-    var image = await CustomCacheManager().getSingleFile(path);
+    //var image = await CustomCacheManager().getSingleFile(path);
+    var image = await DefaultCacheManager().getSingleFile(path);
 
     print('image: $image');
     if (image != null) {
@@ -141,11 +142,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
     //});
   }
- @override
+
+  @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
-    final RankingPuzzle rankingPuzzle =
-        ModalRoute.of(context).settings.arguments;
+    final RankingPuzzle rankingPuzzle = ModalRoute.of(context).settings.arguments;
     pathLlegada = rankingPuzzle.path;
     idImagenLlegada = rankingPuzzle.idImagen;
 
@@ -199,19 +200,14 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                 final puzzleApi = PuzzleApi();
                                 //showProcessingDialog();
 
-                                final res = await puzzleApi.subirTiempo(
-                                    hora, idImagenLlegada);
+                                final res = await puzzleApi.subirTiempo(hora, idImagenLlegada);
 
                                 if (res) {
                                   _subida.value = false;
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                      'ranking',
-                                      ModalRoute.withName('HomePuzzle'),
-                                      arguments: '$hora');
+                                  Navigator.of(context).pushNamedAndRemoveUntil('ranking', ModalRoute.withName('HomePuzzle'), arguments: '$hora');
                                 } else {
                                   _subida.value = false;
-                                  showToast('Error al subir lo datos', 3,
-                                      ToastGravity.CENTER);
+                                  showToast('Error al subir lo datos', 3, ToastGravity.CENTER);
                                 }
                               },
                               child: Text(

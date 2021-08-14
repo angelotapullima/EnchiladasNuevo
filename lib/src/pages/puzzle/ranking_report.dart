@@ -5,7 +5,6 @@ import 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
 import 'package:enchiladasapp/src/models/puzzle_model.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart';
-import 'package:enchiladasapp/src/widgets/customCacheManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +54,7 @@ class _RankingReportState extends State<RankingReport> {
 
     puzzleBloc.obtenerTiempos(horaformat1);
 
-    Future.delayed(Duration(milliseconds:500), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       _controller.animateToDate(today);
     });
 
@@ -75,16 +74,15 @@ class _RankingReportState extends State<RankingReport> {
     );
   }
 
-  Widget _calendar(Responsive responsive, PuzzleBloc puzzleBloc,
-      DatePickerController controller) {
+  Widget _calendar(Responsive responsive, PuzzleBloc puzzleBloc, DatePickerController controller) {
     return Column(
       children: <Widget>[
         Container(
           width: double.infinity,
           child: DatePicker(
             firstDate,
-                  height: responsive.hp(14),
-                  width: responsive.wp(15),
+            height: responsive.hp(14),
+            width: responsive.wp(15),
             initialSelectedDate: today,
             selectionColor: Colors.green,
             locale: 'es_Es',
@@ -149,8 +147,7 @@ class _RankingReportState extends State<RankingReport> {
         Expanded(
           child: StreamBuilder(
               stream: puzzleBloc.puzzleTiempoStream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<RankingPuzzle>> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<List<RankingPuzzle>> snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data.length > 0) {
                     return contenidoRanking(context, responsive, snapshot.data);
@@ -166,8 +163,7 @@ class _RankingReportState extends State<RankingReport> {
     );
   }
 
-  Widget contenidoRanking(
-      BuildContext context, Responsive responsive, List<RankingPuzzle> data) {
+  Widget contenidoRanking(BuildContext context, Responsive responsive, List<RankingPuzzle> data) {
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, i) {
@@ -179,16 +175,14 @@ class _RankingReportState extends State<RankingReport> {
   Widget _cardRanking(Responsive responsive, RankingPuzzle ranking, int index) {
     return Card(
       elevation: 3.0,
-      margin: EdgeInsets.symmetric(
-          horizontal: responsive.wp(2), vertical: responsive.hp(.8)),
+      margin: EdgeInsets.symmetric(horizontal: responsive.wp(2), vertical: responsive.hp(.8)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: Container(
         padding: EdgeInsets.all(responsive.ip(1)),
         child: Row(children: <Widget>[
           Text(
             '$index',
-            style: TextStyle(
-                fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
           ),
           SizedBox(
             width: responsive.wp(2),
@@ -199,34 +193,27 @@ class _RankingReportState extends State<RankingReport> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(100.0),
               child: CachedNetworkImage(
-                cacheManager: CustomCacheManager(),
                 progressIndicatorBuilder: (_, url, downloadProgress) {
                   return Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                    width: double.infinity,
+                    height: double.infinity,
                     child: Stack(
                       children: [
                         Center(
                           child: CircularProgressIndicator(
                             value: downloadProgress.progress,
                             backgroundColor: Colors.green,
-                            valueColor:
-                                new AlwaysStoppedAnimation<Color>(Colors.red),
+                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                           ),
                         ),
                         Center(
-                          child: (downloadProgress.progress != null)
-                              ? Text(
-                                  '${(downloadProgress.progress * 100).toInt().toString()}%')
-                              : Container(),
+                          child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                         )
                       ],
                     ),
                   );
                 },
-                errorWidget: (context, url, error) => Image(
-                    image: AssetImage('assets/carga_fallida.jpg'),
-                    fit: BoxFit.cover),
+                errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
                 imageUrl: '${ranking.userImage}',
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
@@ -243,15 +230,13 @@ class _RankingReportState extends State<RankingReport> {
             width: responsive.wp(2),
           ),
           Expanded(
-            child: Text('${ranking.personName}',
-                style: TextStyle(fontSize: responsive.ip(1.8))),
+            child: Text('${ranking.personName}', style: TextStyle(fontSize: responsive.ip(1.8))),
             //child: Text('Angelo Tapullima Del Aguila',style: TextStyle(fontSize: responsive.ip(1.8)),),
           ),
           SizedBox(
             width: responsive.wp(2),
           ),
-          Text('${ranking.puzzleTiempo}',
-              style: TextStyle(fontSize: responsive.ip(1.8))),
+          Text('${ranking.puzzleTiempo}', style: TextStyle(fontSize: responsive.ip(1.8))),
           //Text('00:00:00'),
         ]),
       ),
