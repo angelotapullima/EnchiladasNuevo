@@ -4,8 +4,6 @@
 #la llave de android esta en /key.jks
 #la configuración de la llave esta en /android/key.properties
 
-
-
 name: enchiladasapp
 description: A new Flutter application.
 
