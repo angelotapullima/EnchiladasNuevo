@@ -80,7 +80,7 @@ class PrincipalTab extends StatelessWidget {
           }
           return Stack(
             children: [
-              _inicio(responsive, pantallasBloc, categoriasBloc,_refreshController),
+              _inicio(responsive, pantallasBloc, categoriasBloc, _refreshController),
               (pase)
                   ? ValueListenableBuilder(
                       valueListenable: provider.cargando,
@@ -100,15 +100,20 @@ class PrincipalTab extends StatelessWidget {
     );
   }
 
-  Widget _inicio(Responsive responsive, PantallaBloc pantallasBloc, CategoriasBloc categoriasBloc,RefreshController refreshController) {
+  Widget _inicio(Responsive responsive, PantallaBloc pantallasBloc, CategoriasBloc categoriasBloc, RefreshController refreshController) {
     return StreamBuilder(
         stream: pantallasBloc.pantallasStream,
         builder: (BuildContext context, AsyncSnapshot<List<PantallaModel>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
-              return SmartRefresher(enablePullDown: true,
+              return SmartRefresher(
+                enablePullDown: true,
                 footer: null,
-                header: WaterDropHeader(refresh: CircularProgressIndicator(), complete: Text('Completado'), waterDropColor: Colors.red),
+                header: WaterDropHeader(
+                  refresh: CircularProgressIndicator(),
+                  complete: Text('Completado'),
+                  waterDropColor: Colors.red,
+                ),
                 controller: refreshController,
                 onRefresh: () {
                   _onRefresh(context);
@@ -306,7 +311,7 @@ class PrincipalTab extends StatelessWidget {
                                                     );
                                                   }
                                                   index = index - 1;
-              
+
                                                   return InkWell(
                                                     onTap: () {
                                                       /* Navigator.of(context).push(
@@ -387,7 +392,7 @@ class PrincipalTab extends StatelessWidget {
                                 ],
                               );
                             }
-              
+
                             if (index == snapshot.data.length) {
                               return SizedBox(
                                 height: responsive.hp(1),
@@ -632,248 +637,245 @@ class PrincipalTab extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (context, i) {
             return GestureDetector(
-             onTap: () {
-                    if (pantallaModel.idPantalla == '1') {
-                      final bottomBloc = ProviderBloc.bottom(context);
-                      bottomBloc.changePage(2);
-                    } else if (pantallaModel.idPantalla == '5') {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 400),
-                          pageBuilder: (context, animation, secondaryAnimation) {
-                            return CategoriasPorTipo(
-                              nombreTipo: 'Var 247',
-                              tipo: '4',
-                            );
-                            //return DetalleProductitos(productosData: productosData);
-                          },
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    } else if (pantallaModel.idPantalla == '4') {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 400),
-                          pageBuilder: (context, animation, secondaryAnimation) {
-                            return CategoriasPorTipo(
-                              nombreTipo: 'Café 247',
-                              tipo: '3',
-                            );
-                            //return DetalleProductitos(productosData: productosData);
-                          },
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    } else if (pantallaModel.idPantalla == '3') {
-                      Navigator.pushNamed(context, 'HomePuzzle');
-                    } else {
-                      Arguments arg = new Arguments("${pantallaModel.pantallaNombre}", '${pantallaModel.pantallCategoria}');
+              onTap: () {
+                if (pantallaModel.idPantalla == '1') {
+                  final bottomBloc = ProviderBloc.bottom(context);
+                  bottomBloc.changePage(2);
+                } else if (pantallaModel.idPantalla == '5') {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 400),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return CategoriasPorTipo(
+                          nombreTipo: 'Var 247',
+                          tipo: '4',
+                        );
+                        //return DetalleProductitos(productosData: productosData);
+                      },
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                } else if (pantallaModel.idPantalla == '4') {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 400),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return CategoriasPorTipo(
+                          nombreTipo: 'Café 247',
+                          tipo: '3',
+                        );
+                        //return DetalleProductitos(productosData: productosData);
+                      },
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  Arguments arg = new Arguments("${pantallaModel.pantallaNombre}", '${pantallaModel.pantallCategoria}');
 
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 100),
-                          pageBuilder: (context, animation, secondaryAnimation) {
-                            return CategoriasEspecialesPage(
-                              arg: arg,
-                            );
-                            //return DetalleProductitos(productosData: productosData);
-                          },
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                        ),
-                      );}
-                    
-             },
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 100),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return CategoriasEspecialesPage(
+                          arg: arg,
+                        );
+                        //return DetalleProductitos(productosData: productosData);
+                      },
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                width: responsive.ip(anchoCard),
-                //height: (tipo=='puzzle')?responsive.hp(20):responsive.ip(altoCard),
-                margin: EdgeInsets.only(
-                  right: responsive.wp(1.5),
-                  left: responsive.wp(1.5),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          height: (tipo == 'puzzle')
-                              ? responsive.hp(25)
-                              : (tipo == 'producto')
-                                  ? responsive.ip(altoCard) - responsive.ip(15)
-                                  : responsive.ip(altoCard) - responsive.ip(0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
-                              progressIndicatorBuilder: (_, url, downloadProgress) {
-                                return Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  child: Stack(
-                                    children: [
-                                      Center(
-                                        child: CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                          backgroundColor: Colors.green,
-                                          valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
-                              errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
-                              imageUrl: '${pantallaModel.items[i].fotoItem}',
-                              imageBuilder: (context, imageProvider) => Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: boxfit,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        (tipo == 'producto')
-                            ? ('${pantallaModel.items[i].productoNuevo}' != '1')
-                                ? Positioned(
-                                    top: 5,
-                                    left: 0,
-                                    right: 0,
-                                    /*  left: responsive.wp(1),
-                                    top: responsive.hp(.5), */
-                                    child: Row(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  width: responsive.ip(anchoCard),
+                  //height: (tipo=='puzzle')?responsive.hp(20):responsive.ip(altoCard),
+                  margin: EdgeInsets.only(
+                    right: responsive.wp(1.5),
+                    left: responsive.wp(1.5),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: <Widget>[
+                          Container(
+                            width: double.infinity,
+                            height: (tipo == 'puzzle')
+                                ? responsive.hp(25)
+                                : (tipo == 'producto')
+                                    ? responsive.ip(altoCard) - responsive.ip(15)
+                                    : responsive.ip(altoCard) - responsive.ip(0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                progressIndicatorBuilder: (_, url, downloadProgress) {
+                                  return Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    child: Stack(
                                       children: [
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: responsive.wp(3),
-                                            vertical: responsive.hp(.5),
-                                          ),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                bottomRight: Radius.circular(10),
-                                              ),
-                                              color: Colors.red),
-                                          child: Text(
-                                            'Nuevo',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: responsive.ip(1.5),
-                                            ),
+                                        Center(
+                                          child: CircularProgressIndicator(
+                                            value: downloadProgress.progress,
+                                            backgroundColor: Colors.green,
+                                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
                                           ),
                                         ),
-                                        Spacer(),
-                                        Container(
-                                          padding: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.white),
-                                          child: Center(
-                                            child: Icon(
-                                              Ionicons.md_heart,
-                                              color: Colors.red,
-                                              size: 15,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: responsive.wp(2),
+                                        Center(
+                                          child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                                         )
                                       ],
                                     ),
-                                  )
-                                : Container()
-                            : Container(),
-                      ],
-                    ),
-                    (tipo == 'puzzle')
-                        ? Container()
-                        : Container(
-                            padding: EdgeInsets.only(
-                              right: responsive.wp(1.5),
-                              left: responsive.wp(1.5),
-                            ),
-                            height: responsive.hp(3),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'S/ 23',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontFamily: 'Aeonik',
-                                    fontSize: 17,
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: responsive.wp(2),
-                                    vertical: responsive.hp(.5),
-                                  ),
+                                  );
+                                },
+                                errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
+                                imageUrl: '${pantallaModel.items[i].fotoItem}',
+                                imageBuilder: (context, imageProvider) => Container(
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      /* borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(10),
-                                        ), */
-                                      color: Colors.orange),
-                                  child: Text(
-                                    'Destacado',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: responsive.ip(1.3),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: boxfit,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                    (tipo == 'puzzle')
-                        ? Container()
-                        : Padding(
-                            padding: EdgeInsets.only(
-                              right: responsive.wp(1.5),
-                              left: responsive.wp(1.5),
-                            ),
-                            child: Text(
-                              '${pantallaModel.items[i].nombreItem.toLowerCase()}',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Aeonik',
-                                fontSize: 14,
                               ),
                             ),
                           ),
-                  ],
-                )
-              ),
+                          (tipo == 'producto')
+                              ? ('${pantallaModel.items[i].productoNuevo}' != '1')
+                                  ? Positioned(
+                                      top: 5,
+                                      left: 0,
+                                      right: 0,
+                                      /*  left: responsive.wp(1),
+                                    top: responsive.hp(.5), */
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: responsive.wp(3),
+                                              vertical: responsive.hp(.5),
+                                            ),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                  bottomRight: Radius.circular(10),
+                                                ),
+                                                color: Colors.red),
+                                            child: Text(
+                                              'Nuevo',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: responsive.ip(1.5),
+                                              ),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            padding: EdgeInsets.all(5),
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.white),
+                                            child: Center(
+                                              child: Icon(
+                                                Ionicons.md_heart,
+                                                color: Colors.red,
+                                                size: 15,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: responsive.wp(2),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : Container()
+                              : Container(),
+                        ],
+                      ),
+                      (tipo == 'puzzle')
+                          ? Container()
+                          : Container(
+                              padding: EdgeInsets.only(
+                                right: responsive.wp(1.5),
+                                left: responsive.wp(1.5),
+                              ),
+                              height: responsive.hp(3),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'S/ 23',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Aeonik',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: responsive.wp(2),
+                                      vertical: responsive.hp(.5),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        /* borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(10),
+                                        ), */
+                                        color: Colors.orange),
+                                    child: Text(
+                                      'Destacado',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: responsive.ip(1.3),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                      (tipo == 'puzzle')
+                          ? Container()
+                          : Padding(
+                              padding: EdgeInsets.only(
+                                right: responsive.wp(1.5),
+                                left: responsive.wp(1.5),
+                              ),
+                              child: Text(
+                                '${pantallaModel.items[i].nombreItem.toLowerCase()}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Aeonik',
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                    ],
+                  )),
             );
           },
         );

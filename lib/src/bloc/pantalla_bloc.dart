@@ -126,32 +126,7 @@ class PantallaBloc {
             listItemPantalla.add(item);
           }
         }
-      } else if (pantalla.idPantalla == '3') {
-        //puzzle
-
-       /*  final listaPuzzle = await puzzleDatabase.obtenerPuzzle(); //puzzle.obtenerCategoriasTodos();
-
-        if (listaPuzzle.length > 10) {
-          for (int x = 0; x < 10; x++) {
-            ItemPantalla item = ItemPantalla();
-
-            item.nombreItem = listaPuzzle[x].imagenSubida;
-            item.fotoItem = listaPuzzle[x].imagenRuta;
-            item.numeroItem = x.toString();
-
-            listItemPantalla.add(item);
-          }
-        } else {
-          for (int x = 0; x < listaPuzzle.length; x++) {
-            ItemPantalla item = ItemPantalla();
-
-            item.nombreItem = listaPuzzle[x].imagenSubida;
-            item.fotoItem = listaPuzzle[x].imagenRuta;
-
-            listItemPantalla.add(item);
-          }
-        } */
-      } else {
+      }  else {
         //resto
 
         final listaProductos = await productosDatabase.obtenerProductosPorCategoriaDelivery(pantalla.pantallCategoria);
