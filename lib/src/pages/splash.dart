@@ -28,13 +28,13 @@ class _SplashState extends State<Splash> {
       final usuarioDatabase = UsuarioDatabase();
 
       if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
-        //await categoriasApi.obtenerAmbos(context);
+        await categoriasApi.obtenerAmbos(context);
 
         await configuracionApi.configuracion();
 
         preferences.estadoCargaInicial = '1';
       } else {
-        //categoriasApi.obtenerAmbos(context);
+        categoriasApi.obtenerAmbos(context);
 
         configuracionApi.configuracion();
       }

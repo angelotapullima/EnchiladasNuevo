@@ -12,11 +12,9 @@ class DesicionPage extends StatefulWidget {
 
 class _DesicionPageState extends State<DesicionPage> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final responsive = Responsive.of(context);
-
-    /* final pantallaBloc = ProviderBloc.pantalla(context);
-    pantallaBloc.estadoPantalla(); */
+ 
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -70,7 +68,8 @@ class _DesicionPageState extends State<DesicionPage> {
                       child: SvgPicture.asset('assets/icono_local.svg'),
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, 'homeLocal');
+
+                        Navigator.pushNamed(context, 'homeLocal');
                     },
                   ),
                 ],

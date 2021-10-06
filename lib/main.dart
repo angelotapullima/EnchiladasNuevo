@@ -13,14 +13,11 @@ import 'package:enchiladasapp/src/pages/onboarding_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_pago_page.dart';
 import 'package:enchiladasapp/src/pages/pantalla_delivery_opciones.dart';
-import 'package:enchiladasapp/src/pages/puzzle/ranking.dart';
-import 'package:enchiladasapp/src/pages/puzzle/ranking_report.dart';
 import 'package:enchiladasapp/src/pages/detalle_promociones.dart';
 import 'package:enchiladasapp/src/pages/ticket.dart';
 import 'package:enchiladasapp/src/pages/webview.dart';
 import 'package:enchiladasapp/src/pages/zoom_foto_direccion.dart';
 import 'package:enchiladasapp/src/pushProvider/push_notifications.dart';
-import 'package:enchiladasapp/src/utils/utilidades.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/pages/detalle_pago.dart';
@@ -32,8 +29,6 @@ import 'package:enchiladasapp/src/pages/splash.dart';
 import 'package:enchiladasapp/src/pages/home_page.dart';
 import 'package:enchiladasapp/src/pages/desicion_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_page.dart';
-import 'package:enchiladasapp/src/pages/puzzle/home_puzzle.dart';
-import 'package:enchiladasapp/src/pages/puzzle/puzzle.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -172,8 +167,7 @@ class _MyAppState extends State<MyApp> {
               routes: {
                 '/': (BuildContext context) => HomePage(),
                 'homeLocal': (BuildContext context) => HomeLocal(),
-                'HomePuzzle': (BuildContext context) => HomePuzzle(),
-                'puzzle': (BuildContext context) => PuzzlePage(),
+                
                 'login': (BuildContext context) => LoginPage(),
                 'splash': (BuildContext context) => Splash(),
                 'desicion': (BuildContext context) => DesicionPage(),
@@ -187,8 +181,7 @@ class _MyAppState extends State<MyApp> {
                 /* 'pedidosRepartidor': (BuildContext context) => PedidosRepartidor(),
                 'mapaRepartidor': (BuildContext context) => MapaRepartidor(), */
                 'mapaCliente': (BuildContext context) => MapaCliente(),
-                'ranking': (BuildContext context) => RankingPage(),
-                'rankingReport': (BuildContext context) => RankingReport(),
+                
                 'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
 
                 'timeline': (BuildContext context) => DeliveryTimeline(),
@@ -203,6 +196,14 @@ class _MyAppState extends State<MyApp> {
                     DetallePromocionesLocal(), */
                 'notificationPage': (BuildContext context) => NotificationPage(),
                 'pantallaDeliveryOpciones': (BuildContext context) => PantallaDeliveryOpciones(),
+
+
+                //puzzle:
+
+                /* 'HomePuzzle': (BuildContext context) => HomePuzzle(),
+                'puzzle': (BuildContext context) => PuzzlePage(),
+                'ranking': (BuildContext context) => RankingPage(),
+                'rankingReport': (BuildContext context) => RankingReport(), */
               },
             ),
           ),

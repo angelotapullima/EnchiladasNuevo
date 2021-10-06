@@ -22,8 +22,8 @@ import 'package:enchiladasapp/src/bloc/market_navigation_bloc.dart';
 export 'package:enchiladasapp/src/bloc/market_navigation_bloc.dart';
 
 
-import 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
-export 'package:enchiladasapp/src/bloc/puzzle_bloc.dart';
+import 'package:enchiladasapp/src/puzzle/puzzle_bloc.dart';
+export 'package:enchiladasapp/src/puzzle/puzzle_bloc.dart';
 
 
 import 'package:enchiladasapp/src/bloc/bottom_navigation_bloc.dart';
@@ -65,7 +65,7 @@ class ProviderBloc extends InheritedWidget {
   final marketNaviBloc = MarketNaviBloc();
   final pedidosBloc = PedidoBloc();
   //final pedidosAsignadosBloc = PedidosAsignadosBloc();
-  final puzzleBloc = PuzzleBloc();
+  //final puzzleBloc = PuzzleBloc();
   final zonaBloc = ZonaBloc();
   final nuevoMetodoPagoBloc = NuevoMetodoPagoBloc();
   final carritoCompletoBloc = CarritoCompletoBloc();
@@ -149,10 +149,10 @@ class ProviderBloc extends InheritedWidget {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .pedidosAsignadosBloc;
   } */
-  static PuzzleBloc puzzle(BuildContext context) {
+  /* static PuzzleBloc puzzle(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .puzzleBloc;
-  }
+  } */
   static ZonaBloc zona(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .zonaBloc;

@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:enchiladasapp/src/database/pantalla_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
 import 'package:enchiladasapp/src/database/publicidad_database.dart';
-import 'package:enchiladasapp/src/database/puzzle_database.dart';
+import 'package:enchiladasapp/src/puzzle/puzzle_database.dart';
 import 'package:enchiladasapp/src/database/zona_database.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/publicidad_model.dart';
-import 'package:enchiladasapp/src/models/puzzle_model.dart';
+import 'package:enchiladasapp/src/puzzle/puzzle_model.dart';
 import 'package:enchiladasapp/src/models/zona_model.dart';
 import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
@@ -20,7 +20,7 @@ class ConfiguracionApi {
   final prefs = new Preferences();
   final zonaDatabase = ZonaDatabase();
   final pantallaDatabase = PantallaDatabase();
-  final puzzleDatabase = PuzzleDatabase();
+  //final puzzleDatabase = PuzzleDatabase();
   final productoDatabase = ProductoDatabase();
   final publicidadDatabase = PublicidadDatabase();
 
@@ -112,7 +112,7 @@ class ConfiguracionApi {
           await pantallaDatabase.insertarPantalla(pantalla);
         }
 
-        for (int y = 0; y < decodedData['result']['data']['puzzle'].length; y++) {
+        /* for (int y = 0; y < decodedData['result']['data']['puzzle'].length; y++) {
           PuzzleDatum puzzle = PuzzleDatum();
           puzzle.idImagen = decodedData['result']['data']['puzzle'][y]['id_imagen'];
           puzzle.imagenRuta = decodedData['result']['data']['puzzle'][y]['imagen_ruta'];
@@ -124,7 +124,7 @@ class ConfiguracionApi {
           puzzle.imagenEstado = decodedData['result']['data']['puzzle'][y]['imagen_estado'];
 
           await puzzleDatabase.insertarPuzzle(puzzle);
-        }
+        } */
 
         /*  for (int t = 0;
             t < decodedData['result']['data']['adicionales'].length;

@@ -1,5 +1,3 @@
-
-
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/pages/%20categorias_por_tipo.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -47,10 +45,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                     ),
                     Text(
                       'Elige una Opción',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: responsive.ip(3.8),
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.white, fontSize: responsive.ip(3.8), fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: responsive.hp(2),
@@ -70,8 +65,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                     ),
                     StreamBuilder(
                       stream: pantallasBloc.estadoVarStream,
-                      builder:
-                          (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                         if (snapshot.hasData) {
                           if (snapshot.data) {
                             return GestureDetector(
@@ -82,26 +76,24 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                               ),
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      transitionDuration:
-                                          const Duration(milliseconds: 400),
-                                      pageBuilder: (context, animation,
-                                          secondaryAnimation) {
-                                        return CategoriasPorTipo(
-                                          nombreTipo: 'Var 247',
-                                          tipo: '4',
-                                        );
-                                        //return DetalleProductitos(productosData: productosData);
-                                      },
-                                      transitionsBuilder: (context, animation,
-                                          secondaryAnimation, child) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: child,
-                                        );
-                                      },
-                                    ));
+                                  context,
+                                  PageRouteBuilder(
+                                    transitionDuration: const Duration(milliseconds: 400),
+                                    pageBuilder: (context, animation, secondaryAnimation) {
+                                      return CategoriasPorTipo(
+                                        nombreTipo: 'Var 247',
+                                        tipo: '4',
+                                      );
+                                      //return DetalleProductitos(productosData: productosData);
+                                    },
+                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
                                 //Navigator.pushNamed(context, 'market');
                               },
                             );
@@ -122,8 +114,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                     ),
                     StreamBuilder(
                         stream: pantallasBloc.estadoCafeStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<bool> snapshot) {
+                        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data) {
                               return GestureDetector(
@@ -136,17 +127,15 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                   Navigator.push(
                                       context,
                                       PageRouteBuilder(
-                                        transitionDuration:
-                                            const Duration(milliseconds: 400),
-                                        pageBuilder: (context, animation,
-                                            secondaryAnimation) {
-                                          return CategoriasPorTipo(nombreTipo:'Café 247',
+                                        transitionDuration: const Duration(milliseconds: 400),
+                                        pageBuilder: (context, animation, secondaryAnimation) {
+                                          return CategoriasPorTipo(
+                                            nombreTipo: 'Café 247',
                                             tipo: '3',
                                           );
                                           //return DetalleProductitos(productosData: productosData);
                                         },
-                                        transitionsBuilder: (context, animation,
-                                            secondaryAnimation, child) {
+                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                           return FadeTransition(
                                             opacity: animation,
                                             child: child,

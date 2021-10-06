@@ -1,14 +1,15 @@
+
+
 import 'package:enchiladasapp/src/database/categorias_database.dart';
 import 'package:enchiladasapp/src/database/pantalla_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
-import 'package:enchiladasapp/src/database/puzzle_database.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:rxdart/subjects.dart';
 
 class PantallaBloc {
   final pantallaDatabase = PantallaDatabase();
   final categoriasDatabase = CategoriasDatabase();
-  final puzzleDatabase = PuzzleDatabase();
+  //final puzzleDatabase = PuzzleDatabase();
   final productosDatabase = ProductoDatabase();
 
   final _pantallasController = new BehaviorSubject<List<PantallaModel>>();
@@ -128,7 +129,7 @@ class PantallaBloc {
       } else if (pantalla.idPantalla == '3') {
         //puzzle
 
-        final listaPuzzle = await puzzleDatabase.obtenerPuzzle(); //puzzle.obtenerCategoriasTodos();
+       /*  final listaPuzzle = await puzzleDatabase.obtenerPuzzle(); //puzzle.obtenerCategoriasTodos();
 
         if (listaPuzzle.length > 10) {
           for (int x = 0; x < 10; x++) {
@@ -149,7 +150,7 @@ class PantallaBloc {
 
             listItemPantalla.add(item);
           }
-        }
+        } */
       } else {
         //resto
 

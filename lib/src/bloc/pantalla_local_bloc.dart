@@ -1,7 +1,7 @@
 import 'package:enchiladasapp/src/database/categorias_database.dart';
 import 'package:enchiladasapp/src/database/pantalla_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
-import 'package:enchiladasapp/src/database/puzzle_database.dart';
+import 'package:enchiladasapp/src/puzzle/puzzle_database.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:rxdart/subjects.dart';
@@ -9,7 +9,7 @@ import 'package:rxdart/subjects.dart';
 class PantallaLocalBloc {
   final pantallaDatabase = PantallaDatabase();
   final categoriasDatabase = CategoriasDatabase();
-  final puzzleDatabase = PuzzleDatabase();
+  //final puzzleDatabase = PuzzleDatabase();
   final productosDatabase = ProductoDatabase();
 
   final _pantallasLocalController = new BehaviorSubject<List<CategoriaData>>();

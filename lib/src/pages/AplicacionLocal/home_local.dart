@@ -13,7 +13,7 @@ class HomeLocal extends StatefulWidget {
 }
 
 class _HomeLocalState extends State<HomeLocal> {
-  List<Widget> pageListLocal = List<Widget>();
+  final List<Widget> pageListLocal =[];
 
   @override
   void initState() {
@@ -28,9 +28,9 @@ class _HomeLocalState extends State<HomeLocal> {
     final Responsive responsive = new Responsive.of(context);
 
     final bottomBloc = ProviderBloc.bottomLocal(context);
-    if (bottomBloc.pageLocal == null) {
+    //if (bottomBloc.pageLocal == null) {
       bottomBloc.changePageLocal(0);
-    }
+    //}
 
     return Scaffold(
       body: StreamBuilder(
