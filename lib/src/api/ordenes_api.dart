@@ -41,7 +41,7 @@ class OrdenesApi {
         estadoDelivery = 0;
       }
 
-      final productsList = List<Carrito>();
+      final List<Carrito> productsList = [];
 
       String productitos = "";
       int cantidadDeProductos = 0;
@@ -234,7 +234,7 @@ class OrdenesApi {
 
   Future<List<PedidoServer>> obtenerPedidoPorId(String idPedido) async {
     try {
-      final list = List<PedidoServer>();
+      final List<PedidoServer> list = [];
 
       final url = '$_url/api/pedido/consultar_pedido';
       final List<Userio> user = await userDatabase.obtenerUsUario();
@@ -249,7 +249,7 @@ class OrdenesApi {
       final decodedData = json.decode(response.body);
 
       if (decodedData['result']['code'] == 1) {
-        var cantidadPedidos = List<dynamic>();
+        var cantidadPedidos = [];
         cantidadPedidos = decodedData['result']['data'];
 
         for (int x = 0; x < cantidadPedidos.length; x++) {
@@ -312,7 +312,7 @@ class OrdenesApi {
 
   Future<List<PedidoServer>> obtenerhistorialDePedidos() async {
     try {
-      final list = List<PedidoServer>();
+      final List<PedidoServer> list = [];
 
       final url = '$_url/api/pedido/historial_pedidos';
       final List<Userio> user = await userDatabase.obtenerUsUario();
@@ -330,7 +330,7 @@ class OrdenesApi {
       final decodedData = json.decode(response.body);
 
       if (decodedData['result']['code'] == 1) {
-        var cantidadPedidos = List<dynamic>();
+        var cantidadPedidos =[];
         cantidadPedidos = decodedData['result']['data'];
 
         for (int x = 0; x < cantidadPedidos.length; x++) {

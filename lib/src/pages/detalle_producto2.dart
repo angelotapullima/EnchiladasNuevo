@@ -128,12 +128,25 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                           right: 0,
                           //left: 0,
                           child: Container(
-                            /*  transform: Matrix4.translationValues(
-                                    -responsive.wp(29), 0, 0), */
-                            height: responsive.ip(7),
-                            width: responsive.ip(7),
-                            child: SvgPicture.asset('assets/medalla.svg'),
-                          ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: responsive.wp(2),
+                                          vertical: responsive.hp(.5),
+                                        ),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                            /* borderRadius: BorderRadius.only(
+                                                    bottomRight: Radius.circular(10),
+                                                  ), */
+                                            color: Colors.orange),
+                                        child: Text(
+                                          'Destacado',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: responsive.ip(1.3),
+                                          ),
+                                        ),
+                                      )
                         )
                       : Container()
                 ],

@@ -6,8 +6,11 @@ import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:share_extend/share_extend.dart';
 
 class DetalleProductoFoto extends StatefulWidget {
   const DetalleProductoFoto({Key key}) : super(key: key);
@@ -18,7 +21,8 @@ class DetalleProductoFoto extends StatefulWidget {
 
 class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
   final _toque = ValueNotifier<bool>(false);
-  File _imageFile;
+  Uint8List _imageFile;
+  List<String> imagePaths = [];
   ScreenshotController screenshotController = ScreenshotController();
 
   @override
@@ -37,7 +41,7 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                 radius: responsive.ip(2.5), color: Colors.transparent, widget: Icon(Icons.share) //Icon(Icons.arrow_back, color: Colors.black),
                 ),
             onTap: () async {
-              /*   await takeScreenshotandShare(productosData.idProducto); */
+                await takeScreenshotandShare(); 
               //_logoScreen.value = false;
             },
           ),
@@ -230,35 +234,47 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
           }),
     );
   }
-/* 
-  takeScreenshotandShare(String nombre) async {
+
+takeScreenshotandShare() async {
     var now = DateTime.now();
-    nombre = now.microsecond.toString();
+    var nombre = now.microsecond.toString();
     _imageFile = null;
-    screenshotController
-        .capture(delay: Duration(milliseconds: 10), pixelRatio: 2.0)
-        .then((File image) async {
+    screenshotController.capture(delay: Duration(milliseconds: 10), pixelRatio: 2.0).then((Uint8List image) async {
       setState(() {
         _imageFile = image;
       });
 
-      await ImageGallerySaver.saveImage(image.readAsBytesSync());
+      await ImageGallerySaver.saveImage(image);
 
       // Save image to gallery,  Needs plugin  https://pub.dev/packages/image_gallery_saver
       print("File Saved to Gallery");
 
       final directory = (await getApplicationDocumentsDirectory()).path;
-      Uint8List pngBytes = _imageFile.readAsBytesSync();
+      Uint8List pngBytes = _imageFile;
       File imgFile = new File('$directory/Screenshot$nombre.png');
       imgFile.writeAsBytes(pngBytes);
       print("File Saved to Gallery");
 
-      await Share.file(
-          'Anupam', 'Screenshot$nombre.png', pngBytes, 'image/png');
+      imagePaths.clear();
+      imagePaths.add(imgFile.path);
+      if (imagePaths.isNotEmpty) {
+        await Future.delayed(
+          Duration(seconds: 1),
+        );
+
+        ShareExtend.shareMultiple(imagePaths, "image", subject: "carnet");
+
+        /*  await Share.shareFiles(imagePaths,
+            text: 'prueba',
+            subject: 'prueba',
+            sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size); */
+      } else {
+        /*  await Share.share('prueba',
+            subject: 'prueba',
+            sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size); */
+      }
     }).catchError((onError) {
       print(onError);
     });
-  }
-
- */
+  } 
 }

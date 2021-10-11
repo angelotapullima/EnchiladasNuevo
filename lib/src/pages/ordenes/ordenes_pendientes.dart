@@ -40,15 +40,18 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
     final pedidoBloc = ProviderBloc.pedido(context);
 
     pedidoBloc.obtenerPedidosPendientes(context);
-    timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
-      if (banderaTimer) {
-        print('ordenes pendientes true ');
-        pedidoBloc.obtenerPedidosPendientes(context);
-      } else {
-        print('ordenes pendientes false ');
-        timer.cancel();
-      }
-    });
+    timer = Timer.periodic(
+      Duration(seconds: 10),
+      (Timer t) {
+        if (banderaTimer) {
+          print('ordenes pendientes true ');
+          pedidoBloc.obtenerPedidosPendientes(context);
+        } else {
+          print('ordenes pendientes false ');
+          timer.cancel();
+        }
+      },
+    );
 
 /* 
     final pedidoBloc = ProviderBloc.pedido(context);
@@ -56,17 +59,20 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
     final responsive = Responsive.of(context);
 
     return Scaffold(
-        body: Stack(children: <Widget>[
-      Container(
-        height: responsive.hp(70),
-        width: double.infinity,
-        color: Colors.red,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: responsive.hp(70),
+            width: double.infinity,
+            color: Colors.red,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 5),
+            child: _contenido(context, pedidoBloc),
+          ),
+        ],
       ),
-      Padding(
-        padding: EdgeInsets.only(top: 5),
-        child: _contenido(context, pedidoBloc),
-      ),
-    ]));
+    );
   }
 
   Widget _contenido(BuildContext context, PedidoBloc pedidoBloc) {
@@ -74,36 +80,28 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
         child: Column(
       children: <Widget>[
         Expanded(
-            child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadiusDirectional.only(
-                topStart: Radius.circular(13),
-                topEnd: Radius.circular(13),
-              ),
-              color: Colors.grey[50]),
-          child: SmartRefresher(
-            controller: _refreshController,
-            onRefresh: () {
-              _onRefresh(context);
-            },
-            child: StreamBuilder(
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadiusDirectional.only(
+                  topStart: Radius.circular(13),
+                  topEnd: Radius.circular(13),
+                ),
+                color: Colors.grey[50]),
+            child: SmartRefresher(
+              controller: _refreshController,
+              onRefresh: () {
+                _onRefresh(context);
+              },
+              child: StreamBuilder(
                 stream: pedidoBloc.pedidosPendientesStream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<PedidoServer>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<PedidoServer>> snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data.length > 0) {
-                      return SmartRefresher(
-                        controller: _refreshController,
-                        onRefresh: () {
-                          _onRefresh(context);
-                        },
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, i) =>
-                              _itemPedido(context, snapshot.data[i]),
-                        ),
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, i) => _itemPedido(context, snapshot.data[i]),
                       );
                     } else {
                       return Center(
@@ -115,9 +113,11 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
                       child: CupertinoActivityIndicator(),
                     );
                   }
-                }),
+                },
+              ),
+            ),
           ),
-        ))
+        )
       ],
     ));
   }

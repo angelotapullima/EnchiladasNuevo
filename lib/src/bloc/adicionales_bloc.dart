@@ -25,12 +25,12 @@ class AdicionalesBloc {
   }
 
   Future<List<ItemAdicional>> obtenerAdicionales2(String idProducto) async {
-    final listGeneral = List<ItemAdicional>();
+    final  List<ItemAdicional> listGeneral = [];
     final listAdicionales =
         await adicionalesDatabase.obtenerAdicionalesNumeroItem(idProducto);
 
     for (var i = 0; i < listAdicionales.length; i++) {
-      final listtsytdvufbu = List<AdicionalesModel>();
+      final List<AdicionalesModel> listtsytdvufbu = [];
 
       ItemAdicional itemAdicional = ItemAdicional();
       itemAdicional.item = listAdicionales[i].adicionalItem;

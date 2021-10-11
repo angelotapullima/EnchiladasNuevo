@@ -22,7 +22,7 @@ class ItemObservacionBloc {
   }
 
   Future<List<ProductosData>> obtenerObservacionItem2() async {
-    final listGeneral = List<ProductosData>();
+    final List<ProductosData> listGeneral = [];
 
     final datosObtenidos =
         await itemObservacionDatabase.obtenerItemObservacion();

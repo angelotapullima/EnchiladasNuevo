@@ -187,58 +187,59 @@ class _CategoriasProductoState extends State<CategoriasProducto> {
     final enchiladasNaviBloc = ProviderBloc.enchiNavi(context);
 
     return StreamBuilder(
-        stream: enchiladasNaviBloc.enchiladasIndexStream,
-        builder: (context, snapshot) {
-          return GestureDetector(
-              child: Container(
-                width: size.width * 0.25,
-                decoration: BoxDecoration(
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-                  color: (categoria.idCategoria == snapshot.data) ? Colors.red : Colors.white,
-                  border: Border.all(color: Colors.grey[100]),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(width: 4),
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
-                        color: Colors.white,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: responsive.ip(6),
-                              width: responsive.ip(6),
-                              child: SvgPicture.network(
-                                '${categoria.categoriaIcono}',
-                                semanticsLabel: 'A shark?!',
-                                placeholderBuilder: (BuildContext context) =>
-                                    Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(
-                              height: responsive.hp(1),
-                            ),
-                            Text(categoria.categoriaNombre,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: responsive.ip(1.5),
-                                ),
-                                textAlign: TextAlign.center),
-                          ],
+      stream: enchiladasNaviBloc.enchiladasIndexStream,
+      builder: (context, snapshot) {
+        return GestureDetector(
+          child: Container(
+            width: size.width * 0.25,
+            decoration: BoxDecoration(
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+              color: (categoria.idCategoria == snapshot.data) ? Colors.red : Colors.white,
+              border: Border.all(color: Colors.grey[100]),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Row(
+              children: <Widget>[
+                SizedBox(width: 4),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          height: responsive.ip(6),
+                          width: responsive.ip(6),
+                          child: SvgPicture.network(
+                            '${categoria.categoriaIcono}',
+                            semanticsLabel: 'A shark?!',
+                            placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
+                        SizedBox(
+                          height: responsive.hp(1),
+                        ),
+                        Text(categoria.categoriaNombre,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: responsive.ip(1.5),
+                            ),
+                            textAlign: TextAlign.center),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              onTap: () {
-                enchiladasNaviBloc.changeIndexPage(categoria.idCategoria);
-                //Navigator.pushNamed(context, 'ProductosID',arguments: categoria);
-              });
-        });
+              ],
+            ),
+          ),
+          onTap: () {
+            enchiladasNaviBloc.changeIndexPage(categoria.idCategoria);
+            //Navigator.pushNamed(context, 'ProductosID',arguments: categoria);
+          },
+        );
+      },
+    );
   }
 }
 
@@ -307,10 +308,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(8)),
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)], color: Colors.white, border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8)),
         margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5)),
         //height: responsive.hp(13),
         child: Row(
@@ -339,9 +337,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                                   ),
                                 ),
                                 Center(
-                                  child: (downloadProgress.progress != null)
-                                      ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
-                                      : Container(),
+                                  child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                                 )
                               ],
                             ),
@@ -436,10 +432,25 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
                             //right: 0,
                             //left: 0,
                             child: Container(
-                              transform: Matrix4.translationValues(-responsive.wp(13), 0, 0),
-                              height: responsive.ip(3),
-                              child: SvgPicture.asset('assets/medalla.svg'),
-                            ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: responsive.wp(2),
+                                          vertical: responsive.hp(.5),
+                                        ),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                            /* borderRadius: BorderRadius.only(
+                                                    bottomRight: Radius.circular(10),
+                                                  ), */
+                                            color: Colors.orange),
+                                        child: Text(
+                                          'Destacado',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: responsive.ip(1.3),
+                                          ),
+                                        ),
+                                      )
                           )
                         : Container()
                   ],
@@ -481,8 +492,7 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
             transitionDuration: const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
               //return DetalleProductitos(productosData: productosData);
-              return SliderDetalleProductos(
-                  numeroItem: productosData.numeroitem, idCategoria: productosData.idCategoria, cantidadItems: cantidadItems);
+              return SliderDetalleProductos(numeroItem: productosData.numeroitem, idCategoria: productosData.idCategoria, cantidadItems: cantidadItems);
             },
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(

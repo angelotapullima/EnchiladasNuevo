@@ -49,33 +49,42 @@ class GestionarDirecciones extends StatelessWidget {
                   SizedBox(
                     height: responsive.hp(1),
                   ),
-                  Text(
-                    'Agrega o escoge una dirección',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2.8),
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        'Agrega o escoge una dirección',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsive.ip(2.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: responsive.hp(1),
                   ),
                   Container(
                     width: responsive.wp(30),
-                    height: responsive.hp(4.5),
+                    height: responsive.hp(5),
                     decoration: BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                            ),
-                            onPressed: () async {
-                              final direccionDatabase = DireccionDatabase();
-                              await direccionDatabase.deleteDireccion();
-                              direccionesBloc.obtenerDirecciones();
-                              direccionesBloc.obtenerDireccionesConZonas();
-                            }),
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                          onPressed: () async {
+                            final direccionDatabase = DireccionDatabase();
+                            await direccionDatabase.deleteDireccion();
+                            direccionesBloc.obtenerDirecciones();
+                            direccionesBloc.obtenerDireccionesConZonas();
+                          },
+                        ),
                         Expanded(
                           child: Text(
                             'Eliminar todos',
@@ -125,8 +134,7 @@ class GestionarDirecciones extends StatelessWidget {
                             onPressed: () {
                               Navigator.pushNamed(context, 'sel_Direccion');
                             },
-                            icon: Icon(Icons.arrow_forward_ios,
-                                size: responsive.ip(3), color: Colors.red),
+                            icon: Icon(Icons.arrow_forward_ios, size: responsive.ip(3), color: Colors.red),
                           ),
                         ],
                       ),
@@ -144,24 +152,20 @@ class GestionarDirecciones extends StatelessWidget {
                       width: double.infinity,
                       child: StreamBuilder(
                           stream: direccionesBloc.direccionesStream,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Direccion>> snapshot) {
+                          builder: (BuildContext context, AsyncSnapshot<List<Direccion>> snapshot) {
                             var ubicacionActual = Column(
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, 'sel_Direccion');
+                                    Navigator.pushNamed(context, 'sel_Direccion');
                                   },
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
                                       CircleContainer(
                                         color: Colors.red,
                                         radius: responsive.ip(3),
-                                        widget: Icon(Icons.near_me,
-                                            color: Colors.white),
+                                        widget: Icon(Icons.near_me, color: Colors.white),
                                       ),
                                       SizedBox(
                                         width: responsive.wp(5),
@@ -181,12 +185,9 @@ class GestionarDirecciones extends StatelessWidget {
                                       ),
                                       IconButton(
                                         onPressed: () {
-                                          Navigator.pushNamed(
-                                              context, 'sel_Direccion');
+                                          Navigator.pushNamed(context, 'sel_Direccion');
                                         },
-                                        icon: Icon(Icons.arrow_forward_ios,
-                                            size: responsive.ip(3),
-                                            color: Colors.red),
+                                        icon: Icon(Icons.arrow_forward_ios, size: responsive.ip(3), color: Colors.red),
                                       ),
                                     ],
                                   ),
@@ -210,8 +211,7 @@ class GestionarDirecciones extends StatelessWidget {
                                     }
 
                                     int index = i - 1;
-                                    return _carDirection(context, responsive,
-                                        snapshot.data[index]);
+                                    return _carDirection(context, responsive, snapshot.data[index]);
                                   },
                                 );
                               } else {
@@ -234,8 +234,7 @@ class GestionarDirecciones extends StatelessWidget {
     );
   }
 
-  Widget _carDirection(
-      BuildContext context, Responsive responsive, Direccion direccion) {
+  Widget _carDirection(BuildContext context, Responsive responsive, Direccion direccion) {
     return GestureDetector(
       onTap: () {
         utils.seleccionarDireccion(context, '${direccion.idDireccion}');
@@ -256,8 +255,7 @@ class GestionarDirecciones extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: Container(
-                    child:
-                        Icon(FontAwesomeIcons.truck, color: Colors.grey[600]),
+                    child: Icon(FontAwesomeIcons.truck, color: Colors.grey[600]),
                   ),
                 ),
                 SizedBox(
@@ -299,11 +297,9 @@ class GestionarDirecciones extends StatelessWidget {
                 ('${direccion.seleccionado}' != '1')
                     ? IconButton(
                         onPressed: () {
-                          utils.deleteDireccion(
-                              context, '${direccion.idDireccion}');
+                          utils.deleteDireccion(context, '${direccion.idDireccion}');
                         },
-                        icon: Icon(Icons.delete_outline,
-                            size: responsive.ip(4), color: Colors.red),
+                        icon: Icon(Icons.delete_outline, size: responsive.ip(4), color: Colors.red),
                       )
                     : CircleContainer(
                         radius: responsive.ip(2),

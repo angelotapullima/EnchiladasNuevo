@@ -1,6 +1,7 @@
 import 'package:enchiladasapp/src/bloc/bottom_navigation_bloc.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
+import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/categoria2.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     pageList.add(PrincipalTab());
     pageList.add(FavoritosTab());
-    pageList.add(CategoriasPage());
+    pageList.add(Categoria2());
     pageList.add(MiOrdenTab());
     pageList.add(MiCuentaTab());
     super.initState();
@@ -101,6 +102,7 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  SizedBox(height: responsive.hp(1),),
                                   Icon(
                                     Icons.home,
                                     size: responsive.ip(3),
@@ -122,7 +124,8 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: [SizedBox(height: responsive.hp(1),),
+                                  
                                   Icon(
                                     FontAwesome5Solid.heart,
                                     size: responsive.ip(3),
@@ -173,7 +176,8 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: [SizedBox(height: responsive.hp(1),),
+                                  
                                   StreamBuilder(
                                       stream: carritoBloc.carritoIdStream,
                                       builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
@@ -246,7 +250,8 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: [SizedBox(height: responsive.hp(1),),
+                                  
                                   Icon(
                                     Icons.person,
                                     size: responsive.ip(3),

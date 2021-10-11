@@ -1,7 +1,6 @@
 import 'package:enchiladasapp/src/database/categorias_database.dart';
 import 'package:enchiladasapp/src/database/pantalla_database.dart';
 import 'package:enchiladasapp/src/database/producto_database.dart';
-import 'package:enchiladasapp/src/puzzle/puzzle_database.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:rxdart/subjects.dart';
@@ -52,7 +51,7 @@ class PantallaLocalBloc {
       final productos = await productosDatabase
           .obtenerProductosPorCategoriaLocal(listaCategorias[i].idCategoria);
 
-      final productitos = List<ProductosData>();
+      final List<ProductosData> productitos =[];
 
       for (var x = 0; x < productos.length; x++) {
         ProductosData productosData = ProductosData();
@@ -100,7 +99,7 @@ class PantallaLocalBloc {
       final productos = await productosDatabase
           .obtenerProductosPorCategoriaLocal(listaCategorias[i].idCategoria);
 
-      final productitos = List<ProductosData>();
+      final List<ProductosData> productitos = [];
 
       for (var x = 0; x < productos.length; x++) {
         ProductosData productosData = ProductosData();
@@ -149,7 +148,7 @@ class PantallaLocalBloc {
       final productos = await productosDatabase
           .obtenerProductosPorCategoriaLocal(listaCategorias[i].idCategoria);
 
-      final productitos = List<ProductosData>();
+      final List<ProductosData> productitos = [];
 
       for (var x = 0; x < productos.length; x++) {
         ProductosData productosData = ProductosData();

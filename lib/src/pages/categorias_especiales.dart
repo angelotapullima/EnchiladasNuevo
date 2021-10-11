@@ -108,10 +108,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(8)),
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)], color: Colors.white, border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(8)),
         margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5), horizontal: responsive.wp(2.5)),
         //height: responsive.hp(13),
         child: Row(
@@ -138,9 +135,7 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                                 ),
                               ),
                               Center(
-                                child: (downloadProgress.progress != null)
-                                    ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
-                                    : Container(),
+                                child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                               )
                             ],
                           ),
@@ -184,11 +179,25 @@ class _CategoriasEspecialesPage extends State<CategoriasEspecialesPage> {
                           //right: 0,
                           //left: 0,
                           child: Container(
-                            transform: Matrix4.translationValues(-responsive.wp(16), 0, 0),
-                            height: responsive.ip(4),
-                            child: SvgPicture.asset('assets/medalla.svg'),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(2),
+                            vertical: responsive.hp(.5),
                           ),
-                        )
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              /* borderRadius: BorderRadius.only(
+                                                    bottomRight: Radius.circular(10),
+                                                  ), */
+                              color: Colors.orange),
+                          child: Text(
+                            'Destacado',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(1.3),
+                            ),
+                          ),
+                        ))
                       : Container(),
                 ],
               ),

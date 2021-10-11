@@ -6,6 +6,7 @@ import 'package:enchiladasapp/src/bloc/cerrar_publicidad_bloc.dart';
 import 'package:enchiladasapp/src/bloc/pantalla_bloc.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
+import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
@@ -13,7 +14,9 @@ import 'package:enchiladasapp/src/models/publicidad_model.dart';
 import 'package:enchiladasapp/src/pages/%20categorias_por_tipo.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
-import 'package:enchiladasapp/src/pages/detalle_productos_destacado.dart';
+import 'package:enchiladasapp/src/pages/search.dart';
+import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/categoria2.dart';
+import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/detalle_categoria.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
@@ -59,9 +62,8 @@ class PrincipalTab extends StatelessWidget {
 
     pantallasBloc.obtenerPantallas();
     categoriasBloc.obtenerCategoriasPromociones();
-
-    final productosDestacadosBloc = ProviderBloc.proDestacados(context);
-    productosDestacadosBloc.obtenerProductosDestacados();
+    categoriasBloc.obtenerCategoriasEnchiladas();
+ 
 
     final provider = Provider.of<PrincipalChangeBloc>(context, listen: false);
 
@@ -102,318 +104,314 @@ class PrincipalTab extends StatelessWidget {
 
   Widget _inicio(Responsive responsive, PantallaBloc pantallasBloc, CategoriasBloc categoriasBloc, RefreshController refreshController) {
     return StreamBuilder(
-        stream: pantallasBloc.pantallasStream,
-        builder: (BuildContext context, AsyncSnapshot<List<PantallaModel>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return SmartRefresher(
-                enablePullDown: true,
-                footer: null,
-                header: WaterDropHeader(
-                  refresh: CircularProgressIndicator(),
-                  complete: Text('Completado'),
-                  waterDropColor: Colors.red,
-                ),
-                controller: refreshController,
-                onRefresh: () {
-                  _onRefresh(context);
-                },
-                child: CustomScrollView(
-                  slivers: [
-                    CustomHeaderPrincipal1(),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: 0),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            if (index == 0) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  StreamBuilder(
-                                    stream: categoriasBloc.categoriasPromociionesStream,
-                                    builder: (context, AsyncSnapshot<List<CategoriaData>> cat) {
-                                      if (cat.hasData) {
-                                        if (cat.data.length > 0) {
-                                          return Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                height: responsive.hp(1),
-                                              ),
-                                              CarouselSlider.builder(
-                                                itemCount: cat.data.length,
-                                                itemBuilder: (context, x, y) {
-                                                  return InkWell(
-                                                    onTap: () {},
-                                                    child: Container(
-                                                      margin: EdgeInsets.symmetric(horizontal: responsive.wp(1), vertical: responsive.hp(1)),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(10.0),
-                                                      ),
-                                                      height: responsive.hp(20),
-                                                      child: ClipRRect(
-                                                        borderRadius: BorderRadius.circular(10.0),
-                                                        child: CachedNetworkImage(
-                                                          placeholder: (context, url) => Container(
-                                                              width: double.infinity,
-                                                              height: double.infinity,
-                                                              child: Center(
-                                                                child: CupertinoActivityIndicator(),
-                                                              )),
-                                                          errorWidget: (context, url, error) => Container(
+      stream: pantallasBloc.pantallasStream,
+      builder: (BuildContext context, AsyncSnapshot<List<PantallaModel>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return SmartRefresher(
+              enablePullDown: true,
+              footer: null,
+              header: WaterDropHeader(
+                refresh: CircularProgressIndicator(),
+                complete: Text('Completado'),
+                waterDropColor: Colors.red,
+              ),
+              controller: refreshController,
+              onRefresh: () {
+                _onRefresh(context);
+              },
+              child: CustomScrollView(
+                slivers: [
+                  CustomHeaderPrincipal1(),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          if (index == 0) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                StreamBuilder(
+                                  stream: categoriasBloc.categoriasPromociionesStream,
+                                  builder: (context, AsyncSnapshot<List<CategoriaData>> cat) {
+                                    if (cat.hasData) {
+                                      if (cat.data.length > 0) {
+                                        return Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: responsive.hp(1),
+                                            ),
+                                            CarouselSlider.builder(
+                                              itemCount: cat.data.length,
+                                              itemBuilder: (context, x, y) {
+                                                return InkWell(
+                                                  onTap: () {
+                                                    Arguments arg = new Arguments("${cat.data[x].categoriaNombre}", '${cat.data[x].idCategoria}');
+                                                    Navigator.pushNamed(context, 'detallePromociones', arguments: arg);
+                                                    //Navigator.pushNamed(context, 'detallePromociones');
+                                                  },
+                                                  child: Container(
+                                                    margin: EdgeInsets.symmetric(horizontal: responsive.wp(1), vertical: responsive.hp(1)),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    height: responsive.hp(20),
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                      child: CachedNetworkImage(
+                                                        placeholder: (context, url) => Container(
                                                             width: double.infinity,
                                                             height: double.infinity,
                                                             child: Center(
-                                                              child: Icon(Icons.error),
-                                                            ),
+                                                              child: CupertinoActivityIndicator(),
+                                                            )),
+                                                        errorWidget: (context, url, error) => Container(
+                                                          width: double.infinity,
+                                                          height: double.infinity,
+                                                          child: Center(
+                                                            child: Icon(Icons.error),
                                                           ),
-                                                          imageUrl: '${cat.data[x].categoriaBanner}',
-                                                          imageBuilder: (context, imageProvider) => Container(
-                                                            decoration: BoxDecoration(
-                                                              image: DecorationImage(
-                                                                image: imageProvider,
-                                                                fit: BoxFit.cover,
-                                                              ),
+                                                        ),
+                                                        imageUrl: '${cat.data[x].categoriaBanner}',
+                                                        imageBuilder: (context, imageProvider) => Container(
+                                                          decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                              image: imageProvider,
+                                                              fit: BoxFit.cover,
                                                             ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  );
-                                                },
-                                                options: CarouselOptions(
-                                                    height: responsive.hp(20),
-                                                    onPageChanged: (index, page) {
-                                                      _currentPageNotifier.value = index;
-                                                    },
-                                                    enlargeCenterPage: true,
-                                                    autoPlay: true,
-                                                    autoPlayCurve: Curves.fastOutSlowIn,
-                                                    autoPlayInterval: Duration(seconds: 6),
-                                                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
-                                                    viewportFraction: 0.85),
-                                              ),
-                                              SizedBox(
-                                                height: responsive.hp(1),
-                                              ),
-                                              ValueListenableBuilder(
-                                                  valueListenable: _currentPageNotifier,
-                                                  builder: (BuildContext context, int data, Widget child) {
-                                                    return Container(
-                                                      margin: EdgeInsets.symmetric(
-                                                        horizontal: responsive.wp(10),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: List.generate(
-                                                          cat.data.length,
-                                                          (index) => Container(
-                                                            width: (_currentPageNotifier.value >= index - 0.5 && _currentPageNotifier.value < index + 0.5) ? 10 : 5,
-                                                            height: 5,
-                                                            margin: EdgeInsets.symmetric(horizontal: 5),
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: (_currentPageNotifier.value >= index - 0.5 && _currentPageNotifier.value < index + 0.5)
-                                                                  ? BorderRadius.circular(8)
-                                                                  : BorderRadius.circular(10),
-                                                              color: (_currentPageNotifier.value >= index - 0.5 && _currentPageNotifier.value < index + 0.5)
-                                                                  ? Colors.green
-                                                                  : Colors.grey,
-                                                              /*    shape: (_currentPageNotifier.value >= index - 0.5 &&
+                                                  ),
+                                                );
+                                              },
+                                              options: CarouselOptions(
+                                                  height: responsive.hp(20),
+                                                  onPageChanged: (index, page) {
+                                                    _currentPageNotifier.value = index;
+                                                  },
+                                                  enlargeCenterPage: true,
+                                                  autoPlay: true,
+                                                  autoPlayCurve: Curves.fastOutSlowIn,
+                                                  autoPlayInterval: Duration(seconds: 6),
+                                                  autoPlayAnimationDuration: Duration(milliseconds: 2000),
+                                                  viewportFraction: 0.85),
+                                            ),
+                                            SizedBox(
+                                              height: responsive.hp(1),
+                                            ),
+                                            ValueListenableBuilder(
+                                                valueListenable: _currentPageNotifier,
+                                                builder: (BuildContext context, int data, Widget child) {
+                                                  return Container(
+                                                    margin: EdgeInsets.symmetric(
+                                                      horizontal: responsive.wp(10),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: List.generate(
+                                                        cat.data.length,
+                                                        (index) => Container(
+                                                          width: (_currentPageNotifier.value >= index - 0.5 && _currentPageNotifier.value < index + 0.5) ? 10 : 5,
+                                                          height: 5,
+                                                          margin: EdgeInsets.symmetric(horizontal: 5),
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: (_currentPageNotifier.value >= index - 0.5 && _currentPageNotifier.value < index + 0.5)
+                                                                ? BorderRadius.circular(8)
+                                                                : BorderRadius.circular(10),
+                                                            color: (_currentPageNotifier.value >= index - 0.5 && _currentPageNotifier.value < index + 0.5)
+                                                                ? Colors.green
+                                                                : Colors.grey,
+                                                            /*    shape: (_currentPageNotifier.value >= index - 0.5 &&
                                                                           _currentPageNotifier.value < index + 0.5)
                                                                       ? BoxShape.rectangle
                                                                       : BoxShape.circle*/
-                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    );
-                                                  }),
-                                            ],
-                                          );
-                                        } else {
-                                          return Container();
-                                        }
+                                                    ),
+                                                  );
+                                                }),
+                                          ],
+                                        );
                                       } else {
                                         return Container();
                                       }
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: responsive.hp(2),
-                                  ),
-                                  StreamBuilder(
-                                      stream: categoriasBloc.categoriasEnchiladasStream,
-                                      builder: (context, AsyncSnapshot<List<CategoriaData>> snapshot) {
-                                        if (snapshot.hasData) {
-                                          if (snapshot.data.length > 0) {
-                                            return Container(
-                                              height: responsive.hp(11),
-                                              child: ListView.builder(
-                                                itemCount: snapshot.data.length + 1,
-                                                scrollDirection: Axis.horizontal,
-                                                itemBuilder: (context, index) {
-                                                  if (index == 0) {
-                                                    return InkWell(
-                                                      onTap: () {
-                                                        /* Navigator.of(context).push(
-                                                            PageRouteBuilder(
-                                                              pageBuilder: (context, animation, secondaryAnimation) {
-                                                                return Categoria2();
-                                                              },
-                                                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                                                var begin = Offset(0.0, 1.0);
-                                                                var end = Offset.zero;
-                                                                var curve = Curves.ease;
-              
-                                                                var tween = Tween(begin: begin, end: end).chain(
-                                                                  CurveTween(curve: curve),
-                                                                );
-              
-                                                                return SlideTransition(
-                                                                  position: animation.drive(tween),
-                                                                  child: child,
-                                                                );
-                                                              },
-                                                            ),
-                                                          );
-                                                         */
-                                                      },
-                                                      child: Container(
-                                                        width: responsive.hp(9),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                          children: [
-                                                            CircleAvatar(
-                                                              backgroundColor: Colors.red,
-                                                              radius: responsive.ip(2.5),
-                                                              child: Center(
-                                                                child: Icon(
-                                                                  Ionicons.ios_alert,
-                                                                  color: Colors.white,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: responsive.hp(.5),
-                                                            ),
-                                                            Text(
-                                                              'Categorías',
-                                                              style: TextStyle(
-                                                                fontSize: responsive.ip(1.2),
-                                                                fontWeight: FontWeight.w600,
-                                                                color: Colors.grey,
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                  index = index - 1;
-
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                ),
+                                SizedBox(
+                                  height: responsive.hp(2),
+                                ),
+                                StreamBuilder(
+                                    stream: categoriasBloc.categoriasEnchiladasStream,
+                                    builder: (context, AsyncSnapshot<List<CategoriaData>> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data.length > 0) {
+                                          return Container(
+                                            height: responsive.hp(11),
+                                            child: ListView.builder(
+                                              itemCount: snapshot.data.length + 1,
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                if (index == 0) {
                                                   return InkWell(
                                                     onTap: () {
-                                                      /* Navigator.of(context).push(
+                                                      Navigator.of(context).push(
                                                         PageRouteBuilder(
                                                           pageBuilder: (context, animation, secondaryAnimation) {
-                                                            return Detallecategoria(
-                                                              idCategoria: '${snapshot.data[index].idCategoria}',
-                                                              categoriaNombre: '${snapshot.data[index].categoriaNombre}',
-                                                              categoriaIcono: '${snapshot.data[index].categoriaIcono}',
-                                                            );
+                                                            return Categoria2();
                                                           },
                                                           transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                                             var begin = Offset(0.0, 1.0);
                                                             var end = Offset.zero;
                                                             var curve = Curves.ease;
-              
+
                                                             var tween = Tween(begin: begin, end: end).chain(
                                                               CurveTween(curve: curve),
                                                             );
-              
+
                                                             return SlideTransition(
                                                               position: animation.drive(tween),
                                                               child: child,
                                                             );
                                                           },
                                                         ),
-                                                      ); */
+                                                      );
                                                     },
                                                     child: Container(
                                                       width: responsive.hp(9),
                                                       child: Column(
                                                         crossAxisAlignment: CrossAxisAlignment.center,
                                                         children: [
-                                                          Container(
-                                                            height: responsive.ip(5),
-                                                            width: responsive.ip(5),
-                                                            child: SvgPicture.network(
-                                                              '${snapshot.data[index].categoriaIcono}',
-                                                              semanticsLabel: 'A shark?!',
-                                                              //color:Colors.black,
-                                                              placeholderBuilder: (BuildContext context) =>
-                                                                  Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
-                                                              fit: BoxFit.cover,
+                                                          CircleAvatar(
+                                                            backgroundColor: Colors.red,
+                                                            radius: responsive.ip(2.5),
+                                                            child: Center(
+                                                              child: Icon(
+                                                                Ionicons.ios_alert,
+                                                                color: Colors.white,
+                                                              ),
                                                             ),
                                                           ),
                                                           SizedBox(
                                                             height: responsive.hp(.5),
                                                           ),
-                                                          Padding(
-                                                            padding: EdgeInsets.symmetric(
-                                                              horizontal: responsive.wp(1),
-                                                            ),
-                                                            child: Text(
-                                                              '${snapshot.data[index].categoriaNombre.toLowerCase()}',
-                                                              maxLines: 2,
-                                                              textAlign: TextAlign.center,
-                                                              style: TextStyle(
-                                                                fontSize: responsive.ip(1.2),
-                                                                fontWeight: FontWeight.w600,
-                                                                color: Colors.grey,
-                                                              ),
+                                                          Text(
+                                                            'Categorías',
+                                                            style: TextStyle(
+                                                              fontSize: responsive.ip(1.2),
+                                                              fontWeight: FontWeight.w600,
+                                                              color: Colors.grey[800],
                                                             ),
                                                           )
                                                         ],
                                                       ),
                                                     ),
                                                   );
-                                                },
-                                              ),
-                                            );
-                                          } else {
-                                            return Container();
-                                          }
+                                                }
+                                                index = index - 1;
+
+                                                return InkWell(
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                      PageRouteBuilder(
+                                                        pageBuilder: (context, animation, secondaryAnimation) {
+                                                          return Detallecategoria(
+                                                            idCategoria: '${snapshot.data[index].idCategoria}',
+                                                            categoriaNombre: '${snapshot.data[index].categoriaNombre}',
+                                                            categoriaIcono: '${snapshot.data[index].categoriaIcono}',
+                                                          );
+                                                        },
+                                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                                          var begin = Offset(0.0, 1.0);
+                                                          var end = Offset.zero;
+                                                          var curve = Curves.ease;
+
+                                                          var tween = Tween(begin: begin, end: end).chain(
+                                                            CurveTween(curve: curve),
+                                                          );
+
+                                                          return SlideTransition(
+                                                            position: animation.drive(tween),
+                                                            child: child,
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    width: responsive.hp(9),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: [
+                                                        Container(
+                                                          height: responsive.ip(5),
+                                                          width: responsive.ip(5),
+                                                          child: SvgPicture.network(
+                                                            '${snapshot.data[index].categoriaIcono}',
+                                                            semanticsLabel: 'A shark?!',
+                                                            //color:Colors.black,
+                                                            placeholderBuilder: (BuildContext context) =>
+                                                                Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: responsive.hp(.5),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.symmetric(
+                                                            horizontal: responsive.wp(1),
+                                                          ),
+                                                          child: Text(
+                                                            '${snapshot.data[index].categoriaNombre.toLowerCase()}',
+                                                            maxLines: 2,
+                                                            textAlign: TextAlign.center,
+                                                            style: TextStyle(
+                                                              fontSize: responsive.ip(1.2),
+                                                              fontWeight: FontWeight.w600,
+                                                              color: Colors.grey[800],
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          );
                                         } else {
                                           return Container();
                                         }
-                                      }),
-                                ],
-                              );
-                            }
+                                      } else {
+                                          return Container();
+                                      }
+                                    }),
+                              ],
+                            );
+                          }
 
-                            if (index == snapshot.data.length) {
-                              return SizedBox(
-                                height: responsive.hp(1),
-                              );
-                            }
-                            return _cart(context, responsive, snapshot.data[index]);
-                          },
-                          childCount: snapshot.data.length + 1,
-                        ),
+                          if (index == snapshot.data.length) {
+                            return SizedBox(
+                              height: responsive.hp(1),
+                            );
+                          }
+                          return _cart(context, responsive, snapshot.data[index]);
+                        },
+                        childCount: snapshot.data.length + 1,
                       ),
-                    )
-                  ],
-                ),
-              );
-            } else {
-              final configuracionApi = ConfiguracionApi();
-              configuracionApi.configuracion();
-              return Center(
-                child: CupertinoActivityIndicator(),
-              );
-            }
+                    ),
+                  )
+                ],
+              ),
+            );
           } else {
             final configuracionApi = ConfiguracionApi();
             configuracionApi.configuracion();
@@ -421,141 +419,17 @@ class PrincipalTab extends StatelessWidget {
               child: CupertinoActivityIndicator(),
             );
           }
-        });
-    /*return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-                color: Colors.red),
-            height: responsive.hp(14),
-            padding: EdgeInsets.symmetric(
-              horizontal: responsive.hp(2),
-            ),
-            child: SafeArea(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: responsive.hp(1),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 23,
-                    ),
-                    height: responsive.hp(9),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        (prefs.email != "" && prefs.email != null)
-                            ? (prefs.foto != null)
-                                ? InkWell(
-                                    onTap: () {
-                                      final bottomBloc = ProviderBloc.bottom(context);
-
-                                      bottomBloc.changePage(4);
-                                    },
-                                    child: CircleAvatar(
-                                      radius: responsive.ip(2),
-                                      child: ClipOval(
-                                        child: Image.network(
-                                          prefs.foto,
-                                          width: responsive.ip(4),
-                                          height: responsive.ip(4),
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : InkWell(
-                                    onTap: () {
-                                      final bottomBloc = ProviderBloc.bottom(context);
-
-                                      bottomBloc.changePage(4);
-                                    },
-                                    child: getAlias(nombre, responsive),
-                                  )
-                            : CircleContainer(
-                                radius: responsive.ip(2.3),
-                                color: Colors.red[800],
-                                widget: noLogin,
-                              ),
-                        SizedBox(
-                          width: responsive.wp(2),
-                        ),
-                        Text(
-                          '$alias',
-                          style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.4), fontWeight: FontWeight.w600),
-                        ),
-                        Spacer(),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Color(0x30F3EFE8),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.wp(2),
-                            vertical: responsive.hp(.5),
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
-                        ),
-
-                        /* GestureDetector(
-                          onTap: () {
-                            showSearch(
-                              context: context,
-                              delegate: DataSearch(hintText: 'Buscar'),
-                            );
-                          },
-                          child: Icon(
-                            Icons.search,
-                            color: Colors.white,
-                            size: responsive.ip(4),
-                          ),
-                        ), */
-                        SizedBox(
-                          width: responsive.wp(2),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                      left: responsive.wp(6),
-                      right: responsive.wp(10),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          '" Lo tenemos todo, solo faltas tú "',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: responsive.ip(2.2),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: _contenido(context, responsive, refreshController),
-          )
-        ],
-      ),
+        } else {
+          final configuracionApi = ConfiguracionApi();
+          configuracionApi.configuracion();
+          return Center(
+            child: CupertinoActivityIndicator(),
+          );
+        }
+      },
     );
-   */
+    
+    
   }
 
   Widget _cart(BuildContext context, Responsive responsive, PantallaModel pantallaModel) {
@@ -933,6 +807,8 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
+    final carritoBloc = ProviderBloc.carrito(context);
+    carritoBloc.obtenerCarrito();
 
     final prefs = new Preferences();
     var nombre, alias;
@@ -1021,23 +897,87 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
                       ),
                       Text(
                         '$alias',
-                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.4), fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: responsive.ip(2.4),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0x30F3EFE8),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(2),
-                          vertical: responsive.hp(.5),
-                        ),
-                        child: Icon(
-                          Ionicons.ios_cart,
-                          color: Colors.white,
-                        ),
-                      )
+                      StreamBuilder(
+                          stream: carritoBloc.carritoIdStream,
+                          builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
+                            int cantidad = 0;
+
+                            if (snapshot.hasData) {
+                              if (snapshot.data.length > 0) {
+                                for (int i = 0; i < snapshot.data.length; i++) {
+                                  if (snapshot.data[i].productoTipo != '1') {
+                                    cantidad++;
+                                  }
+                                }
+                              } else {
+                                cantidad = 0;
+                              }
+                            } else {
+                              cantidad = 0;
+                            }
+                            return Stack(
+                              children: [
+                                (cantidad != 0)
+                                    ? Stack(
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Color(0x30F3EFE8),
+                                              borderRadius: BorderRadius.circular(5),
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: responsive.wp(2),
+                                              vertical: responsive.hp(.5),
+                                            ),
+                                            child: Icon(
+                                              Ionicons.ios_cart,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 0,
+                                            right: 0,
+                                            child: Container(
+                                              child: Text(
+                                                cantidad.toString(),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: responsive.ip(1),
+                                                ),
+                                              ),
+                                              alignment: Alignment.center,
+                                              width: responsive.ip(1.6),
+                                              height: responsive.ip(1.6),
+                                              decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                                            ),
+                                            //child: Icon(Icons.brightness_1, size: 8,color: Colors.redAccent,  )
+                                          )
+                                        ],
+                                      )
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          color: Color(0x30F3EFE8),
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: responsive.wp(2),
+                                          vertical: responsive.hp(.5),
+                                        ),
+                                        child: Icon(
+                                          Ionicons.ios_cart,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                              ],
+                            );
+                          }),
                     ],
                   ),
                 ),
@@ -1064,7 +1004,7 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
                 ),
                 InkWell(
                   onTap: () {
-                    /* Navigator.of(context).push(
+                    Navigator.of(context).push(
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) {
                           return SearchPage();
@@ -1084,7 +1024,7 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
                           );
                         },
                       ),
-                    ); */
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(
@@ -1123,244 +1063,6 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
     );
   }
 }
-
-class ProductosDestacados extends StatelessWidget {
-  const ProductosDestacados({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final responsive = Responsive.of(context);
-
-    final productosDestacadosBloc = ProviderBloc.proDestacados(context);
-
-    return StreamBuilder(
-      stream: productosDestacadosBloc.productosDestacadosStream,
-      builder: (context, AsyncSnapshot<List<ProductosData>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            return Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          'Destacados',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.red, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.hp(1.5),
-                            vertical: responsive.hp(.5),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                'Ver más',
-                                style: TextStyle(fontSize: responsive.ip(1.7), color: Colors.white),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                                size: responsive.ip(2.2),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: responsive.hp(1),
-                ),
-                Container(
-                  height: responsive.hp(19),
-                  child: ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      int item = index + 1;
-                      double paddddd = responsive.ip(7);
-
-                      if (item == 1) {
-                        paddddd = responsive.ip(4.5);
-                      }
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration: const Duration(milliseconds: 100),
-                              pageBuilder: (context, animation, secondaryAnimation) {
-                                return SliderDetalleProductosDestacados(
-                                  idCategoria: snapshot.data[index].idCategoria,
-                                  numeroItem: snapshot.data[index].numeroitem,
-                                  items: snapshot.data,
-                                );
-                                /* return DetalleProductitos(
-                                  productosData: snapshot.data[index]); */
-                              },
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: responsive.ip(30),
-                          height: responsive.ip(18),
-                          padding: EdgeInsets.only(
-                            left: responsive.wp(3),
-                          ),
-                          margin: EdgeInsets.only(
-                            right: responsive.wp(1.5),
-                          ),
-                          child: Stack(
-                            children: <Widget>[
-                              Positioned(
-                                left: responsive.ip(10.5),
-                                child: Container(
-                                  width: responsive.ip(18.2),
-                                  height: responsive.ip(17.5),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: CachedNetworkImage(
-                                      progressIndicatorBuilder: (_, url, downloadProgress) {
-                                        return Container(
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          child: Stack(
-                                            children: [
-                                              Center(
-                                                child: CircularProgressIndicator(
-                                                  value: downloadProgress.progress,
-                                                  backgroundColor: Colors.green,
-                                                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
-                                                ),
-                                              ),
-                                              Center(
-                                                child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                      errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
-                                      imageUrl: '${snapshot.data[index].productoFoto}',
-                                      imageBuilder: (context, imageProvider) => Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                left: responsive.ip(10.5),
-                                right: 0,
-                                child: Container(
-                                  width: responsive.ip(18),
-                                  //height: responsive.ip(18),
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: responsive.hp(1),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(.5),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '${snapshot.data[index].productoNombre}',
-                                      style: TextStyle(color: Colors.white, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              ('${snapshot.data[index].productoNuevo}' == '1')
-                                  ? Positioned(
-                                      /*  left: responsive.wp(1),
-                                        top: responsive.hp(.5), */
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: responsive.wp(3),
-                                          vertical: responsive.wp(.2),
-                                        ),
-                                        decoration: BoxDecoration(
-                                            /* borderRadius:
-                                                  BorderRadius.circular(10), */
-                                            color: Colors.red),
-                                        child: Text(
-                                          'Nuevo',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: responsive.ip(1.4),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container(),
-                              Container(
-                                transform: Matrix4.translationValues(-paddddd, 0, 0),
-                                height: responsive.ip(18),
-                                child: SvgPicture.asset('assets/numeros/$item.svg'),
-                              ),
-                              ('${snapshot.data[index].productoDestacado}' != '0')
-                                  ? Positioned(
-                                      top: 0,
-                                      //right: 0,
-                                      left: 0,
-                                      child: Container(
-                                        //transform: Matrix4.translationValues(-paddddd, 0, 0),
-                                        height: responsive.ip(5),
-                                        child: SvgPicture.asset('assets/medalla.svg'),
-                                      ),
-                                    )
-                                  : Container()
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: snapshot.data.length,
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return Container();
-          }
-        } else {
-          return Center(
-            child: CupertinoActivityIndicator(),
-          );
-        }
-      },
-    );
-  }
-}
-
 class PublicidadDialog extends StatelessWidget {
   final PublicidadModel publicidadModel;
   const PublicidadDialog({Key key, @required this.publicidadModel}) : super(key: key);

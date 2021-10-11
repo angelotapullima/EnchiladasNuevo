@@ -15,7 +15,7 @@ class UsuarioApi {
 
   Future<List<Ruc>> consultarRuc(String numero) async {
     try {
-      final list = List<Ruc>();
+      final List<Ruc> list = [];
       Ruc rucs = new Ruc();
 
       final url = 'https://api.sunat.cloud/ruc/$numero';

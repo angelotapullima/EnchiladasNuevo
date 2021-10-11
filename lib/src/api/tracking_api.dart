@@ -61,7 +61,7 @@ class TrackingApi {
   Future<List<TrackingData>> trackingRepartidor(String idPedido) async {
     try {
       final url = '$_url/api/pedido/tracking_pedido';
-      final list = List<TrackingData>();
+      final List<TrackingData> list = [];
 
       final resp = await http.post((Uri.parse(url)), body: {'tn': prefs.token, 'app': 'true', 'id_pedido': idPedido});
       final decodedData = json.decode(resp.body);

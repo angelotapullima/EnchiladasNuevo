@@ -31,10 +31,8 @@ import 'package:enchiladasapp/src/pages/desicion_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'src/pages/blocMapa/mapa/mapa_bloc.dart';
 

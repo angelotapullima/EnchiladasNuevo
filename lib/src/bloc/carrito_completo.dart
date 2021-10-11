@@ -21,7 +21,7 @@ class CarritoCompletoBloc {
 
 
   void obtenerCarritoCpmpleto() async {
-    final listCarritoCompleto = List<CarritoCompleto>();
+    final  List<CarritoCompleto> listCarritoCompleto =[];
     double subtotal = 0.0;
     double monto = 0.0;
     double montoPropina = 0.0;

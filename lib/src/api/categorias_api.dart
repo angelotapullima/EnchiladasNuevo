@@ -84,7 +84,7 @@ class CategoriasApi {
           categoriasDatabase.insertarCategoriasDb(categoriaData);
 
           //TEMPORIZADOR
-          var temporizador = List<dynamic>();
+          var temporizador = [];
           temporizador = decodedData['result']['data'][i]['temporizador'];
 
           TemporizadorModel temporizadorModel = TemporizadorModel();
@@ -106,7 +106,7 @@ class CategoriasApi {
           await temporizadorDatabase.insertarTemporizador(temporizadorModel);
 
           //PRODUCTOS
-          var productos = List<dynamic>();
+          var productos = [];
 
           productos = decodedData['result']['data'][i]['productos'];
 

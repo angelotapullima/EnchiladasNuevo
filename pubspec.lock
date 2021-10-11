@@ -497,13 +497,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   nested:
     dependency: transitive
     description:
@@ -665,13 +658,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.3"
-  share:
+  share_extend:
     dependency: "direct main"
     description:
-      name: share
+      name: share_extend
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.0"
   shared_preferences:
     dependency: "direct main"
     description:

@@ -27,7 +27,7 @@ class _MarketPageState extends State<CategoriasPorTipo> {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasPorTipo(widget.tipo);
+    categoriasBloc.obtenerCategoriasPorTipo2(widget.tipo);
     _refreshController.refreshCompleted();
   }
 
@@ -35,7 +35,7 @@ class _MarketPageState extends State<CategoriasPorTipo> {
   Widget build(BuildContext context) {
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasPorTipo(widget.tipo);
+    categoriasBloc.obtenerCategoriasPorTipo2(widget.tipo);
 
     final reaponsive = Responsive.of(context);
 

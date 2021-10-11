@@ -27,7 +27,7 @@ class EspecialesObservaciones{
 // ESPECIALES A
 
   Future<List<Sabores>> obtenerEspecialesA(String idProducto) async {
-    final listEspecialesA = List<Sabores>();
+    final List<Sabores> listEspecialesA = [];
 
     final listEspecialesADatabase =
         await especialesADatabase.obtenerEspecialesA(idProducto);
@@ -49,7 +49,7 @@ class EspecialesObservaciones{
   }
 
   Future<List<OpcionesSabores>> obtenerOpcionesEspecialesA(String idProducto, String titulo) async {
-    final listOpcionesEspecialesA = List<OpcionesSabores>();
+    final  List<OpcionesSabores> listOpcionesEspecialesA =[];
 
     final listOpcionesEspecialesADatabase =  await opcionesespecialesADatabase.obtenerOpcionesEspecialesA(idProducto,titulo);
 
@@ -73,7 +73,7 @@ class EspecialesObservaciones{
 
   Future<List<String>> nombrecitosEspecialesA(
       String idProducto, String titulo) async {
-    final listNombresEspecialesA = List<String>();
+    final List<String> listNombresEspecialesA = [];
 
     final listOpcionesEspecialesADatabase =  await opcionesespecialesADatabase.obtenerOpcionesEspecialesA(idProducto,titulo);
 
@@ -99,7 +99,7 @@ class EspecialesObservaciones{
 // ESPECIALES B
 
   Future<List<Sabores>> obtenerEspecialesB(String idProducto) async {
-    final listEspecialesB= List<Sabores>();
+    final List<Sabores> listEspecialesB= [];
 
     final listEspecialesBDatabase =
         await especialesBDatabase.obtenerEspecialesB(idProducto);
@@ -121,7 +121,7 @@ class EspecialesObservaciones{
   }
 
   Future<List<OpcionesSabores>> obtenerOpcionesEspecialesB(String idProducto, String titulo) async {
-    final listOpcionesEspecialesB = List<OpcionesSabores>();
+    final List<OpcionesSabores> listOpcionesEspecialesB = [];
 
     final listOpcionesEspecialesBDatabase =  await opcionesespecialesBDatabase.obtenerOpcionesEspecialesB(idProducto,titulo);
 
@@ -145,7 +145,7 @@ class EspecialesObservaciones{
 
   Future<List<String>> nombrecitosEspecialesB(
       String idProducto, String titulo) async {
-    final listNombreEspecialesB= List<String>();
+    final List<String> listNombreEspecialesB= [];
 
     final listOpcionesEspecialesBDatabase =  await opcionesespecialesBDatabase.obtenerOpcionesEspecialesB(idProducto,titulo);
 
@@ -170,7 +170,7 @@ class EspecialesObservaciones{
 // ESPECIALES C
 
   Future<List<Sabores>> obtenerEspecialesC(String idProducto) async {
-    final listEspecialesC = List<Sabores>();
+    final List<Sabores> listEspecialesC = [];
 
     final listEspecialesCDatabase =
         await especialesCDatabase.obtenerEspecialesC(idProducto);
@@ -192,7 +192,7 @@ class EspecialesObservaciones{
   }
 
   Future<List<OpcionesSabores>> obtenerOpcionesEspecialesC(String idProducto, String titulo) async {
-    final listOpcionesEspecialesC = List<OpcionesSabores>();
+    final List<OpcionesSabores> listOpcionesEspecialesC = [];
 
     final listOpcionesEspecialesCDatabase =  await opcionesespecialesCDatabase.obtenerOpcionesEspecialesC(idProducto,titulo);
 
@@ -216,7 +216,7 @@ class EspecialesObservaciones{
 
   Future<List<String>> nombrecitosEspecialesC(
       String idProducto, String titulo) async {
-    final listNombresEspecialesC = List<String>();
+    final List<String> listNombresEspecialesC = [];
 
     final listOpcionesEspecialesCDatabase =  await opcionesespecialesCDatabase.obtenerOpcionesEspecialesC(idProducto,titulo);
 
@@ -237,7 +237,7 @@ class EspecialesObservaciones{
 // ESPECIALES D
 
   Future<List<Sabores>> obtenerEspecialesD(String idProducto) async {
-    final listSabores = List<Sabores>();
+    final List<Sabores> listSabores = [];
 
     final listSaboresDatabase =
         await especialesDDatabase.obtenerEspecialesD(idProducto);
@@ -259,7 +259,7 @@ class EspecialesObservaciones{
   }
 
   Future<List<OpcionesSabores>> obtenerOpcionesEspecialesD(String idProducto, String titulo) async {
-    final listOpcionesSabores = List<OpcionesSabores>();
+    final List<OpcionesSabores> listOpcionesSabores = [];
 
     final listOpcionesSaboresDatabase =  await opcionesespecialesDDatabase.obtenerOpcionesEspecialesD(idProducto,titulo);
 
@@ -283,7 +283,7 @@ class EspecialesObservaciones{
 
   Future<List<String>> nombrecitosEspecialesD(
       String idProducto, String titulo) async {
-    final listOpcionesSabores = List<String>();
+    final List<String>  listOpcionesSabores = [];
 
     final listOpcionesSaboresDatabase =  await opcionesespecialesDDatabase.obtenerOpcionesEspecialesD(idProducto,titulo);
 

@@ -35,12 +35,12 @@ class ObservacionesProductoBloc {
   }
 
   Future<List<Observaciones>> obtenerObservaciones2(String idProducto) async {
-    final observacionesGeneral = List<Observaciones>();
+    final List<Observaciones> observacionesGeneral = [];
     EspecialesObservaciones c = EspecialesObservaciones();
 
     Observaciones observaciones = Observaciones();
 
-    final observacionesFijas = List<ObservacionesFijas>();
+    final List<ObservacionesFijas> observacionesFijas = [];
 
     final obFijas =
         await observacionesFijasDatabase.obtenerObservacionesFijas(idProducto);
@@ -77,7 +77,7 @@ class ObservacionesProductoBloc {
 
   Future<List<ObservacionesVariables>> obtenerVariables(
       String idProducto) async {
-    final listObservacionesVariables = List<ObservacionesVariables>();
+    final List<ObservacionesVariables> listObservacionesVariables = [];
 
     final obsVariables = await observacionesVariablesDatabase
         .obtenerObservacionesVariables(idProducto);
@@ -97,7 +97,7 @@ class ObservacionesProductoBloc {
   }
 
   Future<List<ProductosFijos>> obtenerProductosFijos(String idProducto) async {
-    final listProductosFijos = List<ProductosFijos>();
+    final List<ProductosFijos> listProductosFijos = [];
     final listProductoFijosDatabase =
         await productosFijosDatabase.obtenerProductosFijos(idProducto);
 
@@ -117,7 +117,7 @@ class ObservacionesProductoBloc {
   }
 
   Future<List<Sabores>> obtenerSabores(String idProducto) async {
-    final listSabores = List<Sabores>();
+    final List<Sabores> listSabores = [];
 
     final listSaboresDatabase =
         await saboresDatabase.obtenerSabores(idProducto);
@@ -142,7 +142,7 @@ class ObservacionesProductoBloc {
 
   Future<List<OpcionesSabores>> obtenerOpcionesSabores(
       String idProducto, String titulo) async {
-    final listOpcionesSabores = List<OpcionesSabores>();
+    final List<OpcionesSabores> listOpcionesSabores = [];
 
     final listOpcionesSaboresDatabase = await opcionesSaboresDatabase
         .obtenerOpcionesSabores(idProducto, titulo);
@@ -164,7 +164,7 @@ class ObservacionesProductoBloc {
 
   Future<List<String>> nombrecitosSabores(
       String idProducto, String titulo) async {
-    final listOpcionesSabores = List<String>();
+    final List<String> listOpcionesSabores = [];
 
     final listOpcionesSaboresDatabase = await opcionesSaboresDatabase
         .obtenerOpcionesSabores(idProducto, titulo);
@@ -182,7 +182,7 @@ class ObservacionesProductoBloc {
 
   Future<List<Acompanhamientos>> obtenerAcompanhamientos(
       String idProducto) async {
-    final listAcompanhamientos = List<Acompanhamientos>();
+    final List<Acompanhamientos> listAcompanhamientos = [];
 
     final listlistAcompanhamientosDatabase =
         await acompanhamientosDatabase.obtenerAcompanhamientos(idProducto);
@@ -209,7 +209,7 @@ class ObservacionesProductoBloc {
 
   Future<List<OpcionesAcompanhamientos>> obtenerAcompanhamientosFor(
       String idProducto, String titulo) async {
-    final listOpcionesAcompanhamientoss = List<OpcionesAcompanhamientos>();
+    final List<OpcionesAcompanhamientos> listOpcionesAcompanhamientoss = [];
 
     final listOpcionesAcompanhamientosDatabase =
         await opcionesAcompanhamientosDatabase.obtenerOpcionesAcompanhamientos(
@@ -233,7 +233,7 @@ class ObservacionesProductoBloc {
 
   Future<List<String>> nombrecitosAcompanhamientos(
       String idProducto, String titulo) async {
-    final listOpcionesAcompanhamientos = List<String>();
+    final List<String> listOpcionesAcompanhamientos = [];
 
     final listOpcionesAcompanhamientosDatabase =
         await opcionesAcompanhamientosDatabase.obtenerOpcionesAcompanhamientos(

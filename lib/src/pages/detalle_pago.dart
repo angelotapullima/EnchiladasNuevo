@@ -1107,7 +1107,7 @@ class _DetallePagoState extends State<DetallePago> {
                 ),
               ),
             );
-          },
+          }, 
         );
       },
     );
@@ -1124,10 +1124,8 @@ class _DetallePagoState extends State<DetallePago> {
           stream: nuevoMetodoPagoBloc.telefonoStream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             bool validacion = false;
-            if (nuevoMetodoPagoBloc.valorValidacionTelefono == null) {
-            } else {
-              validacion = nuevoMetodoPagoBloc.valorValidacionTelefono;
-            }
+            if (snapshot.hasData) {  validacion = nuevoMetodoPagoBloc.valorValidacionTelefono;
+            }  
             return GestureDetector(
               onTap: () {
                 FocusScope.of(context).unfocus();
@@ -1201,7 +1199,7 @@ class _DetallePagoState extends State<DetallePago> {
                       SizedBox(
                         height: responsive.hp(3),
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () async {
                           if (telefonoController.text.length > 6) {
                             utils.agregarTelefono(context, telefonoController.text);

@@ -14,33 +14,24 @@ class ProductosBloc {
   final categoriaDatabase = CategoriasDatabase();
   final temporizadorDatabase = TemporizadorDatabase();
 
-  final _productosEnchiladasController =
-      new BehaviorSubject<List<ProductosData>>();
+  final _productosEnchiladasController = new BehaviorSubject<List<ProductosData>>();
   final _productosMarketController = new BehaviorSubject<List<ProductosData>>();
   final _productosIDController = new BehaviorSubject<List<ProductosData>>();
   final _productosQueryController = new BehaviorSubject<List<ProductosData>>();
-  final _categoriaProductosController =
-      new BehaviorSubject<List<CategoriaData>>();
+  final _categoriaProductosController = new BehaviorSubject<List<CategoriaData>>();
   final _cargandoProductosController = BehaviorSubject<bool>();
 
   final _categoriaTemporizador = new BehaviorSubject<ValidarProducto>();
 
-  Stream<List<ProductosData>> get productosEnchiladasStream =>
-      _productosEnchiladasController.stream;
-  Stream<List<ProductosData>> get productosMarketStream =>
-      _productosMarketController.stream;
-  Stream<List<ProductosData>> get productosIdStream =>
-      _productosIDController.stream;
-  Stream<List<ProductosData>> get productosQueryStream =>
-      _productosQueryController.stream;
+  Stream<List<ProductosData>> get productosEnchiladasStream => _productosEnchiladasController.stream;
+  Stream<List<ProductosData>> get productosMarketStream => _productosMarketController.stream;
+  Stream<List<ProductosData>> get productosIdStream => _productosIDController.stream;
+  Stream<List<ProductosData>> get productosQueryStream => _productosQueryController.stream;
 
-  Stream<List<CategoriaData>> get categoriasProductos =>
-      _categoriaProductosController.stream;
-  Stream<bool> get cargandoProductosStream =>
-      _cargandoProductosController.stream;
+  Stream<List<CategoriaData>> get categoriasProductos => _categoriaProductosController.stream;
+  Stream<bool> get cargandoProductosStream => _cargandoProductosController.stream;
 
-  Stream<ValidarProducto> get categoriaTemporizador =>
-      _categoriaTemporizador.stream;
+  Stream<ValidarProducto> get categoriaTemporizador => _categoriaTemporizador.stream;
 
   dispose() {
     _productosEnchiladasController?.close();
@@ -59,13 +50,11 @@ class ProductosBloc {
   void obtenerProductosLocalEnchiladasPorCategoria(String categoria) async {
     _cargandoProductosController.sink.add(true);
 
-    final listGeneral = List<ProductosData>();
-    final listProductos =
-        await productoDatabase.obtenerProductosPorCategoriaLocal('$categoria');
+    final List<ProductosData> listGeneral = [];
+    final listProductos = await productoDatabase.obtenerProductosPorCategoriaLocal('$categoria');
 
     for (var x = 0; x < listProductos.length; x++) {
-      final listCategorias =
-          await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
+      final listCategorias = await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
       ProductosData productosData = ProductosData();
       productosData.idProducto = listProductos[x].idProducto;
       productosData.idCategoria = listProductos[x].idCategoria;
@@ -79,8 +68,7 @@ class ProductosBloc {
       productosData.productoUnidad = listProductos[x].productoUnidad;
       productosData.productoEstado = listProductos[x].productoEstado;
       productosData.productoDestacado = listProductos[x].productoDestacado;
-      productosData.productoEstadoDestacado =
-          listProductos[x].productoEstadoDestacado;
+      productosData.productoEstadoDestacado = listProductos[x].productoEstadoDestacado;
       productosData.productoTupper = listProductos[x].productoTupper;
       productosData.productoNuevo = listProductos[x].productoNuevo;
       productosData.numeroitem = x.toString();
@@ -97,13 +85,11 @@ class ProductosBloc {
   void obtenerProductosdeliveryEnchiladasPorCategoria(String categoria) async {
     _cargandoProductosController.sink.add(true);
 
-    final listGeneral = List<ProductosData>();
-    final listProductos = await productoDatabase
-        .obtenerProductosPorCategoriaDelivery('$categoria');
+    final List<ProductosData> listGeneral = [];
+    final listProductos = await productoDatabase.obtenerProductosPorCategoriaDelivery('$categoria');
 
     for (var x = 0; x < listProductos.length; x++) {
-      final listCategorias =
-          await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
+      final listCategorias = await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
       ProductosData productosData = ProductosData();
       productosData.idProducto = listProductos[x].idProducto;
       productosData.idCategoria = listProductos[x].idCategoria;
@@ -117,14 +103,13 @@ class ProductosBloc {
       productosData.productoUnidad = listProductos[x].productoUnidad;
       productosData.productoEstado = listProductos[x].productoEstado;
       productosData.productoDestacado = listProductos[x].productoDestacado;
-      productosData.productoEstadoDestacado =
-          listProductos[x].productoEstadoDestacado;
+      productosData.productoEstadoDestacado = listProductos[x].productoEstadoDestacado;
       productosData.productoTupper = listProductos[x].productoTupper;
       productosData.productoNuevo = listProductos[x].productoNuevo;
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
-      
+
       productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);
     }
@@ -136,13 +121,11 @@ class ProductosBloc {
   void obtenerProductosMarketPorCategoria(String categoria) async {
     _cargandoProductosController.sink.add(true);
 
-    final listGeneral = List<ProductosData>();
-    final listProductos = await productoDatabase
-        .obtenerProductosPorCategoriaDelivery('$categoria');
+    final List<ProductosData> listGeneral = [];
+    final listProductos = await productoDatabase.obtenerProductosPorCategoriaDelivery('$categoria');
 
     for (var x = 0; x < listProductos.length; x++) {
-      final listCategorias =
-          await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
+      final listCategorias = await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
       ProductosData productosData = ProductosData();
       productosData.idProducto = listProductos[x].idProducto;
       productosData.idCategoria = listProductos[x].idCategoria;
@@ -156,8 +139,7 @@ class ProductosBloc {
       productosData.productoUnidad = listProductos[x].productoUnidad;
       productosData.productoEstado = listProductos[x].productoEstado;
       productosData.productoDestacado = listProductos[x].productoDestacado;
-      productosData.productoEstadoDestacado =
-          listProductos[x].productoEstadoDestacado;
+      productosData.productoEstadoDestacado = listProductos[x].productoEstadoDestacado;
       productosData.productoTupper = listProductos[x].productoTupper;
       productosData.productoNuevo = listProductos[x].productoNuevo;
       productosData.numeroitem = x.toString();
@@ -175,19 +157,16 @@ class ProductosBloc {
 
   void obtenerProductoPorId(String id) async {
     _cargandoProductosController.sink.add(true);
-    _productosIDController.sink
-        .add(await productoDatabase.consultarPorId('$id'));
+    _productosIDController.sink.add(await productoDatabase.consultarPorId('$id'));
     _cargandoProductosController.sink.add(false);
   }
 
   void obtenerProductoPorQueryLocal(String query) async {
-    final listGeneral = List<ProductosData>();
-    final listProductos =
-        await productoDatabase.consultarPorQueryLocal('$query');
+    final List<ProductosData> listGeneral = [];
+    final listProductos = await productoDatabase.consultarPorQueryLocal('$query');
 
     for (var x = 0; x < listProductos.length; x++) {
-      final listCategorias =
-          await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
+      final listCategorias = await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
 
       if (listCategorias.length > 0) {
         ProductosData productosData = ProductosData();
@@ -203,13 +182,11 @@ class ProductosBloc {
         productosData.productoUnidad = listProductos[x].productoUnidad;
         productosData.productoEstado = listProductos[x].productoEstado;
         productosData.productoDestacado = listProductos[x].productoDestacado;
-        productosData.productoEstadoDestacado =
-            listProductos[x].productoEstadoDestacado;
+        productosData.productoEstadoDestacado = listProductos[x].productoEstadoDestacado;
         productosData.productoTupper = listProductos[x].productoTupper;
         productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.productoDescripcion =
-            listProductos[x].productoDescripcion;
+        productosData.productoDescripcion = listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
         productosData.productoFavorito = listProductos[x].productoFavorito;
         listGeneral.add(productosData);
@@ -220,13 +197,11 @@ class ProductosBloc {
   }
 
   void obtenerProductoPorQueryDelivery(String query) async {
-    final listGeneral = List<ProductosData>();
-    final listProductos =
-        await productoDatabase.consultarPorQueryDelivery('$query');
+    final List<ProductosData> listGeneral = [];
+    final listProductos = await productoDatabase.consultarPorQueryDelivery('$query');
 
     for (var x = 0; x < listProductos.length; x++) {
-      final listCategorias =
-          await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
+      final listCategorias = await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
 
       if (listCategorias.length > 0) {
         ProductosData productosData = ProductosData();
@@ -242,13 +217,11 @@ class ProductosBloc {
         productosData.productoUnidad = listProductos[x].productoUnidad;
         productosData.productoEstado = listProductos[x].productoEstado;
         productosData.productoDestacado = listProductos[x].productoDestacado;
-        productosData.productoEstadoDestacado =
-            listProductos[x].productoEstadoDestacado;
+        productosData.productoEstadoDestacado = listProductos[x].productoEstadoDestacado;
         productosData.productoTupper = listProductos[x].productoTupper;
         productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.productoDescripcion =
-            listProductos[x].productoDescripcion;
+        productosData.productoDescripcion = listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
         productosData.productoFavorito = listProductos[x].productoFavorito;
         listGeneral.add(productosData);
@@ -259,8 +232,8 @@ class ProductosBloc {
   }
 
   void cargarCategoriaProductoLocal(String idCategoria) async {
-    var listFinal = List<CategoriaData>();
-    var listProductos = List<ProductosData>();
+    List<CategoriaData> listFinal = [];
+    List<ProductosData> listProductos = [];
     final listCategorias = await categoriaDatabase.consultarPorId(idCategoria);
     final listProductosPorCategoria = await productoDatabase.obtenerProductosPorCategoriaDelivery(idCategoria);
 
@@ -284,11 +257,11 @@ class ProductosBloc {
         productosData.productoUnidad = listProductosPorCategoria[x].productoUnidad;
         productosData.productoEstado = listProductosPorCategoria[x].productoEstado;
         productosData.productoDestacado = listProductosPorCategoria[x].productoDestacado;
-        productosData.productoEstadoDestacado =listProductosPorCategoria[x].productoEstadoDestacado;
+        productosData.productoEstadoDestacado = listProductosPorCategoria[x].productoEstadoDestacado;
         productosData.productoTupper = listProductosPorCategoria[x].productoTupper;
         productosData.productoNuevo = listProductosPorCategoria[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.productoDescripcion =listProductosPorCategoria[x].productoDescripcion;
+        productosData.productoDescripcion = listProductosPorCategoria[x].productoDescripcion;
         productosData.productoComentario = listProductosPorCategoria[x].productoComentario;
         productosData.productoFavorito = listProductosPorCategoria[x].productoFavorito;
 
@@ -303,11 +276,10 @@ class ProductosBloc {
   }
 
   void cargarCategoriaProductoDelivery(String idCategoria) async {
-    var listFinal = List<CategoriaData>();
-    var listProductos = List<ProductosData>();
+    List<CategoriaData> listFinal = [];
+    List<ProductosData> listProductos = [];
     final listCategorias = await categoriaDatabase.consultarPorId(idCategoria);
-    final listProductosPorCategoria = await productoDatabase
-        .obtenerProductosPorCategoriaDelivery(idCategoria);
+    final listProductosPorCategoria = await productoDatabase.obtenerProductosPorCategoriaDelivery(idCategoria);
 
     CategoriaData categoria = CategoriaData();
 
@@ -319,37 +291,23 @@ class ProductosBloc {
         ProductosData productosData = ProductosData();
         productosData.idProducto = listProductosPorCategoria[x].idProducto;
         productosData.idCategoria = listProductosPorCategoria[x].idCategoria;
-        productosData.productoNombre =
-            listProductosPorCategoria[x].productoNombre;
+        productosData.productoNombre = listProductosPorCategoria[x].productoNombre;
         productosData.productoFoto = listProductosPorCategoria[x].productoFoto;
-        productosData.productoOrden =
-            listProductosPorCategoria[x].productoOrden;
-        productosData.productoPrecio =
-            listProductosPorCategoria[x].productoPrecio;
-        productosData.productoCarta =
-            listProductosPorCategoria[x].productoCarta;
-        productosData.productoDelivery =
-            listProductosPorCategoria[x].productoDelivery;
+        productosData.productoOrden = listProductosPorCategoria[x].productoOrden;
+        productosData.productoPrecio = listProductosPorCategoria[x].productoPrecio;
+        productosData.productoCarta = listProductosPorCategoria[x].productoCarta;
+        productosData.productoDelivery = listProductosPorCategoria[x].productoDelivery;
         productosData.sonido = listCategorias[0].categoriaSonido;
-        productosData.productoUnidad =
-            listProductosPorCategoria[x].productoUnidad;
-        productosData.productoEstado =
-            listProductosPorCategoria[x].productoEstado;
-        productosData.productoDestacado =
-            listProductosPorCategoria[x].productoDestacado;
-        productosData.productoEstadoDestacado =
-            listProductosPorCategoria[x].productoEstadoDestacado;
-        productosData.productoTupper =
-            listProductosPorCategoria[x].productoTupper;
-        productosData.productoNuevo =
-            listProductosPorCategoria[x].productoNuevo;
+        productosData.productoUnidad = listProductosPorCategoria[x].productoUnidad;
+        productosData.productoEstado = listProductosPorCategoria[x].productoEstado;
+        productosData.productoDestacado = listProductosPorCategoria[x].productoDestacado;
+        productosData.productoEstadoDestacado = listProductosPorCategoria[x].productoEstadoDestacado;
+        productosData.productoTupper = listProductosPorCategoria[x].productoTupper;
+        productosData.productoNuevo = listProductosPorCategoria[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.productoDescripcion =
-            listProductosPorCategoria[x].productoDescripcion;
-        productosData.productoComentario =
-            listProductosPorCategoria[x].productoComentario;
-        productosData.productoFavorito =
-            listProductosPorCategoria[x].productoFavorito;
+        productosData.productoDescripcion = listProductosPorCategoria[x].productoDescripcion;
+        productosData.productoComentario = listProductosPorCategoria[x].productoComentario;
+        productosData.productoFavorito = listProductosPorCategoria[x].productoFavorito;
 
         listProductos.add(productosData);
       }
@@ -365,13 +323,11 @@ class ProductosBloc {
     var date = DateTime.now();
 
     final producto = await productoDatabase.consultarPorId(idProducto);
-    final temporizadorList = await temporizadorDatabase
-        .obtenerTemporizadorPorIdCategoria(producto[0].idCategoria);
+    final temporizadorList = await temporizadorDatabase.obtenerTemporizadorPorIdCategoria(producto[0].idCategoria);
 
     if (temporizadorList[0].temporizadorTipo == '1') {
       //1 cualquier día, en un rango de horas específicas
-      _categoriaTemporizador.sink
-          .add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
+      _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
     } else if (temporizadorList[0].temporizadorTipo == '2') {
       //2 en días específicos de la semana
 
@@ -387,8 +343,7 @@ class ProductosBloc {
     } else if (temporizadorList[0].temporizadorTipo == '5') {
       //5 en un rango de fechas en específico en una hora específica
 
-      _categoriaTemporizador.sink
-          .add(_rangoFechasYHorasEspecificas(temporizadorList, date));
+      _categoriaTemporizador.sink.add(_rangoFechasYHorasEspecificas(temporizadorList, date));
     } else {
       //siempre disponible
 
@@ -399,8 +354,7 @@ class ProductosBloc {
     }
   }
 
-  ValidarProducto _rangoFechasYHorasEspecificas(
-      List<TemporizadorModel> temporizadorList, DateTime date) {
+  ValidarProducto _rangoFechasYHorasEspecificas(List<TemporizadorModel> temporizadorList, DateTime date) {
     var fechaInicio = temporizadorList[0].temporizadorFechainicio;
     var fechaFin = temporizadorList[0].temporizadorFechafin;
 
@@ -425,8 +379,7 @@ class ProductosBloc {
     }
   }
 
-  void _ragoDeFechadEspecificas(
-      List<TemporizadorModel> temporizadorList, DateTime date) {
+  void _ragoDeFechadEspecificas(List<TemporizadorModel> temporizadorList, DateTime date) {
     var fechaInicio = temporizadorList[0].temporizadorFechainicio;
     var fechaFin = temporizadorList[0].temporizadorFechafin;
 
@@ -455,8 +408,7 @@ class ProductosBloc {
     }
   }
 
-  void _enDiasYHorasEspecificosDeLaSemana(
-      DateTime date, List<TemporizadorModel> temporizadorList) {
+  void _enDiasYHorasEspecificosDeLaSemana(DateTime date, List<TemporizadorModel> temporizadorList) {
     var week = date.weekday;
 
     ValidarProducto validarProducto = ValidarProducto();
@@ -465,58 +417,50 @@ class ProductosBloc {
 
     if (week == 1) {
       if (temporizadorList[0].temporizadorLunes == '1') {
-        _categoriaTemporizador.sink.add(
-            _cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
+        _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
       } else {
         _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 2) {
       if (temporizadorList[0].temporizadorMartes == '1') {
-        _categoriaTemporizador.sink.add(
-            _cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
+        _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
       } else {
         _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 3) {
       if (temporizadorList[0].temporizadorMiercoles == '1') {
-        _categoriaTemporizador.sink.add(
-            _cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
+        _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
       } else {
         _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 4) {
       if (temporizadorList[0].temporizadorJueves == '1') {
-        _categoriaTemporizador.sink.add(
-            _cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
+        _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
       } else {
         _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 5) {
       if (temporizadorList[0].temporizadorViernes == '1') {
-        _categoriaTemporizador.sink.add(
-            _cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
+        _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
       } else {
         _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 6) {
       if (temporizadorList[0].temporizadorSabado == '1') {
-        _categoriaTemporizador.sink.add(
-            _cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
+        _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
       } else {
         _categoriaTemporizador.sink.add(validarProducto);
       }
     } else if (week == 7) {
       if (temporizadorList[0].temporizadorDomingo == '1') {
-        _categoriaTemporizador.sink.add(
-            _cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
+        _categoriaTemporizador.sink.add(_cualquierDiaEnRangoDeHorasEspecificas(date, temporizadorList));
       } else {
         _categoriaTemporizador.sink.add(validarProducto);
       }
     }
   }
 
-  ValidarProducto _cualquierDiaEnRangoDeHorasEspecificas(
-      DateTime date, List<TemporizadorModel> temporizadorList) {
+  ValidarProducto _cualquierDiaEnRangoDeHorasEspecificas(DateTime date, List<TemporizadorModel> temporizadorList) {
     var horaInicio =
         '${date.year.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} ${temporizadorList[0].temporizadorHorainicio}';
     var horaFin =
@@ -546,8 +490,7 @@ class ProductosBloc {
     }
   }
 
-  void diasEspecificosDeLaSemana(
-      DateTime date, List<TemporizadorModel> temporizadorList) {
+  void diasEspecificosDeLaSemana(DateTime date, List<TemporizadorModel> temporizadorList) {
     var week = date.weekday;
 
     ValidarProducto validarProducto = ValidarProducto();

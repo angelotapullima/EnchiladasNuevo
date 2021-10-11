@@ -14,9 +14,7 @@ class WebViewExample extends StatefulWidget {
 }
 
 class _WebViewExampleState extends State<WebViewExample> {
-  
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
   Widget build(BuildContext context) {
@@ -106,35 +104,41 @@ class _WebViewExampleState extends State<WebViewExample> {
         // We're using a Builder here so we have a context that is below the Scaffold
         // to allow calling Scaffold.of(context) so we can show a snackbar.
         body: StreamBuilder(
-                 stream: nuevoMetodoPagoBloc.estadoWebview,
-                 builder: (context, snapshot) {
-                   return Stack(
-                     children: <Widget>[
-                       _contenidoWebview(args,nuevoMetodoPagoBloc),
-                       (nuevoMetodoPagoBloc.valorEstadoWe ==true)?Center(child:CupertinoActivityIndicator()):Container()
-                     ],
-                   );
-                 }
-               )
+          stream: nuevoMetodoPagoBloc.estadoWebview,
+          builder: (context, snapshot) {
+            return Stack(
+              children: <Widget>[
+                _contenidoWebview(args, nuevoMetodoPagoBloc),
+
+                (snapshot.hasData)?
+                (nuevoMetodoPagoBloc.valorEstadoWe == true)
+                    ? Center(
+                        child: CupertinoActivityIndicator(),
+                      )
+                    : Container(): Container()
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Builder _contenidoWebview(ArgumentsDetallePago args,NuevoMetodoPagoBloc nuevoMetodoPagoBloc) {
+  Builder _contenidoWebview(ArgumentsDetallePago args, NuevoMetodoPagoBloc nuevoMetodoPagoBloc) {
     return Builder(
-              builder: (BuildContext context) {
-                return WebView(
-                  initialUrl: args.link,
-                  javascriptMode: JavascriptMode.unrestricted,
-                  onWebViewCreated: (WebViewController webViewController) {
-                    _controller.complete(webViewController);
-                  },
-                  // elimine esto cuando los literales de colección se establezcan.
-                  // ignore: prefer_collection_literals
-                  javascriptChannels: <JavascriptChannel>[
-                    _toasterJavascriptChannel(context),
-                  ].toSet(),
-                  /* navigationDelegate: (NavigationRequest request) {
+      builder: (BuildContext context) {
+        return WebView(
+          initialUrl: args.link,
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            _controller.complete(webViewController);
+          },
+          // elimine esto cuando los literales de colección se establezcan.
+          // ignore: prefer_collection_literals
+          javascriptChannels: <JavascriptChannel>[
+            _toasterJavascriptChannel(context),
+          ].toSet(),
+          /* navigationDelegate: (NavigationRequest request) {
                     if (request.url.startsWith('www.google.com')) {
                       print('blocking navigation to $request}');
                       return NavigationDecision.prevent;
@@ -142,88 +146,70 @@ class _WebViewExampleState extends State<WebViewExample> {
                     print('allowing navigation to $request');
                     return NavigationDecision.navigate;
                   }, */
-                  onPageStarted: (String url) {
-                    
-                    print('Page started loading: $url');
-                    nuevoMetodoPagoBloc.changeEstadoWebview(true);
+          onPageStarted: (String url) {
+            print('Page started loading: $url');
+            nuevoMetodoPagoBloc.changeEstadoWebview(true);
 
-                    if (url ==
-                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = args.idPedido;
-                      argumentsWebview.codigo = '1';
+            if (url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
+              ArgumentsWebview argumentsWebview = ArgumentsWebview();
+              argumentsWebview.idPedido = args.idPedido;
+              argumentsWebview.codigo = '1';
 
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                    } else if (url ==
-                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = args.idPedido;
-                      argumentsWebview.codigo = '2';
+              Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
+            } else if (url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
+              ArgumentsWebview argumentsWebview = ArgumentsWebview();
+              argumentsWebview.idPedido = args.idPedido;
+              argumentsWebview.codigo = '2';
 
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                    } else if (url ==
-                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = args.idPedido;
-                      argumentsWebview.codigo = '3';
+              Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
+            } else if (url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
+              ArgumentsWebview argumentsWebview = ArgumentsWebview();
+              argumentsWebview.idPedido = args.idPedido;
+              argumentsWebview.codigo = '3';
 
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                    } else if (url ==
-                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = args.idPedido;
-                      argumentsWebview.codigo = '4';
+              Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
+            } else if (url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
+              ArgumentsWebview argumentsWebview = ArgumentsWebview();
+              argumentsWebview.idPedido = args.idPedido;
+              argumentsWebview.codigo = '4';
 
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                    }
-                  },
-                  onPageFinished: (String url) {
+              Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
+            }
+          },
+          onPageFinished: (String url) {
+            nuevoMetodoPagoBloc.changeEstadoWebview(false);
+            print('Page finished loading: $url');
 
-                    nuevoMetodoPagoBloc.changeEstadoWebview(false);
-                    print('Page finished loading: $url');
+            if (url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
+              ArgumentsWebview argumentsWebview = ArgumentsWebview();
+              argumentsWebview.idPedido = args.idPedido;
+              argumentsWebview.codigo = '1';
 
-                    if (url ==
-                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CORRECTO') {
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = args.idPedido;
-                      argumentsWebview.codigo = '1';
+              Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
+            } else if (url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
+              ArgumentsWebview argumentsWebview = ArgumentsWebview();
+              argumentsWebview.idPedido = args.idPedido;
+              argumentsWebview.codigo = '2';
 
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                    } else if (url ==
-                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=CANCELADO') {
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = args.idPedido;
-                      argumentsWebview.codigo = '2';
+              Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
+            } else if (url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
+              ArgumentsWebview argumentsWebview = ArgumentsWebview();
+              argumentsWebview.idPedido = args.idPedido;
+              argumentsWebview.codigo = '3';
 
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                    } else if (url ==
-                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=RECHAZADO') {
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = args.idPedido;
-                      argumentsWebview.codigo = '3';
+              Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
+            } else if (url == 'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
+              ArgumentsWebview argumentsWebview = ArgumentsWebview();
+              argumentsWebview.idPedido = args.idPedido;
+              argumentsWebview.codigo = '4';
 
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                    } else if (url ==
-                        'https://delivery.lacasadelasenchiladas.pe/respuesta/index.php?respuesta=ERROR') {
-                      ArgumentsWebview argumentsWebview = ArgumentsWebview();
-                      argumentsWebview.idPedido = args.idPedido;
-                      argumentsWebview.codigo = '4';
-
-                      Navigator.pushNamed(context, 'ticket',
-                          arguments: argumentsWebview);
-                    }
-                  },
-                  gestureNavigationEnabled: true,
-                );
-              },
-            );
+              Navigator.pushNamed(context, 'ticket', arguments: argumentsWebview);
+            }
+          },
+          gestureNavigationEnabled: true,
+        );
+      },
+    );
   }
 
   JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
@@ -239,8 +225,7 @@ class _WebViewExampleState extends State<WebViewExample> {
 }
 
 class NavigationControls extends StatelessWidget {
-  const NavigationControls(this._webViewControllerFuture)
-      : assert(_webViewControllerFuture != null);
+  const NavigationControls(this._webViewControllerFuture) : assert(_webViewControllerFuture != null);
 
   final Future<WebViewController> _webViewControllerFuture;
 
@@ -248,10 +233,8 @@ class NavigationControls extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<WebViewController>(
       future: _webViewControllerFuture,
-      builder:
-          (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
-        final bool webViewReady =
-            snapshot.connectionState == ConnectionState.done;
+      builder: (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
+        final bool webViewReady = snapshot.connectionState == ConnectionState.done;
         final WebViewController controller = snapshot.data;
         return Row(
           children: <Widget>[
@@ -279,8 +262,7 @@ class NavigationControls extends StatelessWidget {
                         await controller.goForward();
                       } else {
                         Scaffold.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("No forward history item")),
+                          const SnackBar(content: Text("No forward history item")),
                         );
                         return;
                       }

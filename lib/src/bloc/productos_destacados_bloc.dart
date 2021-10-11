@@ -18,7 +18,7 @@ class ProductosDestacadosBloc {
   }
 
   void obtenerProductosDestacados() async {
-    final listGeneral = List<ProductosData>();
+    final List<ProductosData> listGeneral = [];
 
     final listProductos = await productoDatabase.obtenerProductosDestacados();
 

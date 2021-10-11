@@ -27,7 +27,7 @@ class _CategoriasPorTipoLocalState extends State<CategoriasPorTipoLocal> {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasPorTipo(widget.idCategoriaTipo);
+    categoriasBloc.obtenerCategoriasPorTipo2(widget.idCategoriaTipo);
     _refreshController.refreshCompleted();
   }
 
@@ -35,7 +35,7 @@ class _CategoriasPorTipoLocalState extends State<CategoriasPorTipoLocal> {
   Widget build(BuildContext context) {
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasPorTipo(widget.idCategoriaTipo);
+    categoriasBloc.obtenerCategoriasPorTipo2(widget.idCategoriaTipo);
 
     return Scaffold(
       body: Stack(children: <Widget>[

@@ -21,9 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:enchiladasapp/src/bloc/market_navigation_bloc.dart';
 export 'package:enchiladasapp/src/bloc/market_navigation_bloc.dart';
 
-
-import 'package:enchiladasapp/src/puzzle/puzzle_bloc.dart';
-export 'package:enchiladasapp/src/puzzle/puzzle_bloc.dart';
+ 
 
 
 import 'package:enchiladasapp/src/bloc/bottom_navigation_bloc.dart';
