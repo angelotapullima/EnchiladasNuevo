@@ -55,7 +55,7 @@ class _DesicionPageState extends State<DesicionPage> {
                       child: SvgPicture.asset('assets/icono_delivery.svg'),
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, 'pantallaDeliveryOpciones');
+                      Navigator.pushNamed(context, '/');
                     },
                   ),
                   SizedBox(
@@ -69,7 +69,7 @@ class _DesicionPageState extends State<DesicionPage> {
                     ),
                     onTap: () {
 
-                        Navigator.pushNamed(context, 'homeLocal');
+                        Navigator.pushNamed(context, 'pantallaDeliveryOpciones');
                     },
                   ),
                 ],

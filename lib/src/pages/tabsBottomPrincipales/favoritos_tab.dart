@@ -104,7 +104,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
                           Stack(
                             children: <Widget>[
                               Container(
-                                height: responsive.hp(14),
+                                height: responsive.hp(18),
                                 width: double.infinity,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -178,7 +178,10 @@ class _FavoritosTabState extends State<FavoritosTab> {
                                     Spacer(),
                                     Container(
                                       padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.white),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        color: Colors.white,
+                                      ),
                                       child: Center(
                                         child: Icon(
                                           Ionicons.md_heart,
@@ -243,7 +246,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
                               left: responsive.wp(1.5),
                             ),
                             child: Text(
-                              '${snapshot.data[i].productoNombre.toLowerCase()}',
+                              '${snapshot.data[i].productoNombre.toUpperCase()}',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(

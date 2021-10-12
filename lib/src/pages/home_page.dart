@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   height: kBottomNavigationBarHeight * responsive.hp(.18),
                   padding: EdgeInsets.only(
-                    bottom: responsive.hp(3),
+                    bottom: responsive.hp(2),
                   ),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -102,7 +102,9 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(height: responsive.hp(1),),
+                                  SizedBox(
+                                    height: responsive.hp(1),
+                                  ),
                                   Icon(
                                     Icons.home,
                                     size: responsive.ip(3),
@@ -124,8 +126,10 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [SizedBox(height: responsive.hp(1),),
-                                  
+                                children: [
+                                  SizedBox(
+                                    height: responsive.hp(1),
+                                  ),
                                   Icon(
                                     FontAwesome5Solid.heart,
                                     size: responsive.ip(3),
@@ -157,16 +161,23 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ],
                                 ),
-                                child: CircleAvatar(
-                                  radius: responsive.ip(3),
-                                  backgroundColor: Colors.red,
-                                  child: Center(
-                                    child: Icon(
-                                      MaterialIcons.grid_on,
-                                      color: Colors.white,
-                                      size: responsive.ip(2.5),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: responsive.hp(1),
                                     ),
-                                  ),
+                                    CircleAvatar(
+                                      radius: responsive.ip(3),
+                                      backgroundColor: Colors.red,
+                                      child: Center(
+                                        child: Icon(
+                                          MaterialIcons.grid_on,
+                                          color: Colors.white,
+                                          size: responsive.ip(2.5),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -176,8 +187,10 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [SizedBox(height: responsive.hp(1),),
-                                  
+                                children: [
+                                  SizedBox(
+                                    height: responsive.hp(1),
+                                  ),
                                   StreamBuilder(
                                       stream: carritoBloc.carritoIdStream,
                                       builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
@@ -250,8 +263,10 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [SizedBox(height: responsive.hp(1),),
-                                  
+                                children: [
+                                  SizedBox(
+                                    height: responsive.hp(1),
+                                  ),
                                   Icon(
                                     Icons.person,
                                     size: responsive.ip(3),
@@ -283,91 +298,6 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      
-    );
-  }
-
-  Widget bottonNaviga(Responsive responsive, int cantidad, BottomNaviBloc bottomBloc) {
-    return StreamBuilder(
-      stream: bottomBloc.selectPageStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          selectedItemColor: Colors.green[400],
-          unselectedItemColor: Colors.red,
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-          unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                size: responsive.ip(3),
-              ),
-              label: 'Principal',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                FontAwesomeIcons.solidHeart,
-                size: responsive.ip(2.7),
-              ),
-              label: 'Favoritos',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.near_me,
-                  size: responsive.ip(3),
-                ),
-                label: 'Categorías'),
-            BottomNavigationBarItem(
-              icon: (cantidad != 0)
-                  ? Stack(
-                      children: <Widget>[
-                        Icon(
-                          Icons.shopping_cart,
-                          size: responsive.ip(3),
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            child: Text(
-                              cantidad.toString(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(1),
-                              ),
-                            ),
-                            alignment: Alignment.center,
-                            width: responsive.ip(1.6),
-                            height: responsive.ip(1.6),
-                            decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-                          ),
-                          //child: Icon(Icons.brightness_1, size: 8,color: Colors.redAccent,  )
-                        )
-                      ],
-                    )
-                  : Icon(
-                      Icons.shopping_cart,
-                      size: responsive.ip(3),
-                    ),
-              label: 'Carrito',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                size: responsive.ip(3),
-              ),
-              label: 'Cuenta',
-            )
-          ],
-          currentIndex: bottomBloc.page,
-          onTap: (index) => {
-            bottomBloc.changePage(index),
-          },
-        );
-      },
     );
   }
 }

@@ -75,7 +75,11 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                 child: Image.asset('assets/var.png'),
                               ),
                               onTap: () {
-                                Navigator.push(
+
+
+                        Navigator.pushNamed(context, '/');
+
+                                /* Navigator.push(
                                   context,
                                   PageRouteBuilder(
                                     transitionDuration: const Duration(milliseconds: 400),
@@ -93,7 +97,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                );
+                                ); */
                                 //Navigator.pushNamed(context, 'market');
                               },
                             );
@@ -124,7 +128,10 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                   child: Image.asset('assets/cafe_247.png'),
                                 ),
                                 onTap: () {
-                                  Navigator.push(
+
+
+                        Navigator.pushNamed(context, '/');
+                                 /*  Navigator.push(
                                       context,
                                       PageRouteBuilder(
                                         transitionDuration: const Duration(milliseconds: 400),
@@ -141,7 +148,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                             child: child,
                                           );
                                         },
-                                      ));
+                                      )); */
                                 },
                               );
                             } else {

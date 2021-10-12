@@ -200,7 +200,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                   : IconButton(
                       onPressed: () {
                         setState(() {
-                          print('agregar');
+                          print('agregar ${productosData.idProducto}' );
                           agregarFavoritos(context, productosData);
                         });
                       },

@@ -37,11 +37,10 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
         backgroundColor: Colors.transparent,
         actions: [
           GestureDetector(
-            child: CircleContainer(
-                radius: responsive.ip(2.5), color: Colors.transparent, widget: Icon(Icons.share) //Icon(Icons.arrow_back, color: Colors.black),
+            child: CircleContainer(radius: responsive.ip(2.5), color: Colors.transparent, widget: Icon(Icons.share) //Icon(Icons.arrow_back, color: Colors.black),
                 ),
             onTap: () async {
-                await takeScreenshotandShare(); 
+              await takeScreenshotandShare();
               //_logoScreen.value = false;
             },
           ),
@@ -235,11 +234,16 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
     );
   }
 
-takeScreenshotandShare() async {
+  takeScreenshotandShare() async {
     var now = DateTime.now();
     var nombre = now.microsecond.toString();
     _imageFile = null;
-    screenshotController.capture(delay: Duration(milliseconds: 10), pixelRatio: 2.0).then((Uint8List image) async {
+    screenshotController
+        .capture(
+      delay: Duration(milliseconds: 10),
+      pixelRatio: 2.0,
+    )
+        .then((Uint8List image) async {
       setState(() {
         _imageFile = image;
       });
@@ -276,5 +280,5 @@ takeScreenshotandShare() async {
     }).catchError((onError) {
       print(onError);
     });
-  } 
+  }
 }

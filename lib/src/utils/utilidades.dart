@@ -39,9 +39,12 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
 
   await productoDatabase.updateProductosDb(productos);
 
-  favoritosBloc.obtenerProductosFavoritos();
-  productosIdBloc
-      .obtenerProductosdeliveryEnchiladasPorCategoria(productos.idCategoria);
+  favoritosBloc.obtenerProductosFavoritos();favoritosBloc.obtenerProductosFavoritos();
+  productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(productos.idCategoria);
+  productosIdBloc.obtenerProductosLocalEnchiladasPorCategoria(productos.idCategoria);
+  productosIdBloc.obtenerProductosMarketPorCategoria(productos.idCategoria);
+  productosIdBloc.cargarCategoriaProductoLocal(productos.idCategoria);
+  productosIdBloc.cargarCategoriaProductoDelivery(productos.idCategoria);
   //_mostrarAlert(context);
 }
 
@@ -129,8 +132,7 @@ void deleteProductoCarrito(BuildContext context, int idProdcuto) {
   carritoBloc.obtenerCarrito();
 }
 
-void agregarCarrito(
-    ProductosData productosData, BuildContext context, String cantidad) async {
+void agregarCarrito(ProductosData productosData, BuildContext context, String cantidad) async {
   Carrito carrito = new Carrito();
   final carritoDatabase = CarritoDatabase();
 
@@ -142,8 +144,7 @@ void agregarCarrito(
       int.parse(productosData.idProducto),
     );
   } else {
-    final dato =
-        await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
+    final dato = await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
 
     carrito.idProducto = int.parse(productosData.idProducto);
     carrito.productoNombre = productosData.productoNombre;
@@ -170,8 +171,7 @@ void agregarCarrito(
   //_mostrarAlert(context);
 }
 
-void agregarPropinaCarrito(
-    ProductosData productosData, BuildContext context, String cantidad) async {
+void agregarPropinaCarrito(ProductosData productosData, BuildContext context, String cantidad) async {
   Carrito carrito = new Carrito();
   final carritoDatabase = CarritoDatabase();
 
@@ -183,8 +183,7 @@ void agregarPropinaCarrito(
   } else {
     await carritoDatabase.deletePropinaCarritoDb();
 
-    final dato =
-        await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
+    final dato = await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
 
     carrito.idProducto = int.parse(productosData.idProducto);
     carrito.productoNombre = productosData.productoNombre;
@@ -213,18 +212,15 @@ void agregarPropinaCarrito(
   //_mostrarAlert(context);
 }
 
-void agregarCarritoConAdicionales(ProductosData productosData,
-    BuildContext context, String cantidad, String observacion) async {
+void agregarCarritoConAdicionales(ProductosData productosData, BuildContext context, String cantidad, String observacion) async {
   Carrito carrito = new Carrito();
   final carritoDatabase = CarritoDatabase();
 
   final carritoBloc = ProviderBloc.carrito(context);
   if (cantidad == "0") {
-    await carritoDatabase
-        .deteleProductoCarrito(int.parse(productosData.idProducto));
+    await carritoDatabase.deteleProductoCarrito(int.parse(productosData.idProducto));
   } else {
-    final dato =
-        await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
+    final dato = await carritoDatabase.consultarCarritoPorId(productosData.idProducto);
 
     carrito.idProducto = int.parse(productosData.idProducto);
     carrito.productoNombre = productosData.productoNombre;
@@ -252,8 +248,7 @@ String format(double n) {
   return n.toStringAsFixed(n.truncateToDouble() == n ? 2 : 2);
 }
 
-void quitarFavoritosMarket(
-    BuildContext context, ProductosData productosData, String categotia) async {
+void quitarFavoritosMarket(BuildContext context, ProductosData productosData, String categotia) async {
   ProductosData productos = new ProductosData();
   final productoDatabase = ProductoDatabase();
   final productosIdBloc = ProviderBloc.prod(context);
@@ -288,8 +283,7 @@ void seleccionarDireccion(BuildContext context, String id) async {
   direccionBloc.obtenerDirecciones();
 }
 
-void agregarDireccion(BuildContext context, String addres, double latitud,
-    double longitud, String referencia, String idDistrito) async {
+void agregarDireccion(BuildContext context, String addres, double latitud, double longitud, String referencia, String idDistrito) async {
   final direccionDatabase = DireccionDatabase();
   direccionDatabase.ponerTodos0();
   final direccionBloc = ProviderBloc.dire(context);
@@ -308,18 +302,15 @@ void agregarDireccion(BuildContext context, String addres, double latitud,
   direccionBloc.obtenerDirecciones();
 }
 
-void cambiarEstadoSeleccionAdicional(BuildContext context, String idProducto,
-    bool valor, String idProdcutoAdicional, String item) async {
+void cambiarEstadoSeleccionAdicional(BuildContext context, String idProducto, bool valor, String idProdcutoAdicional, String item) async {
   final adicionalesDatabase = AdicionalesDatabase();
   final adicionalesBloc = ProviderBloc.adicionales(context);
   if (valor) {
     //await adicionalesDatabase.updateAdicionalesEnFalseDb();
 
-    await adicionalesDatabase.updateAdicionalesEnTrueDb(
-        idProducto, idProdcutoAdicional, item);
+    await adicionalesDatabase.updateAdicionalesEnTrueDb(idProducto, idProdcutoAdicional, item);
   } else {
-    await adicionalesDatabase.updateAdicionalesEnfalsePorId(
-        idProducto, idProdcutoAdicional, item);
+    await adicionalesDatabase.updateAdicionalesEnfalsePorId(idProducto, idProdcutoAdicional, item);
   }
 
   adicionalesBloc.obtenerAdicionales(idProducto);
@@ -343,8 +334,7 @@ void agregarTelefono(BuildContext context, String telefono) async {
   usuarioBloc.obtenerUsuario();
 }
 
-void actualizarObservacion(
-    BuildContext context, String observacion, String id) async {
+void actualizarObservacion(BuildContext context, String observacion, String id) async {
   final carritoBloc = ProviderBloc.carrito(context);
   final carritoDatabase = CarritoDatabase();
 
@@ -355,17 +345,10 @@ void actualizarObservacion(
 
 void showToast(String msg, int duration, ToastGravity gravity) {
   Fluttertoast.showToast(
-      msg: '$msg',
-      toastLength: Toast.LENGTH_LONG,
-      gravity: gravity,
-      timeInSecForIosWeb: duration,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      fontSize: 16.0);
+      msg: '$msg', toastLength: Toast.LENGTH_LONG, gravity: gravity, timeInSecForIosWeb: duration, backgroundColor: Colors.black, textColor: Colors.white, fontSize: 16.0);
 }
 
-void agregarItemObservacion(
-    BuildContext context, String idProducto, bool valor, String tipo,String observacion) async {
+void agregarItemObservacion(BuildContext context, String idProducto, bool valor, String tipo, String observacion) async {
   print(valor);
   final itemObservacionDatabase = ItemObservacionDatabase();
   final productoDatabase = ProductoDatabase();
@@ -393,19 +376,16 @@ void agregarItemObservacion(
   //_mostrarAlert(context);
 }
 
-void agregarItemObservacionFijos(
-    BuildContext context, String idProducto, bool valor, String tipo) async {
+void agregarItemObservacionFijos(BuildContext context, String idProducto, bool valor, String tipo) async {
   print(valor);
   final itemObservacionDatabase = ItemObservacionDatabase();
   final productoDatabase = ProductoDatabase();
 
-  final itemsObservacion =
-      await itemObservacionDatabase.obtenerItemObservacion();
+  final itemsObservacion = await itemObservacionDatabase.obtenerItemObservacion();
 
   for (var i = 0; i < itemsObservacion.length; i++) {
     if (itemsObservacion[i].idCategoria != '16') {
-      await itemObservacionDatabase
-          .deleteItemObservacionPorProducto(itemsObservacion[i].idProducto);
+      await itemObservacionDatabase.deleteItemObservacionPorProducto(itemsObservacion[i].idProducto);
     }
   }
 
@@ -496,8 +476,7 @@ void agregarObservacionEnProductoObservacion(
     }
   }
 
-  final itemsObservacion =
-      await itemObservacionDatabase.obtenerItemObservacion();
+  final itemsObservacion = await itemObservacionDatabase.obtenerItemObservacion();
 
   for (var i = 0; i < itemsObservacion.length; i++) {
     if (itemsObservacion[i].idCategoria != '16') {
@@ -526,7 +505,7 @@ void agregarProductosAlCarrito(BuildContext context) async {
   Carrito carrito = new Carrito();
   final carritoDatabase = CarritoDatabase();
 
-  final itemsObservacion =await itemObservacionDatabase.obtenerItemObservacion();
+  final itemsObservacion = await itemObservacionDatabase.obtenerItemObservacion();
 
   for (var i = 0; i < itemsObservacion.length; i++) {
     final dato = await carritoDatabase.consultarCarritoPorId(itemsObservacion[i].idProducto);
@@ -622,8 +601,6 @@ Future<List<ProductosData>> agregarAdicionalesDeProducto(
 }
  */
 
-
-
 List<DateTime> getDateList(DateTime firstDate, DateTime lastDate) {
   List<DateTime> list = List();
   int count = daysCount(toDateMonthYear(firstDate), toDateMonthYear(lastDate));
@@ -637,8 +614,7 @@ DateTime toDateMonthYear(DateTime dateTime) {
   return DateTime(dateTime.year, dateTime.month, dateTime.day);
 }
 
-int daysCount(DateTime first, DateTime last) =>
-    last.difference(first).inDays + 1;
+int daysCount(DateTime first, DateTime last) => last.difference(first).inDays + 1;
 
 enum LabelType {
   date,

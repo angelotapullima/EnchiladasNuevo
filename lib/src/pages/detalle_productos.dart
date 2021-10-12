@@ -245,29 +245,26 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                 right: 0,
                 //left: 0,
                 child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: responsive.wp(2),
-                                          vertical: responsive.hp(.5),
-                                        ),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(15),
-                                            /* borderRadius: BorderRadius.only(
-                                                    bottomRight: Radius.circular(10),
-                                                  ), */
-                                            color: Colors.orange),
-                                        child: Text(
-                                          'Destacado',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: responsive.ip(1.3),
-                                          ),
-                                        ),
-                                      )
-              )
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(2),
+                    vertical: responsive.hp(.5),
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                     
+                      color: Colors.orange),
+                  child: Text(
+                    'Destacado',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsive.ip(1.3),
+                    ),
+                  ),
+                ))
             : Container()
       ],
-    ));
+    ),);
   }
 
   Widget botonesBajos(Responsive responsive, ProductosData productosData, ProductosBloc productosBloc) {
@@ -290,11 +287,9 @@ class _DetalleProducto extends State<DetalleProductitoss> {
               child: favourite
                   ? IconButton(
                       onPressed: () {
-                        setState(() {
-                          print('quitar');
-                          utils.quitarFavoritos(context, productosData);
-                          favourite = false;
-                        });
+                        print('quitar');
+                        utils.quitarFavoritos(context, productosData);
+                        favourite = false;
                       },
                       icon: Icon(
                         FontAwesomeIcons.solidHeart,
@@ -304,11 +299,9 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                     )
                   : IconButton(
                       onPressed: () {
-                        setState(() {
-                          print('agregar');
-                          utils.agregarFavoritos(context, productosData);
-                          favourite = true;
-                        });
+                        print('agregar ${productosData.idProducto} --detalle prodcuto ${productosData.productoNombre}');
+                        utils.agregarFavoritos(context, productosData);
+                        favourite = true;
                       },
                       icon: Icon(
                         FontAwesomeIcons.heart,
@@ -846,9 +839,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                                     ),
                                   ),
                                   Center(
-                                    child: (downloadProgress.progress != null)
-                                        ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
-                                        : Container(),
+                                    child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                                   )
                                 ],
                               ),
