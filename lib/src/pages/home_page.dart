@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                                       backgroundColor: Colors.red,
                                       child: Center(
                                         child: Icon(
-                                          MaterialIcons.grid_on,
+                                          Icons.menu_rounded,
                                           color: Colors.white,
                                           size: responsive.ip(2.5),
                                         ),

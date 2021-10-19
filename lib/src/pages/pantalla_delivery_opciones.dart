@@ -75,9 +75,7 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                 child: Image.asset('assets/var.png'),
                               ),
                               onTap: () {
-
-
-                        Navigator.pushNamed(context, '/');
+                                Navigator.pushNamed(context, '/');
 
                                 /* Navigator.push(
                                   context,
@@ -117,21 +115,19 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                       height: responsive.hp(2),
                     ),
                     StreamBuilder(
-                        stream: pantallasBloc.estadoCafeStream,
-                        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data) {
-                              return GestureDetector(
-                                child: Container(
-                                  width: double.infinity,
-                                  height: responsive.ip(16),
-                                  child: Image.asset('assets/cafe_247.png'),
-                                ),
-                                onTap: () {
-
-
-                        Navigator.pushNamed(context, '/');
-                                 /*  Navigator.push(
+                      stream: pantallasBloc.estadoCafeStream,
+                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data) {
+                            return GestureDetector(
+                              child: Container(
+                                width: double.infinity,
+                                height: responsive.ip(16),
+                                child: Image.asset('assets/cafe_247.png'),
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(context, '/');
+                                /*  Navigator.push(
                                       context,
                                       PageRouteBuilder(
                                         transitionDuration: const Duration(milliseconds: 400),
@@ -149,19 +145,20 @@ class PantallaDeliveryOpciones extends StatelessWidget {
                                           );
                                         },
                                       )); */
-                                },
-                              );
-                            } else {
-                              return Container(
-                                height: responsive.ip(16),
-                              );
-                            }
+                              },
+                            );
                           } else {
                             return Container(
                               height: responsive.ip(16),
                             );
                           }
-                        }),
+                        } else {
+                          return Container(
+                            height: responsive.ip(16),
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
