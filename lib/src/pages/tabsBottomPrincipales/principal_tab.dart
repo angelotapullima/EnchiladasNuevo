@@ -11,7 +11,7 @@ import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/publicidad_model.dart';
-import 'package:enchiladasapp/src/pages/%20categorias_por_tipo.dart';
+import 'package:enchiladasapp/src/eliminados/%20categorias_por_tipo.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/pages/search.dart';
@@ -35,15 +35,13 @@ class PrincipalTab extends StatelessWidget {
   void _onRefresh(BuildContext context) async {
     print('_onRefresh pantalla');
     final pantallasBloc = ProviderBloc.pantalla(context);
-    final categoriasBloc = ProviderBloc.cat(context);
-    final productosDestacadosBloc = ProviderBloc.proDestacados(context);
+    final categoriasBloc = ProviderBloc.cat(context); 
 
     final categoriasApi = CategoriasApi();
     await categoriasApi.obtenerAmbos(context);
     pantallasBloc.obtenerPantallas();
     categoriasBloc.obtenerCategoriasPromociones();
-
-    productosDestacadosBloc.obtenerProductosDestacados();
+ 
 
     _refreshController.refreshCompleted();
   }
@@ -516,7 +514,7 @@ class PrincipalTab extends StatelessWidget {
                   final bottomBloc = ProviderBloc.bottom(context);
                   bottomBloc.changePage(2);
                 } else if (pantallaModel.idPantalla == '5') {
-                  Navigator.push(
+                  /* Navigator.push(
                     context,
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 400),
@@ -534,9 +532,9 @@ class PrincipalTab extends StatelessWidget {
                         );
                       },
                     ),
-                  );
+                  ); */
                 } else if (pantallaModel.idPantalla == '4') {
-                  Navigator.push(
+                  /* Navigator.push(
                     context,
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 400),
@@ -555,7 +553,7 @@ class PrincipalTab extends StatelessWidget {
                       },
                     ),
                   );
-                } else {
+                */ } else {
                   Arguments arg = new Arguments("${pantallaModel.pantallaNombre}", '${pantallaModel.pantallCategoria}');
 
                   Navigator.push(

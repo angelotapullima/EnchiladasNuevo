@@ -1,4 +1,4 @@
-import 'package:enchiladasapp/src/bloc/bottom_local.dart';
+/* import 'package:enchiladasapp/src/bloc/bottom_local.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/categorias_local.dart';
 import 'package:enchiladasapp/src/pages/AplicacionLocal/principal_local.dart';
@@ -82,3 +82,4 @@ class _HomeLocalState extends State<HomeLocal> {
     );
   }
 }
+ */

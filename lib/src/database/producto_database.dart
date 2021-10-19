@@ -125,17 +125,6 @@ class ProductoDatabase {
     return list;
   }
 
-  Future<List<ProductosData>> obtenerProductosDestacados() async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM Producto WHERE producto_estado_destacado='1'  order by CAST(producto_destacado AS INT) ASC");
-
-    List<ProductosData> list = res.isNotEmpty
-        ? res.map((c) => ProductosData.fromJson(c)).toList()
-        : [];
-
-    return list;
-  }
 
   Future<List<ProductosData>> obtenerFavoritos() async {
     final db = await dbprovider.database;

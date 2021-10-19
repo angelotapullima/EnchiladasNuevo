@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'tabsBottomPrincipales/categorias_page.dart';
+import '../eliminados/categorias_page.dart';
 import 'tabsBottomPrincipales/favoritos_tab.dart';
 import 'tabsBottomPrincipales/mi_cuenta.dart';
 import 'tabsBottomPrincipales/carrito_tab.dart';

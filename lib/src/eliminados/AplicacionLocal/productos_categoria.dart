@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+/* import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/arguments.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
@@ -186,3 +186,4 @@ class _ProductosCategoriaPage extends State<ProductosCategoria> {
     );
   }
 }
+ */

@@ -1,4 +1,4 @@
-import 'package:enchiladasapp/src/pages/detalle_productos.dart';
+/* import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/search/search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -507,3 +507,4 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 }
+ */

@@ -102,16 +102,16 @@ class CategoriasBloc {
             CategoriaData categoriaData = CategoriaData();
 
             categoriaData.idCategoria = listGen[i].idCategoria;
-          categoriaData.categoriaNombre = listGen[i].categoriaNombre;
-          categoriaData.categoriaIcono = listGen[i].categoriaIcono;
-          categoriaData.categoriaTipo = listGen[i].categoriaTipo;
-          categoriaData.categoriaFoto = listGen[i].categoriaFoto;
-          categoriaData.categoriaBanner = listGen[i].categoriaBanner;
-          categoriaData.categoriaPromocion = listGen[i].categoriaPromocion;
-          categoriaData.categoriaSonido = listGen[i].categoriaSonido;
-          categoriaData.categoriaEstado = listGen[i].categoriaEstado;
-          categoriaData.categoriaMostrarApp = listGen[i].categoriaMostrarApp;
-          categoriaData.categoriaOrden = listGen[i].categoriaOrden;
+            categoriaData.categoriaNombre = listGen[i].categoriaNombre;
+            categoriaData.categoriaIcono = listGen[i].categoriaIcono;
+            categoriaData.categoriaTipo = listGen[i].categoriaTipo;
+            categoriaData.categoriaFoto = listGen[i].categoriaFoto;
+            categoriaData.categoriaBanner = listGen[i].categoriaBanner;
+            categoriaData.categoriaPromocion = listGen[i].categoriaPromocion;
+            categoriaData.categoriaSonido = listGen[i].categoriaSonido;
+            categoriaData.categoriaEstado = listGen[i].categoriaEstado;
+            categoriaData.categoriaMostrarApp = listGen[i].categoriaMostrarApp;
+            categoriaData.categoriaOrden = listGen[i].categoriaOrden;
 
             listCate.add(categoriaData);
           }

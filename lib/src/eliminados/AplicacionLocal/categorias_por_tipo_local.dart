@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+/* import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
@@ -10,13 +10,24 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CategoriasLocal extends StatelessWidget {
+class CategoriasPorTipoLocal extends StatefulWidget {
+  const CategoriasPorTipoLocal({Key key, @required this.idCategoriaTipo, @required this.nombreCategoriaTipo}) : super(key: key);
+
+  final String idCategoriaTipo;
+  final String nombreCategoriaTipo;
+
+  @override
+  _CategoriasPorTipoLocalState createState() => _CategoriasPorTipoLocalState();
+}
+
+class _CategoriasPorTipoLocalState extends State<CategoriasPorTipoLocal> {
   final _refreshController = RefreshController(initialRefresh: false);
+
   void _onRefresh(BuildContext context) async {
     print('_onRefresh');
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasEnchiladas();
+    categoriasBloc.obtenerCategoriasPorTipo2(widget.idCategoriaTipo);
     _refreshController.refreshCompleted();
   }
 
@@ -24,7 +35,7 @@ class CategoriasLocal extends StatelessWidget {
   Widget build(BuildContext context) {
     final categoriasBloc = ProviderBloc.cat(context);
     categoriasBloc.cargandoCategoriasFalse();
-    categoriasBloc.obtenerCategoriasEnchiladas();
+    categoriasBloc.obtenerCategoriasPorTipo2(widget.idCategoriaTipo);
 
     return Scaffold(
       body: Stack(children: <Widget>[
@@ -46,33 +57,29 @@ class CategoriasLocal extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: responsive.wp(2),
-              vertical: responsive.hp(1),
+          AppBar(
+            backgroundColor: Colors.red,
+            elevation: 0,
+            title: Text(
+              /*  (widget.tipo == '2') ? 'Market 247' : 'Café 247', */
+              widget.nombreCategoriaTipo,
+              style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.8), fontWeight: FontWeight.bold),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Categorías',
-                  style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.8), fontWeight: FontWeight.bold),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                  size: responsive.ip(3.5),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: responsive.ip(3.5),
-                  ),
-                  onPressed: () {
-                    showSearch(
-                      context: context,
-                      delegate: SearchLocal(hintText: 'Buscar'),
-                    );
-                  },
-                )
-              ],
-            ),
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: SearchLocal(hintText: 'Buscar'),
+                  );
+                },
+              )
+            ],
           ),
           Expanded(
             child: Container(
@@ -93,7 +100,7 @@ class CategoriasLocal extends StatelessWidget {
                   _onRefresh(context);
                 },
                 child: StreamBuilder(
-                  stream: categoriasBloc.categoriasEnchiladasStream,
+                  stream: categoriasBloc.categoriasPorTipoStream,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.length > 0) {
@@ -407,3 +414,4 @@ class _ProductosIdPageState extends State<ProductosIdPage> {
     );
   }
 }
+ */

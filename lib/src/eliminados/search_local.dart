@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
+/* import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/models/productos_model.dart';
-import 'package:enchiladasapp/src/pages/AplicacionLocal/producto_foto_local.dart';
+import 'package:enchiladasapp/src/models/productos_model.dart'; 
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -225,3 +224,4 @@ class SearchLocal extends SearchDelegate {
     );
   }
 }
+ */

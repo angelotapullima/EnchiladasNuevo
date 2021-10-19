@@ -1,5 +1,5 @@
 import 'package:enchiladasapp/src/bloc/provider.dart';
-import 'package:enchiladasapp/src/pages/%20categorias_por_tipo.dart';
+import 'package:enchiladasapp/src/eliminados/%20categorias_por_tipo.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
