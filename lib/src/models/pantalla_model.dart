@@ -13,7 +13,7 @@ class PantallaModel{
         this.altoList,
         this.altoCard,
         this.anchoCard,
-        this.items,
+        this.items, 
     });
 
     String idPantalla;
@@ -54,7 +54,9 @@ class ItemPantalla{
     String numeroItem; 
     String cantidadItems; 
     String productoNuevo; 
-    String productoDestacado; 
+    String productoDestacado;
+    String categoriaNombre;
+    String categoriaIcono;
 
   ItemPantalla({
         this.idProducto,
@@ -65,16 +67,8 @@ class ItemPantalla{
         this.cantidadItems, 
         this.productoNuevo, 
         this.productoDestacado, 
+        this.categoriaNombre, 
+        this.categoriaIcono, 
     });
 
-     factory ItemPantalla.fromJson(Map<dynamic, dynamic> json) => ItemPantalla(
-        idProducto: json["idProducto"],
-        idCategoria: json["idCategoria"],
-        nombreItem: json["nombreItem"],
-        fotoItem: json["fotoItem"], 
-        numeroItem: json["numeroItem"], 
-        cantidadItems: json["cantidadItems"], 
-        productoNuevo: json["productoNuevo"], 
-        productoDestacado: json["productoDestacado"], 
-    );
 }

@@ -189,7 +189,11 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     ),
                                     Text(
                                       'S/. ${productosData.productoPrecio}',
-                                      style: TextStyle(color: Colors.red, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: responsive.ip(3),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ],
                                 ),

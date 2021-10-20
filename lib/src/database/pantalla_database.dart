@@ -15,9 +15,9 @@ class PantallaDatabase{
 
       final res = await db.rawInsert(
           "INSERT OR REPLACE INTO Pantalla (id_pantalla,pantalla_nombre,pantalla_orden,"
-          "pantalla_foto,pantalla_estado,pantalla_categorias) "
+          "pantalla_foto,pantalla_estado,pantallaTipo,pantalla_categorias) "
           "VALUES ('${pantalla.idPantalla}','${pantalla.pantallaNombre}','${pantalla.pantallaOrden}',"
-          "'${pantalla.pantallaFoto}','${pantalla.pantallaEstado}','${pantalla.pantallCategoria}'"
+          "'${pantalla.pantallaFoto}','${pantalla.pantallaEstado}','${pantalla.pantallaTipo}','${pantalla.pantallCategoria}'"
           ")");
       return res;
     } catch (exception) {
@@ -25,9 +25,9 @@ class PantallaDatabase{
     }
   } 
 
-  Future<List<PantallaModel>> obtenerPantallas() async {
+  Future<List<PantallaModel>> obtenerPantallas(String tipo) async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Pantalla where pantalla_estado='1'");
+    final res = await db.rawQuery("SELECT * FROM Pantalla where pantallaTipo='$tipo' and  pantalla_estado='1'");
 
     List<PantallaModel> list = res.isNotEmpty
         ? res.map((c) => PantallaModel.fromJson(c)).toList()

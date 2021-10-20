@@ -18,15 +18,13 @@ class Categoria2 extends StatelessWidget {
     final preferences = Preferences();
     final categoriasBloc = ProviderBloc.cat(context);
 
-    if (preferences.tipoCategoria == '1') {
-      categoriasBloc.obtenerCategoriasRestaurant('1');
-      categoriasBloc.obtenerCategoriasCafe('3');
-      categoriasBloc.obtenerCategoriasVar('4');
-    } else {
-      categoriasBloc.obtenerCategoriasRestaurant('5');
-      categoriasBloc.obtenerCategoriasCafe('6');
-      categoriasBloc.obtenerCategoriasVar('7');
-    }
+    categoriasBloc.obtenerCategoriasRestaurant('1');
+    categoriasBloc.obtenerCategoriasCafe('3');
+    categoriasBloc.obtenerCategoriasVar('4');
+
+    categoriasBloc.obtenerCategoriasRestaurantDelivery('5');
+    categoriasBloc.obtenerCategoriasCafeDelivery('6');
+    categoriasBloc.obtenerCategoriasVarDelivery('7');
 
     final responsive = Responsive.of(context);
     return Scaffold(
@@ -107,7 +105,7 @@ class Categoria2 extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: DefaultTabController(
-        length: 3,
+        length: 6,
         child: Column(
           children: [
             SizedBox(
@@ -115,12 +113,12 @@ class Categoria2 extends StatelessWidget {
             ),
             (preferences.tipoCategoriaNumero == '3')
                 ? ButtonsTabBar(
+                    height: responsive.hp(8),
                     backgroundColor: Colors.transparent,
                     duration: 0,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: responsive.wp(5),
                     ),
-                    physics: NeverScrollableScrollPhysics(),
                     unselectedBackgroundColor: Colors.transparent,
                     unselectedLabelStyle: TextStyle(
                       color: Colors.black,
@@ -139,10 +137,19 @@ class Categoria2 extends StatelessWidget {
                         text: "Cafe 24/7",
                       ),
                       Tab(
+                        text: "Cafe 24/7 \n Delivery",
+                      ),
+                      Tab(
                         text: "Restaurant",
                       ),
                       Tab(
+                        text: "Restaurant \n Delivery",
+                      ),
+                      Tab(
                         text: "Var 24/7",
+                      ),
+                      Tab(
+                        text: "Var 24/7 \n Delivery",
                       ),
                     ],
                   )
@@ -153,7 +160,6 @@ class Categoria2 extends StatelessWidget {
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: responsive.wp(5),
                         ),
-                        physics: NeverScrollableScrollPhysics(),
                         unselectedBackgroundColor: Colors.transparent,
                         unselectedLabelStyle: TextStyle(
                           color: Colors.black,
@@ -172,10 +178,19 @@ class Categoria2 extends StatelessWidget {
                             text: "Var 24/7",
                           ),
                           Tab(
+                            text: "Var 24/7 \n Delivery",
+                          ),
+                          Tab(
                             text: "Restaurant",
                           ),
                           Tab(
+                            text: "Restaurant \n Delivery",
+                          ),
+                          Tab(
                             text: "Cafe 24/7",
+                          ),
+                          Tab(
+                            text: "Cafe 24/7 \n Delivery",
                           ),
                         ],
                       )
@@ -185,7 +200,6 @@ class Categoria2 extends StatelessWidget {
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: responsive.wp(5),
                         ),
-                        physics: NeverScrollableScrollPhysics(),
                         unselectedBackgroundColor: Colors.transparent,
                         unselectedLabelStyle: TextStyle(
                           color: Colors.black,
@@ -204,10 +218,19 @@ class Categoria2 extends StatelessWidget {
                             text: "Restaurant",
                           ),
                           Tab(
+                            text: "Restaurant \n Delivery",
+                          ),
+                          Tab(
                             text: "Cafe 24/7",
                           ),
                           Tab(
+                            text: "Cafe 24/7 \n Delivery",
+                          ),
+                          Tab(
                             text: "Var 24/7",
+                          ),
+                          Tab(
+                            text: "Var 24/7 \n Delivery",
                           ),
                         ],
                       ),
@@ -216,19 +239,28 @@ class Categoria2 extends StatelessWidget {
                 children: (preferences.tipoCategoriaNumero == '3')
                     ? <Widget>[
                         CafeWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                        CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                         RestaurantWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                        RestaurantDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                         VarWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                        VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                       ]
                     : (preferences.tipoCategoriaNumero == '4')
                         ? <Widget>[
                             VarWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                            VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                             RestaurantWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                            RestaurantDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                             CafeWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                            CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                           ]
                         : <Widget>[
                             RestaurantWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                            RestaurantDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                             CafeWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                            CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                             VarWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                            VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                           ],
               ),
             )
@@ -571,6 +603,312 @@ class VarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: categoriasBloc.categoriasVarStream,
+      builder: (BuildContext context, AsyncSnapshot<List<CategoriaData>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (context, i) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return Detallecategoria(
+                          idCategoria: '${snapshot.data[i].idCategoria}',
+                          categoriaNombre: '${snapshot.data[i].categoriaNombre}',
+                          categoriaIcono: '${snapshot.data[i].categoriaIcono}',
+                        );
+                      },
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        var begin = Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+
+                        var tween = Tween(begin: begin, end: end).chain(
+                          CurveTween(curve: curve),
+                        );
+
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                    ));
+                  },
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: responsive.wp(5),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: responsive.ip(4),
+                              width: responsive.ip(4),
+                              child: SvgPicture.network(
+                                '${snapshot.data[i].categoriaIcono}',
+                                semanticsLabel: 'A shark?!',
+                                placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                '${snapshot.data[i].categoriaNombre}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: responsive.ip(1.5),
+                                ),
+                              ),
+                            ),
+                            Icon(Ionicons.ios_arrow_forward, color: Colors.black, size: responsive.hp(3)),
+                          ],
+                        ),
+                      ),
+                      Divider()
+                    ],
+                  ),
+                );
+              },
+            );
+          } else {
+            return Container(
+              child: Center(child: Text('No aye')),
+            );
+          }
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
+
+class RestaurantDeliveryWidget extends StatelessWidget {
+  const RestaurantDeliveryWidget({
+    Key key,
+    @required this.categoriasBloc,
+    @required this.responsive,
+  }) : super(key: key);
+
+  final CategoriasBloc categoriasBloc;
+  final Responsive responsive;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: categoriasBloc.categoriasRestaurantDeliveryStream,
+      builder: (BuildContext context, AsyncSnapshot<List<CategoriaData>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (context, i) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return Detallecategoria(
+                          idCategoria: '${snapshot.data[i].idCategoria}',
+                          categoriaNombre: '${snapshot.data[i].categoriaNombre}',
+                          categoriaIcono: '${snapshot.data[i].categoriaIcono}',
+                        );
+                      },
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        var begin = Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+
+                        var tween = Tween(begin: begin, end: end).chain(
+                          CurveTween(curve: curve),
+                        );
+
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                    ));
+                  },
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: responsive.wp(5),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: responsive.ip(4),
+                              width: responsive.ip(4),
+                              child: SvgPicture.network(
+                                '${snapshot.data[i].categoriaIcono}',
+                                semanticsLabel: 'A shark?!',
+                                placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                '${snapshot.data[i].categoriaNombre}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: responsive.ip(1.5),
+                                ),
+                              ),
+                            ),
+                            Icon(Ionicons.ios_arrow_forward, color: Colors.black, size: responsive.hp(3)),
+                          ],
+                        ),
+                      ),
+                      Divider()
+                    ],
+                  ),
+                );
+              },
+            );
+          } else {
+            return Container(
+              child: Center(child: Text('No aye')),
+            );
+          }
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
+
+class CafeDeliveryWidget extends StatelessWidget {
+  const CafeDeliveryWidget({
+    Key key,
+    @required this.categoriasBloc,
+    @required this.responsive,
+  }) : super(key: key);
+
+  final CategoriasBloc categoriasBloc;
+  final Responsive responsive;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: categoriasBloc.categoriasCafeDeliveryStream,
+      builder: (BuildContext context, AsyncSnapshot<List<CategoriaData>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (context, i) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return Detallecategoria(
+                          idCategoria: '${snapshot.data[i].idCategoria}',
+                          categoriaNombre: '${snapshot.data[i].categoriaNombre}',
+                          categoriaIcono: '${snapshot.data[i].categoriaIcono}',
+                        );
+                      },
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        var begin = Offset(0.0, 1.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+
+                        var tween = Tween(begin: begin, end: end).chain(
+                          CurveTween(curve: curve),
+                        );
+
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                    ));
+                  },
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: responsive.wp(5),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: responsive.ip(4),
+                              width: responsive.ip(4),
+                              child: SvgPicture.network(
+                                '${snapshot.data[i].categoriaIcono}',
+                                semanticsLabel: 'A shark?!',
+                                placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                '${snapshot.data[i].categoriaNombre}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: responsive.ip(1.5),
+                                ),
+                              ),
+                            ),
+                            Icon(Ionicons.ios_arrow_forward, color: Colors.black, size: responsive.hp(3)),
+                          ],
+                        ),
+                      ),
+                      Divider()
+                    ],
+                  ),
+                );
+              },
+            );
+          } else {
+            return Container(
+              child: Center(child: Text('No aye')),
+            );
+          }
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
+
+class VarDeliveryWidget extends StatelessWidget {
+  const VarDeliveryWidget({
+    Key key,
+    @required this.categoriasBloc,
+    @required this.responsive,
+  }) : super(key: key);
+
+  final CategoriasBloc categoriasBloc;
+  final Responsive responsive;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: categoriasBloc.categoriasVarDeliveryStream,
       builder: (BuildContext context, AsyncSnapshot<List<CategoriaData>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {

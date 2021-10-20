@@ -1103,7 +1103,11 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                         ),
                       ),
                       Center(
-                        child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
+                        child: (downloadProgress.progress != null)
+                            ? Text(
+                                '${(downloadProgress.progress * 100).toInt().toString()}%',
+                              )
+                            : Container(),
                       )
                     ],
                   ),
@@ -1128,45 +1132,47 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
 
   void dialogoObservacionProducto(String id) {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (contextd) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            title: Text('Ingrese la observación del producto'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  maxLines: 3,
-                  controller: observacionProductoController,
-                ),
-                //Text('Producto agregado al carrito correctamente'),
-                SizedBox(
-                  height: 20.0,
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              MaterialButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancelar')),
-              MaterialButton(
-                onPressed: () async {
-                  actualizarObservacion(context, observacionProductoController.text, id);
-
-                  observacionProductoController.text = '';
-
-                  Navigator.pop(context);
-                },
-                child: Text('Aceptar'),
+      context: context,
+      barrierDismissible: true,
+      builder: (contextd) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          title: Text('Ingrese la observación del producto'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                maxLines: 3,
+                controller: observacionProductoController,
+              ),
+              //Text('Producto agregado al carrito correctamente'),
+              SizedBox(
+                height: 20.0,
               ),
             ],
-          );
-        });
+          ),
+          actions: <Widget>[
+            MaterialButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar'),
+            ),
+            MaterialButton(
+              onPressed: () async {
+                actualizarObservacion(context, observacionProductoController.text, id);
+
+                observacionProductoController.text = '';
+
+                Navigator.pop(context);
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

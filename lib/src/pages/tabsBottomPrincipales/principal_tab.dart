@@ -13,6 +13,7 @@ import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/publicidad_model.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
+import 'package:enchiladasapp/src/pages/detalle_productos.dart';
 import 'package:enchiladasapp/src/pages/search.dart';
 import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/categoria2.dart';
 import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/detalle_categoria.dart';
@@ -39,7 +40,7 @@ class PrincipalTab extends StatelessWidget {
 
     final categoriasApi = CategoriasApi();
     await categoriasApi.obtenerAmbos(context);
-    pantallasBloc.obtenerPantallas();
+    pantallasBloc.obtenerPantallas(prefs.tipoCategoriaNumero);
     if (prefs.tipoCategoria == '1') {
       categoriasBloc.obtenerCategoriasPromociones(prefs.tipoCategoriaNumero);
     } else {
@@ -63,7 +64,7 @@ class PrincipalTab extends StatelessWidget {
     final pantallasBloc = ProviderBloc.pantalla(context);
     final categoriasBloc = ProviderBloc.cat(context);
 
-    pantallasBloc.obtenerPantallas();
+    pantallasBloc.obtenerPantallas(prefs.tipoCategoriaNumero);
 
     if (prefs.tipoCategoria == '1') {
       categoriasBloc.obtenerCategoriasPromociones(prefs.tipoCategoriaNumero);
@@ -113,9 +114,9 @@ class PrincipalTab extends StatelessWidget {
   Widget _inicio(Responsive responsive, PantallaBloc pantallasBloc, CategoriasBloc categoriasBloc, RefreshController refreshController) {
     return StreamBuilder(
       stream: pantallasBloc.pantallasStream,
-      builder: (BuildContext context, AsyncSnapshot<List<PantallaModel>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
+      builder: (BuildContext context, AsyncSnapshot<List<PantallaModel>> pantallas) {
+        if (pantallas.hasData) {
+          if (pantallas.data.length > 0) {
             return SmartRefresher(
               enablePullDown: true,
               footer: null,
@@ -132,7 +133,10 @@ class PrincipalTab extends StatelessWidget {
                 slivers: [
                   CustomHeaderPrincipal1(),
                   SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    padding: EdgeInsets.only(
+                      left: 0,
+                      right: 0,
+                    ),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
@@ -166,32 +170,38 @@ class PrincipalTab extends StatelessWidget {
                                                       borderRadius: BorderRadius.circular(10.0),
                                                     ),
                                                     height: responsive.hp(20),
-                                                    child: ClipRRect(
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                      child: CachedNetworkImage(
-                                                        placeholder: (context, url) => Container(
-                                                            width: double.infinity,
-                                                            height: double.infinity,
-                                                            child: Center(
-                                                              child: CupertinoActivityIndicator(),
-                                                            )),
-                                                        errorWidget: (context, url, error) => Container(
-                                                          width: double.infinity,
-                                                          height: double.infinity,
-                                                          child: Center(
-                                                            child: Icon(Icons.error),
-                                                          ),
-                                                        ),
-                                                        imageUrl: '${cat.data[x].categoriaBanner}',
-                                                        imageBuilder: (context, imageProvider) => Container(
-                                                          decoration: BoxDecoration(
-                                                            image: DecorationImage(
-                                                              image: imageProvider,
-                                                              fit: BoxFit.cover,
+                                                    child: Stack(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius: BorderRadius.circular(10.0),
+                                                          child: CachedNetworkImage(
+                                                            placeholder: (context, url) => Container(
+                                                                width: double.infinity,
+                                                                height: double.infinity,
+                                                                child: Center(
+                                                                  child: CupertinoActivityIndicator(),
+                                                                )),
+                                                            errorWidget: (context, url, error) => Container(
+                                                              width: double.infinity,
+                                                              height: double.infinity,
+                                                              child: Center(
+                                                                child: Icon(Icons.error),
+                                                              ),
+                                                            ),
+                                                            imageUrl: '${cat.data[x].categoriaBanner}',
+                                                            imageBuilder: (context, imageProvider) => Container(
+                                                              decoration: BoxDecoration(
+                                                                image: DecorationImage(
+                                                                  image: imageProvider,
+                                                                  fit: BoxFit.cover,
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
+
+                                                      
+                                                      ],
                                                     ),
                                                   ),
                                                 );
@@ -254,13 +264,13 @@ class PrincipalTab extends StatelessWidget {
                                 ),
                                 StreamBuilder(
                                     stream: categoriasBloc.categoriasPantallaInicialStream,
-                                    builder: (context, AsyncSnapshot<List<CategoriaData>> snapshot) {
-                                      if (snapshot.hasData) {
-                                        if (snapshot.data.length > 0) {
+                                    builder: (context, AsyncSnapshot<List<CategoriaData>> categorias) {
+                                      if (categorias.hasData) {
+                                        if (categorias.data.length > 0) {
                                           return Container(
                                             height: responsive.hp(11),
                                             child: ListView.builder(
-                                              itemCount: snapshot.data.length + 1,
+                                              itemCount: categorias.data.length + 1,
                                               scrollDirection: Axis.horizontal,
                                               itemBuilder: (context, index) {
                                                 if (index == 0) {
@@ -327,9 +337,9 @@ class PrincipalTab extends StatelessWidget {
                                                       PageRouteBuilder(
                                                         pageBuilder: (context, animation, secondaryAnimation) {
                                                           return Detallecategoria(
-                                                            idCategoria: '${snapshot.data[index].idCategoria}',
-                                                            categoriaNombre: '${snapshot.data[index].categoriaNombre}',
-                                                            categoriaIcono: '${snapshot.data[index].categoriaIcono}',
+                                                            idCategoria: '${categorias.data[index].idCategoria}',
+                                                            categoriaNombre: '${categorias.data[index].categoriaNombre}',
+                                                            categoriaIcono: '${categorias.data[index].categoriaIcono}',
                                                           );
                                                         },
                                                         transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -358,7 +368,7 @@ class PrincipalTab extends StatelessWidget {
                                                           height: responsive.ip(5),
                                                           width: responsive.ip(5),
                                                           child: SvgPicture.network(
-                                                            '${snapshot.data[index].categoriaIcono}',
+                                                            '${categorias.data[index].categoriaIcono}',
                                                             semanticsLabel: 'A shark?!',
                                                             //color:Colors.black,
                                                             placeholderBuilder: (BuildContext context) =>
@@ -374,13 +384,13 @@ class PrincipalTab extends StatelessWidget {
                                                             horizontal: responsive.wp(1),
                                                           ),
                                                           child: Text(
-                                                            '${snapshot.data[index].categoriaNombre}',
+                                                            '${categorias.data[index].categoriaNombre}',
                                                             maxLines: 2,
                                                             textAlign: TextAlign.center,
                                                             style: TextStyle(
                                                               fontSize: responsive.ip(1.2),
                                                               fontWeight: FontWeight.w600,
-                                                              color: ('${snapshot.data[index].categoriaMostrarApp}' =='1')?Colors.grey[800]:Colors.red,
+                                                              color: ('${categorias.data[index].categoriaMostrarApp}' == '1') ? Colors.grey[800] : Colors.red,
                                                             ),
                                                           ),
                                                         )
@@ -402,14 +412,10 @@ class PrincipalTab extends StatelessWidget {
                             );
                           }
 
-                          if (index == snapshot.data.length) {
-                            return SizedBox(
-                              height: responsive.hp(1),
-                            );
-                          }
-                          return _cart(context, responsive, snapshot.data[index]);
+                          index = index - 1;
+                          return _cart(context, responsive, pantallas.data[index]);
                         },
-                        childCount: snapshot.data.length + 1,
+                        childCount: pantallas.data.length + 1,
                       ),
                     ),
                   )
@@ -435,54 +441,10 @@ class PrincipalTab extends StatelessWidget {
   }
 
   Widget _cart(BuildContext context, Responsive responsive, PantallaModel pantallaModel) {
-    double altoCard = 30.0;
-    double anchoCard = 35.0;
-    BoxFit boxfit;
-    String tipo;
-    if (pantallaModel.idPantalla == '2') {
-      //market
-
-      altoCard = 23.0;
-      anchoCard = 25;
-
-      boxfit = BoxFit.cover;
-
-      tipo = 'categoria';
-    } else if (pantallaModel.idPantalla == '1') {
-      //carta Principal
-
-      altoCard = 15.0;
-      anchoCard = 18;
-
-      tipo = 'categoria';
-
-      boxfit = BoxFit.fill;
-    } else if (pantallaModel.idPantalla == '4') {
-      //carta Principal
-
-      altoCard = 15.0;
-      anchoCard = 18;
-
-      tipo = 'categoria';
-
-      boxfit = BoxFit.fill;
-    } else if (pantallaModel.idPantalla == '5') {
-      //carta Principal
-
-      altoCard = 15.0;
-      anchoCard = 18;
-
-      tipo = 'categoria';
-
-      boxfit = BoxFit.fill;
-    } else {
-      boxfit = BoxFit.fill;
-      tipo = 'producto';
-    }
-
     return ListView.builder(
       padding: EdgeInsets.only(
         top: responsive.hp(1),
+        bottom: responsive.hp(2),
       ),
       physics: ClampingScrollPhysics(),
       shrinkWrap: true,
@@ -493,81 +455,133 @@ class PrincipalTab extends StatelessWidget {
             padding: EdgeInsets.all(8.0),
             child: Text(
               '${pantallaModel.pantallaNombre}',
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Aeonik',
-                fontSize: 19,
-              ),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: responsive.ip(2)),
             ),
           );
         }
         return GridView.builder(
           padding: EdgeInsets.zero,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: .9,
+            childAspectRatio: 1.1,
             crossAxisCount: 2,
-            mainAxisSpacing: responsive.hp(1),
+            mainAxisSpacing: responsive.hp(.2),
           ),
           itemCount: (pantallaModel.items.length > 3) ? 4 : pantallaModel.items.length,
           physics: ClampingScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, i) {
-            return GestureDetector(
-              onTap: () {
-                if (pantallaModel.idPantalla == '1') {
-                  final bottomBloc = ProviderBloc.bottom(context);
-                  bottomBloc.changePage(2);
-                } else if (pantallaModel.idPantalla == '5') {
-                  /* Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 400),
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return CategoriasPorTipo(
-                          nombreTipo: 'Var 247',
-                          tipo: '4',
-                        );
-                        //return DetalleProductitos(productosData: productosData);
-                      },
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
+            if (i == 3) {
+              return LayoutBuilder(builder: (context, constraints) {
+                return GestureDetector(
+                  onTap: () {
+                     Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 100),
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return Detallecategoria(
+                            categoriaNombre:pantallaModel.items[i].categoriaNombre ,
+                            categoriaIcono:pantallaModel.items[i].categoriaIcono ,
+                            idCategoria:pantallaModel.items[i].idCategoria ,
+                          );
+                          //return DetalleProductitos(productosData: productosData);
+                        },
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
                     ),
-                  ); */
-                } else if (pantallaModel.idPantalla == '4') {
-                  /* Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 400),
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return CategoriasPorTipo(
-                          nombreTipo: 'Café 247',
-                          tipo: '3',
-                        );
-                        //return DetalleProductitos(productosData: productosData);
-                      },
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
+                    margin: EdgeInsets.only(
+                      right: responsive.wp(1.5),
+                      left: responsive.wp(1.5),
                     ),
-                  );
-                */
-                } else {
-                  Arguments arg = new Arguments("${pantallaModel.pantallaNombre}", '${pantallaModel.pantallCategoria}');
-
-                  Navigator.push(
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          height: constraints.maxHeight * .7,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              progressIndicatorBuilder: (_, url, downloadProgress) {
+                                return Container(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  child: Stack(
+                                    children: [
+                                      Center(
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          backgroundColor: Colors.green,
+                                          valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              errorWidget: (context, url, error) => Image(image: AssetImage('assets/carga_fallida.jpg'), fit: BoxFit.cover),
+                              imageUrl: '${pantallaModel.items[i].fotoItem}',
+                              imageBuilder: (context, imageProvider) => Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black.withOpacity(.4),
+                          ),
+                          height: constraints.maxHeight * .7,
+                        ),
+                        Center(
+                          child: Text(
+                            'Ver Más',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(2),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              });
+            }
+            return LayoutBuilder(builder: (context, constraints) {
+              return GestureDetector(
+                onTap: () {  Navigator.push(
                     context,
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 100),
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return CategoriasEspecialesPage(
-                          arg: arg,
+                        return SliderDetalleProductos(
+                         cantidadItems: pantallaModel.items[i].cantidadItems,
+                         idCategoria: pantallaModel.items[i].idCategoria,
+                         numeroItem: pantallaModel.items[i].numeroItem,
                         );
                         //return DetalleProductitos(productosData: productosData);
                       },
@@ -579,15 +593,13 @@ class PrincipalTab extends StatelessWidget {
                       },
                     ),
                   );
-                }
-              },
-              child: Container(
+                },
+                child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                   ),
-                  width: responsive.ip(anchoCard),
-                  //height: (tipo=='puzzle')?responsive.hp(20):responsive.ip(altoCard),
+                  width: double.infinity,
                   margin: EdgeInsets.only(
                     right: responsive.wp(1.5),
                     left: responsive.wp(1.5),
@@ -599,11 +611,7 @@ class PrincipalTab extends StatelessWidget {
                         children: <Widget>[
                           Container(
                             width: double.infinity,
-                            height: (tipo == 'puzzle')
-                                ? responsive.hp(25)
-                                : (tipo == 'producto')
-                                    ? responsive.ip(altoCard) - responsive.ip(15)
-                                    : responsive.ip(altoCard) - responsive.ip(0),
+                            height: constraints.maxHeight * .7,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
@@ -633,67 +641,64 @@ class PrincipalTab extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: imageProvider,
-                                      fit: boxfit,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          (tipo == 'producto')
-                              ? ('${pantallaModel.items[i].productoNuevo}' != '1')
-                                  ? Positioned(
-                                      top: 5,
-                                      left: 0,
-                                      right: 0,
-                                      /*  left: responsive.wp(1),
-                                    top: responsive.hp(.5), */
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: responsive.wp(3),
-                                              vertical: responsive.hp(.5),
+                          ('${pantallaModel.items[i].productoNuevo}' == '1')
+                              ? Positioned(
+                                  top: 5,
+                                  left: 0,
+                                  right: 0,
+                                  /*  left: responsive.wp(1),
+                                        top: responsive.hp(.5), */
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: responsive.wp(3),
+                                          vertical: responsive.hp(.5),
+                                        ),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              bottomRight: Radius.circular(10),
                                             ),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                  bottomRight: Radius.circular(10),
-                                                ),
-                                                color: Colors.red),
-                                            child: Text(
-                                              'Nuevo',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: responsive.ip(1.5),
-                                              ),
-                                            ),
+                                            color: Colors.red),
+                                        child: Text(
+                                          'Nuevo',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: responsive.ip(1.5),
                                           ),
-                                          Spacer(),
-                                          Container(
-                                            padding: EdgeInsets.all(5),
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.white),
-                                            child: Center(
-                                              child: Icon(
-                                                Ionicons.md_heart,
-                                                color: Colors.red,
-                                                size: 15,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: responsive.wp(2),
-                                          )
-                                        ],
+                                        ),
                                       ),
-                                    )
-                                  : Container()
-                              : Container(),
+                                      Spacer(),
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.white),
+                                        child: Center(
+                                          child: Icon(
+                                            Ionicons.md_heart,
+                                            color: Colors.red,
+                                            size: 15,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: responsive.wp(2),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
-                      (tipo == 'puzzle')
-                          ? Container()
-                          : Container(
+                      (pantallaModel.items[i].productoDestacado != '0')
+                          ? Container(
                               padding: EdgeInsets.only(
                                 right: responsive.wp(1.5),
                                 left: responsive.wp(1.5),
@@ -702,14 +707,7 @@ class PrincipalTab extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'S/ 23',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontFamily: 'Aeonik',
-                                      fontSize: 17,
-                                    ),
-                                  ),
+                                  Spacer(),
                                   Container(
                                     padding: EdgeInsets.symmetric(
                                       horizontal: responsive.wp(2),
@@ -718,8 +716,8 @@ class PrincipalTab extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
                                         /* borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(10),
-                                        ), */
+                                              bottomRight: Radius.circular(10),
+                                            ), */
                                         color: Colors.orange),
                                     child: Text(
                                       'Destacado',
@@ -729,31 +727,31 @@ class PrincipalTab extends StatelessWidget {
                                         fontSize: responsive.ip(1.3),
                                       ),
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
-                            ),
-                      (tipo == 'puzzle')
-                          ? Container()
-                          : Padding(
-                              padding: EdgeInsets.only(
-                                right: responsive.wp(1.5),
-                                left: responsive.wp(1.5),
-                              ),
-                              child: Text(
-                                '${pantallaModel.items[i].nombreItem}',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Aeonik',
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
+                            )
+                          : Container(),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: responsive.wp(1.5),
+                          left: responsive.wp(1.5),
+                        ),
+                        child: Text(
+                          '${pantallaModel.items[i].nombreItem}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: responsive.ip(1.7),
+                          ),
+                        ),
+                      ),
                     ],
-                  )),
-            );
+                  ),
+                ),
+              );
+            });
           },
         );
       },

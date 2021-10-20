@@ -11,18 +11,13 @@ class CategoriasBloc {
   final _categoriasPromocionesController = new BehaviorSubject<List<CategoriaData>>();
   final _cargandoCategoriasController = BehaviorSubject<bool>();
 
-  // estos controladores se usaran en la vista de categorias
-  //En delivery
-  //Restaurant  = 5
-  //Cafe  = 6
-  //var  = 7
-  //En el Local
-  //Restaurant  = 1
-  //Cafe  = 3
-  //var  = 4
   final _categoriasRestaurantController = new BehaviorSubject<List<CategoriaData>>();
   final _categoriasCafeController = new BehaviorSubject<List<CategoriaData>>();
   final _categoriasVarController = new BehaviorSubject<List<CategoriaData>>();
+
+  final _categoriasRestaurantDeliveryController = new BehaviorSubject<List<CategoriaData>>();
+  final _categoriasCafeDeliveryController = new BehaviorSubject<List<CategoriaData>>();
+  final _categoriasVarDeliveryController = new BehaviorSubject<List<CategoriaData>>();
 
   Stream<List<CategoriaData>> get categoriasPantallaInicialStream => _categoriasPantallaInicialController.stream;
   Stream<List<CategoriaData>> get categoriasPromociionesStream => _categoriasPromocionesController.stream;
@@ -31,12 +26,18 @@ class CategoriasBloc {
   Stream<List<CategoriaData>> get categoriasRestaurantStream => _categoriasRestaurantController.stream;
   Stream<List<CategoriaData>> get categoriasCafeStream => _categoriasCafeController.stream;
   Stream<List<CategoriaData>> get categoriasVarStream => _categoriasVarController.stream;
+  Stream<List<CategoriaData>> get categoriasRestaurantDeliveryStream => _categoriasRestaurantDeliveryController.stream;
+  Stream<List<CategoriaData>> get categoriasCafeDeliveryStream => _categoriasCafeDeliveryController.stream;
+  Stream<List<CategoriaData>> get categoriasVarDeliveryStream => _categoriasVarDeliveryController.stream;
 
   dispose() {
     _categoriasPantallaInicialController?.close();
     _categoriasRestaurantController?.close();
     _categoriasCafeController?.close();
     _categoriasVarController?.close();
+    _categoriasRestaurantDeliveryController?.close();
+    _categoriasCafeDeliveryController?.close();
+    _categoriasVarDeliveryController?.close();
     _cargandoCategoriasController?.close();
     _categoriasPromocionesController?.close();
   }
@@ -93,6 +94,31 @@ class CategoriasBloc {
     print('$tipo');
     _cargandoCategoriasController.sink.add(true);
     _categoriasVarController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
+
+    _cargandoCategoriasController.sink.add(false);
+  }
+
+
+  void obtenerCategoriasRestaurantDelivery(String tipo) async {
+    print('$tipo');
+    _cargandoCategoriasController.sink.add(true);
+    _categoriasRestaurantDeliveryController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
+
+    _cargandoCategoriasController.sink.add(false);
+  }
+
+  void obtenerCategoriasCafeDelivery(String tipo) async {
+    print('$tipo');
+    _cargandoCategoriasController.sink.add(true);
+    _categoriasCafeDeliveryController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
+
+    _cargandoCategoriasController.sink.add(false);
+  }
+
+  void obtenerCategoriasVarDelivery(String tipo) async {
+    print('$tipo');
+    _cargandoCategoriasController.sink.add(true);
+    _categoriasVarDeliveryController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
 
     _cargandoCategoriasController.sink.add(false);
   }
