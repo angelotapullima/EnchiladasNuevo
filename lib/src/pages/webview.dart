@@ -76,11 +76,11 @@ class _WebViewExampleState extends State<WebViewExample> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      FlatButton(
+                      MaterialButton(
                         child: Text('Si'),
                         onPressed: () => Navigator.pop(c, true),
                       ),
-                      FlatButton(
+                      MaterialButton(
                         child: Text('No'),
                         onPressed: () => Navigator.pop(c, false),
                       ),

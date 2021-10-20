@@ -109,8 +109,8 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                 bool validacionEspeciales3 = false;
                 bool validacionEspeciales4 = false;
                 bool validacionAcompa = false;
-                final optionsProductosFijos = List<String>();
-                final optionsProductosVariables = List<String>();
+                final List<String> optionsProductosFijos = [];
+                final  List<String> optionsProductosVariables =[];
 
                 if (snapshot.data[0].fijas[0].productosFijos.length > 0) {
                   for (var x = 0; x < snapshot.data[0].fijas[0].productosFijos.length; x++) {
@@ -991,7 +991,7 @@ class _DetalleObservacionesState extends State<DetalleObservaciones> {
                           ),
                           width: double.infinity,
                           height: responsive.hp(5),
-                          child: RaisedButton(
+                          child: MaterialButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                               side: BorderSide(color: Colors.red),

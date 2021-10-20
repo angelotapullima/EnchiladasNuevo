@@ -112,7 +112,7 @@ class _RatingRepartidorState extends State<RatingRepartidor> {
                     ),
                     SizedBox(
                       width: responsive.wp(90),
-                      child: RaisedButton(
+                      child: MaterialButton(
                         onPressed: () async {
                           if (ratingValue > 0) {
                             if (_comentarioController.text.isEmpty) {

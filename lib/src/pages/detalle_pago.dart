@@ -142,7 +142,7 @@ class _DetallePagoState extends State<DetallePago> {
     return StreamBuilder(
       stream: direccionBloc.direccionZonaStream,
       builder: (BuildContext context, AsyncSnapshot<List<Direccion>> snapshot) {
-        List<Direccion> list = List<Direccion>();
+        List<Direccion> list = [];
 
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
@@ -469,7 +469,7 @@ class _DetallePagoState extends State<DetallePago> {
               fontSize: responsive.ip(2),
             ),
           ),
-          FlatButton(
+          MaterialButton(
             child: Text(
               '$agregar',
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: responsive.ip(1.8)),
@@ -523,7 +523,7 @@ class _DetallePagoState extends State<DetallePago> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text('Dirección de envío', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(2))),
-          FlatButton(
+          MaterialButton(
             child: Text('$agg', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: responsive.ip(1.8))),
             onPressed: () {
               setState(() {});
@@ -794,7 +794,7 @@ class _DetallePagoState extends State<DetallePago> {
               SizedBox(
                 width: double.infinity,
                 height: responsive.hp(4),
-                child: RaisedButton(
+                child: MaterialButton(
                     color: Colors.red,
                     textColor: Colors.white,
                     child: Text(
@@ -847,7 +847,7 @@ class _DetallePagoState extends State<DetallePago> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                FlatButton(
+                MaterialButton(
                   onPressed: () {
                     Navigator.pushNamed(context, 'ordenes');
                   },
@@ -1050,7 +1050,7 @@ class _DetallePagoState extends State<DetallePago> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          FlatButton(
+                          MaterialButton(
                             onPressed: () async {
                               if (double.parse(montoPagoController.text) > double.parse('$precio')) {
                                 Navigator.pop(context);
@@ -1074,7 +1074,7 @@ class _DetallePagoState extends State<DetallePago> {
                               ),
                             ),
                           ),
-                          FlatButton(
+                          MaterialButton(
                             onPressed: () async {
                               print('unfocus');
                               _tipoPagoValue = 0;
@@ -1280,7 +1280,7 @@ class _DetallePagoState extends State<DetallePago> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FlatButton(
+                      MaterialButton(
                         onPressed: () async {
                           if (comprobanteController.text.length > 0) {
                             if (comprobanteController.text.length == 11) {
@@ -1311,7 +1311,7 @@ class _DetallePagoState extends State<DetallePago> {
                           ),
                         ),
                       ),
-                      FlatButton(
+                      MaterialButton(
                         onPressed: () async {
                           setState(() {
                             _comprobanteValue = 0;
@@ -1491,7 +1491,7 @@ class _DetallePagoState extends State<DetallePago> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             title: Text('Su pedido fue ingresado Correctamente'),
             actions: <Widget>[
-              FlatButton(
+              MaterialButton(
                   onPressed: () async {
                     Navigator.pop(context);
                     Navigator.of(context).pop();
@@ -1517,7 +1517,7 @@ class _DetallePagoState extends State<DetallePago> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text('Zona de entrega', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(2))),
-            FlatButton(
+            MaterialButton(
               child: Text(
                 'Agregar',
                 style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
@@ -1552,7 +1552,7 @@ class _DetallePagoState extends State<DetallePago> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text('Zona de entrega', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: responsive.ip(2))),
-            FlatButton(
+            MaterialButton(
               child: Text(
                 '$agregar',
                 style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),

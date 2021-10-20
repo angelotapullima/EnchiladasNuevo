@@ -190,7 +190,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
       children: [
         SlidingUpPanel(
           maxHeight: _panelHeightOpen,
-          minHeight: responsive.hp(7),
+          minHeight: responsive.hp(8),
           controller: panelController,
           parallaxEnabled: true,
           parallaxOffset: 0.1,
@@ -332,7 +332,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                             'Agregar al Carrito',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: responsive.ip(2.5),
+                              fontSize: responsive.ip(2),
                             ),
                           ),
                         ),
@@ -461,10 +461,10 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                   ),
                   Row(
                     children: <Widget>[
-                      Flexible(
+                      Expanded(
                         child: Text(
                           productosData.productoNombre,
-                          style: TextStyle(fontSize: responsive.ip(3), fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: responsive.ip(2), fontWeight: FontWeight.w600),
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -473,7 +473,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                       ),
                       Text(
                         'S/ $precioProdcuto',
-                        style: TextStyle(color: Colors.red, fontSize: responsive.ip(4), fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.red, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
@@ -512,7 +512,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                     '${productosData.productoDescripcion}',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
-                      fontSize: responsive.ip(2),
+                      fontSize: responsive.ip(1.8),
                     ),
                   ),
                   SizedBox(
@@ -1048,7 +1048,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
               SizedBox(
                 width: double.infinity,
                 height: responsive.hp(5),
-                child: RaisedButton(
+                child: MaterialButton(
                     color: Colors.red,
                     textColor: Colors.white,
                     child: Text(
@@ -1067,7 +1067,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
               SizedBox(
                 width: double.infinity,
                 height: responsive.hp(5),
-                child: RaisedButton(
+                child: MaterialButton(
                     color: (preferences.rol == '5') ? Colors.white : Colors.grey,
                     textColor: Colors.red,
                     child: Text(
@@ -1121,13 +1121,13 @@ class _DetalleProducto extends State<DetalleProductitoss> {
             ),
             title: Text('Debe registrarse para Ordenar'),
             actions: <Widget>[
-              FlatButton(
+              MaterialButton(
                 onPressed: () async {
                   Navigator.pop(context);
                 },
                 child: Text('Cancelar'),
               ),
-              FlatButton(
+              MaterialButton(
                 onPressed: () async {
                   Navigator.pop(context);
                   Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
@@ -1234,12 +1234,12 @@ class _DetalleProducto extends State<DetalleProductitoss> {
               ],
             ),
             actions: <Widget>[
-              FlatButton(
+              MaterialButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: Text('Cancelar')),
-              FlatButton(
+              MaterialButton(
                 onPressed: () async {
                   utils.actualizarObservacion(context, observacionProductoController.text, id);
 

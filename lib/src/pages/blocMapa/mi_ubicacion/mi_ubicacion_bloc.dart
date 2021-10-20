@@ -17,19 +17,17 @@ class MiUbicacionBloc extends Bloc<MiUbicacionEvent, MiUbicacionState> {
   bool llamarApi = true;
   String distancia;
 
-
   //final _geolocator = new Geolocator();
   StreamSubscription<List<TrackingData>> _positionSubscription;
 
   void iniciarSeguimiento(String idPedido) {
-    final listaTrack = List<TrackingData>();
+    final List<TrackingData> listaTrack = [];
 
-    _positionSubscription =
-        Stream.periodic(Duration(seconds: 2), (_) {}).asyncMap((event2) async {
+    _positionSubscription = Stream.periodic(Duration(seconds: 2), (_) {}).asyncMap((event2) async {
       //print(event2);
 
       if (llamarApi) {
-        var list = List<TrackingData>();
+        List<TrackingData> list = [];
         final trackingApi = TrackingApi();
         list = await trackingApi.trackingRepartidor(idPedido);
 
@@ -41,9 +39,6 @@ class MiUbicacionBloc extends Bloc<MiUbicacionEvent, MiUbicacionState> {
       }
     }).listen((respuestaAPI) {
       if (respuestaAPI != null) {
-        
-        
-
         listaTrack.clear();
 
         var repartidor = LatLng(
@@ -56,14 +51,10 @@ class MiUbicacionBloc extends Bloc<MiUbicacionEvent, MiUbicacionState> {
           double.parse(respuestaAPI[0].pedidoY),
         );
 
-        var distance = GeoUtils.distanceInKmBetweenEarthCoordinates(
-            repartidor.latitude,
-            repartidor.longitude,
-            destino.latitude,
-            destino.longitude);
+        var distance = GeoUtils.distanceInKmBetweenEarthCoordinates(repartidor.latitude, repartidor.longitude, destino.latitude, destino.longitude);
 
-            distancia = distance.toString();
-          distancia = utils.format(distance);
+        distancia = distance.toString();
+        distancia = utils.format(distance);
 
         print('csmare $distance');
 
@@ -83,10 +74,10 @@ class MiUbicacionBloc extends Bloc<MiUbicacionEvent, MiUbicacionState> {
 
         listaTrack.add(trackingData);
 
-        if(respuestaAPI[0].pedidoEstado != '3'){
+        if (respuestaAPI[0].pedidoEstado != '3') {
           add(OnMostrarRepartidor(true));
-        }else{
-           add(OnMostrarRepartidor(false));
+        } else {
+          add(OnMostrarRepartidor(false));
         }
 
         add(OnUbicacionCambio(repartidor, listaTrack));
@@ -112,15 +103,9 @@ class MiUbicacionBloc extends Bloc<MiUbicacionEvent, MiUbicacionState> {
   @override
   Stream<MiUbicacionState> mapEventToState(MiUbicacionEvent event) async* {
     if (event is OnUbicacionCambio) {
-      yield state.copyWith(
-          existeUbicacion: true,
-          ubicacion: event.ubicacion,
-          pedido: event.pedido);
-    }else if( event is OnMostrarRepartidor){
-
-       yield state.copyWith(
-         llegadaRepartidor: event.mostrar
-       );
+      yield state.copyWith(existeUbicacion: true, ubicacion: event.ubicacion, pedido: event.pedido);
+    } else if (event is OnMostrarRepartidor) {
+      yield state.copyWith(llegadaRepartidor: event.mostrar);
     }
   }
 }

@@ -1,5 +1,4 @@
-
-
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -12,9 +11,11 @@ class DesicionPage extends StatefulWidget {
 
 class _DesicionPageState extends State<DesicionPage> {
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
- 
+
+    final preferences = Preferences();
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -36,42 +37,76 @@ class _DesicionPageState extends State<DesicionPage> {
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: responsive.hp(12),
+                    height: responsive.hp(3),
                   ),
                   Text(
                     'Elige una Opción',
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: responsive.ip(3.8),
-                        fontWeight: FontWeight.bold),
+                      color: Colors.white,
+                      fontSize: responsive.ip(3.8),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   SizedBox(
-                    height: responsive.hp(10),
+                    height: responsive.hp(2),
                   ),
                   GestureDetector(
                     child: Container(
                       width: double.infinity,
-                      height: responsive.ip(20),
+                      height: responsive.ip(16),
                       child: SvgPicture.asset('assets/icono_delivery.svg'),
                     ),
                     onTap: () {
+                      preferences.tipoCategoria = '2';
+                      preferences.tipoCategoriaNumero = '5';
                       Navigator.pushNamed(context, '/');
                     },
                   ),
                   SizedBox(
-                    height: responsive.hp(10),
+                    height: responsive.hp(2),
                   ),
                   GestureDetector(
                     child: Container(
                       width: double.infinity,
-                      height: responsive.ip(20),
-                      child: SvgPicture.asset('assets/icono_local.svg'),
+                      height: responsive.ip(16),
+                      child: Image.asset('assets/logo_enchilada.png'),
                     ),
                     onTap: () {
-
-                        Navigator.pushNamed(context, 'pantallaDeliveryOpciones');
+                      preferences.tipoCategoria = '1';
+                      preferences.tipoCategoriaNumero = '1';
+                      Navigator.pushNamed(context, '/');
                     },
                   ),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      width: double.infinity,
+                      height: responsive.ip(16),
+                      child: Image.asset('assets/var.png'),
+                    ),
+                    onTap: () {
+                      preferences.tipoCategoria = '1';
+                      preferences.tipoCategoriaNumero = '4';
+                      Navigator.pushNamed(context, '/');
+                    },
+                  ),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      width: double.infinity,
+                      height: responsive.ip(16),
+                      child: Image.asset('assets/cafe_247.png'),
+                    ),
+                    onTap: () {
+                      preferences.tipoCategoria = '1';
+                      preferences.tipoCategoriaNumero = '3';
+                      Navigator.pushNamed(context, '/');
+                    },
+                  )
                 ],
               ),
             ),

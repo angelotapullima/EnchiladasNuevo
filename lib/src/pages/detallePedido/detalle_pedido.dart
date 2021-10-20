@@ -276,7 +276,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                   children: <Widget>[
                                     (pedido[0].pedidoEstadoPago == '0')
                                         ? (pedido[0].pedidoFormaPago == '3')
-                                            ? FlatButton(
+                                            ? MaterialButton(
                                                 onPressed: () async {
                                                   showProcessingDialog(context);
                                                   final ordenesApi =
@@ -319,7 +319,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                               )
                                             : Container()
                                         : Container(),
-                                    FlatButton(
+                                    MaterialButton(
                                       onPressed: () {
                                         banderaTimer = false;
                                         timer?.cancel();
@@ -346,7 +346,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                     ),
                                     (pedido[0].pedidoEstadoPago == '0')
                                         ? (pedido[0].pedidoFormaPago == '3')
-                                            ? FlatButton(
+                                            ? MaterialButton(
                                                 onPressed: () {
                                                   _modalCambiarMetodoPago(
                                                       context,
@@ -378,7 +378,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                         : Container(),
                                     (pedido[0].pedidoEstadoPago == '0')
                                         ? (pedido[0].pedidoFormaPago == '3')
-                                            ? FlatButton(
+                                            ? MaterialButton(
                                                 onPressed: () async {
                                                   showProcessingDialog(context);
                                                   final ordenesApi =
@@ -433,7 +433,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                         : Container()
                                   ],
                                 )
-                              : FlatButton(
+                              : MaterialButton(
                                   onPressed: () async {
                                     final ordernesApi = OrdenesApi();
 
@@ -741,7 +741,7 @@ class _DetallePedidoState extends State<DetallePedido> {
                                   nuevoMetodoPagoBloc.valorRadio.toString() ==
                                       "0")
                               ? Center(
-                                  child: FlatButton(
+                                  child: MaterialButton(
                                     onPressed: () async {
                                       if (nuevoMetodoPagoBloc.valorRadio
                                               .toString() ==

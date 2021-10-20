@@ -184,7 +184,7 @@ class _DeliveryTimelineNotificationState
   Widget _botonTracking(BuildContext context, String id) {
     //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
-    return FlatButton(
+    return MaterialButton(
       onPressed: () {
         timer?.cancel();
 
@@ -223,7 +223,7 @@ class _DeliveryTimelineNotificationState
   Widget _botonBoleta(BuildContext context, String id) {
     //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
-    return FlatButton(
+    return MaterialButton(
       onPressed: () {
         timer?.cancel();
         ArgumentsWebview argumentsWebview = ArgumentsWebview();

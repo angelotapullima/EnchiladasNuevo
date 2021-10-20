@@ -63,22 +63,11 @@ class ProductoDatabase {
     return list;
   }
 
-  Future<List<ProductosData>> consultarPorQueryLocal(String query) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM Producto WHERE producto_nombre LIKE '%$query%' and producto_estado='1' and producto_carta='1' ");
-
-    List<ProductosData> list = res.isNotEmpty
-        ? res.map((c) => ProductosData.fromJson(c)).toList()
-        : [];
-
-    return list;
-  }
 
   Future<List<ProductosData>> consultarPorQueryDelivery(String query) async {
     final db = await dbprovider.database;
     final res = await db.rawQuery(
-        "SELECT * FROM Producto WHERE producto_nombre LIKE '%$query%' and producto_estado='1' and producto_delivery='1'");
+        "SELECT * FROM Producto WHERE producto_nombre LIKE '%$query%' and producto_estado='1' ");
 
     List<ProductosData> list = res.isNotEmpty
         ? res.map((c) => ProductosData.fromJson(c)).toList()
@@ -87,20 +76,8 @@ class ProductoDatabase {
     return list;
   }
 
-  Future<List<ProductosData>> obtenerProductosPorCategoriaLocal(
-      String id) async {
-    final db = await dbprovider.database;
-    final res = await db.rawQuery(
-        "SELECT * FROM Producto WHERE id_categoria='$id' and producto_estado='1' and producto_carta='1' order by CAST(producto_orden AS INT) ASC");
 
-    List<ProductosData> list = res.isNotEmpty
-        ? res.map((c) => ProductosData.fromJson(c)).toList()
-        : [];
-
-    return list;
-  }
-
-  Future<List<ProductosData>> obtenerProductosPorCategoriaDelivery(
+  Future<List<ProductosData>> obtenerProductosPorCategoria(
       String id) async {
     final db = await dbprovider.database;
     final res = await db.rawQuery(

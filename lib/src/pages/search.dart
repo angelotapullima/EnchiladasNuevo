@@ -1,11 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
+
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key key}) : super(key: key);
@@ -196,7 +196,7 @@ class _SearchPageState extends State<SearchPage> {
                                       Container(
                                         width: responsive.wp(20),
                                         child: Text(
-                                          'S/. ${snapshot.data[i].productoPrecio}',
+                                          '${snapshot.data[i].idCategoria}',
                                           style: TextStyle(
                                             fontSize: responsive.ip(1.8),
                                           ),
@@ -436,7 +436,7 @@ class _SearchPageState extends State<SearchPage> {
                                                             left: responsive.wp(1.5),
                                                           ),
                                                           child: Text(
-                                                            '${snapshot.data[i].productoNombre.toLowerCase()}',
+                                                            '${snapshot.data[i].productoNombre}',
                                                             maxLines: 2,
                                                             overflow: TextOverflow.ellipsis,
                                                             style: TextStyle(

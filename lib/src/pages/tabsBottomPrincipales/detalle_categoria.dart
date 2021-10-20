@@ -272,7 +272,7 @@ class _DetallecategoriaState extends State<Detallecategoria> {
                               left: responsive.wp(1.5),
                             ),
                             child: Text(
-                              '${snapshot.data[i].productoNombre.toLowerCase()}',
+                              '${snapshot.data[i].productoNombre}',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(

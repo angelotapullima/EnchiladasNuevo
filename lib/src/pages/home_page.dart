@@ -1,4 +1,3 @@
-import 'package:enchiladasapp/src/bloc/bottom_navigation_bloc.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/categoria2.dart';
@@ -6,9 +5,6 @@ import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../eliminados/categorias_page.dart';
 import 'tabsBottomPrincipales/favoritos_tab.dart';
 import 'tabsBottomPrincipales/mi_cuenta.dart';
 import 'tabsBottomPrincipales/carrito_tab.dart';
@@ -68,6 +64,8 @@ class _HomePageState extends State<HomePage> {
                   height: kBottomNavigationBarHeight * responsive.hp(.18),
                   padding: EdgeInsets.only(
                     bottom: responsive.hp(2),
+                    left: responsive.wp(2),
+                    right: responsive.wp(2),
                   ),
                   decoration: BoxDecoration(
                     color: Colors.white,

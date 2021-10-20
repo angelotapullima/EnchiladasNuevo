@@ -31,7 +31,7 @@ class _PropinaPageState extends State<PropinaPage> {
             AsyncSnapshot<List<ProductosData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
-              final algo = List<String>();
+              final List<String> algo = [];
               algo.add('Sin propina');
 
               for (var i = 0; i < snapshot.data.length; i++) {

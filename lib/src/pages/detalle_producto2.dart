@@ -73,9 +73,10 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                 children: [
                   SlidingUpPanel(
                     maxHeight: _panelHeightOpen,
-                    minHeight: responsive.hp(7),
+                    minHeight: responsive.hp(8),
                     controller: panelController,
                     parallaxEnabled: true,
+
                     parallaxOffset: 0.1,
                     backdropEnabled: true,
                     body: Stack(children: <Widget>[
@@ -124,30 +125,25 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                   (snapshot.data[0].productoDestacado != '0')
                       ? Positioned(
                           top: kToolbarHeight + responsive.hp(2),
-                          //top: responsive.hp(40),
                           right: 0,
-                          //left: 0,
                           child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: responsive.wp(2),
-                                          vertical: responsive.hp(.5),
-                                        ),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(15),
-                                            /* borderRadius: BorderRadius.only(
-                                                    bottomRight: Radius.circular(10),
-                                                  ), */
-                                            color: Colors.orange),
-                                        child: Text(
-                                          'Destacado',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: responsive.ip(1.3),
-                                          ),
-                                        ),
-                                      )
-                        )
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(2),
+                              vertical: responsive.hp(.5),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.orange,
+                            ),
+                            child: Text(
+                              'Destacado',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.3),
+                              ),
+                            ),
+                          ))
                       : Container()
                 ],
               );
@@ -200,7 +196,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                   : IconButton(
                       onPressed: () {
                         setState(() {
-                          print('agregar ${productosData.idProducto}' );
+                          print('agregar ${productosData.idProducto}');
                           agregarFavoritos(context, productosData);
                         });
                       },
@@ -233,7 +229,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                             'Agregar al Carrito',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: responsive.ip(2.5),
+                              fontSize: responsive.ip(2),
                             ),
                           ),
                         ),
@@ -351,7 +347,10 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
         minChildSize: 0.7,
         builder: (context, controller) {
           return Container(
-            decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(20), color: Colors.white),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.circular(20),
+              color: Colors.white,
+            ),
             padding: EdgeInsets.symmetric(
               horizontal: responsive.wp(5),
             ),
@@ -368,7 +367,10 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                       Flexible(
                         child: Text(
                           productosData.productoNombre,
-                          style: TextStyle(fontSize: responsive.ip(3), fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: responsive.ip(2),
+                            fontWeight: FontWeight.w600,
+                          ),
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -377,7 +379,11 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                       ),
                       Text(
                         'S/ $precioProdcuto',
-                        style: TextStyle(color: Colors.red, fontSize: responsive.ip(4), fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: responsive.ip(3),
+                          fontWeight: FontWeight.bold,
+                        ),
                       )
                     ],
                   ),
@@ -416,7 +422,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                     '${productosData.productoDescripcion}',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
-                      fontSize: responsive.ip(2),
+                      fontSize: responsive.ip(1.8),
                     ),
                   ),
                   SizedBox(
@@ -496,7 +502,10 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
               ),
               Text(
                 'No hay Productos en el carrito',
-                style: TextStyle(color: Colors.black, fontSize: 22),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                ),
               )
             ]);
           }
@@ -509,13 +518,17 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
     );
   }
 
-  Widget panelRojoMonto(Responsive responsive, double total, String cantidadPedidos) {
+  Widget panelRojoMonto(
+    Responsive responsive,
+    double total,
+    String cantidadPedidos,
+  ) {
     String montoFinalex = format(total);
     return Container(
-      height: responsive.hp(8),
+      height: responsive.hp(9),
       padding: EdgeInsets.symmetric(
         horizontal: responsive.wp(5),
-        vertical: responsive.hp(1),
+        vertical: responsive.hp(.5),
       ),
       decoration: const BoxDecoration(
           borderRadius: BorderRadiusDirectional.only(
@@ -742,9 +755,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                                     ),
                                   ),
                                   Center(
-                                    child: (downloadProgress.progress != null)
-                                        ? Text('${(downloadProgress.progress * 100).toInt().toString()}%')
-                                        : Container(),
+                                    child: (downloadProgress.progress != null) ? Text('${(downloadProgress.progress * 100).toInt().toString()}%') : Container(),
                                   )
                                 ],
                               ),
@@ -953,7 +964,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
               SizedBox(
                 width: double.infinity,
                 height: responsive.hp(5),
-                child: RaisedButton(
+                child: MaterialButton(
                     color: Colors.red,
                     textColor: Colors.white,
                     child: Text(
@@ -972,7 +983,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
               SizedBox(
                 width: double.infinity,
                 height: responsive.hp(5),
-                child: RaisedButton(
+                child: MaterialButton(
                     color: (preferences.rol == '5') ? Colors.white : Colors.grey,
                     textColor: Colors.red,
                     child: Text(
@@ -1026,13 +1037,13 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
             ),
             title: Text('Debe registrarse para Ordenar'),
             actions: <Widget>[
-              FlatButton(
+              MaterialButton(
                 onPressed: () async {
                   Navigator.pop(context);
                 },
                 child: Text('Cancelar'),
               ),
-              FlatButton(
+              MaterialButton(
                 onPressed: () async {
                   Navigator.pop(context);
                   Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
@@ -1139,12 +1150,12 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
               ],
             ),
             actions: <Widget>[
-              FlatButton(
+              MaterialButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: Text('Cancelar')),
-              FlatButton(
+              MaterialButton(
                 onPressed: () async {
                   actualizarObservacion(context, observacionProductoController.text, id);
 

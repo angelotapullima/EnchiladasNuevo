@@ -3,12 +3,10 @@ import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
-import 'package:enchiladasapp/src/utils/utilidades.dart' as utils;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class FavoritosTab extends StatefulWidget {
   const FavoritosTab({Key key}) : super(key: key);

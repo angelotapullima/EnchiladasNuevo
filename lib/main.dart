@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:enchiladasapp/src/bloc/cerrar_publicidad_bloc.dart';
 import 'package:enchiladasapp/src/models/ReceivedNotification.dart';
 import 'package:enchiladasapp/src/pages/blocMapa/mi_ubicacion/mi_ubicacion_bloc.dart';
@@ -10,7 +14,6 @@ import 'package:enchiladasapp/src/pages/notification_page.dart';
 import 'package:enchiladasapp/src/pages/onboarding_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/delivery_timeline.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_pago_page.dart';
-import 'package:enchiladasapp/src/pages/pantalla_delivery_opciones.dart';
 import 'package:enchiladasapp/src/pages/detalle_promociones.dart';
 import 'package:enchiladasapp/src/pages/ticket.dart';
 import 'package:enchiladasapp/src/pages/webview.dart';
@@ -27,6 +30,7 @@ import 'package:enchiladasapp/src/pages/splash.dart';
 import 'package:enchiladasapp/src/pages/home_page.dart';
 import 'package:enchiladasapp/src/pages/desicion_page.dart';
 import 'package:enchiladasapp/src/pages/ordenes/ordenes_page.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -34,8 +38,36 @@ import 'package:provider/provider.dart';
 
 import 'src/pages/blocMapa/mapa/mapa_bloc.dart';
 
+Future<Uint8List> loadImage(String url) {
+  ImageStreamListener listener;
+
+  final Completer<Uint8List> completer = Completer<Uint8List>();
+  final ImageStream imageStream = AssetImage(url).resolve(ImageConfiguration.empty);
+
+  listener = ImageStreamListener(
+    (ImageInfo imageInfo, bool synchronousCall) {
+      imageInfo.image.toByteData(format: ImageByteFormat.png).then((ByteData byteData) {
+        imageStream.removeListener(listener);
+        completer.complete(byteData.buffer.asUint8List());
+      });
+    },
+    onError: (dynamic exception, StackTrace stackTrace) {
+      imageStream.removeListener(listener);
+      completer.completeError(exception);
+    },
+  );
+
+  imageStream.addListener(listener);
+  return completer.future;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await loadImage('assets/logo_enchilada.png');
+  await loadImage('assets/var.png');
+  await loadImage('assets/cafe_247.png');
+  await loadImage('assets/ladrillos.png');
 
   final prefs = new Preferences();
 
@@ -156,13 +188,13 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: navigatorkey,
               initialRoute: 'splash',
               theme: ThemeData(
+                fontFamily: 'MADE-TOMMY',
                 primarySwatch: Colors.red,
                 scaffoldBackgroundColor: Colors.grey[50],
                 canvasColor: Colors.transparent,
               ),
               routes: {
                 '/': (BuildContext context) => HomePage(),
-                
                 'login': (BuildContext context) => LoginPage(),
                 'splash': (BuildContext context) => Splash(),
                 'desicion': (BuildContext context) => DesicionPage(),
@@ -173,7 +205,6 @@ class _MyAppState extends State<MyApp> {
                 'detallePedido': (BuildContext context) => DetallePedido(),
                 'mapaCliente': (BuildContext context) => MapaCliente(),
                 'zoomDireccion': (BuildContext context) => ZoomFotoDireccion(),
-
                 'timeline': (BuildContext context) => DeliveryTimeline(),
                 'webView': (BuildContext context) => WebViewExample(),
                 'ticket': (BuildContext context) => Ticket(),
@@ -181,12 +212,7 @@ class _MyAppState extends State<MyApp> {
                 'detalleProductoFoto': (BuildContext context) => DetalleProductoFoto(),
                 'detallePromociones': (BuildContext context) => DetallePromociones(),
                 'onboarding': (BuildContext context) => OnboardingPage(),
-                
                 'notificationPage': (BuildContext context) => NotificationPage(),
-                'pantallaDeliveryOpciones': (BuildContext context) => PantallaDeliveryOpciones(),
-
-
-                
               },
             ),
           ),

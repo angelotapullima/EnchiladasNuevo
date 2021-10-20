@@ -178,7 +178,7 @@ class _MapsSampleState extends State<MapsSample> {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               if (cantItems == 0) {
-                list = List<String>();
+                list =[];
                 list.add('Seleccionar Distrito');
 
                 for (int i = 0; i < snapshot.data.length; i++) {
@@ -429,7 +429,7 @@ class _MapsSampleState extends State<MapsSample> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.red),
-                          child: FlatButton(
+                          child: MaterialButton(
                             child: Text(
                               'Confirmar',
                               style: TextStyle(
@@ -534,7 +534,7 @@ class _MapsSampleState extends State<MapsSample> {
                   SizedBox(
                     height: responsive.hp(3),
                   ),
-                  FlatButton(
+                  MaterialButton(
                     onPressed: () async {
                       Navigator.pop(context);
                       refe= referenciaController.text;
@@ -608,7 +608,7 @@ class _MapsSampleState extends State<MapsSample> {
                   SizedBox(
                     height: responsive.hp(3),
                   ),
-                  FlatButton(
+                  MaterialButton(
                     onPressed: () async {
                       Navigator.pop(context);
                       direccion = direccionController.text;

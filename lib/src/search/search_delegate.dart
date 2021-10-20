@@ -4,7 +4,6 @@ import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 
 class DataSearch extends SearchDelegate {

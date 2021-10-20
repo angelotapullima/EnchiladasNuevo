@@ -9,7 +9,6 @@ import 'package:rxdart/subjects.dart';
 class PantallaBloc {
   final pantallaDatabase = PantallaDatabase();
   final categoriasDatabase = CategoriasDatabase();
-  //final puzzleDatabase = PuzzleDatabase();
   final productosDatabase = ProductoDatabase();
 
   final _pantallasController = new BehaviorSubject<List<PantallaModel>>();
@@ -45,7 +44,7 @@ class PantallaBloc {
       if (pantalla.idPantalla == '1') {
         //Categorias
 
-        var listaCategorias = await categoriasDatabase.obtenerCategoriasEnchiladas();
+        var listaCategorias = await categoriasDatabase.obtenerCategoriasPorTipo('1');
 
         if (listaCategorias.length > 10) {
           for (int x = 0; x < 10; x++) {
@@ -129,7 +128,7 @@ class PantallaBloc {
       }  else {
         //resto
 
-        final listaProductos = await productosDatabase.obtenerProductosPorCategoriaDelivery(pantalla.pantallCategoria);
+        final listaProductos = await productosDatabase.obtenerProductosPorCategoria(pantalla.pantallCategoria);
 
         if (listaProductos.length > 10) {
           for (int x = 0; x < 10; x++) {

@@ -46,7 +46,7 @@ class CategoriasApi {
 
   Future<bool> obtenerAmbos(BuildContext context) async {
     try {
-      final url = '$urlBase/api/categoria/listar_categorias_solo_productos';
+      final url = '$urlBase/api/categoria/listar_categorias_solo_productos_v2';
 
       final preferences = Preferences();
       final resp = await http.post((Uri.parse(url)), body: {'numero': '1'});
@@ -66,6 +66,18 @@ class CategoriasApi {
           if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
             utils.porcentaje(context, porcentaje);
           }
+          String valor;
+          var dato = decodedData['result']['data'][i]['categoria_tipo_2'].toString();
+
+          if (dato == '5') {
+            valor = '5';
+          } else if (dato == '6') {
+            valor = '5';
+          } else if (dato == '7') {
+            valor = '5';
+          } else {
+            valor = dato;
+          }
 
           CategoriaData categoriaData = CategoriaData();
 
@@ -73,6 +85,7 @@ class CategoriasApi {
           categoriaData.categoriaNombre = decodedData['result']['data'][i]['categoria_nombre'];
           categoriaData.categoriaIcono = decodedData['result']['data'][i]['categoria_icono'];
           categoriaData.categoriaTipo = decodedData['result']['data'][i]['categoria_tipo'];
+          categoriaData.categoriaTipo2 = valor;
           categoriaData.categoriaFoto = decodedData['result']['data'][i]['categoria_foto'];
           categoriaData.categoriaBanner = decodedData['result']['data'][i]['categoria_banner'];
           categoriaData.categoriaPromocion = decodedData['result']['data'][i]['categoria_promocion'];
@@ -152,7 +165,6 @@ class CategoriasApi {
 
               productoDatabase.insertarProductosDb(productosData);
             }
-
           }
         }
       }

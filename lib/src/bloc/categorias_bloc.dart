@@ -1,126 +1,99 @@
 import 'package:enchiladasapp/src/api/categorias_api.dart';
 import 'package:enchiladasapp/src/database/categorias_database.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
-import 'package:enchiladasapp/src/models/tipo_model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CategoriasBloc {
   final categoriasApi = CategoriasApi();
   final categoriasDatabase = CategoriasDatabase();
 
-  final _categoriasTipoController = new BehaviorSubject<List<TipoModel>>();
-  final _categoriasEnchiladasController = new BehaviorSubject<List<CategoriaData>>();
-  final _categoriasPorTipoController = new BehaviorSubject<List<CategoriaData>>();
+  final _categoriasPantallaInicialController = new BehaviorSubject<List<CategoriaData>>();
   final _categoriasPromocionesController = new BehaviorSubject<List<CategoriaData>>();
   final _cargandoCategoriasController = BehaviorSubject<bool>();
 
-  Stream<List<CategoriaData>> get categoriasEnchiladasStream => _categoriasEnchiladasController.stream;
-  Stream<List<TipoModel>> get categoriaTipo => _categoriasTipoController.stream;
-  Stream<List<CategoriaData>> get categoriasPorTipoStream => _categoriasPorTipoController.stream;
+  // estos controladores se usaran en la vista de categorias
+  //En delivery
+  //Restaurant  = 5
+  //Cafe  = 6
+  //var  = 7
+  //En el Local
+  //Restaurant  = 1
+  //Cafe  = 3
+  //var  = 4
+  final _categoriasRestaurantController = new BehaviorSubject<List<CategoriaData>>();
+  final _categoriasCafeController = new BehaviorSubject<List<CategoriaData>>();
+  final _categoriasVarController = new BehaviorSubject<List<CategoriaData>>();
+
+  Stream<List<CategoriaData>> get categoriasPantallaInicialStream => _categoriasPantallaInicialController.stream;
   Stream<List<CategoriaData>> get categoriasPromociionesStream => _categoriasPromocionesController.stream;
   Stream<bool> get cargandoCategoriasStream => _cargandoCategoriasController.stream;
 
+  Stream<List<CategoriaData>> get categoriasRestaurantStream => _categoriasRestaurantController.stream;
+  Stream<List<CategoriaData>> get categoriasCafeStream => _categoriasCafeController.stream;
+  Stream<List<CategoriaData>> get categoriasVarStream => _categoriasVarController.stream;
+
   dispose() {
-    _categoriasEnchiladasController?.close();
-    _categoriasPorTipoController?.close();
+    _categoriasPantallaInicialController?.close();
+    _categoriasRestaurantController?.close();
+    _categoriasCafeController?.close();
+    _categoriasVarController?.close();
     _cargandoCategoriasController?.close();
     _categoriasPromocionesController?.close();
-    _categoriasTipoController?.close();
   }
 
   void cargandoCategoriasFalse() {
     _cargandoCategoriasController.sink.add(false);
   }
 
-  void obtenerCategoriasEnchiladas2() async {
+  //Se usara para los categorias con tipo desplegadas
+  void obtenerCategoriasPorTipo(String tipo) async {
+    print('$tipo');
     _cargandoCategoriasController.sink.add(true);
-    _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas());
-    /* await categoriasApi.obtenerAmbos();
+    _categoriasPantallaInicialController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
 
-     
-   
-    _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas()); 
-     */
     _cargandoCategoriasController.sink.add(false);
   }
 
-  void obtenerCategoriasEnchiladas() async {
+  void obtenerCategoriasPorTipoUnidos(String tipo) async {
+    print('$tipo');
     _cargandoCategoriasController.sink.add(true);
-    _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasLocalEnchiladas());
-    /* await categoriasApi.obtenerAmbos();
+    _categoriasPantallaInicialController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipoUnidos(tipo));
 
-     
-   
-    _categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasEnchiladas()); 
-     */
+    _cargandoCategoriasController.sink.add(false);
+  }
+  //////////////////////////////////
+
+  //Se usara para los categorias con tipo desplegadas
+  void obtenerCategoriasPromociones(String tipo) async {
+    _categoriasPromocionesController.sink.add(await categoriasDatabase.obtenerCategoriasPromociones(tipo));
+  }
+
+  //Se usara para los categorias con tipo desplegadas
+  void obtenerCategoriasPromocionesUnidas(String tipo) async {
+    _categoriasPromocionesController.sink.add(await categoriasDatabase.obtenerCategoriasPromocionesUnidas(tipo));
+  }
+
+  void obtenerCategoriasRestaurant(String tipo) async {
+    print('$tipo');
+    _cargandoCategoriasController.sink.add(true);
+    _categoriasRestaurantController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
+
     _cargandoCategoriasController.sink.add(false);
   }
 
-  void obtenerCategoriasPorTipo2(String tipo) async {
-    //tipo ==2 market
-    //tipo ==3 cafe
-
+  void obtenerCategoriasCafe(String tipo) async {
+    print('$tipo');
     _cargandoCategoriasController.sink.add(true);
-    _categoriasPorTipoController.sink.add(await categoriasDatabase.obtenerCategoriasLocalEnchiladas());
+    _categoriasCafeController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
 
-    /* _categoriasMarketController.sink.add(await categoriasApi.cargarCategorias());
-
-    _categoriasMarketController.sink.add(await categoriasDatabase.obtenerCategoriasMarket()); */
     _cargandoCategoriasController.sink.add(false);
   }
 
-  void obtenerCategoriasPromociones() async {
-    _categoriasPromocionesController.sink.add(await categoriasDatabase.obtenerCategoriasPromociones());
-  }
-
-  void obtenerCatOrdenado() async {
-    final List<TipoModel> tipis = [];
-    final List<String> listString = [];
+  void obtenerCategoriasVar(String tipo) async {
+    print('$tipo');
     _cargandoCategoriasController.sink.add(true);
-    //_categoriasEnchiladasController.sink.add(await categoriasDatabase.obtenerCategoriasLocalEnchiladas());
-    final listGen = await categoriasDatabase.obtenerCategoriasLocalEnchiladas();
+    _categoriasVarController.sink.add(await categoriasDatabase.obtenerCategoriasPorTipo(tipo));
 
-    if (listGen.length > 0) {
-      for (var i = 0; i < listGen.length; i++) {
-        listString.add(listGen[i].categoriaTipo);
-      }
-
-      List<String> algo = listString.toSet().toList();
-
-      for (var x = 0; x < algo.length; x++) {
-        final List<CategoriaData> listCate = [];
-
-        TipoModel tipoModel = TipoModel();
-        tipoModel.tipo = (algo[x] == '1')
-            ? 'Restaurant'
-            : (algo[x] == '3')
-                ? 'Cafe 24/7'
-                : 'Var 24/7';
-        tipoModel.nombre = algo[x];
-        for (var i = 0; i < listGen.length; i++) {
-          if (algo[x] == listGen[i].categoriaTipo) {
-            CategoriaData categoriaData = CategoriaData();
-
-            categoriaData.idCategoria = listGen[i].idCategoria;
-            categoriaData.categoriaNombre = listGen[i].categoriaNombre;
-            categoriaData.categoriaIcono = listGen[i].categoriaIcono;
-            categoriaData.categoriaTipo = listGen[i].categoriaTipo;
-            categoriaData.categoriaFoto = listGen[i].categoriaFoto;
-            categoriaData.categoriaBanner = listGen[i].categoriaBanner;
-            categoriaData.categoriaPromocion = listGen[i].categoriaPromocion;
-            categoriaData.categoriaSonido = listGen[i].categoriaSonido;
-            categoriaData.categoriaEstado = listGen[i].categoriaEstado;
-            categoriaData.categoriaMostrarApp = listGen[i].categoriaMostrarApp;
-            categoriaData.categoriaOrden = listGen[i].categoriaOrden;
-
-            listCate.add(categoriaData);
-          }
-        }
-        tipoModel.cate = listCate;
-        tipis.add(tipoModel);
-      }
-    }
-
-    _categoriasTipoController.sink.add(tipis);
+    _cargandoCategoriasController.sink.add(false);
   }
 }

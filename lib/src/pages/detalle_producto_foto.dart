@@ -88,7 +88,11 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     Expanded(
                                       child: Text(
                                         '${productosData.productoNombre}',
-                                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsive.ip(2),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                     SizedBox(
@@ -96,7 +100,11 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     ),
                                     Text(
                                       'S/. ${productosData.productoPrecio}',
-                                      style: TextStyle(color: Colors.red, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: responsive.ip(2.5),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -169,7 +177,11 @@ class _DetalleProductoFotoState extends State<DetalleProductoFoto> {
                                     Expanded(
                                       child: Text(
                                         '${productosData.productoNombre}',
-                                        style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsive.ip(2),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                     SizedBox(

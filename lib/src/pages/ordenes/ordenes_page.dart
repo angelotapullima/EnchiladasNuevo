@@ -11,7 +11,7 @@ class OrdenesPage extends StatefulWidget {
 
 class _OrdenesPageState extends State<OrdenesPage> {
 
-  List<Widget> pageList = List<Widget>();
+  List<Widget> pageList = [];
 
   @override
   void initState() {

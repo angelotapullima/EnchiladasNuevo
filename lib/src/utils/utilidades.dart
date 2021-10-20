@@ -41,9 +41,6 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
 
   favoritosBloc.obtenerProductosFavoritos();favoritosBloc.obtenerProductosFavoritos();
   productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(productos.idCategoria);
-  productosIdBloc.obtenerProductosLocalEnchiladasPorCategoria(productos.idCategoria);
-  productosIdBloc.obtenerProductosMarketPorCategoria(productos.idCategoria);
-  productosIdBloc.cargarCategoriaProductoLocal(productos.idCategoria);
   productosIdBloc.cargarCategoriaProductoDelivery(productos.idCategoria);
   //_mostrarAlert(context);
 }
@@ -76,9 +73,6 @@ void quitarFavoritos(BuildContext context, ProductosData productosData) async {
   //_mostrarAlert(context);
   favoritosBloc.obtenerProductosFavoritos();
   productosIdBloc.obtenerProductosdeliveryEnchiladasPorCategoria(productos.idCategoria);
-  productosIdBloc.obtenerProductosLocalEnchiladasPorCategoria(productos.idCategoria);
-  productosIdBloc.obtenerProductosMarketPorCategoria(productos.idCategoria);
-  productosIdBloc.cargarCategoriaProductoLocal(productos.idCategoria);
   productosIdBloc.cargarCategoriaProductoDelivery(productos.idCategoria);
 }
 
@@ -247,31 +241,7 @@ void agregarCarritoConAdicionales(ProductosData productosData, BuildContext cont
 String format(double n) {
   return n.toStringAsFixed(n.truncateToDouble() == n ? 2 : 2);
 }
-
-void quitarFavoritosMarket(BuildContext context, ProductosData productosData, String categotia) async {
-  ProductosData productos = new ProductosData();
-  final productoDatabase = ProductoDatabase();
-  final productosIdBloc = ProviderBloc.prod(context);
-
-  productos.idProducto = productosData.idProducto;
-  productos.idCategoria = productosData.idCategoria;
-  productos.productoNombre = productosData.productoNombre;
-  productos.productoFoto = productosData.productoFoto;
-  productos.productoPrecio = productosData.productoPrecio;
-  productos.productoUnidad = productosData.productoUnidad;
-  productos.productoEstado = productosData.productoEstado;
-  productos.productoDestacado = productosData.productoDestacado;
-  productos.productoEstadoDestacado = productosData.productoEstadoDestacado;
-  productos.productoTupper = productosData.productoTupper;
-  productos.productoNuevo = productosData.productoNuevo;
-  productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
-  productos.productoFavorito = 0;
-
-  await productoDatabase.updateProductosDb(productos);
-
-  //_mostrarAlert(context);
-  productosIdBloc.obtenerProductosMarketPorCategoria(categotia);
-}
+ 
 
 void seleccionarDireccion(BuildContext context, String id) async {
   final direccionDatabase = DireccionDatabase();
@@ -602,7 +572,7 @@ Future<List<ProductosData>> agregarAdicionalesDeProducto(
  */
 
 List<DateTime> getDateList(DateTime firstDate, DateTime lastDate) {
-  List<DateTime> list = List();
+  List<DateTime> list = [];
   int count = daysCount(toDateMonthYear(firstDate), toDateMonthYear(lastDate));
   for (int i = 0; i < count; i++) {
     list.add(toDateMonthYear(firstDate).add(Duration(days: i)));

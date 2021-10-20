@@ -97,7 +97,7 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
 
     //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
-    return FlatButton( 
+    return MaterialButton( 
       onPressed: () {
 
         timer?.cancel();
@@ -136,7 +136,7 @@ class _DeliveryTimelineState extends State<DeliveryTimeline> {
 
     //print('esto va del timeline a mapa tracking $id');
     final responsive = Responsive.of(context);
-    return FlatButton(
+    return MaterialButton(
       onPressed: () {
 
         timer?.cancel();

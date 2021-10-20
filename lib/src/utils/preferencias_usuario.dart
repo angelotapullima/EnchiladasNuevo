@@ -1,179 +1,138 @@
-
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
-
-
   static final Preferences _instancia = new Preferences._internal();
 
-  factory Preferences(){
+  factory Preferences() {
     return _instancia;
   }
 
-  SharedPreferences _prefs ;
+  SharedPreferences _prefs;
 
   Preferences._internal();
 
-  initPrefs()async {
-  this._prefs = await SharedPreferences.getInstance() ;
-
+  initPrefs() async {
+    this._prefs = await SharedPreferences.getInstance();
   }
 
-  clearPreferences()async{
-    await  _prefs.clear();
+  clearPreferences() async {
+    await _prefs.clear();
   }
-
 
 //sirve para obtener el id producto de la bolsa
-  get idBolsa{
+  get idBolsa {
     return _prefs.getString('idBolsa');
   }
 
-  set idBolsa(String value){
-
+  set idBolsa(String value) {
     _prefs.setString('idBolsa', value);
   }
 
-
-
 //sirve para obtener el id producto de la bolsa
-  get idTupper{
+  get idTupper {
     return _prefs.getString('idTupper');
   }
 
-  set idTupper(String value){
-
+  set idTupper(String value) {
     _prefs.setString('idTupper', value);
   }
 
   //sirve para verificar el estado de la primera carga
-  get estadoCargaInicial{
+  get estadoCargaInicial {
     return _prefs.getString('estadoCarga');
   }
 
-  set estadoCargaInicial(String value){
-
+  set estadoCargaInicial(String value) {
     _prefs.setString('estadoCarga', value);
   }
 
-
-
-
-
-//pantalla para seleccionar si es market o enchiladas
-  get pantallaCuenta{
-    return _prefs.getString('pantallaCuenta');
-  }
-
-  set pantallaCuenta(String value){
-
-    _prefs.setString('pantallaCuenta', value);
-  }
-
-
-
-
-//pantalla para seleccionar si es market o enchiladas
-  get pantallaDPago{
-    return _prefs.getString('pantallaDPago');
-  }
-
-  set pantallaDPago(String value){
-
-    _prefs.setString('pantallaDPago', value);
-  }
-
-
-
-//pantalla para seleccionar si es market o enchiladas
-  get pantallaDProducto{
-    return _prefs.getString('pantallaDProducto');
-  }
-
-  set pantallaDProducto(String value){
-
-    _prefs.setString('pantallaDProducto', value);
-  }
-
-
-
-  //pantalla para seleccionar si es market o enchiladas
-  get pantallaCategoria{
-    return _prefs.getString('pantallaCategoria');
-  }
-
-  set pantallaCategoria(String value){
-
-    _prefs.setString('pantallaCategoria', value);
-  }
-
-
-
-  //pantalla para seleccionar si es market o enchiladas
-  get pantallaSeleccion{
-    return _prefs.getString('pantallaSeleccion');
-  }
-
-  set pantallaSeleccion(String value){
-
-    _prefs.setString('pantallaSeleccion', value);
-  }
-
-  get personName{
+  get personName {
     return _prefs.getString('personName');
   }
 
-  set personName(String value){
+  set personName(String value) {
     _prefs.setString('personName', value);
   }
-  get foto{
+
+  get foto {
     return _prefs.getString('foto');
   }
 
-  set foto(String value){
+  set foto(String value) {
     _prefs.setString('foto', value);
   }
-  get email{
+
+  get email {
     return _prefs.getString('email');
   }
 
-  set email(String value){
+  set email(String value) {
     _prefs.setString('email', value);
   }
-  
 
-  get token{
+  get token {
     return _prefs.getString('token');
   }
 
-  set token(String value){
+  set token(String value) {
     _prefs.setString('token', value);
   }
-  get idUser{
+
+  get idUser {
     return _prefs.getString('idUser');
   }
 
-  set idUser(String value){
+  set idUser(String value) {
     _prefs.setString('idUser', value);
   }
 
-  get rol{
+  get rol {
     return _prefs.getString('rol');
   }
 
-  set rol(String value){
+  set rol(String value) {
     _prefs.setString('rol', value);
   }
 
-
-
-get propinaRepartidor{
+  get propinaRepartidor {
     return _prefs.getString('propinaRepartidor');
   }
 
-  set propinaRepartidor(String value){
+  set propinaRepartidor(String value) {
     _prefs.setString('propinaRepartidor', value);
   }
 
+//sirve para obtener si las categorias estan desplegadas o unidas
+//Categorias  desplegadas = 1:
+//Salon = 1
+//Cafe = 3
+//VAR  = 4
+//
+//Categorias Unidas = 2:
+//Salon = 5
+//Cafe = 6
+//VAR  = 7
+  get tipoCategoria {
+    return _prefs.getString('tipoCategoria');
+  }
+
+  set tipoCategoria(String value) {
+    _prefs.setString('tipoCategoria', value);
+  }
+
+
+//Categorias  Numeros:
+//Salon = 1
+//Cafe = 3
+//VAR  = 4
+//Salon(delivery) = 5
+//Cafe (delivery) = 6
+//VAR  (delivery) = 7
+  get tipoCategoriaNumero {
+    return _prefs.getString('tipoCategoriaNumero');
+  }
+
+  set tipoCategoriaNumero(String value) {
+    _prefs.setString('tipoCategoriaNumero', value);
+  }
 }

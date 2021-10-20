@@ -454,7 +454,7 @@ class _MapaClienteState extends State<MapaCliente> {
             ),
             title: Text('El repartidor ya llego a su destino'),
             actions: <Widget>[
-              FlatButton(
+              MaterialButton(
                 onPressed: () async {
                   Navigator.pop(context, true);
                   Navigator.pop(context);

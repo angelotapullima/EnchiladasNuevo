@@ -11,7 +11,6 @@ import 'package:enchiladasapp/src/models/categoria_model.dart';
 import 'package:enchiladasapp/src/models/pantalla_model.dart';
 import 'package:enchiladasapp/src/models/productos_model.dart';
 import 'package:enchiladasapp/src/models/publicidad_model.dart';
-import 'package:enchiladasapp/src/eliminados/%20categorias_por_tipo.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/pages/search.dart';
@@ -34,14 +33,18 @@ class PrincipalTab extends StatelessWidget {
 
   void _onRefresh(BuildContext context) async {
     print('_onRefresh pantalla');
+    final prefs = new Preferences();
     final pantallasBloc = ProviderBloc.pantalla(context);
-    final categoriasBloc = ProviderBloc.cat(context); 
+    final categoriasBloc = ProviderBloc.cat(context);
 
     final categoriasApi = CategoriasApi();
     await categoriasApi.obtenerAmbos(context);
     pantallasBloc.obtenerPantallas();
-    categoriasBloc.obtenerCategoriasPromociones();
- 
+    if (prefs.tipoCategoria == '1') {
+      categoriasBloc.obtenerCategoriasPromociones(prefs.tipoCategoriaNumero);
+    } else {
+      categoriasBloc.obtenerCategoriasPromocionesUnidas(prefs.tipoCategoriaNumero);
+    }
 
     _refreshController.refreshCompleted();
   }
@@ -49,6 +52,8 @@ class PrincipalTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = new Responsive.of(context);
+
+    final prefs = new Preferences();
     final usuarioBloc = ProviderBloc.user(context);
     usuarioBloc.obtenerUsuario();
 
@@ -59,9 +64,14 @@ class PrincipalTab extends StatelessWidget {
     final categoriasBloc = ProviderBloc.cat(context);
 
     pantallasBloc.obtenerPantallas();
-    categoriasBloc.obtenerCategoriasPromociones();
-    categoriasBloc.obtenerCategoriasEnchiladas();
- 
+
+    if (prefs.tipoCategoria == '1') {
+      categoriasBloc.obtenerCategoriasPromociones(prefs.tipoCategoriaNumero);
+      categoriasBloc.obtenerCategoriasPorTipo(prefs.tipoCategoriaNumero);
+    } else {
+      categoriasBloc.obtenerCategoriasPromocionesUnidas(prefs.tipoCategoriaNumero);
+      categoriasBloc.obtenerCategoriasPorTipoUnidos(prefs.tipoCategoriaNumero);
+    }
 
     final provider = Provider.of<PrincipalChangeBloc>(context, listen: false);
 
@@ -223,10 +233,6 @@ class PrincipalTab extends StatelessWidget {
                                                             color: (_currentPageNotifier.value >= index - 0.5 && _currentPageNotifier.value < index + 0.5)
                                                                 ? Colors.green
                                                                 : Colors.grey,
-                                                            /*    shape: (_currentPageNotifier.value >= index - 0.5 &&
-                                                                          _currentPageNotifier.value < index + 0.5)
-                                                                      ? BoxShape.rectangle
-                                                                      : BoxShape.circle*/
                                                           ),
                                                         ),
                                                       ),
@@ -247,7 +253,7 @@ class PrincipalTab extends StatelessWidget {
                                   height: responsive.hp(2),
                                 ),
                                 StreamBuilder(
-                                    stream: categoriasBloc.categoriasEnchiladasStream,
+                                    stream: categoriasBloc.categoriasPantallaInicialStream,
                                     builder: (context, AsyncSnapshot<List<CategoriaData>> snapshot) {
                                       if (snapshot.hasData) {
                                         if (snapshot.data.length > 0) {
@@ -368,13 +374,13 @@ class PrincipalTab extends StatelessWidget {
                                                             horizontal: responsive.wp(1),
                                                           ),
                                                           child: Text(
-                                                            '${snapshot.data[index].categoriaNombre.toLowerCase()}',
+                                                            '${snapshot.data[index].categoriaNombre}',
                                                             maxLines: 2,
                                                             textAlign: TextAlign.center,
                                                             style: TextStyle(
                                                               fontSize: responsive.ip(1.2),
                                                               fontWeight: FontWeight.w600,
-                                                              color: Colors.grey[800],
+                                                              color: ('${snapshot.data[index].categoriaMostrarApp}' =='1')?Colors.grey[800]:Colors.red,
                                                             ),
                                                           ),
                                                         )
@@ -389,7 +395,7 @@ class PrincipalTab extends StatelessWidget {
                                           return Container();
                                         }
                                       } else {
-                                          return Container();
+                                        return Container();
                                       }
                                     }),
                               ],
@@ -426,8 +432,6 @@ class PrincipalTab extends StatelessWidget {
         }
       },
     );
-    
-    
   }
 
   Widget _cart(BuildContext context, Responsive responsive, PantallaModel pantallaModel) {
@@ -553,7 +557,8 @@ class PrincipalTab extends StatelessWidget {
                       },
                     ),
                   );
-                */ } else {
+                */
+                } else {
                   Arguments arg = new Arguments("${pantallaModel.pantallaNombre}", '${pantallaModel.pantallCategoria}');
 
                   Navigator.push(
@@ -736,7 +741,7 @@ class PrincipalTab extends StatelessWidget {
                                 left: responsive.wp(1.5),
                               ),
                               child: Text(
-                                '${pantallaModel.items[i].nombreItem.toLowerCase()}',
+                                '${pantallaModel.items[i].nombreItem}',
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -854,7 +859,7 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
                   padding: EdgeInsets.symmetric(
                     horizontal: 23,
                   ),
-                  height: responsive.hp(9),
+                  height: responsive.hp(8),
                   child: Row(
                     children: [
                       (prefs.email != "" && prefs.email != null)
@@ -990,7 +995,7 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
                         '" Lo tenemos todo, solo faltas tú "',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: responsive.ip(2.2),
+                          fontSize: responsive.ip(2.1),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -1061,6 +1066,7 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
     );
   }
 }
+
 class PublicidadDialog extends StatelessWidget {
   final PublicidadModel publicidadModel;
   const PublicidadDialog({Key key, @required this.publicidadModel}) : super(key: key);

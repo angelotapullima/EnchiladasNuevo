@@ -467,7 +467,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${carritoList[i].productoNombre.toLowerCase()}',
+                          '${carritoList[i].productoNombre}',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w600,

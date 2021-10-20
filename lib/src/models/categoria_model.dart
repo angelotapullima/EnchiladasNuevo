@@ -46,6 +46,7 @@ class CategoriaData {
         this.categoriaNombre,
         this.categoriaEstado,
         this.categoriaTipo,
+        this.categoriaTipo2,
         this.categoriaOrden,
         this.categoriaPromocion,
         this.categoriaSonido,
@@ -60,6 +61,7 @@ class CategoriaData {
     String categoriaNombre;
     String categoriaEstado;
     String categoriaTipo;
+    String categoriaTipo2;
     String categoriaOrden;
     String categoriaPromocion;
     String categoriaSonido;
@@ -75,6 +77,7 @@ class CategoriaData {
         categoriaNombre: json["categoria_nombre"],
         categoriaEstado: json["categoria_estado"],
         categoriaTipo: json["categoria_tipo"],
+        categoriaTipo2: json["categoriaTipo2"],
         categoriaOrden: json["categoria_orden"],
         categoriaPromocion: json["categoria_promocion"],
         categoriaSonido: json["categoria_sonido"],

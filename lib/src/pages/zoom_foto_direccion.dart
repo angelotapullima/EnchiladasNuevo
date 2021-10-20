@@ -18,7 +18,7 @@ class ZoomFotoDireccion extends StatelessWidget {
           Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: FlatButton(
+              child: MaterialButton(
                 onPressed: () async {
                   final res = await utils.agregarZona(context, zona.idZona);
                   if (res) {
@@ -58,7 +58,7 @@ class ZoomFotoDireccion extends StatelessWidget {
           ),
           title: Text('¡Su zona fue ingresada correctamente!'),
           actions: <Widget>[
-            FlatButton(
+            MaterialButton(
               onPressed: () async {
                 if (zona.route == 'carrito') {
                   Navigator.popUntil(
