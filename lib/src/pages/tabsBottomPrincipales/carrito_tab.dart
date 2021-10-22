@@ -63,7 +63,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
-              return _listaPedidos(responsive, snapshot.data, usuarioBloc,preferences);
+              return _listaPedidos(responsive, snapshot.data, usuarioBloc, preferences);
             } else {
               return SafeArea(
                 child: Column(
@@ -137,7 +137,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     );
   }
 
-  Widget _listaPedidos(Responsive responsive, List<Carrito> carritoList, UsuarioBloc usuarioBloc,Preferences preferences) {
+  Widget _listaPedidos(Responsive responsive, List<Carrito> carritoList, UsuarioBloc usuarioBloc, Preferences preferences) {
     double subtotal = 0;
     for (int i = 0; i < carritoList.length; i++) {
       if (carritoList[i].productoTipo != '1') {
@@ -266,83 +266,84 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 SizedBox(
                   height: responsive.hp(2),
                 ),
-                (preferences.tipoCategoria == '1')?Container():InkWell(
-                  onTap: () {
-                    final prefs = Preferences();
+                (preferences.tipoCategoria == '1')
+                    ? Container()
+                    : InkWell(
+                        onTap: () {
+                          final prefs = Preferences();
 
-                    if (prefs.email != null && prefs.email != "") {
-                      prefs.propinaRepartidor = '0';
-                      Navigator.pushNamed(context, 'detallePago');
-                    } else {
-                      pedirLogueo();
-                    }
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(3),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(3),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.orange[300],
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 2), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    height: responsive.hp(8),
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Ionicons.ios_cart,
-                          color: Color(0xFF677281),
-                        ),
-                        SizedBox(
-                          width: responsive.wp(3),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${carritoList.length} Productos agregados',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[700],
-                                fontSize: 13,
+                          if (prefs.email != null && prefs.email != "") {
+                            prefs.propinaRepartidor = '0';
+                            Navigator.pushNamed(context, 'detallePago');
+                          } else {
+                            pedirLogueo();
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(3),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(3),
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.orange[300],
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 2), // changes position of shadow
                               ),
-                            ),
-                            Text(
-                              'S/.${utils.format(subtotal)}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                            ],
+                          ),
+                          height: responsive.hp(8),
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Ionicons.ios_cart,
+                                color: Color(0xFF677281),
                               ),
-                            )
-                          ],
-                        ),
-                        Spacer(),
-                        Text(
-                          'Pagar',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            fontSize: responsive.ip(1.5)
-                            ,
+                              SizedBox(
+                                width: responsive.wp(3),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${carritoList.length} Productos agregados',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey[700],
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  Text(
+                                    'S/.${utils.format(subtotal)}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Spacer(),
+                              Text(
+                                'Pagar',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  fontSize: responsive.ip(1.5),
+                                ),
+                              ),
+                              Icon(Icons.arrow_forward_ios)
+                            ],
                           ),
                         ),
-                        Icon(Icons.arrow_forward_ios)
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
                 SizedBox(
                   height: responsive.hp(8),
                 ),
@@ -617,7 +618,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
       },
     );
   }
- void pedirLogueo() {
+
+  void pedirLogueo() {
     showDialog(
       context: context,
       barrierDismissible: true,

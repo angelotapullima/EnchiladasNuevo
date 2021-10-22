@@ -153,19 +153,19 @@ class _HomePageState extends State<HomePage> {
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.red.withOpacity(0.2),
-                                      spreadRadius: 1,
+                                      spreadRadius: .2,
                                       blurRadius: 8,
-                                      offset: Offset(0, 1), // changes position of shadow
+                                      offset: Offset(0, .5), // changes position of shadow
                                     ),
                                   ],
                                 ),
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      height: responsive.hp(1),
+                                      height: responsive.hp(.5),
                                     ),
                                     CircleAvatar(
-                                      radius: responsive.ip(3),
+                                      radius: responsive.ip(2.2),
                                       backgroundColor: Colors.red,
                                       child: Center(
                                         child: Icon(
@@ -175,6 +175,12 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                     ),
+                                    Text(
+                                      'Categorías',
+                                      style: TextStyle(
+                                        fontSize: responsive.ip(1.5),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),

@@ -60,14 +60,11 @@ class CategoriasApi {
       if (decodedData['result']['data'].length > 0) {
         for (int i = 0; i < decodedData['result']['data'].length; i++) {
           var porcentaje = ((i + 1) * 100) / cantidadTotal;
- 
 
           if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
             utils.porcentaje(context, porcentaje);
           }
           var dato = decodedData['result']['data'][i]['categoria_tipo_2'].toString();
-
-         
 
           CategoriaData categoriaData = CategoriaData();
 
@@ -119,9 +116,11 @@ class CategoriasApi {
           //print('productos tamaño ${productos.length}');
 
           for (int x = 0; x < productos.length; x++) {
+            String validado = '0';
             final idproducto = productos[x]['id_producto'];
 
             final datoproducto = await productoDatabase.consultarPorId(idproducto);
+
             //print('id productos ${datoproducto.length}');
             ProductosData productosData = ProductosData();
             productosData.idProducto = productos[x]['id_producto'];
@@ -141,6 +140,19 @@ class CategoriasApi {
             productosData.productoCarta = productos[x]['producto_carta'];
             productosData.productoDelivery = productos[x]['producto_delivery'];
             productosData.productoOrden = productos[x]['producto_orden'];
+
+            if (productosData.categoriaTipo == '5' ||
+                productosData.categoriaTipo == '6' ||
+                productosData.categoriaTipo == '7' ||
+                productosData.categoriaTipo2 == '5' ||
+                productosData.categoriaTipo2 == '6' ||
+                productosData.categoriaTipo2 == '7') {
+              validado = '1';
+            }
+
+            //0 == false <> 1 = true
+            //para validar si el producto es solo para delivery
+            productosData.validadoDelivery = validado;
 
             if (productosData.productoDestacado == '0') {
               productosData.productoEstadoDestacado = '0';

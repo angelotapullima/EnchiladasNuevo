@@ -68,6 +68,9 @@ class ProductosBloc {
       productosData.numeroitem = x.toString();
       productosData.productoDescripcion = listProductos[x].productoDescripcion;
       productosData.productoComentario = listProductos[x].productoComentario;
+      productosData.categoriaTipo = listProductos[x].categoriaTipo;
+      productosData.categoriaTipo2 = listProductos[x].categoriaTipo2;
+      productosData.validadoDelivery = listProductos[x].validadoDelivery;
 
       productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);

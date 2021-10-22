@@ -161,7 +161,7 @@ class Auth {
   }
 
   Future<void> logOut(BuildContext context) async {
-    final data = (await user).providerData;
+    final data = (user).providerData;
     String providerId = "firebase";
 
     for (final provider in data) {

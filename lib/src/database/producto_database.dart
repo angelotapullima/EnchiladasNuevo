@@ -12,13 +12,13 @@ class ProductoDatabase {
           'INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_orden,'
           'producto_precio,producto_carta,producto_delivery,producto_sonido,'
           'producto_unidad,producto_destacado,producto_estado_destacado,categoriaTipo,categoriaTipo2,producto_tupper,producto_estado,producto_nuevo,'
-          'producto_descripcion,producto_comentario,producto_favorito) '
+          'producto_descripcion,producto_comentario,validadoDelivery,producto_favorito) '
           'VALUES ( "${productos.idProducto}" , "${productos.idCategoria}" , "${productos.productoNombre}" ,'
           ' "${productos.productoFoto}" ,"${productos.productoOrden}" , "${productos.productoPrecio}" ,'
           ' "${productos.productoCarta}" ,"${productos.productoDelivery}",'
           ' "${productos.sonido}" ,"${productos.productoUnidad}","${productos.productoDestacado}","${productos.productoEstadoDestacado}","${productos.categoriaTipo}","${productos.categoriaTipo2}",'
           '"${productos.productoTupper}","${productos.productoEstado}","${productos.productoNuevo}",'
-          '"${productos.productoDescripcion}", "${productos.productoComentario}",${productos.productoFavorito} )');
+          '"${productos.productoDescripcion}", "${productos.productoComentario}","${productos.validadoDelivery}",${productos.productoFavorito} )');
       return res;
     } catch (exception) {
       print(exception);
@@ -47,6 +47,7 @@ class ProductoDatabase {
         'producto_sonido="${productos.sonido}",'
         'producto_nuevo="${productos.productoNuevo}",'
         'producto_descripcion="${productos.productoDescripcion}", '
+        'validadoDelivery="${productos.validadoDelivery}", '
         'producto_comentario="${productos.productoComentario}" '
         'WHERE id_producto = "${productos.idProducto}"');
 

@@ -39,6 +39,7 @@ class ConfiguracionApi {
           productosData.productoEstado = decodedData['result']['data']['bolsa'][z]['producto_estado'];
           productosData.productoFavorito = 0;
           productosData.productoComentario = '';
+          productosData.validadoDelivery = '0';
 
           productoDatabase.insertarProductosDb(productosData);
 
@@ -55,6 +56,7 @@ class ConfiguracionApi {
           productosData.productoEstado = decodedData['result']['data']['tupper'][a]['producto_estado'];
           productosData.productoFavorito = 0;
           productosData.productoComentario = '';
+          productosData.validadoDelivery = '0';
 
           productoDatabase.insertarProductosDb(productosData);
 

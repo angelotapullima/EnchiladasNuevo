@@ -292,7 +292,7 @@ class BusquedaGeneralTab {
     cantidadVarDelivery.sink.add(20000);
 
     _productosQueryEnchiladasController.sink.add([]);
-    _productosQueryEnchiladasController.sink.add([]);
+    _productosQueryEnchiladasDeliveryController.sink.add([]);
     _productosQueryCafeController.sink.add([]);
     _productosQueryCafeDeliveryController.sink.add([]);
     _productosQueryVarController.sink.add([]);

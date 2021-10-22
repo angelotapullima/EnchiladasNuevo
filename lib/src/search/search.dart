@@ -29,21 +29,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    print('didChangeDependencies');
-    /* 
-    _controller.addListener(() {
-      if (_controller.indexIsChanging) {
-        csmare = _controller.index;
-        print('dentro ${_controller.index}');
-        setState(() {});
-      } else {
-        print('fuera ${_controller.index}');
-      }
-    }); */
-    super.didChangeDependencies();
-  }
 
   @override
   void initState() {
@@ -162,8 +147,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
                               productosBloc.resetearCantidades();
                               _controllerBusquedaProducto.text = '';
-                              _controller.index = 777;
-                              setState(() {});
+                              //setState(() {});
                             },
                             child: CircleAvatar(
                               backgroundColor: Colors.grey,
@@ -879,19 +863,19 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                     if (snapshot.data == 20000) {
                                       return (csmare == 0)
                                           ? Text(
-                                              'Restaurantss',
+                                              'Restaurant',
                                               style: TextStyle(color: Colors.red),
                                             )
-                                          : Text('Restaurantss', style: TextStyle(color: Colors.black));
+                                          : Text('Restaurant', style: TextStyle(color: Colors.black));
                                     } else {
                                       return Row(
                                         children: [
                                           (csmare == 0)
-                                              ? Text('Restaurantss',
+                                              ? Text('Restaurant',
                                                   style: TextStyle(
                                                     color: Colors.red,
                                                   ))
-                                              : Text('Restaurantss', style: TextStyle(color: Colors.black)),
+                                              : Text('Restaurant', style: TextStyle(color: Colors.black)),
                                           SizedBox(width: responsive.wp(2)),
                                           CircleAvatar(
                                             radius: responsive.ip(1.23),
@@ -910,10 +894,10 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                   } else {
                                     return (csmare == 0)
                                         ? Text(
-                                            'Restaurantss',
+                                            'Restaurant',
                                             style: TextStyle(color: Colors.red),
                                           )
-                                        : Text('Restaurantss', style: TextStyle(color: Colors.black));
+                                        : Text('Restaurant', style: TextStyle(color: Colors.black));
                                   }
                                 }),
                           ),

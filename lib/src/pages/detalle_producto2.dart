@@ -55,7 +55,6 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
 
   @override
   Widget build(BuildContext context) {
-
     final preferences = Preferences();
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
     //final ProductosData productos = ModalRoute.of(context).settings.arguments;
@@ -73,34 +72,51 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
             if (snapshot.data.length > 0) {
               return Stack(
                 children: [
-                  SlidingUpPanel(
-                    maxHeight: _panelHeightOpen,
-                    minHeight: responsive.hp(8),
-                    controller: panelController,
-                    parallaxEnabled: true,
+                  (preferences.tipoCategoria == '1')
+                      ? Stack(
+                          children: <Widget>[
+                            _backgroundImage(context, widget.productosData),
+                            _crearAppbar(responsive, widget.mostrarback),
+                            TranslateAnimation(
+                              duration: const Duration(milliseconds: 400),
+                              child: _contenido(
+                                widget.productosData,
+                                responsive,
+                                context,
+                                productosIdBloc,
+                                preferences,
+                              ),
+                            ),
+                          ],
+                        )
+                      : SlidingUpPanel(
+                          maxHeight: _panelHeightOpen,
+                          minHeight: responsive.hp(8),
+                          controller: panelController,
+                          parallaxEnabled: true,
 
-                    parallaxOffset: 0.1,
-                    backdropEnabled: true,
-                    body: Stack(children: <Widget>[
-                      _backgroundImage(context, snapshot.data[0]),
-                      _crearAppbar(responsive, widget.mostrarback),
-                      TranslateAnimation(
-                        duration: const Duration(milliseconds: 400),
-                        child: _contenido(snapshot.data[0], responsive, context, productosIdBloc,preferences),
-                      ),
-                    ]),
-                    panelBuilder: (sc) {
-                      return TranslateAnimation(
-                        duration: const Duration(milliseconds: 600),
-                        child: _carritoProductos(responsive, sc),
-                      );
-                    },
-                    borderRadius: const BorderRadius.only(
-                      topLeft: const Radius.circular(20),
-                      topRight: const Radius.circular(20),
-                    ),
-                    //onPanelSlide: (double pos) => setState(() {}),
-                  ),
+                          parallaxOffset: 0.1,
+                          backdropEnabled: true,
+                          body: Stack(children: <Widget>[
+                            _backgroundImage(context, snapshot.data[0]),
+                            _crearAppbar(responsive, widget.mostrarback),
+                            TranslateAnimation(
+                              duration: const Duration(milliseconds: 400),
+                              child: _contenido(snapshot.data[0], responsive, context, productosIdBloc, preferences),
+                            ),
+                          ]),
+                          panelBuilder: (sc) {
+                            return TranslateAnimation(
+                              duration: const Duration(milliseconds: 600),
+                              child: _carritoProductos(responsive, sc),
+                            );
+                          },
+                          borderRadius: const BorderRadius.only(
+                            topLeft: const Radius.circular(20),
+                            topRight: const Radius.circular(20),
+                          ),
+                          //onPanelSlide: (double pos) => setState(() {}),
+                        ),
                   (snapshot.data[0].productoNuevo == '1')
                       ? Positioned(
                           top: kToolbarHeight + responsive.hp(2),
@@ -164,7 +180,11 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
     );
   }
 
-  Widget botonesBajos(Responsive responsive, ProductosData productosData, ProductosBloc productosBloc) {
+  Widget botonesBajos(
+    Responsive responsive,
+    ProductosData productosData,
+    ProductosBloc productosBloc,
+  ) {
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: responsive.hp(1),
@@ -213,48 +233,72 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
           SizedBox(
             width: responsive.wp(5),
           ),
-         StreamBuilder(
+          StreamBuilder(
               stream: productosBloc.categoriaTemporizador,
               builder: (context, AsyncSnapshot<ValidarProducto> snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data.valor) {
-                    return GestureDetector(
-                      child: Container(
-                        width: responsive.wp(65),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.red,
-                          border: Border.all(color: Colors.red),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Agregar al Carrito',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: responsive.ip(2),
+                    return (productosData.validadoDelivery == '1')
+                        ? GestureDetector(
+                            child: Container(
+                              width: responsive.wp(65),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.red,
+                                border: Border.all(color: Colors.red),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Agregar al Carrito',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: responsive.ip(2),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      onTap: () async {
-                        final adicionalesDatabase = AdicionalesDatabase();
+                            onTap: () async {
+                              final adicionalesDatabase = AdicionalesDatabase();
 
-                        await adicionalesDatabase.updateAdicionalesEnFalseDb();
+                              await adicionalesDatabase.updateAdicionalesEnFalseDb();
 
-                        //await utils.agregarAdicionalesDeProducto(productosData.productoAdicionalOpciones);
-                        final itemObservacionDatabase = ItemObservacionDatabase();
-                        itemObservacionDatabase.deleteItemObservacion();
+                              //await utils.agregarAdicionalesDeProducto(productosData.productoAdicionalOpciones);
+                              final itemObservacionDatabase = ItemObservacionDatabase();
+                              itemObservacionDatabase.deleteItemObservacion();
 
-                        agregarItemObservacion(context, productosData.idProducto, true, 'producto', '');
+                              agregarItemObservacion(context, productosData.idProducto, true, 'producto', '');
 
-                        Navigator.of(context).push(_createRoute(productosData.idProducto, productosData.productoAdicionalOpciones));
-                        /* setState(() { 
+                              Navigator.of(context).push(_createRoute(productosData.idProducto, productosData.productoAdicionalOpciones));
+                              /* setState(() { 
                             mostrar =true;
                             
                           }); */
-                        //utils.agregarCarrito(productosData, context, "1");
-                      },
-                    );
+                              //utils.agregarCarrito(productosData, context, "1");
+                            },
+                          )
+                        : InkWell(
+                            child: Container(
+                              width: responsive.wp(65),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.grey,
+                                border: Border.all(color: Colors.grey),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Agregar al Carrito',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: responsive.ip(2.5),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              showToast('Producto Disponible solo en el local', 2, ToastGravity.TOP);
+                              //utils.agregarCarrito(productosData, context, "1");
+                            },
+                          );
                   } else {
                     return InkWell(
                       child: Container(
@@ -336,7 +380,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
     );
   }
 
-  Widget _contenido(ProductosData productosData, Responsive responsive, BuildContext context, ProductosBloc productosBloc,Preferences preferences) {
+  Widget _contenido(ProductosData productosData, Responsive responsive, BuildContext context, ProductosBloc productosBloc, Preferences preferences) {
     final precioProdcuto = format(
       double.parse(productosData.productoPrecio),
     );
@@ -392,33 +436,24 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                   SizedBox(
                     height: responsive.hp(3),
                   ),
-                   (preferences.tipoCategoria == '1')?Container():botonesBajos(responsive, productosData, productosBloc),
+                  (preferences.tipoCategoria == '1') ? Container() : botonesBajos(responsive, productosData, productosBloc),
                   //_cantidad(responsive),
                   SizedBox(
                     height: responsive.hp(1),
                   ),
-
-                  /*  ('${productosData.productoNuevo}' == '1')
-                      ? Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.wp(3),
-                            vertical: responsive.wp(.5),
+                  (productosData.validadoDelivery == '1')
+                      ? Container()
+                      : Text(
+                          'Producto disponible solo en el local',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: responsive.ip(1.8),
                           ),
-                          decoration: BoxDecoration(
-                              //borderRadius: BorderRadius.circular(10),
-                              color: Colors.red),
-                          child: Text(
-                            'Producto Nuevo',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: responsive.ip(2),
-                            ),
-                          ),
-                        )
-                      : Container(), */
+                        ),
                   SizedBox(
-                    height: responsive.hp(1),
+                    height: responsive.hp(2),
                   ),
                   Text(
                     '${productosData.productoDescripcion}',
@@ -1007,7 +1042,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                         /* utils.showToast(
                             'No tiene permisos', 2, ToastGravity.TOP); */
                       } else {
-                        showToast('No tiene permisos', 2, ToastGravity.TOP);
+                        showToast('Debe iniciar sessión para Ordenar', 2, ToastGravity.TOP);
                       }
                     }),
               ),
