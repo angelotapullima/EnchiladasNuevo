@@ -1,6 +1,7 @@
 
 
 import 'package:enchiladasapp/src/bloc/adicionales_bloc.dart';
+import 'package:enchiladasapp/src/bloc/busqueda_bloc.dart';
 import 'package:enchiladasapp/src/bloc/carrito_completo.dart';
 import 'package:enchiladasapp/src/bloc/contador_productos_foto.dart';
 import 'package:enchiladasapp/src/bloc/item_observacion_bloc.dart';
@@ -73,6 +74,7 @@ class ProviderBloc extends InheritedWidget {
   final productosDestacadosBloc=ProductosDestacadosBloc(); */
   final publicidadBloc = PublicidadBloc();
   final porcentajesBloc = PorcentajesBloc();
+  final busquedaGeneralTab = BusquedaGeneralTab();
 
   static ProviderBloc _instancia;
 
@@ -226,4 +228,11 @@ class ProviderBloc extends InheritedWidget {
         .porcentajesBloc;
   }
     
+
+
+  static BusquedaGeneralTab busquedaAngelo(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).busquedaGeneralTab;
+  }
+
+  
 }

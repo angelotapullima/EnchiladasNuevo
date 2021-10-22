@@ -264,10 +264,7 @@ class _DetallePromocionesState extends State<DetallePromociones> {
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black, fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'S/ ${productosData.productoPrecio}',
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: responsive.ip(2)),
-                  ),
+                   
                 ],
               ),
             ),

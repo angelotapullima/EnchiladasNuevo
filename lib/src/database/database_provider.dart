@@ -23,7 +23,7 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'enchiladasbd1.db');
+    final path = join(documentsDirectory.path, 'enchiladasbd2.db');
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onConfigure: (Database db) async {
@@ -93,6 +93,8 @@ class DatabaseProvider {
           'producto_unidad VARCHAR,'
           'producto_destacado VARCHAR,'
           'producto_estado_destacado VARCHAR,'
+          'categoriaTipo VARCHAR,'
+          'categoriaTipo2 VARCHAR,'
           'producto_tupper VARCHAR,' 
           'producto_estado VARCHAR,'
           'producto_nuevo VARCHAR,'

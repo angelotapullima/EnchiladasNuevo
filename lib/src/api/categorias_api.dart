@@ -60,24 +60,14 @@ class CategoriasApi {
       if (decodedData['result']['data'].length > 0) {
         for (int i = 0; i < decodedData['result']['data'].length; i++) {
           var porcentaje = ((i + 1) * 100) / cantidadTotal;
-
-          print('porcentaje $porcentaje');
+ 
 
           if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
             utils.porcentaje(context, porcentaje);
           }
-          String valor;
           var dato = decodedData['result']['data'][i]['categoria_tipo_2'].toString();
 
-          if (dato == '5') {
-            valor = '5';
-          } else if (dato == '6') {
-            valor = '5';
-          } else if (dato == '7') {
-            valor = '5';
-          } else {
-            valor = dato;
-          }
+         
 
           CategoriaData categoriaData = CategoriaData();
 
@@ -85,7 +75,7 @@ class CategoriasApi {
           categoriaData.categoriaNombre = decodedData['result']['data'][i]['categoria_nombre'];
           categoriaData.categoriaIcono = decodedData['result']['data'][i]['categoria_icono'];
           categoriaData.categoriaTipo = decodedData['result']['data'][i]['categoria_tipo'];
-          categoriaData.categoriaTipo2 = valor;
+          categoriaData.categoriaTipo2 = dato.toString();
           categoriaData.categoriaFoto = decodedData['result']['data'][i]['categoria_foto'];
           categoriaData.categoriaBanner = decodedData['result']['data'][i]['categoria_banner'];
           categoriaData.categoriaPromocion = decodedData['result']['data'][i]['categoria_promocion'];
@@ -143,6 +133,8 @@ class CategoriasApi {
             productosData.productoEstado = productos[x]['producto_estado'];
             productosData.productoDestacado = productos[x]['producto_destacado'];
             productosData.productoNuevo = productos[x]['producto_nuevo'];
+            productosData.categoriaTipo = decodedData['result']['data'][i]['categoria_tipo'].toString();
+            productosData.categoriaTipo2 = decodedData['result']['data'][i]['categoria_tipo_2'].toString();
             productosData.productoDescripcion = productos[x]['producto_detalle'];
             productosData.productoComentario = productos[x]['producto_comentario'];
             productosData.sonido = decodedData['result']['data'][i]['categoria_sonido'];

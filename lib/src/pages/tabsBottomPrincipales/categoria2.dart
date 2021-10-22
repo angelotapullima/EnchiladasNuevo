@@ -1,7 +1,7 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/categoria_model.dart';
-import 'package:enchiladasapp/src/pages/search.dart';
+import 'package:enchiladasapp/src/search/search.dart';
 import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/detalle_categoria.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
@@ -37,8 +37,8 @@ class Categoria2 extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'MADE-TOMMY',
             fontWeight: FontWeight.bold,
-            color: Colors.grey[700],
-            fontSize: responsive.ip(2.6),
+            color: Colors.grey[700], /* 
+            fontSize: responsive.ip(2.6), */
           ),
         ),
         bottom: PreferredSize(
@@ -114,23 +114,29 @@ class Categoria2 extends StatelessWidget {
             (preferences.tipoCategoriaNumero == '3')
                 ? ButtonsTabBar(
                     height: responsive.hp(8),
-                    backgroundColor: Colors.transparent,
-                    duration: 0,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: responsive.wp(5),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.red,
+                          width: 1.5,
+                        ),
+                      ),
                     ),
-                    unselectedBackgroundColor: Colors.transparent,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: responsive.wp(3),
+                    ),
                     unselectedLabelStyle: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'MADE-TOMMY',
-                      fontSize: responsive.ip(2),
+                      fontSize: responsive.ip(1.6),
                     ),
                     labelStyle: TextStyle(
                       color: Colors.red,
                       fontFamily: 'MADE-TOMMY',
                       fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2),
+                      fontSize: responsive.ip(1.6),
                     ),
                     tabs: [
                       Tab(
@@ -155,23 +161,31 @@ class Categoria2 extends StatelessWidget {
                   )
                 : (preferences.tipoCategoriaNumero == '4')
                     ? ButtonsTabBar(
-                        backgroundColor: Colors.transparent,
-                        duration: 0,
+                        height: responsive.hp(8),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.red,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
                         contentPadding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(5),
+                          horizontal: responsive.wp(3),
                         ),
                         unselectedBackgroundColor: Colors.transparent,
                         unselectedLabelStyle: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'MADE-TOMMY',
-                          fontSize: responsive.ip(2),
+                          fontSize: responsive.ip(1.6),
                         ),
                         labelStyle: TextStyle(
                           color: Colors.red,
                           fontFamily: 'MADE-TOMMY',
                           fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(2),
+                          fontSize: responsive.ip(1.6),
                         ),
                         tabs: [
                           Tab(
@@ -195,23 +209,31 @@ class Categoria2 extends StatelessWidget {
                         ],
                       )
                     : ButtonsTabBar(
-                        backgroundColor: Colors.transparent,
-                        duration: 0,
+                        height: responsive.hp(8), 
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.red,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
                         contentPadding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(5),
+                          horizontal: responsive.wp(3),
                         ),
                         unselectedBackgroundColor: Colors.transparent,
                         unselectedLabelStyle: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'MADE-TOMMY',
-                          fontSize: responsive.ip(2),
+                          fontSize: responsive.ip(1.6),
                         ),
                         labelStyle: TextStyle(
                           color: Colors.red,
                           fontFamily: 'MADE-TOMMY',
                           fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(2),
+                          fontSize: responsive.ip(1.6),
                         ),
                         tabs: [
                           Tab(
@@ -264,120 +286,6 @@ class Categoria2 extends StatelessWidget {
                           ],
               ),
             )
-            /*  Expanded(
-              child: StreamBuilder(
-                stream: categoriasBloc.categoriaTipo,
-                builder: (context, AsyncSnapshot<List<TipoModel>> snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data.length > 0) {
-                      return ListView.builder(
-                          itemCount: snapshot.data.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            
-                            return ListView.builder(
-                              itemCount: snapshot.data[index].cate.length + 1,
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              itemBuilder: (context, i) {
-                                if (i == 0) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: responsive.wp(2),
-                                      vertical: responsive.hp(2),
-                                    ),
-                                    child: Text(
-                                      '${snapshot.data[index].tipo}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: responsive.ip(2.5),
-                                      ),
-                                    ),
-                                  );
-                                }
-      
-                                i = i - 1;
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(PageRouteBuilder(
-                                      pageBuilder: (context, animation, secondaryAnimation) {
-                                        return Detallecategoria(
-                                          idCategoria: '${snapshot.data[index].cate[i].idCategoria}',
-                                          categoriaNombre: '${snapshot.data[index].cate[i].categoriaNombre}',
-                                          categoriaIcono: '${snapshot.data[index].cate[i].categoriaIcono}',
-                                        );
-                                      },
-                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                        var begin = Offset(0.0, 1.0);
-                                        var end = Offset.zero;
-                                        var curve = Curves.ease;
-      
-                                        var tween = Tween(begin: begin, end: end).chain(
-                                          CurveTween(curve: curve),
-                                        );
-      
-                                        return SlideTransition(
-                                          position: animation.drive(tween),
-                                          child: child,
-                                        );
-                                      },
-                                    ));
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: responsive.wp(5),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              height: responsive.ip(4),
-                                              width: responsive.ip(4),
-                                              child: SvgPicture.network(
-                                                '${snapshot.data[index].cate[i].categoriaIcono}',
-                                                semanticsLabel: 'A shark?!',
-                                                placeholderBuilder: (BuildContext context) =>
-                                                    Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                '${snapshot.data[index].cate[i].categoriaNombre}',
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: responsive.ip(1.5),
-                                                ),
-                                              ),
-                                            ),
-                                            Icon(Ionicons.ios_arrow_forward, color: Colors.black, size: responsive.hp(3)),
-                                          ],
-                                        ),
-                                      ),
-                                      Divider()
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          });
-                    } else {
-                      return Container(
-                        child: Center(child: Text('No aye')),
-                      );
-                    }
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-            ),
-           */
           ],
         ),
       ),
@@ -476,7 +384,7 @@ class RestaurantWidget extends StatelessWidget {
             );
           } else {
             return Container(
-              child: Center(child: Text('No aye')),
+              child: Center(child: Text('No Existen categorías ')),
             );
           }
         } else {
@@ -578,7 +486,7 @@ class CafeWidget extends StatelessWidget {
             );
           } else {
             return Container(
-              child: Center(child: Text('No aye')),
+              child: Center(child: Text('No Existen categorías')),
             );
           }
         } else {
@@ -680,7 +588,7 @@ class VarWidget extends StatelessWidget {
             );
           } else {
             return Container(
-              child: Center(child: Text('No aye')),
+              child: Center(child: Text('No Existen categorías')),
             );
           }
         } else {
@@ -753,7 +661,10 @@ class RestaurantDeliveryWidget extends StatelessWidget {
                               child: SvgPicture.network(
                                 '${snapshot.data[i].categoriaIcono}',
                                 semanticsLabel: 'A shark?!',
-                                placeholderBuilder: (BuildContext context) => Container(padding: const EdgeInsets.all(30.0), child: const CircularProgressIndicator()),
+                                placeholderBuilder: (BuildContext context) => Container(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: const CircularProgressIndicator(),
+                                ),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -782,7 +693,7 @@ class RestaurantDeliveryWidget extends StatelessWidget {
             );
           } else {
             return Container(
-              child: Center(child: Text('No aye')),
+              child: Center(child: Text('No Existen categorías')),
             );
           }
         } else {
@@ -817,29 +728,31 @@ class CafeDeliveryWidget extends StatelessWidget {
               itemBuilder: (context, i) {
                 return InkWell(
                   onTap: () {
-                    Navigator.of(context).push(PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return Detallecategoria(
-                          idCategoria: '${snapshot.data[i].idCategoria}',
-                          categoriaNombre: '${snapshot.data[i].categoriaNombre}',
-                          categoriaIcono: '${snapshot.data[i].categoriaIcono}',
-                        );
-                      },
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        var begin = Offset(0.0, 1.0);
-                        var end = Offset.zero;
-                        var curve = Curves.ease;
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return Detallecategoria(
+                            idCategoria: '${snapshot.data[i].idCategoria}',
+                            categoriaNombre: '${snapshot.data[i].categoriaNombre}',
+                            categoriaIcono: '${snapshot.data[i].categoriaIcono}',
+                          );
+                        },
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
 
-                        var tween = Tween(begin: begin, end: end).chain(
-                          CurveTween(curve: curve),
-                        );
+                          var tween = Tween(begin: begin, end: end).chain(
+                            CurveTween(curve: curve),
+                          );
 
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
                   },
                   child: Column(
                     children: [
@@ -884,7 +797,7 @@ class CafeDeliveryWidget extends StatelessWidget {
             );
           } else {
             return Container(
-              child: Center(child: Text('No aye')),
+              child: Center(child: Text('No Existen categorías')),
             );
           }
         } else {
@@ -986,7 +899,7 @@ class VarDeliveryWidget extends StatelessWidget {
             );
           } else {
             return Container(
-              child: Center(child: Text('No aye')),
+              child: Center(child: Text('No Existen categorías')),
             );
           }
         } else {

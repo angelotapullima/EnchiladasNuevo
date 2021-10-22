@@ -14,7 +14,7 @@ import 'package:enchiladasapp/src/models/publicidad_model.dart';
 import 'package:enchiladasapp/src/pages/categorias_especiales.dart';
 import 'package:enchiladasapp/src/pages/detalle_producto2.dart';
 import 'package:enchiladasapp/src/pages/detalle_productos.dart';
-import 'package:enchiladasapp/src/pages/search.dart';
+import 'package:enchiladasapp/src/search/search.dart';
 import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/categoria2.dart';
 import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/detalle_categoria.dart';
 import 'package:enchiladasapp/src/utils/circle.dart';
@@ -35,7 +35,7 @@ class PrincipalTab extends StatelessWidget {
   void _onRefresh(BuildContext context) async {
     print('_onRefresh pantalla');
     final prefs = new Preferences();
-    final pantallasBloc = ProviderBloc.pantalla(context);
+    final pantallasBloc = ProviderBloc.pantalla(context); 
     final categoriasBloc = ProviderBloc.cat(context);
 
     final categoriasApi = CategoriasApi();
@@ -299,16 +299,15 @@ class PrincipalTab extends StatelessWidget {
                                                       );
                                                     },
                                                     child: Container(
-                                                      width: responsive.hp(9),
+                                                      width: responsive.wp(18),
                                                       child: Column(
                                                         crossAxisAlignment: CrossAxisAlignment.center,
                                                         children: [
                                                           CircleAvatar(
                                                             backgroundColor: Colors.red,
-                                                            radius: responsive.ip(2.5),
+                                                            radius: responsive.ip(3),
                                                             child: Center(
-                                                              child: Icon(
-                                                                Ionicons.ios_alert,
+                                                              child: Icon(Icons.menu_rounded,
                                                                 color: Colors.white,
                                                               ),
                                                             ),
@@ -359,14 +358,15 @@ class PrincipalTab extends StatelessWidget {
                                                       ),
                                                     );
                                                   },
-                                                  child: Container(
-                                                    width: responsive.hp(9),
+                                                  child: Container( 
+                                                    margin: EdgeInsets.symmetric(horizontal: responsive.wp(1)),
+                                                    width: responsive.wp(21),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                       children: [
                                                         Container(
-                                                          height: responsive.ip(5),
-                                                          width: responsive.ip(5),
+                                                          height: responsive.ip(6),
+                                                          width: responsive.ip(6),
                                                           child: SvgPicture.network(
                                                             '${categorias.data[index].categoriaIcono}',
                                                             semanticsLabel: 'A shark?!',
@@ -381,7 +381,7 @@ class PrincipalTab extends StatelessWidget {
                                                         ),
                                                         Padding(
                                                           padding: EdgeInsets.symmetric(
-                                                            horizontal: responsive.wp(1),
+                                                            horizontal: responsive.wp(0),
                                                           ),
                                                           child: Text(
                                                             '${categorias.data[index].categoriaNombre}',
@@ -923,60 +923,67 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
                             } else {
                               cantidad = 0;
                             }
-                            return Stack(
-                              children: [
-                                (cantidad != 0)
-                                    ? Stack(
-                                        children: <Widget>[
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Color(0x30F3EFE8),
-                                              borderRadius: BorderRadius.circular(5),
-                                            ),
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: responsive.wp(2),
-                                              vertical: responsive.hp(.5),
-                                            ),
-                                            child: Icon(
-                                              Ionicons.ios_cart,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: Container(
-                                              child: Text(
-                                                cantidad.toString(),
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: responsive.ip(1),
-                                                ),
+                            return  InkWell(
+                                  onTap: () {
+                                    final bottomBloc = ProviderBloc.bottom(context);
+
+                                    bottomBloc.changePage(3);
+                                  },
+                              child: Stack(
+                                children: [
+                                  (cantidad != 0)
+                                      ? Stack(
+                                          children: <Widget>[
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Color(0x30F3EFE8),
+                                                borderRadius: BorderRadius.circular(5),
                                               ),
-                                              alignment: Alignment.center,
-                                              width: responsive.ip(1.6),
-                                              height: responsive.ip(1.6),
-                                              decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: responsive.wp(2),
+                                                vertical: responsive.hp(.5),
+                                              ),
+                                              child: Icon(
+                                                Ionicons.ios_cart,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                            //child: Icon(Icons.brightness_1, size: 8,color: Colors.redAccent,  )
-                                          )
-                                        ],
-                                      )
-                                    : Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(0x30F3EFE8),
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: responsive.wp(2),
-                                          vertical: responsive.hp(.5),
-                                        ),
-                                        child: Icon(
-                                          Ionicons.ios_cart,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                              ],
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: Container(
+                                                child: Text(
+                                                  cantidad.toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1),
+                                                  ),
+                                                ),
+                                                alignment: Alignment.center,
+                                                width: responsive.ip(1.6),
+                                                height: responsive.ip(1.6),
+                                                decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                                              ),
+                                              //child: Icon(Icons.brightness_1, size: 8,color: Colors.redAccent,  )
+                                            )
+                                          ],
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0x30F3EFE8),
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: responsive.wp(2),
+                                            vertical: responsive.hp(.5),
+                                          ),
+                                          child: Icon(
+                                            Ionicons.ios_cart,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                ],
+                              ),
                             );
                           }),
                     ],

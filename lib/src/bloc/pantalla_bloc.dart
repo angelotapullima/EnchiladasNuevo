@@ -76,10 +76,8 @@ class PantallaBloc {
       pantalla.items = listItemPantalla;
 
       listFinal.add(pantalla);
-      print('final');
     }
 
-    print('ver datos');
     _pantallasController.sink.add(listFinal);
   }
 }

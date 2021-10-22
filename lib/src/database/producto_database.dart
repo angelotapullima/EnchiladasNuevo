@@ -4,26 +4,26 @@ import 'package:enchiladasapp/src/models/productos_model.dart';
 class ProductoDatabase {
   final dbprovider = DatabaseProvider.db;
 
-  insertarProductosDb(ProductosData productos) async { 
+    insertarProductosDb(ProductosData productos) async { 
     try {
       final db = await dbprovider.database;
 
       final res = await db.rawInsert(
           'INSERT OR REPLACE INTO Producto (id_producto,id_categoria,producto_nombre,producto_foto,producto_orden,'
           'producto_precio,producto_carta,producto_delivery,producto_sonido,'
-          'producto_unidad,producto_destacado,producto_estado_destacado,producto_tupper,producto_estado,producto_nuevo,'
+          'producto_unidad,producto_destacado,producto_estado_destacado,categoriaTipo,categoriaTipo2,producto_tupper,producto_estado,producto_nuevo,'
           'producto_descripcion,producto_comentario,producto_favorito) '
           'VALUES ( "${productos.idProducto}" , "${productos.idCategoria}" , "${productos.productoNombre}" ,'
           ' "${productos.productoFoto}" ,"${productos.productoOrden}" , "${productos.productoPrecio}" ,'
           ' "${productos.productoCarta}" ,"${productos.productoDelivery}",'
-          ' "${productos.sonido}" ,"${productos.productoUnidad}","${productos.productoDestacado}","${productos.productoEstadoDestacado}",'
+          ' "${productos.sonido}" ,"${productos.productoUnidad}","${productos.productoDestacado}","${productos.productoEstadoDestacado}","${productos.categoriaTipo}","${productos.categoriaTipo2}",'
           '"${productos.productoTupper}","${productos.productoEstado}","${productos.productoNuevo}",'
           '"${productos.productoDescripcion}", "${productos.productoComentario}",${productos.productoFavorito} )');
       return res;
     } catch (exception) {
       print(exception);
     }
-  }
+  }  
 
   updateProductosDb(ProductosData productos) async {
     final db = await dbprovider.database;
@@ -40,6 +40,8 @@ class ProductoDatabase {
         'producto_estado="${productos.productoEstado}", '
         'producto_favorito="${productos.productoFavorito}",'
         'producto_destacado="${productos.productoDestacado}",'
+        'categoriaTipo="${productos.categoriaTipo}",'
+        'categoriaTipo2="${productos.categoriaTipo2}",'
         'producto_estado_destacado="${productos.productoEstadoDestacado}",'
         'producto_tupper="${productos.productoTupper}",'
         'producto_sonido="${productos.sonido}",'
@@ -64,10 +66,10 @@ class ProductoDatabase {
   }
 
 
-  Future<List<ProductosData>> consultarPorQueryDelivery(String query) async {
+  Future<List<ProductosData>> consultarPorQuery(String query,String tipo) async {
     final db = await dbprovider.database;
     final res = await db.rawQuery(
-        "SELECT * FROM Producto WHERE producto_nombre LIKE '%$query%' and producto_estado='1' ");
+        "SELECT * FROM Producto WHERE producto_nombre LIKE '%$query%' and producto_estado='1' and (categoriaTipo = '$tipo' or categoriaTipo2 = '$tipo')");
 
     List<ProductosData> list = res.isNotEmpty
         ? res.map((c) => ProductosData.fromJson(c)).toList()

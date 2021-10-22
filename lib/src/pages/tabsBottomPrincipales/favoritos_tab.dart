@@ -206,14 +206,14 @@ class _FavoritosTabState extends State<FavoritosTab> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
+                                 /*  Text(
                                     'S/ ${snapshot.data[i].productoPrecio}',
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontFamily: 'Aeonik',
                                       fontSize: responsive.ip(1.9),
                                     ),
-                                  ),
+                                  ), */
                                   ('${snapshot.data[i].productoDestacado}' != '0')
                                       ? Container(
                                           padding: EdgeInsets.symmetric(

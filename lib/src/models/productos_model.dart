@@ -63,6 +63,8 @@ class ProductosData {
     this.productoFavorito,
     this.productoTupper,
     this.productoDestacado,
+    this.categoriaTipo,
+    this.categoriaTipo2,
     this.productoNuevo,
     this.productoEstadoDestacado,
     this.productoObservacion,
@@ -88,6 +90,8 @@ class ProductosData {
   int productoFavorito;
   String productoTupper;
   String productoDestacado;
+  String categoriaTipo;
+  String categoriaTipo2;
   String productoEstadoDestacado;
   String sonido;
   String productoNuevo;
@@ -113,6 +117,8 @@ class ProductosData {
         productoFavorito: json["producto_favorito"],
         productoDestacado: json["producto_destacado"],
         productoEstadoDestacado: json["producto_estado_destacado"],
+        categoriaTipo: json["categoriaTipo"],
+        categoriaTipo2: json["categoriaTipo2"],
         productoTupper: json["producto_tupper"],
         productoNuevo: json["producto_nuevo"],
         //productoCantidadAdicional: json["producto_cantidad_adicional"],

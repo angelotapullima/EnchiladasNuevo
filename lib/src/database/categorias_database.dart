@@ -19,20 +19,19 @@ class CategoriasDatabase {
   //Se usara para los categorias con tipo Unidos -- Delivery
   Future<List<CategoriaData>> obtenerCategoriasPorTipoUnidos(String tipo) async {
     final db = await dbprovider.database;
-    final res = await db
-        .rawQuery("SELECT * FROM Categorias where  categoria_tipo = '$tipo' or categoriaTipo2 = '$tipo'   and  categoria_mostrar_app='1' order by CAST(categoria_orden AS INT) ASC");
+    final res = await db.rawQuery(
+        "SELECT * FROM Categorias where  categoria_mostrar_app='1' and (categoria_tipo in (5,6,7) or categoriaTipo2 in (5,6,7) )     order by CAST(categoria_orden AS INT) ASC");
 
     List<CategoriaData> list = res.isNotEmpty ? res.map((c) => CategoriaData.fromJson(c)).toList() : [];
 
     return list;
   }
 
-
   //Se usara para los categorias con tipo Unidos -- Cafe-VAR-Salon
   Future<List<CategoriaData>> obtenerCategoriasPorTipo(String tipo) async {
     final db = await dbprovider.database;
-    final res = await db
-        .rawQuery("SELECT * FROM Categorias where categoria_mostrar_app='1'  and  categoria_tipo = '$tipo' or categoriaTipo2 = '$tipo'    order by CAST(categoria_orden AS INT) ASC");
+    final res = await db.rawQuery(
+        "SELECT * FROM Categorias where categoria_mostrar_app='1'  and  (categoria_tipo = '$tipo' or categoriaTipo2 = '$tipo' )   order by CAST(categoria_orden AS INT) ASC");
 
     List<CategoriaData> list = res.isNotEmpty ? res.map((c) => CategoriaData.fromJson(c)).toList() : [];
 
@@ -43,7 +42,7 @@ class CategoriasDatabase {
   Future<List<CategoriaData>> obtenerCategoriasPromociones(String tipo) async {
     final db = await dbprovider.database;
     final res =
-        await db.rawQuery("SELECT * FROM Categorias where  categoria_promocion = '1' and categoria_mostrar_app='1' and categoria_tipo = '$tipo' or categoriaTipo2 = '$tipo'    ");
+        await db.rawQuery("SELECT * FROM Categorias where  categoria_promocion = '1' and categoria_mostrar_app='1' and (categoria_tipo = '$tipo' or categoriaTipo2 = '$tipo')    ");
 
     List<CategoriaData> list = res.isNotEmpty ? res.map((c) => CategoriaData.fromJson(c)).toList() : [];
 
@@ -54,7 +53,7 @@ class CategoriasDatabase {
   Future<List<CategoriaData>> obtenerCategoriasPromocionesUnidas(String tipo) async {
     final db = await dbprovider.database;
     final res =
-        await db.rawQuery("SELECT * FROM Categorias where  categoria_tipo = '$tipo' or categoriaTipo2 = '$tipo'   and  categoria_promocion = '1' and  categoria_mostrar_app='1' ");
+        await db.rawQuery("SELECT * FROM Categorias where categoria_promocion = '1' and categoria_mostrar_app='1' and( categoria_tipo in (5,6,7) or categoriaTipo2 in (5,6,7) )  ");
 
     List<CategoriaData> list = res.isNotEmpty ? res.map((c) => CategoriaData.fromJson(c)).toList() : [];
 

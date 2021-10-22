@@ -55,6 +55,8 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
 
   @override
   Widget build(BuildContext context) {
+
+    final preferences = Preferences();
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
     //final ProductosData productos = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
@@ -84,7 +86,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                       _crearAppbar(responsive, widget.mostrarback),
                       TranslateAnimation(
                         duration: const Duration(milliseconds: 400),
-                        child: _contenido(snapshot.data[0], responsive, context, productosIdBloc),
+                        child: _contenido(snapshot.data[0], responsive, context, productosIdBloc,preferences),
                       ),
                     ]),
                     panelBuilder: (sc) {
@@ -211,7 +213,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
           SizedBox(
             width: responsive.wp(5),
           ),
-          StreamBuilder(
+         StreamBuilder(
               stream: productosBloc.categoriaTemporizador,
               builder: (context, AsyncSnapshot<ValidarProducto> snapshot) {
                 if (snapshot.hasData) {
@@ -334,7 +336,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
     );
   }
 
-  Widget _contenido(ProductosData productosData, Responsive responsive, BuildContext context, ProductosBloc productosBloc) {
+  Widget _contenido(ProductosData productosData, Responsive responsive, BuildContext context, ProductosBloc productosBloc,Preferences preferences) {
     final precioProdcuto = format(
       double.parse(productosData.productoPrecio),
     );
@@ -390,7 +392,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                   SizedBox(
                     height: responsive.hp(3),
                   ),
-                  botonesBajos(responsive, productosData, productosBloc),
+                   (preferences.tipoCategoria == '1')?Container():botonesBajos(responsive, productosData, productosBloc),
                   //_cantidad(responsive),
                   SizedBox(
                     height: responsive.hp(1),

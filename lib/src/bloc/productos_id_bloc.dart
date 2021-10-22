@@ -16,7 +16,6 @@ class ProductosBloc {
 
   final _productosEnchiladasController = new BehaviorSubject<List<ProductosData>>();
   final _productosIDController = new BehaviorSubject<List<ProductosData>>();
-  final _productosQueryController = new BehaviorSubject<List<ProductosData>>();
   final _categoriaProductosController = new BehaviorSubject<List<CategoriaData>>();
   final _cargandoProductosController = BehaviorSubject<bool>();
 
@@ -24,7 +23,6 @@ class ProductosBloc {
 
   Stream<List<ProductosData>> get productosEnchiladasStream => _productosEnchiladasController.stream;
   Stream<List<ProductosData>> get productosIdStream => _productosIDController.stream;
-  Stream<List<ProductosData>> get productosQueryStream => _productosQueryController.stream;
 
   Stream<List<CategoriaData>> get categoriasProductos => _categoriaProductosController.stream;
   Stream<bool> get cargandoProductosStream => _cargandoProductosController.stream;
@@ -34,7 +32,6 @@ class ProductosBloc {
   dispose() {
     _productosEnchiladasController?.close();
     _productosIDController?.close();
-    _productosQueryController?.close();
     _cargandoProductosController?.close();
     _categoriaProductosController?.close();
     _categoriaTemporizador?.close();
@@ -84,41 +81,6 @@ class ProductosBloc {
     _cargandoProductosController.sink.add(true);
     _productosIDController.sink.add(await productoDatabase.consultarPorId('$id'));
     _cargandoProductosController.sink.add(false);
-  }
-
-  void obtenerProductoPorQueryDelivery(String query) async {
-    final List<ProductosData> listGeneral = [];
-    final listProductos = await productoDatabase.consultarPorQueryDelivery('$query');
-
-    for (var x = 0; x < listProductos.length; x++) {
-      final listCategorias = await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
-
-      if (listCategorias.length > 0) {
-        ProductosData productosData = ProductosData();
-        productosData.idProducto = listProductos[x].idProducto;
-        productosData.idCategoria = listCategorias[0].categoriaNombre;
-        productosData.productoNombre = listProductos[x].productoNombre;
-        productosData.productoFoto = listProductos[x].productoFoto;
-        productosData.productoOrden = listProductos[x].productoOrden;
-        productosData.productoPrecio = listProductos[x].productoPrecio;
-        productosData.productoCarta = listProductos[x].productoCarta;
-        productosData.productoDelivery = listProductos[x].productoDelivery;
-        productosData.sonido = listCategorias[0].categoriaSonido;
-        productosData.productoUnidad = listProductos[x].productoUnidad;
-        productosData.productoEstado = listProductos[x].productoEstado;
-        productosData.productoDestacado = listProductos[x].productoDestacado;
-        productosData.productoEstadoDestacado = listProductos[x].productoEstadoDestacado;
-        productosData.productoTupper = listProductos[x].productoTupper;
-        productosData.productoNuevo = listProductos[x].productoNuevo;
-        productosData.numeroitem = x.toString();
-        productosData.productoDescripcion = listProductos[x].productoDescripcion;
-        productosData.productoComentario = listProductos[x].productoComentario;
-        productosData.productoFavorito = listProductos[x].productoFavorito;
-        listGeneral.add(productosData);
-      }
-    }
-    _productosQueryController.sink.add(listGeneral);
-    //_productosQueryController.sink.add(await productoDatabase.consultarPorQuery('$query'));
   }
 
   void cargarCategoriaProductoDelivery(String idCategoria) async {

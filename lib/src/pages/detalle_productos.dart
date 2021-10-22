@@ -177,6 +177,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
 
   @override
   Widget build(BuildContext context) {
+    final preferences = Preferences();
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
     //final ProductosData productos = ModalRoute.of(context).settings.arguments;
     final responsive = Responsive.of(context);
@@ -186,85 +187,83 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     productosIdBloc.verificarDisponibilidad(widget.productosData.idProducto);
 
     return Material(
-        child: Stack(
-      children: [
-        SlidingUpPanel(
-          maxHeight: _panelHeightOpen,
-          minHeight: responsive.hp(8),
-          controller: panelController,
-          parallaxEnabled: true,
-          parallaxOffset: 0.1,
-          backdropEnabled: true,
-          body: Stack(children: <Widget>[
-            _backgroundImage(context, widget.productosData),
-            _crearAppbar(responsive, widget.mostrarback),
-            TranslateAnimation(
-              duration: const Duration(milliseconds: 400),
-              child: _contenido(widget.productosData, responsive, context, productosIdBloc),
+      child: Stack(
+        children: [
+          SlidingUpPanel(
+            maxHeight: _panelHeightOpen,
+            minHeight: responsive.hp(8),
+            controller: panelController,
+            parallaxEnabled: true,
+            parallaxOffset: 0.1,
+            backdropEnabled: true,
+            body: Stack(children: <Widget>[
+              _backgroundImage(context, widget.productosData),
+              _crearAppbar(responsive, widget.mostrarback),
+              TranslateAnimation(
+                duration: const Duration(milliseconds: 400),
+                child: _contenido(widget.productosData, responsive, context, productosIdBloc, preferences),
+              ),
+            ]),
+            panelBuilder: (sc) {
+              return TranslateAnimation(
+                duration: const Duration(milliseconds: 600),
+                child: _carritoProductos(responsive, sc),
+              );
+            },
+            borderRadius: const BorderRadius.only(
+              topLeft: const Radius.circular(20),
+              topRight: const Radius.circular(20),
             ),
-          ]),
-          panelBuilder: (sc) {
-            return TranslateAnimation(
-              duration: const Duration(milliseconds: 600),
-              child: _carritoProductos(responsive, sc),
-            );
-          },
-          borderRadius: const BorderRadius.only(
-            topLeft: const Radius.circular(20),
-            topRight: const Radius.circular(20),
+            //onPanelSlide: (double pos) => setState(() {}),
           ),
-          //onPanelSlide: (double pos) => setState(() {}),
-        ),
-        (widget.productosData.productoNuevo == '1')
-            ? Positioned(
-                top: kToolbarHeight + responsive.hp(2),
-                left: 0,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(3),
-                    vertical: responsive.wp(.5),
-                  ),
-                  decoration: BoxDecoration(
-                      //borderRadius: BorderRadius.circular(10),
-                      color: Colors.red),
-                  child: Text(
-                    'Producto Nuevo',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(2),
+          (widget.productosData.productoNuevo == '1')
+              ? Positioned(
+                  top: kToolbarHeight + responsive.hp(2),
+                  left: 0,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: responsive.wp(3),
+                      vertical: responsive.wp(.5),
+                    ),
+                    decoration: BoxDecoration(
+                        //borderRadius: BorderRadius.circular(10),
+                        color: Colors.red),
+                    child: Text(
+                      'Producto Nuevo',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: responsive.ip(2),
+                      ),
                     ),
                   ),
-                ),
-              )
-            : Container(),
-        (widget.productosData.productoDestacado != '0')
-            ? Positioned(
-                top: kToolbarHeight + responsive.hp(2),
-                //top: responsive.hp(40),
-                right: 0,
-                //left: 0,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: responsive.wp(2),
-                    vertical: responsive.hp(.5),
-                  ),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                     
-                      color: Colors.orange),
-                  child: Text(
-                    'Destacado',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: responsive.ip(1.3),
+                )
+              : Container(),
+          (widget.productosData.productoDestacado != '0')
+              ? Positioned(
+                  top: kToolbarHeight + responsive.hp(2),
+                  //top: responsive.hp(40),
+                  right: 0,
+                  //left: 0,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: responsive.wp(2),
+                      vertical: responsive.hp(.5),
                     ),
-                  ),
-                ))
-            : Container()
-      ],
-    ),);
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.orange),
+                    child: Text(
+                      'Destacado',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: responsive.ip(1.3),
+                      ),
+                    ),
+                  ))
+              : Container()
+        ],
+      ),
+    );
   }
 
   Widget botonesBajos(Responsive responsive, ProductosData productosData, ProductosBloc productosBloc) {
@@ -434,7 +433,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
     );
   }
 
-  Widget _contenido(ProductosData productosData, Responsive responsive, BuildContext context, ProductosBloc productosBloc) {
+  Widget _contenido(ProductosData productosData, Responsive responsive, BuildContext context, ProductosBloc productosBloc, Preferences preferences) {
     final precioProdcuto = utils.format(
       double.parse(productosData.productoPrecio),
     );
@@ -480,7 +479,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                   SizedBox(
                     height: responsive.hp(3),
                   ),
-                  botonesBajos(responsive, productosData, productosBloc),
+                  (preferences.tipoCategoria == '1') ? Container() : botonesBajos(responsive, productosData, productosBloc),
                   //_cantidad(responsive),
                   SizedBox(
                     height: responsive.hp(1),

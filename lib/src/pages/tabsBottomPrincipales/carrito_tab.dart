@@ -36,6 +36,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     //_obtenerUbicacion(context);
     final Responsive responsive = new Responsive.of(context);
 
+    final preferences = Preferences();
+
     final carritoBloc = ProviderBloc.carrito(context);
     carritoBloc.obtenerCarrito();
 
@@ -61,7 +63,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
         builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
-              return _listaPedidos(responsive, snapshot.data, usuarioBloc);
+              return _listaPedidos(responsive, snapshot.data, usuarioBloc,preferences);
             } else {
               return SafeArea(
                 child: Column(
@@ -135,7 +137,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
     );
   }
 
-  Widget _listaPedidos(Responsive responsive, List<Carrito> carritoList, UsuarioBloc usuarioBloc) {
+  Widget _listaPedidos(Responsive responsive, List<Carrito> carritoList, UsuarioBloc usuarioBloc,Preferences preferences) {
     double subtotal = 0;
     for (int i = 0; i < carritoList.length; i++) {
       if (carritoList[i].productoTipo != '1') {
@@ -264,7 +266,7 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                 SizedBox(
                   height: responsive.hp(2),
                 ),
-                InkWell(
+                (preferences.tipoCategoria == '1')?Container():InkWell(
                   onTap: () {
                     final prefs = Preferences();
 
@@ -332,7 +334,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.black,
-                            fontSize: 13,
+                            fontSize: responsive.ip(1.5)
+                            ,
                           ),
                         ),
                         Icon(Icons.arrow_forward_ios)
