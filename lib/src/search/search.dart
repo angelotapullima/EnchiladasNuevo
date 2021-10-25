@@ -1347,15 +1347,7 @@ class RestaurantWidget extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              width: responsive.wp(20),
-                              child: Text(
-                                '${snapshot.data[i].idCategoria}',
-                                style: TextStyle(
-                                  fontSize: responsive.ip(1.8),
-                                ),
-                              ),
-                            )
+                            
                           ],
                         ),
                         Divider()

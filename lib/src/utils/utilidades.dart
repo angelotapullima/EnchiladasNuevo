@@ -35,6 +35,9 @@ void agregarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoTupper = productosData.productoTupper;
   productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
   productos.productoNuevo = productosData.productoNuevo;
+  productos.validadoLocal = productosData.validadoLocal;
+  productos.validadoDelivery = productosData.validadoDelivery;
+  productos.productoNuevo = productosData.productoNuevo;
   productos.productoFavorito = 1;
 
   await productoDatabase.updateProductosDb(productos);
@@ -66,6 +69,8 @@ void quitarFavoritos(BuildContext context, ProductosData productosData) async {
   productos.productoTupper = productosData.productoTupper;
   productos.productoAdicionalOpciones = productosData.productoAdicionalOpciones;
   productos.productoNuevo = productosData.productoNuevo;
+  productos.validadoLocal = productosData.validadoLocal;
+  productos.validadoDelivery = productosData.validadoDelivery;
   productos.productoFavorito = 0;
 
   await productoDatabase.updateProductosDb(productos);

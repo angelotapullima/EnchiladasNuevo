@@ -116,7 +116,8 @@ class CategoriasApi {
           //print('productos tamaño ${productos.length}');
 
           for (int x = 0; x < productos.length; x++) {
-            String validado = '0';
+            String validadoDelivery = '0';
+            String validadoLocal = '0';
             final idproducto = productos[x]['id_producto'];
 
             final datoproducto = await productoDatabase.consultarPorId(idproducto);
@@ -147,12 +148,22 @@ class CategoriasApi {
                 productosData.categoriaTipo2 == '5' ||
                 productosData.categoriaTipo2 == '6' ||
                 productosData.categoriaTipo2 == '7') {
-              validado = '1';
+              validadoDelivery = '1';
+            }
+
+            if (productosData.categoriaTipo == '1' ||
+                productosData.categoriaTipo == '3' ||
+                productosData.categoriaTipo == '4' ||
+                productosData.categoriaTipo2 == '1' ||
+                productosData.categoriaTipo2 == '3' ||
+                productosData.categoriaTipo2 == '4') {
+              validadoLocal = '1';
             }
 
             //0 == false <> 1 = true
             //para validar si el producto es solo para delivery
-            productosData.validadoDelivery = validado;
+            productosData.validadoDelivery = validadoDelivery;
+            productosData.validadoLocal = validadoLocal;
 
             if (productosData.productoDestacado == '0') {
               productosData.productoEstadoDestacado = '0';

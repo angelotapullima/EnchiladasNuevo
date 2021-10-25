@@ -19,16 +19,14 @@ class _PropinaPageState extends State<PropinaPage> {
     final propinasBloc = ProviderBloc.propina(context);
     propinasBloc.obtenerPropinas();
 
-    if(cantidad==0){
-
-    utils.deletePropinas(context);
+    if (cantidad == 0) {
+      utils.deletePropinas(context);
     }
     return Container(
       //height: responsive.hp(15),
       child: StreamBuilder(
         stream: propinasBloc.propinasStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ProductosData>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<ProductosData>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               final List<String> algo = [];
@@ -55,12 +53,9 @@ class _PropinaPageState extends State<PropinaPage> {
 
                       ProductosData productos = ProductosData();
                       productos.idProducto = snapshot.data[val - 1].idProducto;
-                      productos.idCategoria =
-                          snapshot.data[val - 1].idCategoria;
-                      productos.productoNombre =
-                          snapshot.data[val - 1].productoNombre;
-                      productos.productoPrecio =
-                          snapshot.data[val - 1].productoPrecio;
+                      productos.idCategoria = snapshot.data[val - 1].idCategoria;
+                      productos.productoNombre = snapshot.data[val - 1].productoNombre;
+                      productos.productoPrecio = snapshot.data[val - 1].productoPrecio;
 
                       utils.agregarPropinaCarrito(productos, context, '1');
                     }

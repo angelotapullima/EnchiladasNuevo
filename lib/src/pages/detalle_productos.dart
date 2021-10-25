@@ -545,11 +545,43 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                           'Producto disponible solo en el local',
                           textAlign: TextAlign.justify,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
                             fontSize: responsive.ip(1.8),
                           ),
                         ),
-
+                  SizedBox(
+                    height: responsive.hp(1),
+                  ),
+                   (productosData.validadoDelivery == '1')
+                      ? (productosData.validadoLocal == '1')
+                          ? Text(
+                              'Producto disponible en el local y en Delivery',
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.8),
+                              ),
+                            )
+                          : Text(
+                              'Producto disponible solo en Delivery',
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.ip(1.8),
+                              ),
+                            )
+                      : Text(
+                          'Producto disponible solo en el local',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: responsive.ip(1.8),
+                          ),
+                        ),
                   /*  ('${productosData.productoNuevo}' == '1')
                       ? Container(
                           padding: EdgeInsets.symmetric(

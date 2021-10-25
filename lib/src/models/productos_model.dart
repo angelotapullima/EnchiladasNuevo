@@ -72,6 +72,7 @@ class ProductosData {
     this.productoAdicionalOpciones,
     this.sonido,
     this.validadoDelivery,
+    this.validadoLocal,
   });
 
   String idProducto;
@@ -100,6 +101,7 @@ class ProductosData {
   String productoTipo;
   String productoObservacion;
   String validadoDelivery;
+  String validadoLocal;
 
   factory ProductosData.fromJson(Map<String, dynamic> json) => ProductosData(
         idProducto: json["id_producto"],
@@ -128,6 +130,7 @@ class ProductosData {
         productoTipo: json["producto_tipo"],
         sonido: json["producto_sonido"],
         validadoDelivery: json["validadoDelivery"],
+        validadoLocal: json["validadoLocal"],
       );
 
   Map<String, dynamic> toJson() => {

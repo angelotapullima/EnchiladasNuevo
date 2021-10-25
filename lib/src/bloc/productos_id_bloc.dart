@@ -71,6 +71,7 @@ class ProductosBloc {
       productosData.categoriaTipo = listProductos[x].categoriaTipo;
       productosData.categoriaTipo2 = listProductos[x].categoriaTipo2;
       productosData.validadoDelivery = listProductos[x].validadoDelivery;
+      productosData.validadoLocal = listProductos[x].validadoLocal;
 
       productosData.productoFavorito = listProductos[x].productoFavorito;
       listGeneral.add(productosData);
@@ -119,6 +120,8 @@ class ProductosBloc {
         productosData.productoDescripcion = listProductosPorCategoria[x].productoDescripcion;
         productosData.productoComentario = listProductosPorCategoria[x].productoComentario;
         productosData.productoFavorito = listProductosPorCategoria[x].productoFavorito;
+        productosData.validadoDelivery = listProductosPorCategoria[x].validadoDelivery;
+        productosData.validadoLocal = listProductosPorCategoria[x].validadoLocal;
 
         listProductos.add(productosData);
       }

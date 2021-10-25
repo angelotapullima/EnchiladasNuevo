@@ -102,6 +102,7 @@ class DatabaseProvider {
           'producto_comentario VARCHAR,' 
           'producto_cantidad_adicional VARCHAR,' 
           'validadoDelivery VARCHAR,' 
+          'validadoLocal VARCHAR,' 
           'producto_favorito int'
           ')');
 
