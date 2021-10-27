@@ -64,12 +64,17 @@ class BusquedaGeneralTab {
     cantidadVarDelivery?.close();
   }
 
-  void queryEnchiladas(String query, String tipo) async {
+  void queryEnchiladas(String query, String tipo,bool inicial) async {
     if (query.length > 0) {
       final List<ProductosData> listGeneral = [];
-      final listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      
 
-      print('cantidad ${listProductos.length}');
+      var listProductos = [];
+      if (inicial) {
+        listProductos = await productoDatabase.allProductsPorCategoriaTipo(tipo);
+      } else {
+        listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      }
 
       for (var x = 0; x < listProductos.length; x++) {
         //final listCategorias = await categoriaDatabase.consultarPorId(listProductos[x].idCategoria);
@@ -95,11 +100,11 @@ class BusquedaGeneralTab {
         productosData.productoTupper = listProductos[x].productoTupper;
         productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.categoriaTipo =listProductos[x].categoriaTipo;
-        productosData.categoriaTipo2 =listProductos[x].categoriaTipo2;
+        productosData.categoriaTipo = listProductos[x].categoriaTipo;
+        productosData.categoriaTipo2 = listProductos[x].categoriaTipo2;
         productosData.numeroitem = x.toString();
-        productosData.validadoDelivery =  listProductos[x].validadoDelivery;
-        productosData.validadoLocal =  listProductos[x].validadoLocal;
+        productosData.validadoDelivery = listProductos[x].validadoDelivery;
+        productosData.validadoLocal = listProductos[x].validadoLocal;
         productosData.productoDescripcion = listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
         productosData.productoFavorito = listProductos[x].productoFavorito;
@@ -115,10 +120,16 @@ class BusquedaGeneralTab {
     }
   }
 
-  void queryCafe(String query, String tipo) async {
+  void queryCafe(String query, String tipo,bool inicial) async {
     if (query.length > 0) {
       final List<ProductosData> listGeneral = [];
-      final listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+
+      var listProductos = [];
+      if (inicial) {
+        listProductos = await productoDatabase.allProductsPorCategoriaTipo(tipo);
+      } else {
+        listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      }
 
       for (var x = 0; x < listProductos.length; x++) {
         ProductosData productosData = ProductosData();
@@ -136,10 +147,10 @@ class BusquedaGeneralTab {
         productosData.productoTupper = listProductos[x].productoTupper;
         productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.categoriaTipo =listProductos[x].categoriaTipo;
-        productosData.categoriaTipo2 =listProductos[x].categoriaTipo2;
-        productosData.validadoDelivery =  listProductos[x].validadoDelivery;
-        productosData.validadoLocal =  listProductos[x].validadoLocal;
+        productosData.categoriaTipo = listProductos[x].categoriaTipo;
+        productosData.categoriaTipo2 = listProductos[x].categoriaTipo2;
+        productosData.validadoDelivery = listProductos[x].validadoDelivery;
+        productosData.validadoLocal = listProductos[x].validadoLocal;
         productosData.productoDescripcion = listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
         productosData.productoFavorito = listProductos[x].productoFavorito;
@@ -154,10 +165,15 @@ class BusquedaGeneralTab {
     }
   }
 
-  void queryVar(String query, String tipo) async {
+  void queryVar(String query, String tipo,bool inicial) async {
     if (query.length > 0) {
       final List<ProductosData> listGeneral = [];
-      final listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      var listProductos = [];
+      if (inicial) {
+        listProductos = await productoDatabase.allProductsPorCategoriaTipo(tipo);
+      } else {
+        listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      }
 
       for (var x = 0; x < listProductos.length; x++) {
         ProductosData productosData = ProductosData();
@@ -175,10 +191,10 @@ class BusquedaGeneralTab {
         productosData.productoTupper = listProductos[x].productoTupper;
         productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.categoriaTipo =listProductos[x].categoriaTipo;
-        productosData.categoriaTipo2 =listProductos[x].categoriaTipo2;
-        productosData.validadoDelivery =  listProductos[x].validadoDelivery;
-        productosData.validadoLocal =  listProductos[x].validadoLocal;
+        productosData.categoriaTipo = listProductos[x].categoriaTipo;
+        productosData.categoriaTipo2 = listProductos[x].categoriaTipo2;
+        productosData.validadoDelivery = listProductos[x].validadoDelivery;
+        productosData.validadoLocal = listProductos[x].validadoLocal;
         productosData.productoDescripcion = listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
         productosData.productoFavorito = listProductos[x].productoFavorito;
@@ -192,10 +208,16 @@ class BusquedaGeneralTab {
     }
   }
 
-  void queryEnchiladasDelivery(String query, String tipo) async {
+  void queryEnchiladasDelivery(String query, String tipo,bool inicial) async {
     if (query.length > 0) {
       final List<ProductosData> listGeneral = [];
-      final listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      var listProductos = [];
+      if (inicial) {
+        listProductos = await productoDatabase.allProductsPorCategoriaTipo(tipo);
+      } else {
+        listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      }
+
 
       for (var x = 0; x < listProductos.length; x++) {
         ProductosData productosData = ProductosData();
@@ -213,10 +235,10 @@ class BusquedaGeneralTab {
         productosData.productoTupper = listProductos[x].productoTupper;
         productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.categoriaTipo =listProductos[x].categoriaTipo;
-        productosData.categoriaTipo2 =listProductos[x].categoriaTipo2;
-        productosData.validadoDelivery =  listProductos[x].validadoDelivery;
-        productosData.validadoLocal =  listProductos[x].validadoLocal;
+        productosData.categoriaTipo = listProductos[x].categoriaTipo;
+        productosData.categoriaTipo2 = listProductos[x].categoriaTipo2;
+        productosData.validadoDelivery = listProductos[x].validadoDelivery;
+        productosData.validadoLocal = listProductos[x].validadoLocal;
         productosData.productoDescripcion = listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
         productosData.productoFavorito = listProductos[x].productoFavorito;
@@ -230,10 +252,15 @@ class BusquedaGeneralTab {
     }
   }
 
-  void queryCafeDelivery(String query, String tipo) async {
+  void queryCafeDelivery(String query, String tipo,bool inicial) async {
     if (query.length > 0) {
       final List<ProductosData> listGeneral = [];
-      final listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      var listProductos = [];
+      if (inicial) {
+        listProductos = await productoDatabase.allProductsPorCategoriaTipo(tipo);
+      } else {
+        listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      }
 
       for (var x = 0; x < listProductos.length; x++) {
         ProductosData productosData = ProductosData();
@@ -249,12 +276,12 @@ class BusquedaGeneralTab {
         productosData.productoDestacado = listProductos[x].productoDestacado;
         productosData.productoEstadoDestacado = listProductos[x].productoEstadoDestacado;
         productosData.productoTupper = listProductos[x].productoTupper;
-        productosData.validadoDelivery =  listProductos[x].validadoDelivery;
-        productosData.validadoLocal =  listProductos[x].validadoLocal;
+        productosData.validadoDelivery = listProductos[x].validadoDelivery;
+        productosData.validadoLocal = listProductos[x].validadoLocal;
         productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.categoriaTipo =listProductos[x].categoriaTipo;
-        productosData.categoriaTipo2 =listProductos[x].categoriaTipo2;
+        productosData.categoriaTipo = listProductos[x].categoriaTipo;
+        productosData.categoriaTipo2 = listProductos[x].categoriaTipo2;
         productosData.productoDescripcion = listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
         productosData.productoFavorito = listProductos[x].productoFavorito;
@@ -269,10 +296,16 @@ class BusquedaGeneralTab {
     }
   }
 
-  void queryVarDelivery(String query, String tipo) async {
+  void queryVarDelivery(String query, String tipo,bool inicial) async {
     if (query.length > 0) {
       final List<ProductosData> listGeneral = [];
-      final listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      var listProductos = [];
+      if (inicial) {
+        listProductos = await productoDatabase.allProductsPorCategoriaTipo(tipo);
+      } else {
+        listProductos = await productoDatabase.consultarPorQuery(query, tipo);
+      }
+
 
       for (var x = 0; x < listProductos.length; x++) {
         ProductosData productosData = ProductosData();
@@ -290,10 +323,10 @@ class BusquedaGeneralTab {
         productosData.productoTupper = listProductos[x].productoTupper;
         productosData.productoNuevo = listProductos[x].productoNuevo;
         productosData.numeroitem = x.toString();
-        productosData.categoriaTipo =listProductos[x].categoriaTipo;
-        productosData.categoriaTipo2 =listProductos[x].categoriaTipo2;
-        productosData.validadoDelivery =  listProductos[x].validadoDelivery;
-        productosData.validadoLocal =  listProductos[x].validadoLocal;
+        productosData.categoriaTipo = listProductos[x].categoriaTipo;
+        productosData.categoriaTipo2 = listProductos[x].categoriaTipo2;
+        productosData.validadoDelivery = listProductos[x].validadoDelivery;
+        productosData.validadoLocal = listProductos[x].validadoLocal;
         productosData.productoDescripcion = listProductos[x].productoDescripcion;
         productosData.productoComentario = listProductos[x].productoComentario;
         productosData.productoFavorito = listProductos[x].productoFavorito;

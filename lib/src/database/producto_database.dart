@@ -81,6 +81,20 @@ class ProductoDatabase {
   }
 
 
+
+  Future<List<ProductosData>> allProductsPorCategoriaTipo(String tipo) async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery(
+        "SELECT * FROM Producto WHERE   producto_estado='1' and (categoriaTipo = '$tipo' or categoriaTipo2 = '$tipo') order by producto_nombre asc");
+
+    List<ProductosData> list = res.isNotEmpty
+        ? res.map((c) => ProductosData.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+
   Future<List<ProductosData>> obtenerProductosPorCategoria(
       String id) async {
     final db = await dbprovider.database;

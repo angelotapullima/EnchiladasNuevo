@@ -35,7 +35,7 @@ class PrincipalTab extends StatelessWidget {
   void _onRefresh(BuildContext context) async {
     print('_onRefresh pantalla');
     final prefs = new Preferences();
-    final pantallasBloc = ProviderBloc.pantalla(context); 
+    final pantallasBloc = ProviderBloc.pantalla(context);
     final categoriasBloc = ProviderBloc.cat(context);
 
     final categoriasApi = CategoriasApi();
@@ -59,7 +59,7 @@ class PrincipalTab extends StatelessWidget {
     usuarioBloc.obtenerUsuario();
 
     final publicidadBloc = ProviderBloc.publi(context);
-    publicidadBloc.obtenerPublicidad();
+    publicidadBloc.obtenerPublicidad(prefs.tipoCategoriaNumero);
 
     final pantallasBloc = ProviderBloc.pantalla(context);
     final categoriasBloc = ProviderBloc.cat(context);
@@ -199,8 +199,6 @@ class PrincipalTab extends StatelessWidget {
                                                             ),
                                                           ),
                                                         ),
-
-                                                      
                                                       ],
                                                     ),
                                                   ),
@@ -307,7 +305,8 @@ class PrincipalTab extends StatelessWidget {
                                                             backgroundColor: Colors.red,
                                                             radius: responsive.ip(3),
                                                             child: Center(
-                                                              child: Icon(Icons.menu_rounded,
+                                                              child: Icon(
+                                                                Icons.menu_rounded,
                                                                 color: Colors.white,
                                                               ),
                                                             ),
@@ -358,7 +357,7 @@ class PrincipalTab extends StatelessWidget {
                                                       ),
                                                     );
                                                   },
-                                                  child: Container( 
+                                                  child: Container(
                                                     margin: EdgeInsets.symmetric(horizontal: responsive.wp(1)),
                                                     width: responsive.wp(21),
                                                     child: Column(
@@ -474,15 +473,15 @@ class PrincipalTab extends StatelessWidget {
               return LayoutBuilder(builder: (context, constraints) {
                 return GestureDetector(
                   onTap: () {
-                     Navigator.push(
+                    Navigator.push(
                       context,
                       PageRouteBuilder(
                         transitionDuration: const Duration(milliseconds: 100),
                         pageBuilder: (context, animation, secondaryAnimation) {
                           return Detallecategoria(
-                            categoriaNombre:pantallaModel.items[i].categoriaNombre ,
-                            categoriaIcono:pantallaModel.items[i].categoriaIcono ,
-                            idCategoria:pantallaModel.items[i].idCategoria ,
+                            categoriaNombre: pantallaModel.items[i].categoriaNombre,
+                            categoriaIcono: pantallaModel.items[i].categoriaIcono,
+                            idCategoria: pantallaModel.items[i].idCategoria,
                           );
                           //return DetalleProductitos(productosData: productosData);
                         },
@@ -573,15 +572,16 @@ class PrincipalTab extends StatelessWidget {
             }
             return LayoutBuilder(builder: (context, constraints) {
               return GestureDetector(
-                onTap: () {  Navigator.push(
+                onTap: () {
+                  Navigator.push(
                     context,
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 100),
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return SliderDetalleProductos(
-                         cantidadItems: pantallaModel.items[i].cantidadItems,
-                         idCategoria: pantallaModel.items[i].idCategoria,
-                         numeroItem: pantallaModel.items[i].numeroItem,
+                          cantidadItems: pantallaModel.items[i].cantidadItems,
+                          idCategoria: pantallaModel.items[i].idCategoria,
+                          numeroItem: pantallaModel.items[i].numeroItem,
                         );
                         //return DetalleProductitos(productosData: productosData);
                       },
@@ -923,12 +923,12 @@ class _CustomHeaderPrincipal1State extends State<CustomHeaderPrincipal1> {
                             } else {
                               cantidad = 0;
                             }
-                            return  InkWell(
-                                  onTap: () {
-                                    final bottomBloc = ProviderBloc.bottom(context);
+                            return InkWell(
+                              onTap: () {
+                                final bottomBloc = ProviderBloc.bottom(context);
 
-                                    bottomBloc.changePage(3);
-                                  },
+                                bottomBloc.changePage(3);
+                              },
                               child: Stack(
                                 children: [
                                   (cantidad != 0)

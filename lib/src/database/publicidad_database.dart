@@ -10,9 +10,9 @@ class PublicidadDatabase {
 
       final res = await db.rawInsert(
           "INSERT OR REPLACE INTO Publicidad (publicidad_id,publicidad_imagen,publicidad_estado,"
-          "publicidad_tipo,id_relacionado) "
+          "publicidad_tipo,pantalla,id_relacionado) "
           "VALUES ('${publicidadModel.idPublicidad}','${publicidadModel.publicidadImagen}','${publicidadModel.publicidadEstado}',"
-          "'${publicidadModel.publicidadTipo}','${publicidadModel.idRelacionado}'"
+          "'${publicidadModel.publicidadTipo}','${publicidadModel.pantalla}','${publicidadModel.idRelacionado}'"
           ")");
       return res;
     } catch (exception) {
@@ -20,9 +20,9 @@ class PublicidadDatabase {
     }
   }
 
-  Future<List<PublicidadModel>> obtenerPublicidad() async {
+  Future<List<PublicidadModel>> obtenerPublicidad(String dato) async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Publicidad ");
+    final res = await db.rawQuery("SELECT * FROM Publicidad where  pantalla = '$dato'");
 
     List<PublicidadModel> list = res.isNotEmpty
         ? res.map((c) => PublicidadModel.fromJson(c)).toList()

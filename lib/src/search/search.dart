@@ -29,23 +29,39 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-
   @override
   void initState() {
-    _controller = new TabController(vsync: this, length: 6);
-    _controller.addListener(() {
-      csmare = _controller.index;
-      print('dentro ${_controller.index}');
-      setState(() {});
-    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final preferences = Preferences();
+      int valor = 0;
+      if (preferences.tipoCategoriaNumero == '3') {
+        valor = 1;
+      } else if (preferences.tipoCategoriaNumero == '4') {
+        valor = 1;
+      } else if (preferences.tipoCategoriaNumero == '1') {
+        valor = 2;
+      } else {
+        valor = 3;
+      }
+      _controller = new TabController(vsync: this, length: valor);
+      _controller.addListener(() {
+        csmare = _controller.index;
+        print('dentro ${_controller.index}');
+        setState(() {});
+      });
       final productosBloc = ProviderBloc.busquedaAngelo(context);
-      productosBloc.queryEnchiladas('', '');
-      productosBloc.queryCafe('', '');
-      productosBloc.queryVar('', '');
-      productosBloc.queryEnchiladasDelivery('', '');
-      productosBloc.queryCafeDelivery('', '');
-      productosBloc.queryVarDelivery('', '');
+      if (preferences.tipoCategoriaNumero == '3') {
+        productosBloc.queryCafe('prueba', '3', true);
+      } else if (preferences.tipoCategoriaNumero == '4') {
+        productosBloc.queryVar('prueba', '4', true);
+      } else if (preferences.tipoCategoriaNumero == '1') {
+        productosBloc.queryCafe('prueba', '1', true);
+        productosBloc.queryEnchiladas('prueba', '', true);
+      } else {
+        productosBloc.queryEnchiladasDelivery('prueba', '5', true);
+        productosBloc.queryCafeDelivery('prueba', '6', true);
+        productosBloc.queryVarDelivery('prueba', '7', true);
+      }
     });
     print('initState');
     super.initState();
@@ -105,14 +121,22 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       onChanged: (value) {
                         print('valor de tal coaa $value');
                         if (value.length >= 0 && value != ' ' && value != '') {
+                          final productosBloc = ProviderBloc.busquedaAngelo(context);
+                          if (preferences.tipoCategoriaNumero == '3') {
+                            productosBloc.queryCafe('$value', '3', false);
+                          } else if (preferences.tipoCategoriaNumero == '4') {
+                            productosBloc.queryVar('$value', '4', false);
+                          } else if (preferences.tipoCategoriaNumero == '1') {
+                            productosBloc.queryCafe('$value', '3', false);
+                            productosBloc.queryEnchiladas('$value', '1', false);
+                          } else {
+                            productosBloc.queryEnchiladasDelivery('$value', '5', false);
+                            productosBloc.queryCafeDelivery('$value', '6', false);
+                            productosBloc.queryVarDelivery('$value', '7', false);
+                          }
+
                           igual++;
                           _currentPageNotifier.value = true;
-                          productosBloc.queryEnchiladas('$value', '1');
-                          productosBloc.queryCafe('$value', '3');
-                          productosBloc.queryVar('$value', '4');
-                          productosBloc.queryEnchiladasDelivery('$value', '5');
-                          productosBloc.queryCafeDelivery('$value', '6');
-                          productosBloc.queryVarDelivery('$value', '7');
                           //agregarHistorial(context, value, 'pro');
                         } else {
                           productosBloc.resetearCantidades();
@@ -122,12 +146,20 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                         if (value.length >= 0 && value != ' ' && value != '') {
                           igual++;
                           _currentPageNotifier.value = true;
-                          productosBloc.queryEnchiladas('$value', '1');
-                          productosBloc.queryCafe('$value', '3');
-                          productosBloc.queryVar('$value', '4');
-                          productosBloc.queryEnchiladasDelivery('$value', '5');
-                          productosBloc.queryCafeDelivery('$value', '6');
-                          productosBloc.queryVarDelivery('$value', '7');
+                          final productosBloc = ProviderBloc.busquedaAngelo(context);
+                          if (preferences.tipoCategoriaNumero == '3') {
+                            productosBloc.queryCafe('$value', '3', false);
+                          } else if (preferences.tipoCategoriaNumero == '4') {
+                            productosBloc.queryVar('$value', '4', false);
+                          } else if (preferences.tipoCategoriaNumero == '1') {
+                            productosBloc.queryCafe('$value', '3', false);
+                            productosBloc.queryEnchiladas('$value', '1', false);
+                          } else {
+                            productosBloc.queryEnchiladasDelivery('$value', '5', false);
+                            productosBloc.queryCafeDelivery('$value', '6', false);
+                            productosBloc.queryVarDelivery('$value', '7', false);
+                          }
+
                           //agregarHistorial(context, value, 'pro');
                         } else {
                           productosBloc.resetearCantidades();
@@ -171,7 +203,13 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         ),
       ),
       body: DefaultTabController(
-        length: 6,
+        length: (preferences.tipoCategoriaNumero == '3')
+            ? 1
+            : (preferences.tipoCategoriaNumero == '4')
+                ? 1
+                : (preferences.tipoCategoriaNumero == '1')
+                    ? 2
+                    : 3,
         child: Column(
           children: [
             SizedBox(
@@ -179,6 +217,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             ),
             (preferences.tipoCategoriaNumero == '3')
                 ? ButtonsTabBar(
+                    duration: 0,
                     controller: _controller,
                     height: responsive.hp(8),
                     physics: BouncingScrollPhysics(),
@@ -260,7 +299,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             }),
                       ),
 
-                      //Cafe 24/7 \n Delivery
+                      /*  //Cafe 24/7 \n Delivery
                       Tab(
                         child: StreamBuilder(
                             stream: productosBloc.cantidadCafeDeliveryStream,
@@ -497,11 +536,12 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                     : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black));
                               }
                             }),
-                      ),
+                      ), */
                     ],
                   )
                 : (preferences.tipoCategoriaNumero == '4')
                     ? ButtonsTabBar(
+                        duration: 0,
                         height: responsive.hp(8),
                         decoration: BoxDecoration(
                           color: Colors.transparent,
@@ -581,7 +621,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                 }),
                           ),
 
-                          //Var 24/7 \n Delivery
+                          /*  //Var 24/7 \n Delivery
                           Tab(
                             child: StreamBuilder(
                                 stream: productosBloc.cantidadVarDeliveryStream,
@@ -818,359 +858,696 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                         : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black));
                                   }
                                 }),
-                          ),
+                          ), */
                         ],
                       )
-                    : ButtonsTabBar(
-                        height: responsive.hp(8),
-                        controller: _controller,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Colors.red,
-                              width: 1.5,
+                    : (preferences.tipoCategoriaNumero == '1')
+                        ? ButtonsTabBar(
+                            duration: 0,
+                            height: responsive.hp(8),
+                            controller: _controller,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.red,
+                                  width: 1.5,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(3),
-                        ),
-                        onTap: (valor) {
-                          _controller.index = valor;
-                          //setState(() {_controller.index = valor;});
-                        },
-                        unselectedBackgroundColor: Colors.transparent,
-                        unselectedLabelStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'MADE-TOMMY',
-                          fontSize: responsive.ip(1.6),
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.red,
-                          fontFamily: 'MADE-TOMMY',
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(1.6),
-                        ),
-                        tabs: [
-                          //Restaurant
-                          Tab(
-                            child: StreamBuilder(
-                                stream: productosBloc.cantidadEnchiladasStream,
-                                builder: (context, AsyncSnapshot<int> snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data == 20000) {
-                                      return (csmare == 0)
-                                          ? Text(
-                                              'Restaurant',
-                                              style: TextStyle(color: Colors.red),
-                                            )
-                                          : Text('Restaurant', style: TextStyle(color: Colors.black));
-                                    } else {
-                                      return Row(
-                                        children: [
-                                          (csmare == 0)
-                                              ? Text('Restaurant',
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                            ),
+                            onTap: (valor) {
+                              _controller.index = valor;
+                              //setState(() {_controller.index = valor;});
+                            },
+                            unselectedBackgroundColor: Colors.transparent,
+                            unselectedLabelStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'MADE-TOMMY',
+                              fontSize: responsive.ip(1.6),
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.red,
+                              fontFamily: 'MADE-TOMMY',
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(1.6),
+                            ),
+                            tabs: [
+                              //Restaurant
+                              Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadEnchiladasStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 0)
+                                              ? Text(
+                                                  'Restaurant',
+                                                  style: TextStyle(color: Colors.red),
+                                                )
+                                              : Text('Restaurant', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 0)
+                                                  ? Text('Restaurant',
+                                                      style: TextStyle(
+                                                        color: Colors.red,
+                                                      ))
+                                                  : Text('Restaurant', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
                                                   style: TextStyle(
-                                                    color: Colors.red,
-                                                  ))
-                                              : Text('Restaurant', style: TextStyle(color: Colors.black)),
-                                          SizedBox(width: responsive.wp(2)),
-                                          CircleAvatar(
-                                            radius: responsive.ip(1.23),
-                                            backgroundColor: Colors.red,
-                                            child: Text(
-                                              '${snapshot.data}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: responsive.ip(1.1),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                  } else {
-                                    return (csmare == 0)
-                                        ? Text(
-                                            'Restaurant',
-                                            style: TextStyle(color: Colors.red),
-                                          )
-                                        : Text('Restaurant', style: TextStyle(color: Colors.black));
-                                  }
-                                }),
-                          ),
-                          //Restaurant \n Delivery
-                          Tab(
-                            child: StreamBuilder(
-                                stream: productosBloc.cantidadEnchiladasDeliveryStream,
-                                builder: (context, AsyncSnapshot<int> snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data == 20000) {
-                                      return (csmare == 1)
-                                          ? Text(
-                                              'Restaurant \n Delivery',
-                                              style: TextStyle(color: Colors.red),
-                                            )
-                                          : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black));
-                                    } else {
-                                      return Row(
-                                        children: [
-                                          (csmare == 1)
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 0)
+                                            ? Text(
+                                                'Restaurant',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Restaurant', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
+                              //Restaurant \n Delivery
+                              /* Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadEnchiladasDeliveryStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 1)
                                               ? Text(
                                                   'Restaurant \n Delivery',
                                                   style: TextStyle(color: Colors.red),
                                                 )
-                                              : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black)),
-                                          SizedBox(width: responsive.wp(2)),
-                                          CircleAvatar(
-                                            radius: responsive.ip(1.23),
-                                            backgroundColor: Colors.red,
-                                            child: Text(
-                                              '${snapshot.data}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: responsive.ip(1.1),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                  } else {
-                                    return (csmare == 1)
-                                        ? Text(
-                                            'Restaurant \n Delivery',
-                                            style: TextStyle(color: Colors.red),
-                                          )
-                                        : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black));
-                                  }
-                                }),
-                          ),
+                                              : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 1)
+                                                  ? Text(
+                                                      'Restaurant \n Delivery',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 1)
+                                            ? Text(
+                                                'Restaurant \n Delivery',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
 
-                          // Cafe 24/7
-                          Tab(
-                            child: StreamBuilder(
-                                stream: productosBloc.cantidadCafeStream,
-                                builder: (context, AsyncSnapshot<int> snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data == 20000) {
-                                      return (csmare == 2)
-                                          ? Text(
-                                              'Cafe 24/7',
-                                              style: TextStyle(color: Colors.red),
-                                            )
-                                          : Text('Cafe 24/7', style: TextStyle(color: Colors.black));
-                                    } else {
-                                      return Row(
-                                        children: [
-                                          (csmare == 2)
+                               */ // Cafe 24/7
+                              Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadCafeStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 2)
                                               ? Text(
                                                   'Cafe 24/7',
                                                   style: TextStyle(color: Colors.red),
                                                 )
-                                              : Text('Cafe 24/7', style: TextStyle(color: Colors.black)),
-                                          SizedBox(width: responsive.wp(2)),
-                                          CircleAvatar(
-                                            radius: responsive.ip(1.23),
-                                            backgroundColor: Colors.red,
-                                            child: Text(
-                                              '${snapshot.data}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: responsive.ip(1.1),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                  } else {
-                                    return (csmare == 2)
-                                        ? Text(
-                                            'Cafe 24/7',
-                                            style: TextStyle(color: Colors.red),
-                                          )
-                                        : Text('Cafe 24/7', style: TextStyle(color: Colors.black));
-                                  }
-                                }),
-                          ),
+                                              : Text('Cafe 24/7', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 2)
+                                                  ? Text(
+                                                      'Cafe 24/7',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Cafe 24/7', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 2)
+                                            ? Text(
+                                                'Cafe 24/7',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Cafe 24/7', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
 
-                          //Cafe 24/7 \n Delivery
-                          Tab(
-                            child: StreamBuilder(
-                                stream: productosBloc.cantidadCafeDeliveryStream,
-                                builder: (context, AsyncSnapshot<int> snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data == 20000) {
-                                      return (csmare == 3)
-                                          ? Text(
-                                              'Cafe 24/7 \n Delivery',
-                                              style: TextStyle(color: Colors.red),
-                                            )
-                                          : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black));
-                                    } else {
-                                      return Row(
-                                        children: [
-                                          (csmare == 3)
+                              /*  //Cafe 24/7 \n Delivery
+                              Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadCafeDeliveryStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 3)
                                               ? Text(
                                                   'Cafe 24/7 \n Delivery',
                                                   style: TextStyle(color: Colors.red),
                                                 )
-                                              : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black)),
-                                          SizedBox(width: responsive.wp(2)),
-                                          CircleAvatar(
-                                            radius: responsive.ip(1.23),
-                                            backgroundColor: Colors.red,
-                                            child: Text(
-                                              '${snapshot.data}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: responsive.ip(1.1),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                  } else {
-                                    return (csmare == 3)
-                                        ? Text(
-                                            'Cafe 24/7 \n Delivery',
-                                            style: TextStyle(color: Colors.red),
-                                          )
-                                        : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black));
-                                  }
-                                }),
-                          ),
+                                              : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 3)
+                                                  ? Text(
+                                                      'Cafe 24/7 \n Delivery',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 3)
+                                            ? Text(
+                                                'Cafe 24/7 \n Delivery',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
 
-                          //Var 24/7
-                          Tab(
-                            child: StreamBuilder(
-                                stream: productosBloc.cantidadVarStream,
-                                builder: (context, AsyncSnapshot<int> snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data == 20000) {
-                                      return (csmare == 4)
-                                          ? Text(
-                                              'Var 24/7',
-                                              style: TextStyle(color: Colors.red),
-                                            )
-                                          : Text('Var 24/7', style: TextStyle(color: Colors.black));
-                                    } else {
-                                      return Row(
-                                        children: [
-                                          (csmare == 4)
+                              //Var 24/7
+                              Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadVarStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 4)
                                               ? Text(
                                                   'Var 24/7',
                                                   style: TextStyle(color: Colors.red),
                                                 )
-                                              : Text('Var 24/7', style: TextStyle(color: Colors.black)),
-                                          SizedBox(width: responsive.wp(2)),
-                                          CircleAvatar(
-                                            radius: responsive.ip(1.23),
-                                            backgroundColor: Colors.red,
-                                            child: Text(
-                                              '${snapshot.data}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: responsive.ip(1.1),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                  } else {
-                                    return (csmare == 4)
-                                        ? Text(
-                                            'Var 24/7',
-                                            style: TextStyle(color: Colors.red),
-                                          )
-                                        : Text('Var 24/7', style: TextStyle(color: Colors.black));
-                                  }
-                                }),
-                          ),
+                                              : Text('Var 24/7', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 4)
+                                                  ? Text(
+                                                      'Var 24/7',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Var 24/7', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 4)
+                                            ? Text(
+                                                'Var 24/7',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Var 24/7', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
 
-                          //Var 24/7 \n Delivery
-                          Tab(
-                            child: StreamBuilder(
-                                stream: productosBloc.cantidadVarDeliveryStream,
-                                builder: (context, AsyncSnapshot<int> snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data == 20000) {
-                                      return (csmare == 5)
-                                          ? Text(
-                                              'Var 24/7 \n Delivery',
-                                              style: TextStyle(color: Colors.red),
-                                            )
-                                          : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black));
-                                    } else {
-                                      return Row(
-                                        children: [
-                                          (csmare == 5)
+                              //Var 24/7 \n Delivery
+                              Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadVarDeliveryStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 5)
                                               ? Text(
                                                   'Var 24/7 \n Delivery',
                                                   style: TextStyle(color: Colors.red),
                                                 )
-                                              : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black)),
-                                          SizedBox(width: responsive.wp(2)),
-                                          CircleAvatar(
-                                            radius: responsive.ip(1.23),
-                                            backgroundColor: Colors.red,
-                                            child: Text(
-                                              '${snapshot.data}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: responsive.ip(1.1),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }
-                                  } else {
-                                    return (csmare == 5)
-                                        ? Text(
-                                            'Var 24/7 \n Delivery',
-                                            style: TextStyle(color: Colors.red),
-                                          )
-                                        : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black));
-                                  }
-                                }),
+                                              : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 5)
+                                                  ? Text(
+                                                      'Var 24/7 \n Delivery',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 5)
+                                            ? Text(
+                                                'Var 24/7 \n Delivery',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ), */
+                            ],
+                          )
+                        : ButtonsTabBar(
+                            duration: 0,
+                            height: responsive.hp(8),
+                            controller: _controller,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.red,
+                                  width: 1.5,
+                                ),
+                              ),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                            ),
+                            onTap: (valor) {
+                              _controller.index = valor;
+                              //setState(() {_controller.index = valor;});
+                            },
+                            unselectedBackgroundColor: Colors.transparent,
+                            unselectedLabelStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'MADE-TOMMY',
+                              fontSize: responsive.ip(1.6),
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.red,
+                              fontFamily: 'MADE-TOMMY',
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(1.6),
+                            ),
+                            tabs: [
+                              //Restaurant
+                              /* Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadEnchiladasStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 0)
+                                              ? Text(
+                                                  'Restaurant',
+                                                  style: TextStyle(color: Colors.red),
+                                                )
+                                              : Text('Restaurant', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 0)
+                                                  ? Text('Restaurant',
+                                                      style: TextStyle(
+                                                        color: Colors.red,
+                                                      ))
+                                                  : Text('Restaurant', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 0)
+                                            ? Text(
+                                                'Restaurant',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Restaurant', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
+                              //Restaurant \n Delivery
+                              
+                              
+                              
+                               */
+                              Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadEnchiladasDeliveryStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 1)
+                                              ? Text(
+                                                  'Restaurant \n Delivery',
+                                                  style: TextStyle(color: Colors.red),
+                                                )
+                                              : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 1)
+                                                  ? Text(
+                                                      'Restaurant \n Delivery',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 1)
+                                            ? Text(
+                                                'Restaurant \n Delivery',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Restaurant \n Delivery', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
+
+                              // Cafe 24/7
+                              /* Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadCafeStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 2)
+                                              ? Text(
+                                                  'Cafe 24/7',
+                                                  style: TextStyle(color: Colors.red),
+                                                )
+                                              : Text('Cafe 24/7', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 2)
+                                                  ? Text(
+                                                      'Cafe 24/7',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Cafe 24/7', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 2)
+                                            ? Text(
+                                                'Cafe 24/7',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Cafe 24/7', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
+
+                               */ //Cafe 24/7 \n Delivery
+                              Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadCafeDeliveryStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 3)
+                                              ? Text(
+                                                  'Cafe 24/7 \n Delivery',
+                                                  style: TextStyle(color: Colors.red),
+                                                )
+                                              : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 3)
+                                                  ? Text(
+                                                      'Cafe 24/7 \n Delivery',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 3)
+                                            ? Text(
+                                                'Cafe 24/7 \n Delivery',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Cafe 24/7 \n Delivery', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
+
+                              //Var 24/7
+                              /* Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadVarStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 4)
+                                              ? Text(
+                                                  'Var 24/7',
+                                                  style: TextStyle(color: Colors.red),
+                                                )
+                                              : Text('Var 24/7', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 4)
+                                                  ? Text(
+                                                      'Var 24/7',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Var 24/7', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 4)
+                                            ? Text(
+                                                'Var 24/7',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Var 24/7', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
+
+                               */ //Var 24/7 \n Delivery
+                              Tab(
+                                child: StreamBuilder(
+                                    stream: productosBloc.cantidadVarDeliveryStream,
+                                    builder: (context, AsyncSnapshot<int> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data == 20000) {
+                                          return (csmare == 5)
+                                              ? Text(
+                                                  'Var 24/7 \n Delivery',
+                                                  style: TextStyle(color: Colors.red),
+                                                )
+                                              : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black));
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              (csmare == 5)
+                                                  ? Text(
+                                                      'Var 24/7 \n Delivery',
+                                                      style: TextStyle(color: Colors.red),
+                                                    )
+                                                  : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black)),
+                                              SizedBox(width: responsive.wp(2)),
+                                              CircleAvatar(
+                                                radius: responsive.ip(1.23),
+                                                backgroundColor: Colors.red,
+                                                child: Text(
+                                                  '${snapshot.data}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: responsive.ip(1.1),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      } else {
+                                        return (csmare == 5)
+                                            ? Text(
+                                                'Var 24/7 \n Delivery',
+                                                style: TextStyle(color: Colors.red),
+                                              )
+                                            : Text('Var 24/7 \n Delivery', style: TextStyle(color: Colors.black));
+                                      }
+                                    }),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
             Expanded(
               child: TabBarView(
                 controller: _controller,
                 children: (preferences.tipoCategoriaNumero == '3')
                     ? <Widget>[
                         CafeWidget(responsive: responsive),
-                        CafeDeliveryWidget(responsive: responsive),
+                        /*  CafeDeliveryWidget(responsive: responsive),
                         RestaurantWidget(responsive: responsive),
                         RestaurantDeliveryWidget(responsive: responsive),
                         VarWidget(responsive: responsive),
-                        VarDeliveryWidget(responsive: responsive),
+                        VarDeliveryWidget(responsive: responsive), */
                       ]
                     : (preferences.tipoCategoriaNumero == '4')
                         ? <Widget>[
                             VarWidget(responsive: responsive),
-                            VarDeliveryWidget(responsive: responsive),
+                            /* VarDeliveryWidget(responsive: responsive),
                             RestaurantWidget(responsive: responsive),
                             RestaurantDeliveryWidget(responsive: responsive),
                             CafeWidget(responsive: responsive),
-                            CafeDeliveryWidget(responsive: responsive),
+                            CafeDeliveryWidget(responsive: responsive), */
                           ]
-                        : <Widget>[
-                            RestaurantWidget(responsive: responsive),
-                            RestaurantDeliveryWidget(responsive: responsive),
-                            CafeWidget(responsive: responsive),
-                            CafeDeliveryWidget(responsive: responsive),
+                        : (preferences.tipoCategoriaNumero == '1')
+                            ? <Widget>[
+                                RestaurantWidget(responsive: responsive),
+                                //RestaurantDeliveryWidget(responsive: responsive),
+                                CafeWidget(responsive: responsive),
+                                /* CafeDeliveryWidget(responsive: responsive),
                             VarWidget(responsive: responsive),
-                            VarDeliveryWidget(responsive: responsive),
-                          ],
+                            VarDeliveryWidget(responsive: responsive), */
+                              ]
+                            : <Widget>[
+                                //RestaurantWidget(responsive: responsive),
+                                RestaurantDeliveryWidget(responsive: responsive),
+                                //CafeWidget(responsive: responsive),
+                                CafeDeliveryWidget(responsive: responsive),
+                                //VarWidget(responsive: responsive),
+                                VarDeliveryWidget(responsive: responsive),
+                              ],
               ),
             )
           ],
@@ -1347,7 +1724,6 @@ class RestaurantWidget extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            
                           ],
                         ),
                         Divider()

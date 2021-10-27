@@ -105,7 +105,13 @@ class Categoria2 extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: DefaultTabController(
-        length: 6,
+        length: (preferences.tipoCategoriaNumero == '3')
+            ? 1
+            : (preferences.tipoCategoriaNumero == '4')
+                ? 1
+                : (preferences.tipoCategoriaNumero == '1')
+                    ? 2
+                    : 3,
         child: Column(
           children: [
             SizedBox(
@@ -113,6 +119,7 @@ class Categoria2 extends StatelessWidget {
             ),
             (preferences.tipoCategoriaNumero == '3')
                 ? ButtonsTabBar(
+                          duration:0,
                     height: responsive.hp(8),
                     decoration: BoxDecoration(
                       color: Colors.transparent,
@@ -142,7 +149,7 @@ class Categoria2 extends StatelessWidget {
                       Tab(
                         text: "Cafe 24/7",
                       ),
-                      Tab(
+                      /*  Tab(
                         text: "Cafe 24/7 \n Delivery",
                       ),
                       Tab(
@@ -156,11 +163,12 @@ class Categoria2 extends StatelessWidget {
                       ),
                       Tab(
                         text: "Var 24/7 \n Delivery",
-                      ),
+                      ), */
                     ],
                   )
                 : (preferences.tipoCategoriaNumero == '4')
                     ? ButtonsTabBar(
+                          duration:0,
                         height: responsive.hp(8),
                         decoration: BoxDecoration(
                           color: Colors.transparent,
@@ -191,7 +199,7 @@ class Categoria2 extends StatelessWidget {
                           Tab(
                             text: "Var 24/7",
                           ),
-                          Tab(
+                          /* Tab(
                             text: "Var 24/7 \n Delivery",
                           ),
                           Tab(
@@ -205,47 +213,49 @@ class Categoria2 extends StatelessWidget {
                           ),
                           Tab(
                             text: "Cafe 24/7 \n Delivery",
-                          ),
+                          ), */
                         ],
                       )
-                    : ButtonsTabBar(
-                        height: responsive.hp(8), 
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Colors.red,
-                              width: 1.5,
+                    : (preferences.tipoCategoriaNumero == '1')
+                        ? ButtonsTabBar(
+                          duration:0,
+                            height: responsive.hp(8),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.red,
+                                  width: 1.5,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(3),
-                        ),
-                        unselectedBackgroundColor: Colors.transparent,
-                        unselectedLabelStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'MADE-TOMMY',
-                          fontSize: responsive.ip(1.6),
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.red,
-                          fontFamily: 'MADE-TOMMY',
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsive.ip(1.6),
-                        ),
-                        tabs: [
-                          Tab(
-                            text: "Restaurant",
-                          ),
-                          Tab(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                            ),
+                            unselectedBackgroundColor: Colors.transparent,
+                            unselectedLabelStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'MADE-TOMMY',
+                              fontSize: responsive.ip(1.6),
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.red,
+                              fontFamily: 'MADE-TOMMY',
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(1.6),
+                            ),
+                            tabs: [
+                              Tab(
+                                text: "Restaurant",
+                              ),
+                              /* Tab(
                             text: "Restaurant \n Delivery",
-                          ),
-                          Tab(
-                            text: "Cafe 24/7",
-                          ),
-                          Tab(
+                          ), */
+                              Tab(
+                                text: "Cafe 24/7",
+                              ),
+                              /* Tab(
                             text: "Cafe 24/7 \n Delivery",
                           ),
                           Tab(
@@ -253,37 +263,96 @@ class Categoria2 extends StatelessWidget {
                           ),
                           Tab(
                             text: "Var 24/7 \n Delivery",
+                          ), */
+                            ],
+                          )
+                        : ButtonsTabBar(
+                          duration:0,
+                            height: responsive.hp(8),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.red,
+                                  width: 1.5,
+                                ),
+                              ),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(3),
+                            ),
+                            unselectedBackgroundColor: Colors.transparent,
+                            unselectedLabelStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'MADE-TOMMY',
+                              fontSize: responsive.ip(1.6),
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.red,
+                              fontFamily: 'MADE-TOMMY',
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsive.ip(1.6),
+                            ),
+                            tabs: [
+                              /*  Tab(
+                            text: "Restaurant",
+                          ), */
+                              Tab(
+                                text: "Restaurant \n Delivery",
+                              ),
+                              /* Tab(
+                            text: "Cafe 24/7",
+                          ), */
+                              Tab(
+                                text: "Cafe 24/7 \n Delivery",
+                              ),
+                              /*  Tab(
+                            text: "Var 24/7",
+                          ), */
+                              Tab(
+                                text: "Var 24/7 \n Delivery",
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
             Expanded(
               child: TabBarView(
                 children: (preferences.tipoCategoriaNumero == '3')
                     ? <Widget>[
                         CafeWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                        CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                        /* CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                         RestaurantWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                         RestaurantDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                         VarWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                        VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                        VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive), */
                       ]
                     : (preferences.tipoCategoriaNumero == '4')
                         ? <Widget>[
                             VarWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                            VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                            /* VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                             RestaurantWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                             RestaurantDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
                             CafeWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                            CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                            CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive), */
                           ]
-                        : <Widget>[
-                            RestaurantWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                            RestaurantDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                            CafeWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                            CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                            VarWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                            VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
-                          ],
+                        : (preferences.tipoCategoriaNumero == '1')
+                            ? <Widget>[
+                                RestaurantWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                //RestaurantDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                CafeWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                /* CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                VarWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                               */
+                              ]
+                            : <Widget>[
+                                //RestaurantWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                RestaurantDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                //CafeWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                CafeDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                //VarWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                                VarDeliveryWidget(categoriasBloc: categoriasBloc, responsive: responsive),
+                              ],
               ),
             )
           ],

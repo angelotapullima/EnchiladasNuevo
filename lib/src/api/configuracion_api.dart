@@ -68,17 +68,53 @@ class ConfiguracionApi {
         if (tamanoPublicidad > 0) {
           await publicidadDatabase.deletePublcidadDb();
 
-          for (int j = 0; j < decodedData['result']['data']['publicidad'].length; j++) {
-            PublicidadModel publicidadModel = PublicidadModel();
+          PublicidadModel publicidadModel = PublicidadModel();
 
-            publicidadModel.idPublicidad = j.toString();
-            publicidadModel.publicidadEstado = decodedData['result']['data']['publicidad'][j]['publicidad_estado'];
-            publicidadModel.publicidadImagen = decodedData['result']['data']['publicidad'][j]['publicidad_imagen'];
-            publicidadModel.publicidadTipo = decodedData['result']['data']['publicidad'][j]['publicidad_tipo'];
-            publicidadModel.idRelacionado = decodedData['result']['data']['publicidad'][j]['publicidad_id'];
+          //CategoriaNumero = 5 Delivery
+          publicidadModel.idPublicidad = '5';
+          publicidadModel.publicidadEstado = decodedData['result']['data']['publicidad']['delivery']['publicidad_estado'];
+          publicidadModel.publicidadImagen = decodedData['result']['data']['publicidad']['delivery']['publicidad_imagen'];
+          publicidadModel.publicidadTipo = decodedData['result']['data']['publicidad']['delivery']['publicidad_tipo'];
+          publicidadModel.idRelacionado = decodedData['result']['data']['publicidad']['delivery']['publicidad_id'];
+          publicidadModel.pantalla = '5';
 
-            publicidadDatabase.insertarPublicidad(publicidadModel);
-          }
+          await publicidadDatabase.insertarPublicidad(publicidadModel);
+
+          PublicidadModel publicidadModel2 = PublicidadModel();
+
+          //CategoriaNumero = 1 enchiladas
+          publicidadModel2.idPublicidad = '1';
+          publicidadModel2.publicidadEstado = decodedData['result']['data']['publicidad']['enchiladas']['publicidad_estado'];
+          publicidadModel2.publicidadImagen = decodedData['result']['data']['publicidad']['enchiladas']['publicidad_imagen'];
+          publicidadModel2.publicidadTipo = decodedData['result']['data']['publicidad']['enchiladas']['publicidad_tipo'];
+          publicidadModel2.idRelacionado = decodedData['result']['data']['publicidad']['enchiladas']['publicidad_id'];
+          publicidadModel2.pantalla = '1';
+
+          await publicidadDatabase.insertarPublicidad(publicidadModel2);
+
+          PublicidadModel publicidadModel3 = PublicidadModel();
+
+          //CategoriaNumero = 3 cafe
+          publicidadModel3.idPublicidad = '3';
+          publicidadModel3.publicidadEstado = decodedData['result']['data']['publicidad']['cafe']['publicidad_estado'];
+          publicidadModel3.publicidadImagen = decodedData['result']['data']['publicidad']['cafe']['publicidad_imagen'];
+          publicidadModel3.publicidadTipo = decodedData['result']['data']['publicidad']['cafe']['publicidad_tipo'];
+          publicidadModel3.idRelacionado = decodedData['result']['data']['publicidad']['cafe']['publicidad_id'];
+          publicidadModel3.pantalla = '3';
+
+          await publicidadDatabase.insertarPublicidad(publicidadModel3);
+
+          PublicidadModel publicidadModel4 = PublicidadModel();
+
+          //CategoriaNumero = 4 var
+          publicidadModel4.idPublicidad = '4';
+          publicidadModel4.publicidadEstado = decodedData['result']['data']['publicidad']['var']['publicidad_estado'];
+          publicidadModel4.publicidadImagen = decodedData['result']['data']['publicidad']['var']['publicidad_imagen'];
+          publicidadModel4.publicidadTipo = decodedData['result']['data']['publicidad']['var']['publicidad_tipo'];
+          publicidadModel4.idRelacionado = decodedData['result']['data']['publicidad']['var']['publicidad_id'];
+          publicidadModel4.pantalla = '4';
+
+          await publicidadDatabase.insertarPublicidad(publicidadModel4);
         }
 
         for (int i = 0; i < decodedData['result']['data']['zonas'].length; i++) {

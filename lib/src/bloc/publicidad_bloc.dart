@@ -21,7 +21,7 @@ class PublicidadBloc {
     _publicidadController?.close();
   }
 
-  void obtenerPublicidad() async {
-    _publicidadController.sink.add(await publicidadDatabase.obtenerPublicidad());
+  void obtenerPublicidad(String dato) async {
+    _publicidadController.sink.add(await publicidadDatabase.obtenerPublicidad(dato));
   }
 }
