@@ -66,7 +66,7 @@ class _WebViewExampleState extends State<WebViewExample> {
                     height: responsive.hp(2),
                   ),
                   Text(
-                    'Estas seguro de salir ?',
+                    'Está seguro de salir ?',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.red,

@@ -35,9 +35,7 @@ class _HomeScreenState extends State<Ticket> {
         //backgroundColor: Colors.black,
         body: Stack(
           children: <Widget>[
-            (args.codigo == '1')
-                ? pedidoCorrecto(context, responsive, pedidoBloc)
-                : Container(),
+            (args.codigo == '1') ? pedidoCorrecto(context, responsive, pedidoBloc) : Container(),
             (args.codigo == "2") ? pedidoCancelado(responsive) : Container(),
             (args.codigo == "3") ? pedidoRechazado(responsive) : Container(),
             (args.codigo == "4") ? pedidoError(responsive) : Container(),
@@ -47,8 +45,7 @@ class _HomeScreenState extends State<Ticket> {
     );
   }
 
-  Widget pedidoCorrecto(
-      BuildContext context, Responsive responsive, PedidoBloc pedidoBloc) {
+  Widget pedidoCorrecto(BuildContext context, Responsive responsive, PedidoBloc pedidoBloc) {
     final carritoBloc = ProviderBloc.carrito(context);
 
     final carritoDatabase = CarritoDatabase();
@@ -83,8 +80,7 @@ class _HomeScreenState extends State<Ticket> {
               ),
               child: StreamBuilder(
                 stream: pedidoBloc.pedidoIdStream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<PedidoServer>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<PedidoServer>> snapshot) {
                   if (snapshot.hasData) {
                     return detalleTickets(responsive, snapshot.data[0]);
                   } else {
@@ -106,7 +102,6 @@ class _HomeScreenState extends State<Ticket> {
             widget: Icon(Icons.arrow_back, color: Colors.black),
           ),
           onTap: () {
-
             Navigator.pushNamed(context, 'ordenesPago');
 
             /* Navigator.popUntil(
@@ -123,7 +118,7 @@ class _HomeScreenState extends State<Ticket> {
     var tipoPago;
     if (pedido.pedidoTipoComprobante == '6') {
       tipoPago = 'Boleta';
-    } else if (pedido.pedidoTipoComprobante == '7'){
+    } else if (pedido.pedidoTipoComprobante == '7') {
       tipoPago = 'Factura';
     }
     return SingleChildScrollView(
@@ -147,10 +142,7 @@ class _HomeScreenState extends State<Ticket> {
             child: Center(
               child: Text(
                 'Comprobante de Pago',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: responsive.ip(2.5),
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black, fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -162,18 +154,15 @@ class _HomeScreenState extends State<Ticket> {
             ),
             child: Column(
               children: <Widget>[
-                ticketDetailsWidget('Fecha', '${pedido.pedidoFecha}', 'Hora',
-                    '${pedido.pedidoHora}', responsive),
+                ticketDetailsWidget('Fecha', '${pedido.pedidoFecha}', 'Hora', '${pedido.pedidoHora}', responsive),
                 SizedBox(
                   height: responsive.hp(1.5),
                 ),
-                ticketDetailsWidget(
-                    'Cliente', '${pedido.pedidoNombre}', '', '', responsive),
+                ticketDetailsWidget('Cliente', '${pedido.pedidoNombre}', '', '', responsive),
                 SizedBox(
                   height: responsive.hp(1.5),
                 ),
-                ticketDetailsWidget('Tipo de Pago', '$tipoPago', 'Código',
-                    '${pedido.pedidoCodigo}', responsive),
+                ticketDetailsWidget('Tipo de Pago', '$tipoPago', 'Código', '${pedido.pedidoCodigo}', responsive),
                 SizedBox(
                   height: responsive.hp(1.5),
                 ),
@@ -185,28 +174,20 @@ class _HomeScreenState extends State<Ticket> {
             child: Center(
               child: Text(
                 'Productos',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: responsive.ip(2.5),
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black, fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(
-                top: responsive.hp(1),
-                left: responsive.wp(10),
-                right: responsive.wp(10)),
-            child: listProducts(
-                context, responsive, pedido.idPedido, pedido.pedidoTotal),
+            padding: EdgeInsets.only(top: responsive.hp(1), left: responsive.wp(10), right: responsive.wp(10)),
+            child: listProducts(context, responsive, pedido.idPedido, pedido.pedidoTotal),
           ),
         ],
       ),
     );
   }
 
-  Widget listProducts(
-      BuildContext context, Responsive responsive, String id, String total) {
+  Widget listProducts(BuildContext context, Responsive responsive, String id, String total) {
     final pedidoBloc = ProviderBloc.pedido(context);
     pedidoBloc.obtenerDetallePedido(id);
 
@@ -225,10 +206,8 @@ class _HomeScreenState extends State<Ticket> {
         });
   }
 
-  ListView products(
-      Responsive responsive, List<ProductoServer> productos, String totalex) {
-
-        var totalito = utils.format(double.parse(totalex));
+  ListView products(Responsive responsive, List<ProductoServer> productos, String totalex) {
+    var totalito = utils.format(double.parse(totalex));
     final total = Container(
         margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
         child: Column(
@@ -237,20 +216,12 @@ class _HomeScreenState extends State<Ticket> {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Total',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize: responsive.ip(2.5),
-                          fontWeight: FontWeight.bold)),
+                  child: Text('Total', style: TextStyle(color: Colors.red, fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold)),
                 ),
                 SizedBox(
                   width: responsive.wp(5),
                 ),
-                Text('S/ $totalito',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: responsive.ip(2.5),
-                        fontWeight: FontWeight.bold)),
+                Text('S/ $totalito', style: TextStyle(color: Colors.red, fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold)),
               ],
             ),
           ],
@@ -279,10 +250,7 @@ class _HomeScreenState extends State<Ticket> {
               ),
               Text(
                 'S/.${productos[i].detallePrecioTotal}',
-                style: TextStyle(
-                    fontSize: responsive.ip(2),
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: responsive.ip(2), color: Colors.redAccent, fontWeight: FontWeight.bold),
               )
             ],
           ),
@@ -291,8 +259,7 @@ class _HomeScreenState extends State<Ticket> {
     );
   }
 
-  Widget ticketDetailsWidget(String firstTitle, String firstDesc,
-      String secondTitle, String secondDesc, Responsive responsive) {
+  Widget ticketDetailsWidget(String firstTitle, String firstDesc, String secondTitle, String secondDesc, Responsive responsive) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -361,26 +328,26 @@ class _HomeScreenState extends State<Ticket> {
               fontSize: responsive.ip(2),
             ),
           ),
-        ),Positioned(
-        top: responsive.hp(8),
-        left: responsive.wp(4),
-        child: GestureDetector(
-          child: CircleContainer(
-            radius: responsive.ip(2.5),
-            color: Colors.grey[100],
-            widget: Icon(Icons.arrow_back, color: Colors.black),
-          ),
-          onTap: () {
+        ),
+        Positioned(
+          top: responsive.hp(8),
+          left: responsive.wp(4),
+          child: GestureDetector(
+            child: CircleContainer(
+              radius: responsive.ip(2.5),
+              color: Colors.grey[100],
+              widget: Icon(Icons.arrow_back, color: Colors.black),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, 'ordenesPago');
 
-            Navigator.pushNamed(context, 'ordenesPago');
-
-            /* Navigator.popUntil(
+              /* Navigator.popUntil(
               context,
               ModalRoute.withName('/'),
             );  */
-          },
+            },
+          ),
         ),
-      ),
       ],
     );
   }
@@ -400,32 +367,32 @@ class _HomeScreenState extends State<Ticket> {
         ),
         Center(
           child: Text(
-            'Ocurrio un error con el pago',
+            'Ocurrió un error con el pago',
             style: TextStyle(
               color: Colors.white,
               fontSize: responsive.ip(2),
             ),
           ),
-        ),Positioned(
-        top: responsive.hp(8),
-        left: responsive.wp(4),
-        child: GestureDetector(
-          child: CircleContainer(
-            radius: responsive.ip(2.5),
-            color: Colors.grey[100],
-            widget: Icon(Icons.arrow_back, color: Colors.black),
-          ),
-          onTap: () {
+        ),
+        Positioned(
+          top: responsive.hp(8),
+          left: responsive.wp(4),
+          child: GestureDetector(
+            child: CircleContainer(
+              radius: responsive.ip(2.5),
+              color: Colors.grey[100],
+              widget: Icon(Icons.arrow_back, color: Colors.black),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, 'ordenesPago');
 
-            Navigator.pushNamed(context, 'ordenesPago');
-
-            /* Navigator.popUntil(
+              /* Navigator.popUntil(
               context,
               ModalRoute.withName('/'),
             );  */
-          },
+            },
+          ),
         ),
-      ),
       ],
     );
   }
@@ -451,26 +418,26 @@ class _HomeScreenState extends State<Ticket> {
               fontSize: responsive.ip(2),
             ),
           ),
-        ),Positioned(
-        top: responsive.hp(8),
-        left: responsive.wp(4),
-        child: GestureDetector(
-          child: CircleContainer(
-            radius: responsive.ip(2.5),
-            color: Colors.grey[100],
-            widget: Icon(Icons.arrow_back, color: Colors.black),
-          ),
-          onTap: () {
+        ),
+        Positioned(
+          top: responsive.hp(8),
+          left: responsive.wp(4),
+          child: GestureDetector(
+            child: CircleContainer(
+              radius: responsive.ip(2.5),
+              color: Colors.grey[100],
+              widget: Icon(Icons.arrow_back, color: Colors.black),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, 'ordenesPago');
 
-            Navigator.pushNamed(context, 'ordenesPago');
-
-            /* Navigator.popUntil(
+              /* Navigator.popUntil(
               context,
               ModalRoute.withName('/'),
             );  */
-          },
+            },
+          ),
         ),
-      ),
       ],
     );
   }

@@ -107,7 +107,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(20.0),
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        hintText: '¿Qué esta buscando?',
+                        hintText: '¿Qué está buscando?',
                         hintStyle: TextStyle(color: Colors.black45),
                       ),
                       /*  decoration: InputDecoration(

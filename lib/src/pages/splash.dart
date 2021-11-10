@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-
 import 'package:nuts_activity_indicator/nuts_activity_indicator.dart';
 
 class Splash extends StatefulWidget {
@@ -19,32 +18,34 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final categoriasApi = CategoriasApi();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        final categoriasApi = CategoriasApi();
 
-      final configuracionApi = ConfiguracionApi();
-      final preferences = Preferences();
-      final usuarioDatabase = UsuarioDatabase();
+        final configuracionApi = ConfiguracionApi();
+        final preferences = Preferences();
+        final usuarioDatabase = UsuarioDatabase();
 
-      if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
-        await categoriasApi.obtenerAmbos(context);
+        if (preferences.estadoCargaInicial == null || preferences.estadoCargaInicial == '0') {
+          await categoriasApi.obtenerAmbos(context);
 
-        await configuracionApi.configuracion();
+          await configuracionApi.configuracion();
 
-        preferences.estadoCargaInicial = '1';
-      } else {
-        categoriasApi.obtenerAmbos(context);
+          preferences.estadoCargaInicial = '1';
+        } else {
+          categoriasApi.obtenerAmbos(context);
 
-        configuracionApi.configuracion();
-      }
+          configuracionApi.configuracion();
+        }
 
-      final user = await usuarioDatabase.obtenerUsUario();
-      if (user.length > 0) {
-        Navigator.pushReplacementNamed(context, 'desicion');
-      } else {
-        Navigator.pushReplacementNamed(context, 'login');
-      }
-    });
+        final user = await usuarioDatabase.obtenerUsUario();
+        if (user.length > 0) {
+          Navigator.pushReplacementNamed(context, 'desicion');
+        } else {
+          Navigator.pushReplacementNamed(context, 'login');
+        }
+      },
+    );
 
     super.initState();
   }
@@ -59,12 +60,13 @@ class _SplashState extends State<Splash> {
       body: Stack(
         children: <Widget>[
           Container(
-              height: double.infinity,
-              width: double.infinity,
-              child: Image(
-                image: AssetImage('assets/ladrillos.png'),
-                fit: BoxFit.cover,
-              )),
+            height: double.infinity,
+            width: double.infinity,
+            child: Image(
+              image: AssetImage('assets/ladrillos.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -121,6 +123,32 @@ class _SplashState extends State<Splash> {
                 ),
               ),
             ],
+          ),
+          Positioned(
+            bottom: responsive.hp(5),
+            left: 0,
+            right: 0,
+            child: Container(
+              height: responsive.hp(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Spacer(),
+                      Text(
+                        'Con el respaldo de:   ',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: responsive.hp(10),
+                    child: Image.asset('assets/logo_bufeotec.png', color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
