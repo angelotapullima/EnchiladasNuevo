@@ -1,6 +1,7 @@
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/categoria2.dart';
+import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = new Responsive.of(context);
+
+    final preferences = Preferences();
 
     final carritoBloc = ProviderBloc.carrito(context);
     carritoBloc.obtenerCarrito();
@@ -189,77 +192,100 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 bottomBloc.changePage(3);
                               },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: responsive.hp(1),
-                                  ),
-                                  StreamBuilder(
-                                      stream: carritoBloc.carritoIdStream,
-                                      builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
-                                        int cantidad = 0;
+                              child: (preferences.tipoCategoria != '2')
+                                  ? Container(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: responsive.hp(1),
+                                          ),
+                                          Icon(
+                                            MaterialIcons.shopping_cart,
+                                            size: responsive.ip(3),
+                                            color: (bottomBloc.page == 3) ? Colors.red : Colors.grey,
+                                          ),
+                                          Text(
+                                            'Carrito',
+                                            style: TextStyle(
+                                              fontSize: responsive.ip(1.6),
+                                              color: (bottomBloc.page == 3) ? Colors.red : Colors.grey,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: responsive.hp(1),
+                                        ),
+                                        StreamBuilder(
+                                            stream: carritoBloc.carritoIdStream,
+                                            builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
+                                              int cantidad = 0;
 
-                                        if (snapshot.hasData) {
-                                          if (snapshot.data.length > 0) {
-                                            for (int i = 0; i < snapshot.data.length; i++) {
-                                              if (snapshot.data[i].productoTipo != '1') {
-                                                cantidad++;
+                                              if (snapshot.hasData) {
+                                                if (snapshot.data.length > 0) {
+                                                  for (int i = 0; i < snapshot.data.length; i++) {
+                                                    if (snapshot.data[i].productoTipo != '1') {
+                                                      cantidad++;
+                                                    }
+                                                  }
+                                                } else {
+                                                  cantidad = 0;
+                                                }
+                                              } else {
+                                                cantidad = 0;
                                               }
-                                            }
-                                          } else {
-                                            cantidad = 0;
-                                          }
-                                        } else {
-                                          cantidad = 0;
-                                        }
-                                        return Stack(
-                                          children: [
-                                            (cantidad != 0)
-                                                ? Stack(
-                                                    children: <Widget>[
-                                                      Icon(
-                                                        MaterialIcons.shopping_cart,
-                                                        size: responsive.ip(3),
-                                                        color: (bottomBloc.page == 3) ? Colors.red : Colors.grey,
-                                                      ),
-                                                      Positioned(
-                                                        top: 0,
-                                                        right: 0,
-                                                        child: Container(
-                                                          child: Text(
-                                                            cantidad.toString(),
-                                                            style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontSize: responsive.ip(1),
+                                              return Stack(
+                                                children: [
+                                                  (cantidad != 0)
+                                                      ? Stack(
+                                                          children: <Widget>[
+                                                            Icon(
+                                                              MaterialIcons.shopping_cart,
+                                                              size: responsive.ip(3),
+                                                              color: (bottomBloc.page == 3) ? Colors.red : Colors.grey,
                                                             ),
-                                                          ),
-                                                          alignment: Alignment.center,
-                                                          width: responsive.ip(1.6),
-                                                          height: responsive.ip(1.6),
-                                                          decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                                                            Positioned(
+                                                              top: 0,
+                                                              right: 0,
+                                                              child: Container(
+                                                                child: Text(
+                                                                  cantidad.toString(),
+                                                                  style: TextStyle(
+                                                                    color: Colors.white,
+                                                                    fontSize: responsive.ip(1),
+                                                                  ),
+                                                                ),
+                                                                alignment: Alignment.center,
+                                                                width: responsive.ip(1.6),
+                                                                height: responsive.ip(1.6),
+                                                                decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                                                              ),
+                                                              //child: Icon(Icons.brightness_1, size: 8,color: Colors.redAccent,  )
+                                                            )
+                                                          ],
+                                                        )
+                                                      : Icon(
+                                                          MaterialIcons.shopping_cart,
+                                                          size: responsive.ip(3),
+                                                          color: (bottomBloc.page == 3) ? Colors.red : Colors.grey,
                                                         ),
-                                                        //child: Icon(Icons.brightness_1, size: 8,color: Colors.redAccent,  )
-                                                      )
-                                                    ],
-                                                  )
-                                                : Icon(
-                                                    MaterialIcons.shopping_cart,
-                                                    size: responsive.ip(3),
-                                                    color: (bottomBloc.page == 3) ? Colors.red : Colors.grey,
-                                                  ),
-                                          ],
-                                        );
-                                      }),
-                                  Text(
-                                    'Carrito',
-                                    style: TextStyle(
-                                      fontSize: responsive.ip(1.6),
-                                      color: (bottomBloc.page == 3) ? Colors.red : Colors.grey,
+                                                ],
+                                              );
+                                            }),
+                                        Text(
+                                          'Carrito',
+                                          style: TextStyle(
+                                            fontSize: responsive.ip(1.6),
+                                            color: (bottomBloc.page == 3) ? Colors.red : Colors.grey,
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
-                                ],
-                              ),
                             ),
                             InkWell(
                               onTap: () {

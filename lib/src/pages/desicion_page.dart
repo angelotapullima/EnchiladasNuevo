@@ -49,7 +49,7 @@ class _DesicionPageState extends State<DesicionPage> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: GestureDetector(
-                      child: Container(
+                      child: Container( 
                         width: double.infinity,
                         height: responsive.ip(16),
                         child: SvgPicture.asset('assets/icono_delivery.svg'),

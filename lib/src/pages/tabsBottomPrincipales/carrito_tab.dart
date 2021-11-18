@@ -58,80 +58,103 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
           ),
         ),
       ),
-      body: StreamBuilder(
-        stream: carritoBloc.carritoIdStream,
-        builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return _listaPedidos(responsive, snapshot.data, usuarioBloc, preferences);
-            } else {
-              return SafeArea(
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: responsive.wp(2),
-                        vertical: responsive.hp(2),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: (preferences.tipoCategoria != '2')
+          ? Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: responsive.ip(20),
+                    child: SvgPicture.asset('assets/delivery.svg'),
+                  ),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
+                  Text(
+                    'Opción disponible solo en delivery',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: responsive.ip(2.4),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : StreamBuilder(
+              stream: carritoBloc.carritoIdStream,
+              builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.length > 0) {
+                    return _listaPedidos(responsive, snapshot.data, usuarioBloc, preferences);
+                  } else {
+                    return SafeArea(
+                      child: Column(
                         children: <Widget>[
-                          Text(
-                            'Sus Pedidos',
-                            style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.6), fontWeight: FontWeight.bold),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: responsive.wp(2),
+                              vertical: responsive.hp(2),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  'Sus Pedidos',
+                                  style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.6), fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadiusDirectional.only(
+                                    topStart: Radius.circular(13),
+                                    topEnd: Radius.circular(13),
+                                  ),
+                                  color: Colors.grey[50]),
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      height: responsive.hp(20),
+                                      child: SvgPicture.asset('assets/carrito.svg'),
+                                    ),
+                                    SizedBox(
+                                      height: responsive.hp(3),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: responsive.wp(2),
+                                      ),
+                                      child: Text(
+                                        'No hay Productos en el carrito',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: responsive.ip(2.5),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadiusDirectional.only(
-                              topStart: Radius.circular(13),
-                              topEnd: Radius.circular(13),
-                            ),
-                            color: Colors.grey[50]),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                height: responsive.hp(20),
-                                child: SvgPicture.asset('assets/carrito.svg'),
-                              ),
-                              SizedBox(
-                                height: responsive.hp(3),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: responsive.wp(2),
-                                ),
-                                child: Text(
-                                  'No hay Productos en el carrito',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: responsive.ip(2.5),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            }
-          } else {
-            return Center(
-              child: CupertinoActivityIndicator(),
-            );
-          }
-        },
-      ),
+                    );
+                  }
+                } else {
+                  return Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+                }
+              },
+            ),
 
       //
     );
@@ -383,8 +406,8 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
           );
         }
 
-        var observacionProducto = 'Toca para agregar Observación';
-        if (carritoList[i].productoObservacion != null && carritoList[i].productoObservacion != ' ') {
+        var observacionProducto = 'Observaciones: \nPresione para agregar una observación';
+        if (carritoList[i].productoObservacion != null && carritoList[i].productoObservacion.isNotEmpty) {
           observacionProducto = carritoList[i].productoObservacion;
         }
         return Container(
@@ -514,28 +537,45 @@ class _MiOrdenTabState extends State<MiOrdenTab> {
               ),
               GestureDetector(
                 onTap: () {
-                  observacionProductoController.text = '${carritoList[i].productoObservacion}';
+                  observacionProductoController.text = 'Observaciones: \n${carritoList[i].productoObservacion}';
                   modaldialogoObservacionProducto('${carritoList[i].idProducto}');
                 },
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.mode_edit,
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: responsive.wp(2),
+                    vertical: responsive.hp(1),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
                       color: Colors.red,
-                      size: responsive.ip(3),
                     ),
-                    Expanded(
-                      child: Text(
-                        '$observacionProducto',
-                        style: TextStyle(
-                          fontSize: responsive.ip(2),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '$observacionProducto',
+                          textAlign: TextAlign.start,
+                          maxLines: 6,
+                          style: TextStyle(
+                            fontSize: responsive.ip(2),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      Icon(
+                        Icons.mode_edit,
+                      color: Colors.red,
+                      size: responsive.ip(3),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Divider()
+              Divider(
+                thickness: 1.5,
+              )
             ],
           ),
         );

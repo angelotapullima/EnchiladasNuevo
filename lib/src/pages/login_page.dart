@@ -383,3 +383,4 @@ class AppleSignInAvailable {
     return AppleSignInAvailable(await AppleSignIn.isAvailable());
   }
 }
+//https://capitanremake.firebaseapp.com/__/auth/handler

@@ -539,7 +539,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                   SizedBox(
                     height: responsive.hp(1),
                   ),
-                  (productosData.validadoDelivery == '1')
+                  /* (productosData.validadoDelivery == '1')
                       ? Container()
                       : Text(
                           'Producto disponible solo en el local',
@@ -549,7 +549,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                             fontWeight: FontWeight.bold,
                             fontSize: responsive.ip(1.8),
                           ),
-                        ),
+                        ), */
                   SizedBox(
                     height: responsive.hp(1),
                   ),
@@ -582,25 +582,7 @@ class _DetalleProducto extends State<DetalleProductitoss> {
                             fontSize: responsive.ip(1.8),
                           ),
                         ),
-                  /*  ('${productosData.productoNuevo}' == '1')
-                      ? Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsive.wp(3),
-                            vertical: responsive.wp(.5),
-                          ),
-                          decoration: BoxDecoration(
-                              //borderRadius: BorderRadius.circular(10),
-                              color: Colors.red),
-                          child: Text(
-                            'Producto Nuevo',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: responsive.ip(2),
-                            ),
-                          ),
-                        )
-                      : Container(), */
+                 
                   SizedBox(
                     height: responsive.hp(1),
                   ),
