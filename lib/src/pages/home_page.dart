@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:enchiladasapp/src/bloc/provider.dart';
 import 'package:enchiladasapp/src/models/carrito_model.dart';
 import 'package:enchiladasapp/src/pages/tabsBottomPrincipales/categoria2.dart';
+import 'package:enchiladasapp/src/utils/constant.dart';
 import 'package:enchiladasapp/src/utils/preferencias_usuario.dart';
 import 'package:enchiladasapp/src/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'tabsBottomPrincipales/favoritos_tab.dart';
 import 'tabsBottomPrincipales/mi_cuenta.dart';
 import 'tabsBottomPrincipales/carrito_tab.dart';
@@ -318,16 +322,112 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
-              )
-
-              /* IndexedStack(
-                index: (bottomBloc.page == null) ? 0 : bottomBloc.page,
-                children: pageList,
-              ), */
+              ),
+              (preferences.versionApp != null  )
+                  ? (preferences.versionApp != 'null')
+                      ? (int.parse(preferences.versionApp) > int.parse(versionApp))
+                          ? Container(
+                              height: double.infinity,
+                              width: double.infinity,
+                              color: Colors.white,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    child: Image(
+                                      image: AssetImage('assets/ladrillos.png'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: responsive.wp(10)),
+                                        child: Image(
+                                          image: AssetImage('assets/logo_enchilada.png'),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Tenemos una nueva versión disponible para tí, descargala ahora !',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: responsive.ip(2),
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      MaterialButton(
+                                        color: Colors.red,
+                                        onPressed: () {
+                                          //LaunchReview.launch(androidAppId: "com.bufeotec.enchiladasapp", iOSAppId: "1539023978");
+                                          if (Platform.isAndroid) {
+                                            _launchInBrowser('https://play.google.com/store/apps/details?id=com.bufeotec.enchiladasapp');
+                                          } else {
+                                            _launchInBrowser('https://apps.apple.com/us/app/la-casa-de-las-enchiladas/id1539023978');
+                                          }
+                                        },
+                                        child: Text(
+                                          'Actualizar',
+                                          style: TextStyle(
+                                            fontSize: responsive.ip(2.5),
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Positioned(
+                                    bottom: responsive.hp(5),
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      height: responsive.hp(10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Spacer(),
+                                              Text(
+                                                'Con el respaldo de:   ',
+                                                style: TextStyle(color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            height: responsive.hp(10),
+                                            child: Image.asset('assets/logo_bufeotec.png', color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container()
+                      : Container()
+                  : Container()
             ],
           );
         },
       ),
     );
+  }
+
+  Future<void> _launchInBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: true,
+        //headers: <String, String>{'my_header_key': 'my_headser_value'},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

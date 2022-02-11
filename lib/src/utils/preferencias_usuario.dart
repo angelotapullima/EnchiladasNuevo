@@ -135,4 +135,14 @@ class Preferences {
   set tipoCategoriaNumero(String value) {
     _prefs.setString('tipoCategoriaNumero', value);
   }
+
+
+
+  get versionApp {
+    return _prefs.getString('versionApp');
+  }
+
+  set versionApp(String value) {
+    _prefs.setString('versionApp', value);
+  }
 }

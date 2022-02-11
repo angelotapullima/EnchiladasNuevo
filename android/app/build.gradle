@@ -34,7 +34,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
     
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     lintOptions {
         disable 'InvalidPackage'
@@ -43,9 +43,9 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.bufeotec.enchiladasapp"
         minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 23
-        versionName "2.0.0"
+        targetSdkVersion 30
+        versionCode 25
+        versionName "3.0.1"
     }
        signingConfigs {
        release {

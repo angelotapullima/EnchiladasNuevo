@@ -126,6 +126,8 @@ PODS:
   - GTMSessionFetcher/Core (1.7.0)
   - image_gallery_saver (1.5.0):
     - Flutter
+  - launch_review (0.0.1):
+    - Flutter
   - "location_permissions (3.0.0+1)":
     - Flutter
   - nanopb (2.30908.0):
@@ -165,6 +167,7 @@ DEPENDENCIES:
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
+  - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - share_extend (from `.symlinks/plugins/share_extend/ios`)
@@ -226,6 +229,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_sign_in/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
+  launch_review:
+    :path: ".symlinks/plugins/launch_review/ios"
   location_permissions:
     :path: ".symlinks/plugins/location_permissions/ios"
   path_provider:
@@ -273,6 +278,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
+  launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   location_permissions: 7e0f9aa0f60deb8ff93ddf0e2a164c7e8197bc94
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c

@@ -92,7 +92,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
                       : SlidingUpPanel(
                           maxHeight: _panelHeightOpen,
                           minHeight: responsive.hp(8),
-                          controller: panelController,
+                          controller: panelController, 
                           parallaxEnabled: true,
 
                           parallaxOffset: 0.1,
@@ -526,7 +526,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
       builder: (BuildContext context, AsyncSnapshot<List<Carrito>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
-            return _contenidoDeCarrito(responsive, snapshot.data, sc);
+            return _contenidoDeCarrito(responsive, snapshot.data);
           } else {
             return Column(children: <Widget>[
               GestureDetector(
@@ -649,7 +649,7 @@ class _DetalleProductoSolo extends State<DetalleProductitoss2> {
     );
   }
 
-  Widget _contenidoDeCarrito(Responsive responsive, List<Carrito> carrito, ScrollController sc) {
+  Widget _contenidoDeCarrito(Responsive responsive, List<Carrito> carrito) {
     double subtotal = 0;
     double total = 0;
     double valorDelivery = 0;

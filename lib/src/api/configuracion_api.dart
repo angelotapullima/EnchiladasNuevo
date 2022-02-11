@@ -29,6 +29,8 @@ class ConfiguracionApi {
       final Map<String, dynamic> decodedData = json.decode(resp.body);
 
       if (decodedData['result']['code'] == 1) {
+
+        
         for (int z = 0; z < decodedData['result']['data']['bolsa'].length; z++) {
           ProductosData productosData = ProductosData();
           productosData.idProducto = decodedData['result']['data']['bolsa'][z]['id_producto'];
@@ -183,6 +185,11 @@ class ConfiguracionApi {
           pantalla.pantallaTipo = '4';
           await pantallaDatabase.insertarPantalla(pantalla);
         }
+
+        prefs.versionApp = decodedData['result']['data']['version'].toString();
+        print('Version  ${prefs.versionApp}');
+
+
 
         return true;
       } else {

@@ -328,7 +328,7 @@ class _MiCuentaTabState extends State<MiCuentaTab> {
         children: <Widget>[
           Text('Órdenes',
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold, 
                   fontSize: responsive.ip(3),
                   color: Colors.red)),
           SizedBox(

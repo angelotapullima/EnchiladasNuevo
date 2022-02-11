@@ -53,9 +53,6 @@ class _OrdenesPendientesState extends State<OrdenesPendientes> {
       },
     );
 
-/* 
-    final pedidoBloc = ProviderBloc.pedido(context);
-    pedidoBloc.obtenerPedidosPendientes(context); */
     final responsive = Responsive.of(context);
 
     return Scaffold(

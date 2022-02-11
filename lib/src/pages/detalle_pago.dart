@@ -933,11 +933,15 @@ class _DetallePagoState extends State<DetallePago> {
             double vuelto = 0;
             String vuelto2 = '';
 
-            if (nuevoMetodoPagoBloc.valorVuelto == null) {
-            } else {
-              vuelto = nuevoMetodoPagoBloc.valorVuelto;
-              vuelto2 = utils.format(vuelto);
+            if (snapshotvuelto.hasData) {
+              if (nuevoMetodoPagoBloc.valorVuelto == null) {
+                print('ptmr');
+              } else {
+                vuelto = nuevoMetodoPagoBloc.valorVuelto;
+                vuelto2 = utils.format(vuelto);
+              }
             }
+
             return GestureDetector(
               onTap: () {
                 /*   if (montoPagoController.text.length == 0) {
@@ -1107,7 +1111,7 @@ class _DetallePagoState extends State<DetallePago> {
                 ),
               ),
             );
-          }, 
+          },
         );
       },
     );
@@ -1124,8 +1128,9 @@ class _DetallePagoState extends State<DetallePago> {
           stream: nuevoMetodoPagoBloc.telefonoStream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             bool validacion = false;
-            if (snapshot.hasData) {  validacion = nuevoMetodoPagoBloc.valorValidacionTelefono;
-            }  
+            if (snapshot.hasData) {
+              validacion = nuevoMetodoPagoBloc.valorValidacionTelefono;
+            }
             return GestureDetector(
               onTap: () {
                 FocusScope.of(context).unfocus();
